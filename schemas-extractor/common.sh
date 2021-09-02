@@ -42,8 +42,19 @@ function update_or_clone() {
 }
 
 function update_all() {
-  if [[ -z "${UPDATE_SKIP:-}" ]]; then
-    repositories=()
+  if [[ -n "${UPDATE_SKIP:-}" ]]; then
+    return
+  fi
+  repositories=()
+  if [[ $# -gt 0 ]] && [[ -n "$1" ]]; then
+    p=$1
+    skip_generation="$(jq_get "$p" 'skip_generation')"
+    if [[ $skip_generation == "true" ]]; then
+      return
+    fi
+    repository="$(jq_get "$p" 'repository')"
+    repositories+=("$repository")
+  else
     while IFS= read -r p; do
       if [[ "$p" == "__NAME__" ]]; then
         continue
@@ -63,22 +74,22 @@ function update_all() {
       repository="$(jq_get "$p" 'repository')"
       repositories+=("$repository")
     done < <(jq -r 'keys[]' <"$CUR/$config_file")
+  fi
     if [ ! ${#repositories[@]} -eq 0 ]; then
-      mapfile -t uniq < <(sort -u <<<"${repositories[*]}")
-      for repo in "${uniq[@]}"; do
-        repo=$(trim "$repo")
-        if [[ "${UPDATE_PARALLEL:-}" == "1" ]]; then
-          (
-            update_or_clone "$repo"
-          ) &
-        else
+    mapfile -t uniq < <(sort -u <<<"${repositories[*]}")
+    for repo in "${uniq[@]}"; do
+      repo=$(trim "$repo")
+      if [[ "${UPDATE_PARALLEL:-}" == "1" ]]; then
+        (
           update_or_clone "$repo"
-        fi
-      done
+        ) &
+      else
+        update_or_clone "$repo"
+      fi
+    done
     else
       echo "No matching repos found. Provided list: ${CHECK_LIST[*]}"
     fi
-  fi
 }
 
 function generate_one() {
