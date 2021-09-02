@@ -3,10 +3,9 @@
     "skip_generation": false,
     "repository": "github.com/hashicorp/terraform",
     "file": "__NAME__.json",
-    "pkg_name": "builtin/provisioners/__NAME__",
+    "pkg_name": "internal/builtin/provisioners/__NAME__",
     "provisioner_args": ""
   },
-
   "file": {},
   "local-exec": {},
   "remote-exec": {}
