@@ -533,6 +533,12 @@
         "Type": "String",
         "Required": true
       },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "github_branch_protection": {
       "enforce_admins": {
         "Type": "Bool",
         "Optional": true,
@@ -568,7 +574,6 @@
       "required_pull_request_reviews": {
         "Type": "List",
         "Optional": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -576,37 +581,15 @@
           "Info": {
             "dismiss_stale_reviews": {
               "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
+              "Optional": true
             },
-            "dismissal_teams": {
+            "dismissal_restrictions": {
               "Type": "Set",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "String"
-              }
-            },
-            "dismissal_users": {
-              "Type": "Set",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "include_admins": {
-              "Type": "Bool",
-              "Optional": true,
-              "Deprecated": "Use enforce_admins instead",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
               }
             },
             "require_code_owner_reviews": {
@@ -627,7 +610,6 @@
       "required_status_checks": {
         "Type": "List",
         "Optional": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -642,61 +624,9 @@
                 "ElementsType": "String"
               }
             },
-            "include_admins": {
-              "Type": "Bool",
-              "Optional": true,
-              "Deprecated": "Use enforce_admins instead",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
-            },
             "strict": {
               "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
-            }
-          }
-        }
-      },
-      "restrictions": {
-        "Type": "List",
-        "Optional": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "apps": {
-              "Type": "Set",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "teams": {
-              "Type": "Set",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "users": {
-              "Type": "Set",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
+              "Optional": true
             }
           }
         }
@@ -1347,7 +1277,7 @@
       "target_url_template": {
         "Type": "String",
         "Required": true,
-        "Description": "The template of the target URL used for the links; must be a valid URL and contain `\u003cnum\u003e` for the reference number"
+        "Description": "The template of the target URL used for the links; must be a valid URL and contain `<num>` for the reference number"
       }
     },
     "github_repository_collaborator": {
@@ -2775,6 +2705,10 @@
       },
       "squash_merge_commit_title": {
         "Type": "String",
+        "Computed": true
+      },
+      "repo_id": {
+        "Type": "Int",
         "Computed": true
       },
       "ssh_clone_url": {

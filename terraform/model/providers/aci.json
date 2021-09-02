@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "aci",
   "type": "provider",
-  "version": "v0.4.0",
+  "version": "v0.7.1",
   "provider": {
     "cert_name": {
       "Type": "String",
@@ -52,6 +52,30 @@
     }
   },
   "resources": {
+    "aci_aaa_domain": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_access_generic": {
       "annotation": {
         "Type": "String",
@@ -139,7 +163,8 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Computed": true
       },
       "name_alias": {
         "Type": "String",
@@ -627,6 +652,398 @@
         "Computed": true
       }
     },
+    "aci_bd_dhcp_label": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "bridge_domain_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_dhcp_rs_dhcp_option_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_address_family_context": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "e_dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "i_dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "local_dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_ecmp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_ecmp_ibgp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_bgp_best_path_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_bgp_peer_connectivity_profile": {
+      "addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "addr_t_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "allowed_self_as_cnt": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "as_number": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "local_asn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "local_asn_propagate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_node_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "peer_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "private_a_sctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_bgp_rs_peer_pfx_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ttl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "weight": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_peer_prefix": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_pfx": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "restart_time": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "thresh": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_route_control_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "parent_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "route_control_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_route_summarization": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "attrmap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_bgp_timers": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gr_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ka_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_as_limit": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "stale_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_bridge_domain": {
       "annotation": {
         "Type": "String",
@@ -1033,6 +1450,11 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "hub_network": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "hub network to enable transit gateway"
       },
       "name": {
         "Type": "String",
@@ -1489,16 +1911,17 @@
         "Type": "String",
         "Required": true
       },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "name_alias": {
         "Type": "String",
         "Optional": true,
         "Computed": true
       },
       "relation_cloud_rs_subnet_to_flow_log": {
-        "Type": "String",
-        "Optional": true
-      },
-      "relation_cloud_rs_zone_attach": {
         "Type": "String",
         "Optional": true
       },
@@ -1516,6 +1939,56 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_cloud_vpn_gateway": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "cloud_context_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "cloud_router_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "num_instances": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_cloud_rs_to_direct_conn_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_cloud_rs_to_host_router_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_cloud_rs_to_vpn_gw_pol": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "aci_configuration_export_policy": {
@@ -1649,6 +2122,77 @@
         "Optional": true
       },
       "snapshot": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_connection": {
+      "adj_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "conn_dir": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "conn_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "direct_connect": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_service_graph_template_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_abs_connection_conns": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_vns_rs_abs_copy_connection": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "unicast_route": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -1977,6 +2521,144 @@
         "Required": true
       }
     },
+    "aci_dhcp_option_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dhcp_option": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "annotation": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "orchestrator:terraform"
+              }
+            },
+            "data": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "dhcp_option_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "name_alias": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "dhcp_option_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_dhcp_relay_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_dhcp_rs_prov": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "addr": {
+              "Type": "String",
+              "Required": true
+            },
+            "tdn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_end_point_retention_policy": {
       "annotation": {
         "Type": "String",
@@ -2035,6 +2717,196 @@
         "Required": true
       }
     },
+    "aci_endpoint_security_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "application_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "flood_on_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "match_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pc_enf_pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pref_gr_memb": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_fv_rs_cons": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vzBrCP",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "prio": {
+              "Type": "String",
+              "Optional": true
+            },
+            "target_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "relation_fv_rs_cons_if": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vzCPIf",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "prio": {
+              "Type": "String",
+              "Optional": true
+            },
+            "target_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "relation_fv_rs_cust_qos_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to qos:CustomPol"
+      },
+      "relation_fv_rs_intra_epg": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vz:BrCP",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_prot_by": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vz:Taboo",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_prov": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vzBrCP",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_t": {
+              "Type": "String",
+              "Optional": true
+            },
+            "prio": {
+              "Type": "String",
+              "Optional": true
+            },
+            "target_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "relation_fv_rs_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fv:Ctx"
+      },
+      "relation_fv_rs_sec_inherited": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to fv:EPg",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "aci_endpoint_security_group_selector": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "endpoint_security_group_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "match_expression": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_epg_to_contract": {
       "annotation": {
         "Type": "String",
@@ -2073,6 +2945,11 @@
       }
     },
     "aci_epg_to_domain": {
+      "allow_micro_seg": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "annotation": {
         "Type": "String",
         "Optional": true,
@@ -2086,11 +2963,6 @@
         "Required": true
       },
       "binding_type": {
-        "Type": "String",
-        "Optional": true,
-        "Computed": true
-      },
-      "class_pref": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -2427,6 +3299,50 @@
         "Optional": true
       },
       "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_fabric_if_pol": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "auto_neg": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fec_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "link_debounce": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "speed": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -2910,6 +3826,219 @@
         "Computed": true
       }
     },
+    "aci_function_node": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "conn_consumer_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "conn_provider_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "func_template_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "func_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_copy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_service_graph_template_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "managed": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_default_scope_to_term": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_node_to_abs_func_prof": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_node_to_cloud_l_dev": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_node_to_l_dev": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_node_to_m_func": {
+        "Type": "String",
+        "Optional": true
+      },
+      "routing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sequence_number": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "share_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_hsrp_group_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hello_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hsrp_group_policy_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preempt_delay_min": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preempt_delay_reload": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preempt_delay_sync": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_hsrp_interface_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true
+      },
+      "delay": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "reload_delay": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_imported_contract": {
       "annotation": {
         "Type": "String",
@@ -2996,6 +4125,55 @@
         "Computed": true
       }
     },
+    "aci_l2_domain": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_extnw_rs_out": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_infra_rs_dom_vxlan_ns_def": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_infra_rs_vip_addr_ns": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_infra_rs_vlan_ns": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_infra_rs_vlan_ns_def": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "aci_l2_interface_policy": {
       "annotation": {
         "Type": "String",
@@ -3030,6 +4208,167 @@
         "Computed": true
       },
       "vlan_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l2_outside": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_l2ext_rs_e_bd": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_l2ext_rs_l2_dom_att": {
+        "Type": "String",
+        "Optional": true
+      },
+      "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l2out_extepg": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "exception_tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "flood_on_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l2_outside_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "match_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pref_gr_memb": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_fv_rs_cons": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_cons_if": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_cust_qos_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_fv_rs_intra_epg": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_prot_by": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_prov": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_sec_inherited": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_l2ext_rs_l2_inst_p_to_dom_p": {
+        "Type": "String",
+        "Optional": true
+      },
+      "target_dscp": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -3140,9 +4479,14 @@
         "Optional": true
       },
       "scope": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "aci_l3_outside": {
@@ -3160,9 +4504,14 @@
         "Computed": true
       },
       "enforce_rtctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "name": {
         "Type": "String",
@@ -3223,6 +4572,792 @@
         "Required": true
       }
     },
+    "aci_l3out_bfd_interface_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "interface_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_bfd_rs_if_pol": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "aci_l3out_bgp_external_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_outside_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_bgp_protocol_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_node_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_bgp_rs_bgp_node_ctx_pol": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "aci_l3out_floating_svi": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "autostate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Required": true
+      },
+      "encap_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "if_inst_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ll_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mtu": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "relation_l3ext_rs_dyn_path_att": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_hsrp_interface_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "config_issues": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "group_af": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "group_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "group_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_obtain_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3out_hsrp_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_hsrp_rs_group_pol": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "aci_l3out_hsrp_interface_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_hsrp_rs_if_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_hsrp_secondary_vip": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "config_issues": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "l3out_hsrp_interface_group_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_loopback_interface_profile": {
+      "addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_node_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_ospf_external_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "area_cost": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "area_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "area_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "area_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_outside_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "multipod_internal": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_ospf_interface_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "auth_key": {
+        "Type": "String",
+        "Required": true
+      },
+      "auth_key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "auth_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_ospf_rs_if_pol": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "aci_l3out_path_attachment": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "autostate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "if_inst_t": {
+        "Type": "String",
+        "Required": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ll_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mtu": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "target_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_path_attachment_secondary_ip": {
+      "addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3out_path_attachment_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_route_tag_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l3out_static_route": {
+      "aggregate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_node_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_ip_rs_route_track": {
+        "Type": "String",
+        "Optional": true
+      },
+      "rt_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_static_route_next_hop": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nexthop_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nh_addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_ip_rs_nexthop_route_track": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_ip_rs_nh_track_member": {
+        "Type": "String",
+        "Optional": true
+      },
+      "static_route_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l3out_vpc_member": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "leaf_port_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "ll_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "side": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l4_l7_service_graph_template": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_service_graph_template_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "term_cons_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "term_cons_name": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "T1"
+        }
+      },
+      "term_node_cons_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "term_node_prov_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "term_prov_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "term_prov_name": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "T2"
+        }
+      },
+      "ui_template_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_lacp_policy": {
       "annotation": {
         "Type": "String",
@@ -3233,9 +5368,14 @@
         }
       },
       "ctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "description": {
         "Type": "String",
@@ -3294,15 +5434,6 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
-      },
-      "relation_infra_rs_acc_bndl_grp_to_aggr_if": {
-        "Type": "Set",
-        "Optional": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
       },
       "relation_infra_rs_att_ent_p": {
         "Type": "String",
@@ -3575,6 +5706,39 @@
         "Optional": true
       }
     },
+    "aci_leaf_breakout_port_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "brkout_map": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_infra_rs_mon_brkout_infra_pol": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "aci_leaf_interface_profile": {
       "annotation": {
         "Type": "String",
@@ -3613,6 +5777,82 @@
         "Optional": true,
         "Computed": true
       },
+      "leaf_selector": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "node_block": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "description": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "from_": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "to_": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "switch_association_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "leaf_selector_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -3621,6 +5861,16 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "node_block_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "relation_infra_rs_acc_card_p": {
         "Type": "Set",
@@ -3815,6 +6065,125 @@
         "Computed": true
       }
     },
+    "aci_logical_device_context": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "context": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrct_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "graph_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "relation_vns_rs_l_dev_ctx_to_l_dev": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_dev_ctx_to_rtr_cfg": {
+        "Type": "String",
+        "Optional": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_logical_interface_context": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "conn_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_dest": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_device_context_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "permit_log": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_l_if_ctx_to_bd": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_cust_qos_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_inst_p": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_l_if": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_out": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_out_def": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_svc_e_pg_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_vns_rs_l_if_ctx_to_svc_redirect_pol": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "aci_logical_interface_profile": {
       "annotation": {
         "Type": "String",
@@ -3885,15 +6254,6 @@
       "relation_l3ext_rs_nd_if_pol": {
         "Type": "String",
         "Optional": true
-      },
-      "relation_l3ext_rs_path_l3_out_att": {
-        "Type": "Set",
-        "Optional": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
       },
       "tag": {
         "Type": "String",
@@ -3980,6 +6340,44 @@
       "tdn": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "aci_maintenance_group_node": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "from_": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pod_maintenance_group_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "to_": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "aci_maintenance_policy": {
@@ -4191,7 +6589,7 @@
         "Computed": true
       }
     },
-    "aci_node_block_maintgrp": {
+    "aci_node_mgmt_epg": {
       "annotation": {
         "Type": "String",
         "Optional": true,
@@ -4205,7 +6603,30 @@
         "Optional": true,
         "Computed": true
       },
-      "from_": {
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "exception_tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "flood_on_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "management_profile_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "uni/tn-mgmt/mgmtp-default"
+        }
+      },
+      "match_t": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -4219,14 +6640,112 @@
         "Optional": true,
         "Computed": true
       },
-      "pod_maintenance_group_dn": {
-        "Type": "String",
-        "Required": true
-      },
-      "to_": {
+      "pref_gr_memb": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_fv_rs_cons": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_cons_if": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_cust_qos_pol": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_fv_rs_intra_epg": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_prot_by": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_prov": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_fv_rs_sec_inherited": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_mgmt_rs_in_b_st_node": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_mgmt_rs_mgmt_bd": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_mgmt_rs_oo_b_ctx": {
+        "Type": "String",
+        "Optional": true
+      },
+      "relation_mgmt_rs_oo_b_prov": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_mgmt_rs_oo_b_st_node": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_ospf_interface_policy": {
@@ -4244,9 +6763,14 @@
         "Computed": true
       },
       "ctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "dead_intvl": {
         "Type": "String",
@@ -4300,6 +6824,170 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_ospf_route_summarization": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "cost": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inter_area_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_ospf_timers": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "bw_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gr_ctrl": {
+        "Type": "String",
+        "Optional": true
+      },
+      "lsa_arrival_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_gp_pacing_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_max_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_start_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_ecmp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_num": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_reset_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_sleep_cnt": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_sleep_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_thresh": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "spf_hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "spf_init_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "spf_max_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_physical_domain": {
@@ -4425,10 +7113,6 @@
       }
     },
     "aci_ranges": {
-      "_from": {
-        "Type": "String",
-        "Required": true
-      },
       "alloc_mode": {
         "Type": "String",
         "Optional": true,
@@ -4449,8 +7133,7 @@
       },
       "from": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Required": true
       },
       "name_alias": {
         "Type": "String",
@@ -4669,6 +7352,40 @@
         "Computed": true
       }
     },
+    "aci_spanning_tree_interface_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_spine_interface_profile": {
       "annotation": {
         "Type": "String",
@@ -4836,6 +7553,53 @@
         "Required": true
       }
     },
+    "aci_static_node_mgmt_address": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gw": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "management_epg_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "t_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "v6_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "v6_gw": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_subnet": {
       "annotation": {
         "Type": "String",
@@ -4846,9 +7610,14 @@
         }
       },
       "ctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "description": {
         "Type": "String",
@@ -4891,9 +7660,14 @@
         "Optional": true
       },
       "scope": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "virtual": {
         "Type": "String",
@@ -5040,6 +7814,202 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_vmm_controller": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dvs_version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "host_or_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inventory_trig_st": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "msft_config_err_msg": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "msft_config_issues": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "n1kv_stats_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "port": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vmm_rs_acc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to vmm:UsrAccP"
+      },
+      "relation_vmm_rs_ctrlr_p_mon_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to mon:InfraPol"
+      },
+      "relation_vmm_rs_mcast_addr_ns": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fvns:McastAddrInstP"
+      },
+      "relation_vmm_rs_mgmt_e_pg": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fv:EPg"
+      },
+      "relation_vmm_rs_to_ext_dev_mgr": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to extdev:MgrP",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relation_vmm_rs_vmm_ctrlr_p": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vmmCtrlrP",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "epg_depl_pref": {
+              "Type": "String",
+              "Optional": true
+            },
+            "target_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "relation_vmm_rs_vxlan_ns": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fvns:VxlanInstP"
+      },
+      "relation_vmm_rs_vxlan_ns_def": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fvns:AInstP"
+      },
+      "root_cont_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "seq_num": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "stats_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_domain_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "vxlan_depl_pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_vmm_credential": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pwd": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "usr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_domain_dn": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_vmm_domain": {
@@ -5206,11 +8176,6 @@
           "Type": "string",
           "Value": "orchestrator:terraform"
         }
-      },
-      "description": {
-        "Type": "String",
-        "Optional": true,
-        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -5406,6 +8371,93 @@
         "Computed": true
       }
     },
+    "aci_vswitch_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vmm_rs_vswitch_exporter_pol": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to netflowVmmExporterPol",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "active_flow_time_out": {
+              "Type": "String",
+              "Optional": true
+            },
+            "idle_flow_time_out": {
+              "Type": "String",
+              "Optional": true
+            },
+            "sampling_rate": {
+              "Type": "String",
+              "Optional": true
+            },
+            "target_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "relation_vmm_rs_vswitch_override_cdp_if_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to cdp:IfPol"
+      },
+      "relation_vmm_rs_vswitch_override_fw_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to nws:FwPol"
+      },
+      "relation_vmm_rs_vswitch_override_lacp_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to lacp:LagPol"
+      },
+      "relation_vmm_rs_vswitch_override_lldp_if_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to lldp:IfPol"
+      },
+      "relation_vmm_rs_vswitch_override_mcp_if_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to mcp:IfPol"
+      },
+      "relation_vmm_rs_vswitch_override_mtu_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to l2:InstPol"
+      },
+      "relation_vmm_rs_vswitch_override_stp_pol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to stp:IfPol"
+      },
+      "vmm_domain_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_vxlan_pool": {
       "annotation": {
         "Type": "String",
@@ -5465,6 +8517,30 @@
     }
   },
   "data-sources": {
+    "aci_aaa_domain": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_access_generic": {
       "annotation": {
         "Type": "String",
@@ -5882,6 +8958,390 @@
         "Computed": true
       }
     },
+    "aci_bd_dhcp_label": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "bridge_domain_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_address_family_context": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "e_dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "i_dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "local_dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_ecmp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_ecmp_ibgp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_bgp_best_path_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_bgp_peer_connectivity_profile": {
+      "addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "addr_t_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "allowed_self_as_cnt": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "as_number": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "local_asn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "local_asn_propagate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_node_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "peer_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "private_a_sctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ttl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "weight": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_peer_prefix": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_pfx": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "restart_time": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "thresh": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_route_control_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "parent_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "route_control_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_bgp_route_summarization": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "attrmap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_bgp_timers": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gr_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ka_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_as_limit": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "stale_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_bridge_domain": {
       "annotation": {
         "Type": "String",
@@ -6034,6 +9494,113 @@
         "Required": true
       },
       "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_client_end_point": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fvcep_objects": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "application_profile_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "endpoint_path": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "epg_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "instance_profile_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ip": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "l2out_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "mac": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "tenant_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "vlan": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "vrf_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ip": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vlan": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -6506,6 +10073,11 @@
         "Type": "String",
         "Required": true
       },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "name_alias": {
         "Type": "String",
         "Optional": true,
@@ -6517,6 +10089,44 @@
         "Computed": true
       },
       "usage": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_cloud_vpn_gateway": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "cloud_context_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "cloud_router_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "num_instances": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -6625,6 +10235,59 @@
         "Computed": true
       },
       "snapshot": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_connection": {
+      "adj_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "conn_dir": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "conn_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "direct_connect": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_service_graph_template_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "unicast_route": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -6774,6 +10437,110 @@
         "Required": true
       }
     },
+    "aci_dhcp_option": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "data": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dhcp_option_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dhcp_option_policy_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_dhcp_option_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_dhcp_relay_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_end_point_retention_policy": {
       "annotation": {
         "Type": "String",
@@ -6832,6 +10599,92 @@
         "Required": true
       }
     },
+    "aci_endpoint_security_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "application_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "flood_on_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "match_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pc_enf_pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pref_gr_memb": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_endpoint_security_group_selector": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "endpoint_security_group_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "match_expression": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_epg_to_contract": {
       "annotation": {
         "Type": "String",
@@ -6870,6 +10723,11 @@
       }
     },
     "aci_epg_to_domain": {
+      "allow_micro_seg": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "annotation": {
         "Type": "String",
         "Optional": true,
@@ -6883,11 +10741,6 @@
         "Required": true
       },
       "binding_type": {
-        "Type": "String",
-        "Optional": true,
-        "Computed": true
-      },
-      "class_pref": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -7126,6 +10979,50 @@
         "Computed": true
       }
     },
+    "aci_fabric_if_pol": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "auto_neg": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fec_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "link_debounce": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "speed": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_fabric_node_member": {
       "annotation": {
         "Type": "String",
@@ -7178,6 +11075,41 @@
       "serial": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "aci_fabric_path_ep": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "node_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "pod_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "vpc": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       }
     },
     "aci_fc_domain": {
@@ -7539,6 +11471,190 @@
         "Computed": true
       }
     },
+    "aci_function_node": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "func_template_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "func_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_copy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_service_graph_template_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "managed": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "routing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sequence_number": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "share_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_hsrp_group_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hello_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hsrp_group_policy_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preempt_delay_min": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preempt_delay_reload": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preempt_delay_sync": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_hsrp_interface_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "delay": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "reload_delay": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_imported_contract": {
       "annotation": {
         "Type": "String",
@@ -7621,6 +11737,30 @@
         "Computed": true
       }
     },
+    "aci_l2_domain": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_l2_interface_policy": {
       "annotation": {
         "Type": "String",
@@ -7655,6 +11795,97 @@
         "Computed": true
       },
       "vlan_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l2_outside": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l2out_extepg": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "exception_tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "flood_on_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l2_outside_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "match_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pref_gr_memb": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "target_dscp": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -7717,9 +11948,14 @@
         "Computed": true
       },
       "scope": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "aci_l3_outside": {
@@ -7737,9 +11973,14 @@
         "Computed": true
       },
       "enforce_rtctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "name": {
         "Type": "String",
@@ -7760,6 +12001,717 @@
         "Required": true
       }
     },
+    "aci_l3out_bfd_interface_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "interface_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_bgp_external_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_outside_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_bgp_protocol_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_node_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_floating_svi": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "autostate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Required": true
+      },
+      "encap_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "if_inst_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ll_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mtu": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_hsrp_interface_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "config_issues": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "group_af": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "group_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "group_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_obtain_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3out_hsrp_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_hsrp_interface_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_hsrp_secondary_vip": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "config_issues": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "l3out_hsrp_interface_group_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_loopback_interface_profile": {
+      "addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_node_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_ospf_external_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "area_cost": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "area_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "area_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "area_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_outside_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "multipod_internal": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_ospf_interface_profile": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "auth_key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "auth_key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "auth_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_path_attachment": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "autostate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap_scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "if_inst_t": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ll_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_interface_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mtu": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "target_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_path_attachment_secondary_ip": {
+      "addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3out_path_attachment_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_route_tag_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l3out_static_route": {
+      "aggregate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_node_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rt_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l3out_static_route_next_hop": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nexthop_profile_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nh_addr": {
+        "Type": "String",
+        "Required": true
+      },
+      "pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "static_route_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l3out_vpc_member": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ipv6_dad": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "leaf_port_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "ll_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "side": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l4_l7_service_graph_template": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_service_graph_template_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "ui_template_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_lacp_policy": {
       "annotation": {
         "Type": "String",
@@ -7770,9 +12722,14 @@
         }
       },
       "ctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "description": {
         "Type": "String",
@@ -7841,6 +12798,35 @@
           "Type": "string",
           "Value": "orchestrator:terraform"
         }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_leaf_breakout_port_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "brkout_map": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "description": {
         "Type": "String",
@@ -8075,6 +13061,85 @@
         "Computed": true
       }
     },
+    "aci_logical_device_context": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "context": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrct_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "graph_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_logical_interface_context": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "conn_name_or_lbl": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_dest": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_device_context_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "permit_log": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_logical_interface_profile": {
       "annotation": {
         "Type": "String",
@@ -8192,6 +13257,44 @@
       "tdn": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "aci_maintenance_group_node": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "from_": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pod_maintenance_group_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "to_": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "aci_maintenance_policy": {
@@ -8391,7 +13494,7 @@
         "Computed": true
       }
     },
-    "aci_node_block_maintgrp": {
+    "aci_node_mgmt_epg": {
       "annotation": {
         "Type": "String",
         "Optional": true,
@@ -8405,7 +13508,30 @@
         "Optional": true,
         "Computed": true
       },
-      "from_": {
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "exception_tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "flood_on_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "management_profile_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "uni/tn-mgmt/mgmtp-default"
+        }
+      },
+      "match_t": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -8419,14 +13545,19 @@
         "Optional": true,
         "Computed": true
       },
-      "pod_maintenance_group_dn": {
-        "Type": "String",
-        "Required": true
-      },
-      "to_": {
+      "pref_gr_memb": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_ospf_interface_policy": {
@@ -8444,9 +13575,14 @@
         "Computed": true
       },
       "ctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "dead_intvl": {
         "Type": "String",
@@ -8500,6 +13636,172 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_ospf_route_summarization": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "cost": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inter_area_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_ospf_timers": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "bw_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dist": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gr_ctrl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_arrival_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_gp_pacing_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_max_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lsa_start_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_ecmp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_num": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_reset_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_sleep_cnt": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_sleep_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_lsa_thresh": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "spf_hold_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "spf_init_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "spf_max_intvl": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_physical_domain": {
@@ -8605,10 +13907,6 @@
       }
     },
     "aci_ranges": {
-      "_from": {
-        "Type": "String",
-        "Required": true
-      },
       "alloc_mode": {
         "Type": "String",
         "Optional": true,
@@ -8629,8 +13927,7 @@
       },
       "from": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Required": true
       },
       "name_alias": {
         "Type": "String",
@@ -8647,6 +13944,49 @@
         "Required": true
       },
       "vlan_pool_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_rest": {
+      "children": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "child_class_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "child_content": {
+              "Type": "Map",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "class_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "content": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
+      "dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "path": {
         "Type": "String",
         "Required": true
       }
@@ -8818,6 +14158,40 @@
         "Computed": true
       }
     },
+    "aci_spanning_tree_interface_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "ctrl": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_spine_interface_profile": {
       "annotation": {
         "Type": "String",
@@ -8945,6 +14319,53 @@
         "Required": true
       }
     },
+    "aci_static_node_mgmt_address": {
+      "addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gw": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "management_epg_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "t_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "v6_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "v6_gw": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_subnet": {
       "annotation": {
         "Type": "String",
@@ -8955,9 +14376,14 @@
         }
       },
       "ctrl": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "description": {
         "Type": "String",
@@ -8983,11 +14409,274 @@
         "Computed": true
       },
       "scope": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "virtual": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_system": {
+      "address": {
         "Type": "String",
         "Optional": true,
         "Computed": true
       },
-      "virtual": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "boot_strap_tate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "child_action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "config_issues": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "control_plane_mtu": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "current_time": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "enforce_subnet_check": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "etep_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_domain": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_mac": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inb_mgmt_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inb_mgmt_addr6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inb_mgmt_addr6_mask": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inb_mgmt_addr_mask": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inb_mgmt_gateway": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inb_mgmt_gateway6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "last_reboot_time": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "last_reset_reason": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lc_own": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mod_ts": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mon_pol_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "oob_mgmt_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "oob_mgmt_addr6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "oob_mgmt_addr6_mask": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "oob_mgmt_addr_mask": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "oob_mgmt_gateway": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "oob_mgmt_gateway6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pod_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "remote_network_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "remote_node": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rl_oper_pod_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rl_routable_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rldirect_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "serial": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "server_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "site_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "system_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "system_uptime": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tep_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "unicast_xr_ep_learn_disable": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "virtual_mode": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -9119,6 +14808,142 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_vmm_controller": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dvs_version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "host_or_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "inventory_trig_st": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "msft_config_err_msg": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "msft_config_issues": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "n1kv_stats_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "port": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "root_cont_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "scope": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "seq_num": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "stats_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_domain_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "vxlan_depl_pref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_vmm_credential": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pwd": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "usr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_domain_dn": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_vmm_domain": {
@@ -9332,6 +15157,30 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_vswitch_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "orchestrator:terraform"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_domain_dn": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_vxlan_pool": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "tfe",
   "type": "provider",
-  "version": "v0.36.1",
+  "version": "v0.19.0",
   "provider": {
     "hostname": {
       "Type": "String",
@@ -271,6 +271,10 @@
       "url": {
         "Type": "String",
         "Required": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "tfe_organization_token": {
@@ -569,6 +573,14 @@
               }
             },
             "manage_run_tasks": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "manage_policy_overrides": {
               "Type": "Bool",
               "Optional": true,
               "Default": {
@@ -1495,6 +1507,31 @@
         "Computed": true
       },
       "queue_all_runs": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "remote_state_consumer_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "resource_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "run_failures": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "runs_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "speculative_enabled": {
         "Type": "Bool",
         "Computed": true
       },

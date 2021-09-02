@@ -1550,7 +1550,7 @@
                         "resources": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
+                          "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
                           "ConfigImplicitMode": "Attr",
                           "Elem": {
                             "Type": "SchemaElements",
@@ -1674,7 +1674,7 @@
                         "resources": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
+                          "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
                           "ConfigImplicitMode": "Attr",
                           "Elem": {
                             "Type": "SchemaElements",
@@ -1857,7 +1857,7 @@
                         "resources": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
+                          "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
                           "ConfigImplicitMode": "Attr",
                           "Elem": {
                             "Type": "SchemaElements",
@@ -1981,7 +1981,7 @@
                         "resources": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
+                          "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
                           "ConfigImplicitMode": "Attr",
                           "Elem": {
                             "Type": "SchemaElements",
@@ -2240,7 +2240,7 @@
                               "resources": {
                                 "Type": "List",
                                 "Optional": true,
-                                "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
+                                "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
                                 "ConfigImplicitMode": "Attr",
                                 "Elem": {
                                   "Type": "SchemaElements",
@@ -2364,7 +2364,7 @@
                               "resources": {
                                 "Type": "List",
                                 "Optional": true,
-                                "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
+                                "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
                                 "ConfigImplicitMode": "Attr",
                                 "Elem": {
                                   "Type": "SchemaElements",
@@ -2547,7 +2547,7 @@
                               "resources": {
                                 "Type": "List",
                                 "Optional": true,
-                                "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
+                                "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', that match this to stanza. A request matches \nif it contains a resource in this list. If * is specified for resources, \nthen this 'EgressTo' rule will authorize access to all resources outside \nthe perimeter.",
                                 "ConfigImplicitMode": "Attr",
                                 "Elem": {
                                   "Type": "SchemaElements",
@@ -2671,7 +2671,7 @@
                               "resources": {
                                 "Type": "List",
                                 "Optional": true,
-                                "Description": "A list of resources, currently only projects in the form \n'projects/\u003cprojectnumber\u003e', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
+                                "Description": "A list of resources, currently only projects in the form \n'projects/<projectnumber>', protected by this 'ServicePerimeter'\nthat are allowed to be accessed by sources defined in the\ncorresponding 'IngressFrom'. A request matches if it contains\na resource in this list. If '*' is specified for resources,\nthen this 'IngressTo' rule will authorize access to all \nresources inside the perimeter, provided that the request\nalso matches the 'operations' field.",
                                 "ConfigImplicitMode": "Attr",
                                 "Elem": {
                                   "Type": "SchemaElements",
@@ -5334,7 +5334,7 @@
       "runtime_api_version": {
         "Type": "String",
         "Optional": true,
-        "Description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at 'https://cloud.google.com/appengine/docs/standard/\u003clanguage\u003e/config/appref'\\\nSubstitute '\u003clanguage\u003e' with 'python', 'java', 'php', 'ruby', 'go' or 'nodejs'.",
+        "Description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at 'https://cloud.google.com/appengine/docs/standard/<language>/config/appref'\\\nSubstitute '<language>' with 'python', 'java', 'php', 'ruby', 'go' or 'nodejs'.",
         "Computed": true
       },
       "runtime_channel": {
@@ -5879,7 +5879,7 @@
       "runtime_api_version": {
         "Type": "String",
         "Optional": true,
-        "Description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at 'https://cloud.google.com/appengine/docs/standard/\u003clanguage\u003e/config/appref'\\\nSubstitute '\u003clanguage\u003e' with 'python', 'java', 'php', 'ruby', 'go' or 'nodejs'."
+        "Description": "The version of the API in the given runtime environment.\nPlease see the app.yaml reference for valid values at 'https://cloud.google.com/appengine/docs/standard/<language>/config/appref'\\\nSubstitute '<language>' with 'python', 'java', 'php', 'ruby', 'go' or 'nodejs'."
       },
       "service": {
         "Type": "String",
@@ -7627,7 +7627,7 @@
             "skip_leading_rows": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The number of rows at the top of a CSV file that BigQuery will skip when loading the data.\nThe default value is 0. This property is useful if you have header rows in the file that should be skipped.\nWhen autodetect is on, the behavior is the following:\nskipLeadingRows unspecified - Autodetect tries to detect headers in the first row. If they are not detected,\nthe row is read as data. Otherwise data is read starting from the second row.\nskipLeadingRows is 0 - Instructs autodetect that there are no headers and data should be read starting from the first row.\nskipLeadingRows = N \u003e 0 - Autodetect skips N-1 rows and tries to detect headers in row N. If headers are not detected,\nrow N is just skipped. Otherwise row N is used to extract column names for the detected schema.",
+              "Description": "The number of rows at the top of a CSV file that BigQuery will skip when loading the data.\nThe default value is 0. This property is useful if you have header rows in the file that should be skipped.\nWhen autodetect is on, the behavior is the following:\nskipLeadingRows unspecified - Autodetect tries to detect headers in the first row. If they are not detected,\nthe row is read as data. Otherwise data is read starting from the second row.\nskipLeadingRows is 0 - Instructs autodetect that there are no headers and data should be read starting from the first row.\nskipLeadingRows = N > 0 - Autodetect skips N-1 rows and tries to detect headers in row N. If headers are not detected,\nrow N is just skipped. Otherwise row N is used to extract column names for the detected schema.",
               "Default": {
                 "Type": "int",
                 "Value": "0"
@@ -8115,7 +8115,7 @@
             "data_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "A JSON schema for the data type. Required unless argumentKind = ANY_TYPE.\n~\u003e**NOTE**: Because this field expects a JSON string, any changes to the string\nwill create a diff, even if the JSON itself hasn't changed. If the API returns\na different value for the same schema, e.g. it switched the order of values\nor replaced STRUCT field type with RECORD field type, we currently cannot\nsuppress the recurring diff this causes. As a workaround, we recommend using\nthe schema as returned by the API."
+              "Description": "A JSON schema for the data type. Required unless argumentKind = ANY_TYPE.\n~>**NOTE**: Because this field expects a JSON string, any changes to the string\nwill create a diff, even if the JSON itself hasn't changed. If the API returns\na different value for the same schema, e.g. it switched the order of values\nor replaced STRUCT field type with RECORD field type, we currently cannot\nsuppress the recurring diff this causes. As a workaround, we recommend using\nthe schema as returned by the API."
             },
             "mode": {
               "Type": "String",
@@ -8188,7 +8188,7 @@
       "return_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "A JSON schema for the return type. Optional if language = \"SQL\"; required otherwise.\nIf absent, the return type is inferred from definitionBody at query time in each query\nthat references this routine. If present, then the evaluated result will be cast to\nthe specified returned type at query time. ~\u003e**NOTE**: Because this field expects a JSON\nstring, any changes to the string will create a diff, even if the JSON itself hasn't\nchanged. If the API returns a different value for the same schema, e.g. it switche\nd the order of values or replaced STRUCT field type with RECORD field type, we currently\ncannot suppress the recurring diff this causes. As a workaround, we recommend using\nthe schema as returned by the API."
+        "Description": "A JSON schema for the return type. Optional if language = \"SQL\"; required otherwise.\nIf absent, the return type is inferred from definitionBody at query time in each query\nthat references this routine. If present, then the evaluated result will be cast to\nthe specified returned type at query time. ~>**NOTE**: Because this field expects a JSON\nstring, any changes to the string will create a diff, even if the JSON itself hasn't\nchanged. If the API returns a different value for the same schema, e.g. it switche\nd the order of values or replaced STRUCT field type with RECORD field type, we currently\ncannot suppress the recurring diff this causes. As a workaround, we recommend using\nthe schema as returned by the API."
       },
       "routine_id": {
         "Type": "String",
@@ -8839,7 +8839,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique name of the requested app profile. Values are of the form 'projects/\u003cproject\u003e/instances/\u003cinstance\u003e/appProfiles/\u003cappProfileId\u003e'.",
+        "Description": "The unique name of the requested app profile. Values are of the form 'projects/<project>/instances/<instance>/appProfiles/<appProfileId>'.",
         "Computed": true
       },
       "project": {
@@ -9237,7 +9237,7 @@
       "split_keys": {
         "Type": "List",
         "Optional": true,
-        "Description": "A list of predefined keys to split the table on. !\u003e Warning: Modifying the split_keys of an existing table will cause Terraform to delete/recreate the entire google_bigtable_table resource.",
+        "Description": "A list of predefined keys to split the table on. !> Warning: Modifying the split_keys of an existing table will cause Terraform to delete/recreate the entire google_bigtable_table resource.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -9737,7 +9737,7 @@
       "display_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "User data for display name in UI. Must be \u003c= 60 chars."
+        "Description": "User data for display name in UI. Must be <= 60 chars."
       },
       "name": {
         "Type": "String",
@@ -9765,7 +9765,7 @@
             "threshold_percent": {
               "Type": "Float",
               "Required": true,
-              "Description": "Send an alert when this threshold is exceeded. This is a\n1.0-based percentage, so 0.5 = 50%. Must be \u003e= 0."
+              "Description": "Send an alert when this threshold is exceeded. This is a\n1.0-based percentage, so 0.5 = 50%. Must be >= 0."
             }
           }
         }
@@ -11557,7 +11557,7 @@
                                           "name": {
                                             "Type": "String",
                                             "Required": true,
-                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/\u003cproject-id|project-number\u003e/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation."
+                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/<project-id|project-number>/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation."
                                           }
                                         }
                                       }
@@ -11676,7 +11676,7 @@
                               "container_port": {
                                 "Type": "Int",
                                 "Optional": true,
-                                "Description": "Port number the container listens on. This must be a valid port number, 0 \u003c x \u003c 65536."
+                                "Description": "Port number the container listens on. This must be a valid port number, 0 < x < 65536."
                               },
                               "name": {
                                 "Type": "String",
@@ -11835,7 +11835,7 @@
                               "secret_name": {
                                 "Type": "String",
                                 "Required": true,
-                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n\u003calias\u003e:projects/\u003cproject-id|project-number\u003e/secrets/\u003csecret-name\u003e.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation."
+                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n<alias>:projects/<project-id|project-number>/secrets/<secret-name>.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation."
                               }
                             }
                           }
@@ -12235,7 +12235,7 @@
             "topic_name": {
               "Type": "String",
               "Required": true,
-              "Description": "The full resource name for the Cloud Pub/Sub topic to which\nmessages will be published when a job is delivered. ~\u003e**NOTE:**\nThe topic name must be in the same format as required by PubSub's\nPublishRequest.name, e.g. 'projects/my-project/topics/my-topic'."
+              "Description": "The full resource name for the Cloud Pub/Sub topic to which\nmessages will be published when a job is delivered. ~>**NOTE:**\nThe topic name must be in the same format as required by PubSub's\nPublishRequest.name, e.g. 'projects/my-project/topics/my-topic'."
             }
           }
         }
@@ -12408,7 +12408,7 @@
             "max_attempts": {
               "Type": "Int",
               "Optional": true,
-              "Description": "Number of attempts per task.\n\nCloud Tasks will attempt the task maxAttempts times (that is, if\nthe first attempt fails, then there will be maxAttempts - 1\nretries). Must be \u003e= -1.\n\nIf unspecified when the queue is created, Cloud Tasks will pick\nthe default.\n\n-1 indicates unlimited attempts.",
+              "Description": "Number of attempts per task.\n\nCloud Tasks will attempt the task maxAttempts times (that is, if\nthe first attempt fails, then there will be maxAttempts - 1\nretries). Must be >= -1.\n\nIf unspecified when the queue is created, Cloud Tasks will pick\nthe default.\n\n-1 indicates unlimited attempts.",
               "Computed": true
             },
             "max_backoff": {
@@ -13676,7 +13676,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be \u003c= 128 bytes.",
+        "Description": "Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -13876,7 +13876,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be \u003c= 128 bytes.",
+        "Description": "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -15696,7 +15696,7 @@
                   "pypi_packages": {
                     "Type": "Map",
                     "Optional": true,
-                    "Description": "Custom Python Package Index (PyPI) packages to be installed in the environment. Keys refer to the lowercase package name (e.g. \"numpy\"). Values are the lowercase extras and version specifier (e.g. \"==1.12.0\", \"[devel,gcp_api]\", \"[devel]\u003e=1.8.2, \u003c1.9.2\"). To specify a package without pinning it to a version specifier, use the empty string as the value.",
+                    "Description": "Custom Python Package Index (PyPI) packages to be installed in the environment. Keys refer to the lowercase package name (e.g. \"numpy\"). Values are the lowercase extras and version specifier (e.g. \"==1.12.0\", \"[devel,gcp_api]\", \"[devel]>=1.8.2, <1.9.2\"). To specify a package without pinning it to a version specifier, use the empty string as the value.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -15893,7 +15893,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "User-defined labels for this environment. The labels map can contain no more than 64 entries. Entries of the labels map are UTF8 strings that comply with the following restrictions: Label keys must be between 1 and 63 characters long and must conform to the following regular expression: [a-z]([-a-z0-9]*[a-z0-9])?. Label values must be between 0 and 63 characters long and must conform to the regular expression ([a-z]([-a-z0-9]*[a-z0-9])?)?. No more than 64 labels can be associated with a given environment. Both keys and values must be \u003c= 128 bytes in size.",
+        "Description": "User-defined labels for this environment. The labels map can contain no more than 64 entries. Entries of the labels map are UTF8 strings that comply with the following restrictions: Label keys must be between 1 and 63 characters long and must conform to the following regular expression: [a-z]([-a-z0-9]*[a-z0-9])?. Label values must be between 0 and 63 characters long and must conform to the regular expression ([a-z]([-a-z0-9]*[a-z0-9])?)?. No more than 64 labels can be associated with a given environment. Both keys and values must be <= 128 bytes in size.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -15957,7 +15957,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Labels to apply to this address.  A list of key-\u003evalue pairs.",
+        "Description": "Labels to apply to this address.  A list of key->value pairs.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -16432,7 +16432,7 @@
                   "query_string_whitelist": {
                     "Type": "List",
                     "Optional": true,
-                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '\u0026' and '=' will\nbe percent encoded and not treated as delimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '&' and '=' will\nbe percent encoded and not treated as delimiters.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -16844,7 +16844,7 @@
                   "query_string_blacklist": {
                     "Type": "Set",
                     "Optional": true,
-                    "Description": "Names of query string parameters to exclude in cache keys.\n\nAll other parameters will be included. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'\u0026' and '=' will be percent encoded and not treated as\ndelimiters.",
+                    "Description": "Names of query string parameters to exclude in cache keys.\n\nAll other parameters will be included. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'&' and '=' will be percent encoded and not treated as\ndelimiters.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -16854,7 +16854,7 @@
                   "query_string_whitelist": {
                     "Type": "Set",
                     "Optional": true,
-                    "Description": "Names of query string parameters to include in cache keys.\n\nAll other parameters will be excluded. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'\u0026' and '=' will be percent encoded and not treated as\ndelimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\n\nAll other parameters will be excluded. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'&' and '=' will be percent encoded and not treated as\ndelimiters.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17639,7 +17639,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Labels to apply to this disk.  A list of key-\u003evalue pairs.",
+        "Description": "Labels to apply to this disk.  A list of key->value pairs.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -17686,7 +17686,7 @@
       "resource_policies": {
         "Type": "List",
         "Optional": true,
-        "Description": "Resource policies applied to this disk for automatic snapshot creations.\n\n~\u003e**NOTE** This value does not support updating the\nresource policy, as resource policies can not be updated more than\none at a time. Use\n['google_compute_disk_resource_policy_attachment'](https://www.terraform.io/docs/providers/google/r/compute_disk_resource_policy_attachment.html)\nto allow for updating the resource policy attached to the disk.",
+        "Description": "Resource policies applied to this disk for automatic snapshot creations.\n\n~>**NOTE** This value does not support updating the\nresource policy, as resource policies can not be updated more than\none at a time. Use\n['google_compute_disk_resource_policy_attachment'](https://www.terraform.io/docs/providers/google/r/compute_disk_resource_policy_attachment.html)\nto allow for updating the resource policy attached to the disk.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -17701,7 +17701,7 @@
       "size": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~\u003e**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
+        "Description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~>**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
         "Computed": true
       },
       "snapshot": {
@@ -18682,7 +18682,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Labels to apply to this address.  A list of key-\u003evalue pairs.",
+        "Description": "Labels to apply to this address.  A list of key->value pairs.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -18774,7 +18774,7 @@
       "metadata_filters": {
         "Type": "List",
         "Optional": true,
-        "Description": "Opaque filter criteria used by Loadbalancer to restrict routing configuration to a limited set of [xDS](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md) compliant clients. In their xDS requests to Loadbalancer, xDS clients present [node metadata](https://github.com/envoyproxy/data-plane-api/search?q=%22message+Node%22+in%3A%2Fenvoy%2Fapi%2Fv2%2Fcore%2Fbase.proto\u0026). If a match takes place, the relevant configuration is made available to those proxies. Otherwise, all the resources (e.g. `TargetHttpProxy`, `UrlMap`) referenced by the `ForwardingRule` will not be visible to those proxies.\n\nFor each `metadataFilter` in this list, if its `filterMatchCriteria` is set to MATCH_ANY, at least one of the `filterLabel`s must match the corresponding label provided in the metadata. If its `filterMatchCriteria` is set to MATCH_ALL, then all of its `filterLabel`s must match with corresponding labels provided in the metadata.\n\n`metadataFilters` specified here will be applifed before those specified in the `UrlMap` that this `ForwardingRule` references.\n\n`metadataFilters` only applies to Loadbalancers that have their loadBalancingScheme set to `INTERNAL_SELF_MANAGED`.",
+        "Description": "Opaque filter criteria used by Loadbalancer to restrict routing configuration to a limited set of [xDS](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md) compliant clients. In their xDS requests to Loadbalancer, xDS clients present [node metadata](https://github.com/envoyproxy/data-plane-api/search?q=%22message+Node%22+in%3A%2Fenvoy%2Fapi%2Fv2%2Fcore%2Fbase.proto&). If a match takes place, the relevant configuration is made available to those proxies. Otherwise, all the resources (e.g. `TargetHttpProxy`, `UrlMap`) referenced by the `ForwardingRule` will not be visible to those proxies.\n\nFor each `metadataFilter` in this list, if its `filterMatchCriteria` is set to MATCH_ANY, at least one of the `filterLabel`s must match the corresponding label provided in the metadata. If its `filterMatchCriteria` is set to MATCH_ALL, then all of its `filterLabel`s must match with corresponding labels provided in the metadata.\n\n`metadataFilters` specified here will be applifed before those specified in the `UrlMap` that this `ForwardingRule` references.\n\n`metadataFilters` only applies to Loadbalancers that have their loadBalancingScheme set to `INTERNAL_SELF_MANAGED`.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -22877,12 +22877,12 @@
             "source": {
               "Type": "String",
               "Optional": true,
-              "Description": "The name (not self_link) of the disk (such as those managed by google_compute_disk) to attach. ~\u003e Note: Either source or source_image is required when creating a new instance except for when creating a local SSD."
+              "Description": "The name (not self_link) of the disk (such as those managed by google_compute_disk) to attach. ~> Note: Either source or source_image is required when creating a new instance except for when creating a local SSD."
             },
             "source_image": {
               "Type": "String",
               "Optional": true,
-              "Description": "The image from which to initialize this disk. This can be one of: the image's self_link, projects/{project}/global/images/{image}, projects/{project}/global/images/family/{family}, global/images/{image}, global/images/family/{family}, family/{family}, {project}/{family}, {project}/{image}, {family}, or {image}. ~\u003e Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.",
+              "Description": "The image from which to initialize this disk. This can be one of: the image's self_link, projects/{project}/global/images/{image}, projects/{project}/global/images/family/{family}, global/images/{image}, global/images/family/{family}, family/{family}, {project}/{family}, {project}/{image}, {family}, or {image}. ~> Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.",
               "Computed": true
             },
             "type": {
@@ -23508,7 +23508,7 @@
       "router": {
         "Type": "String",
         "Required": true,
-        "Description": "URL of the cloud router to be used for dynamic routing. This router must be in\nthe same region as this InterconnectAttachment. The InterconnectAttachment will\nautomatically connect the Interconnect to the network \u0026 region within which the\nCloud Router is configured."
+        "Description": "URL of the cloud router to be used for dynamic routing. This router must be in\nthe same region as this InterconnectAttachment. The InterconnectAttachment will\nautomatically connect the Interconnect to the network & region within which the\nCloud Router is configured."
       },
       "self_link": {
         "Type": "String",
@@ -24769,7 +24769,7 @@
             "metadata": {
               "Type": "Map",
               "Optional": true,
-              "Description": "Preserved metadata defined for this instance. This is a list of key-\u003evalue pairs.",
+              "Description": "Preserved metadata defined for this instance. This is a list of key->value pairs.",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -25193,7 +25193,7 @@
             "capacity_scaler": {
               "Type": "Float",
               "Optional": true,
-              "Description": "A multiplier applied to the group's maximum servicing capacity\n(based on UTILIZATION, RATE or CONNECTION).\n\n~\u003e**NOTE**: This field cannot be set for\nINTERNAL region backend services (default loadBalancingScheme),\nbut is required for non-INTERNAL backend service. The total\ncapacity_scaler for all backends must be non-zero.\n\nA setting of 0 means the group is completely drained, offering\n0% of its available Capacity. Valid range is [0.0,1.0]."
+              "Description": "A multiplier applied to the group's maximum servicing capacity\n(based on UTILIZATION, RATE or CONNECTION).\n\n~>**NOTE**: This field cannot be set for\nINTERNAL region backend services (default loadBalancingScheme),\nbut is required for non-INTERNAL backend service. The total\ncapacity_scaler for all backends must be non-zero.\n\nA setting of 0 means the group is completely drained, offering\n0% of its available Capacity. Valid range is [0.0,1.0]."
             },
             "description": {
               "Type": "String",
@@ -25298,7 +25298,7 @@
                   "query_string_blacklist": {
                     "Type": "Set",
                     "Optional": true,
-                    "Description": "Names of query string parameters to exclude in cache keys.\n\nAll other parameters will be included. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'\u0026' and '=' will be percent encoded and not treated as\ndelimiters.",
+                    "Description": "Names of query string parameters to exclude in cache keys.\n\nAll other parameters will be included. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'&' and '=' will be percent encoded and not treated as\ndelimiters.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -25308,7 +25308,7 @@
                   "query_string_whitelist": {
                     "Type": "Set",
                     "Optional": true,
-                    "Description": "Names of query string parameters to include in cache keys.\n\nAll other parameters will be excluded. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'\u0026' and '=' will be percent encoded and not treated as\ndelimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\n\nAll other parameters will be excluded. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'&' and '=' will be percent encoded and not treated as\ndelimiters.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -26113,7 +26113,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Labels to apply to this disk.  A list of key-\u003evalue pairs.",
+        "Description": "Labels to apply to this disk.  A list of key->value pairs.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -27466,7 +27466,7 @@
             "metadata": {
               "Type": "Map",
               "Optional": true,
-              "Description": "Preserved metadata defined for this instance. This is a list of key-\u003evalue pairs.",
+              "Description": "Preserved metadata defined for this instance. This is a list of key->value pairs.",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -28155,7 +28155,7 @@
                               "num_retries": {
                                 "Type": "Int",
                                 "Optional": true,
-                                "Description": "Specifies the allowed number retries. This number must be \u003e 0."
+                                "Description": "Specifies the allowed number retries. This number must be > 0."
                               },
                               "per_try_timeout": {
                                 "Type": "List",
@@ -28894,7 +28894,7 @@
                               "num_retries": {
                                 "Type": "Int",
                                 "Required": true,
-                                "Description": "Specifies the allowed number retries. This number must be \u003e 0."
+                                "Description": "Specifies the allowed number retries. This number must be > 0."
                               },
                               "per_try_timeout": {
                                 "Type": "List",
@@ -32138,7 +32138,7 @@
                   "num_retries": {
                     "Type": "Int",
                     "Optional": true,
-                    "Description": "Specifies the allowed number retries. This number must be \u003e 0. If not specified, defaults to 1.",
+                    "Description": "Specifies the allowed number retries. This number must be > 0. If not specified, defaults to 1.",
                     "Default": {
                       "Type": "int",
                       "Value": "1"
@@ -32754,7 +32754,7 @@
                         "num_retries": {
                           "Type": "Int",
                           "Optional": true,
-                          "Description": "Specifies the allowed number retries. This number must be \u003e 0. If not specified, defaults to 1.",
+                          "Description": "Specifies the allowed number retries. This number must be > 0. If not specified, defaults to 1.",
                           "Default": {
                             "Type": "int",
                             "Value": "1"
@@ -33331,7 +33331,7 @@
                               "num_retries": {
                                 "Type": "Int",
                                 "Optional": true,
-                                "Description": "Specifies the allowed number retries. This number must be \u003e 0."
+                                "Description": "Specifies the allowed number retries. This number must be > 0."
                               },
                               "per_try_timeout": {
                                 "Type": "List",
@@ -34070,7 +34070,7 @@
                               "num_retries": {
                                 "Type": "Int",
                                 "Required": true,
-                                "Description": "Specifies the allowed number retries. This number must be \u003e 0."
+                                "Description": "Specifies the allowed number retries. This number must be > 0."
                               },
                               "per_try_timeout": {
                                 "Type": "List",
@@ -35100,7 +35100,7 @@
           "Info": {
             "membership": {
               "Type": "String",
-              "Description": "The name of the managed Hub Membership resource associated to this cluster. Membership names are formatted as projects/\u003cproject-number\u003e/locations/global/membership/\u003ccluster-id\u003e.",
+              "Description": "The name of the managed Hub Membership resource associated to this cluster. Membership names are formatted as projects/<project-number>/locations/global/membership/<cluster-id>.",
               "Computed": true
             },
             "project": {
@@ -35282,12 +35282,12 @@
             "max_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Maximum number of nodes in the NodePool. Must be \u003e= min_node_count."
+              "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count."
             },
             "min_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Minimum number of nodes in the NodePool. Must be \u003e= 1 and \u003c= max_node_count."
+              "Description": "Minimum number of nodes in the NodePool. Must be >= 1 and <= max_node_count."
             }
           }
         }
@@ -35676,7 +35676,7 @@
       "client": {
         "Type": "String",
         "Required": true,
-        "Description": "Name of the AzureClient. The `AzureClient` resource must reside on the same GCP project and region as the `AzureCluster`. `AzureClient` names are formatted as `projects/\u003cproject-number\u003e/locations/\u003cregion\u003e/azureClients/\u003cclient-id\u003e`. See Resource Names (https:cloud.google.com/apis/design/resource_names) for more details on Google Cloud resource names."
+        "Description": "Name of the AzureClient. The `AzureClient` resource must reside on the same GCP project and region as the `AzureCluster`. `AzureClient` names are formatted as `projects/<project-number>/locations/<region>/azureClients/<client-id>`. See Resource Names (https:cloud.google.com/apis/design/resource_names) for more details on Google Cloud resource names."
       },
       "control_plane": {
         "Type": "List",
@@ -35701,7 +35701,7 @@
                   "key_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The ARM ID of the Azure Key Vault key to encrypt / decrypt data. For example: `/subscriptions/\u003csubscription-id\u003e/resourceGroups/\u003cresource-group-id\u003e/providers/Microsoft.KeyVault/vaults/\u003ckey-vault-id\u003e/keys/\u003ckey-name\u003e` Encryption will always take the latest version of the key and hence specific version is not supported."
+                    "Description": "The ARM ID of the Azure Key Vault key to encrypt / decrypt data. For example: `/subscriptions/<subscription-id>/resourceGroups/<resource-group-id>/providers/Microsoft.KeyVault/vaults/<key-vault-id>/keys/<key-name>` Encryption will always take the latest version of the key and hence specific version is not supported."
                   }
                 }
               }
@@ -35739,12 +35739,12 @@
                   "resource_group_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/\u003csubscription-id\u003e/resourceGroups/\u003cresource-group-name\u003e`"
+                    "Description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>`"
                   },
                   "secret_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:\u003ckey-vault-name\u003e.vault.azure.net/secrets/\u003csecret-name\u003e/\u003csecret-version\u003e`."
+                    "Description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:<key-vault-name>.vault.azure.net/secrets/<secret-name>/<secret-version>`."
                   }
                 }
               }
@@ -35870,7 +35870,7 @@
           "Info": {
             "membership": {
               "Type": "String",
-              "Description": "The name of the managed Hub Membership resource associated to this cluster. Membership names are formatted as projects/\u003cproject-number\u003e/locations/global/membership/\u003ccluster-id\u003e.",
+              "Description": "The name of the managed Hub Membership resource associated to this cluster. Membership names are formatted as projects/<project-number>/locations/global/membership/<cluster-id>.",
               "Computed": true
             },
             "project": {
@@ -36057,12 +36057,12 @@
             "max_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Maximum number of nodes in the node pool. Must be \u003e= min_node_count."
+              "Description": "Maximum number of nodes in the node pool. Must be >= min_node_count."
             },
             "min_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Minimum number of nodes in the node pool. Must be \u003e= 1 and \u003c= max_node_count."
+              "Description": "Minimum number of nodes in the node pool. Must be >= 1 and <= max_node_count."
             }
           }
         }
@@ -36107,12 +36107,12 @@
                   "resource_group_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/\u003csubscription-id\u003e/resourceGroups/\u003cresource-group-name\u003e`"
+                    "Description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>`"
                   },
                   "secret_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:\u003ckey-vault-name\u003e.vault.azure.net/secrets/\u003csecret-name\u003e/\u003csecret-version\u003e`."
+                    "Description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:<key-vault-name>.vault.azure.net/secrets/<secret-name>/<secret-version>`."
                   }
                 }
               }
@@ -37711,12 +37711,12 @@
                   "max_node_count": {
                     "Type": "Int",
                     "Required": true,
-                    "Description": "Maximum number of nodes in the NodePool. Must be \u003e= min_node_count."
+                    "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count."
                   },
                   "min_node_count": {
                     "Type": "Int",
                     "Required": true,
-                    "Description": "Minimum number of nodes in the NodePool. Must be \u003e=0 and \u003c= max_node_count."
+                    "Description": "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
                   }
                 }
               }
@@ -38588,12 +38588,12 @@
             "max_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Maximum number of nodes in the NodePool. Must be \u003e= min_node_count."
+              "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count."
             },
             "min_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Minimum number of nodes in the NodePool. Must be \u003e=0 and \u003c= max_node_count."
+              "Description": "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
             }
           }
         }
@@ -40673,7 +40673,7 @@
                                     "custom_alphabet": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "This is supported by mapping these to the alphanumeric characters that the FFX mode natively supports. This happens before/after encryption/decryption. Each character listed must appear only once. Number of characters must be in the range \\[2, 95\\]. This must be encoded as ASCII. The order of characters does not matter. The full list of allowed characters is:\n\n''0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ~'!@#$%^\u0026*()_-+={[}]|:;\"'\u003c,\u003e.?/''"
+                                      "Description": "This is supported by mapping these to the alphanumeric characters that the FFX mode natively supports. This happens before/after encryption/decryption. Each character listed must appear only once. Number of characters must be in the range \\[2, 95\\]. This must be encoded as ASCII. The order of characters does not matter. The full list of allowed characters is:\n\n''0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ~'!@#$%^&*()_-+={[}]|:;\"'<,>.?/''"
                                     },
                                     "radix": {
                                       "Type": "Int",
@@ -41626,7 +41626,7 @@
                               "url": {
                                 "Type": "String",
                                 "Optional": true,
-                                "Description": "The Cloud Storage url of the file(s) to scan, in the format 'gs://\u003cbucket\u003e/\u003cpath\u003e'. Trailing wildcard\nin the path is allowed.\n\nIf the url ends in a trailing slash, the bucket or directory represented by the url will be scanned\nnon-recursively (content in sub-directories will not be scanned). This means that 'gs://mybucket/' is\nequivalent to 'gs://mybucket/*', and 'gs://mybucket/directory/' is equivalent to 'gs://mybucket/directory/*'."
+                                "Description": "The Cloud Storage url of the file(s) to scan, in the format 'gs://<bucket>/<path>'. Trailing wildcard\nin the path is allowed.\n\nIf the url ends in a trailing slash, the bucket or directory represented by the url will be scanned\nnon-recursively (content in sub-directories will not be scanned). This means that 'gs://mybucket/' is\nequivalent to 'gs://mybucket/*', and 'gs://mybucket/directory/' is equivalent to 'gs://mybucket/directory/*'."
                               }
                             }
                           }
@@ -41967,7 +41967,7 @@
                   "url": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The url, in the format 'gs://\u003cbucket\u003e/\u003cpath\u003e'. Trailing wildcard in the path is allowed."
+                    "Description": "The url, in the format 'gs://<bucket>/<path>'. Trailing wildcard in the path is allowed."
                   }
                 }
               }
@@ -47017,7 +47017,7 @@
                               "min_cpu_platform": {
                                 "Type": "String",
                                 "Optional": true,
-                                "Description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -\u003e Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
+                                "Description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -> Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
                                 "Computed": true
                               },
                               "num_instances": {
@@ -47165,7 +47165,7 @@
                               "min_cpu_platform": {
                                 "Type": "String",
                                 "Optional": true,
-                                "Description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -\u003e Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
+                                "Description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -> Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
                                 "Computed": true
                               },
                               "num_instances": {
@@ -47444,7 +47444,7 @@
                               "min_cpu_platform": {
                                 "Type": "String",
                                 "Optional": true,
-                                "Description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -\u003e Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
+                                "Description": "Optional. Specifies the minimum cpu platform for the Instance Group. See [Dataproc -> Minimum CPU Platform](https://cloud.google.com/dataproc/docs/concepts/compute/dataproc-min-cpu).",
                                 "Computed": true
                               },
                               "num_instances": {
@@ -47620,7 +47620,7 @@
       "preview": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "If set to true, a deployment is created with \"shell\" resources\nthat are not actually instantiated. This allows you to preview a\ndeployment. It can be updated to false to actually deploy\nwith real resources.\n ~\u003e**NOTE:** Deployment Manager does not allow update\nof a deployment in preview (unless updating to preview=false). Thus,\nTerraform will force-recreate deployments if either preview is updated\nto true or if other fields are updated while preview is true.",
+        "Description": "If set to true, a deployment is created with \"shell\" resources\nthat are not actually instantiated. This allows you to preview a\ndeployment. It can be updated to false to actually deploy\nwith real resources.\n ~>**NOTE:** Deployment Manager does not allow update\nof a deployment in preview (unless updating to preview=false). Thus,\nTerraform will force-recreate deployments if either preview is updated\nto true or if other fields are updated while preview is true.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -47808,7 +47808,7 @@
       "location": {
         "Type": "String",
         "Required": true,
-        "Description": "The name of the location this agent is located in.\n\n~\u003e **Note:** The first time you are deploying an Agent in your project you must configure location settings.\n This is a one time step but at the moment you can only [configure location settings](https://cloud.google.com/dialogflow/cx/docs/concept/region#location-settings) via the Dialogflow CX console.\n Another options is to use global location so you don't need to manually configure location settings."
+        "Description": "The name of the location this agent is located in.\n\n~> **Note:** The first time you are deploying an Agent in your project you must configure location settings.\n This is a one time step but at the moment you can only [configure location settings](https://cloud.google.com/dialogflow/cx/docs/concept/region#location-settings) via the Dialogflow CX console.\n Another options is to use global location so you don't need to manually configure location settings."
       },
       "name": {
         "Type": "String",
@@ -47823,7 +47823,7 @@
       "security_settings": {
         "Type": "String",
         "Optional": true,
-        "Description": "Name of the SecuritySettings reference for the agent. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/securitySettings/\u003cSecurity Settings ID\u003e."
+        "Description": "Name of the SecuritySettings reference for the agent. Format: projects/<Project ID>/locations/<Location ID>/securitySettings/<Security Settings ID>."
       },
       "speech_to_text_settings": {
         "Type": "List",
@@ -47845,7 +47845,7 @@
       },
       "start_flow": {
         "Type": "String",
-        "Description": "Name of the start flow in this agent. A start flow will be automatically created when the agent is created, and can only be deleted by deleting the agent. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e.",
+        "Description": "Name of the start flow in this agent. A start flow will be automatically created when the agent is created, and can only be deleted by deleting the agent. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>.",
         "Computed": true
       },
       "supported_language_codes": {
@@ -47941,13 +47941,13 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the entity type.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/entityTypes/\u003cEntity Type ID\u003e.",
+        "Description": "The unique identifier of the entity type.\nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/entityTypes/<Entity Type ID>.",
         "Computed": true
       },
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The agent to create a entity type for. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
+        "Description": "The agent to create a entity type for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
       },
       "redact": {
         "Type": "Bool",
@@ -47979,7 +47979,7 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Agent to create an Environment for. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
+        "Description": "The Agent to create an Environment for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
       },
       "update_time": {
         "Type": "String",
@@ -48043,12 +48043,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
+              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
+              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -48113,7 +48113,7 @@
                   "webhook": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The webhook to call. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e."
+                    "Description": "The webhook to call. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/webhooks/<Webhook ID>."
                   }
                 }
               }
@@ -48128,7 +48128,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the flow. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e.",
+        "Description": "The unique identifier of the flow. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>.",
         "Computed": true
       },
       "nlu_settings": {
@@ -48162,12 +48162,12 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The agent to create a flow for. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
+        "Description": "The agent to create a flow for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
       },
       "transition_route_groups": {
         "Type": "List",
         "Optional": true,
-        "Description": "A flow's transition route group serve two purposes:\nThey are responsible for matching the user's first utterances in the flow.\nThey are inherited by every page's [transition route groups][Page.transition_route_groups]. Transition route groups defined in the page have higher priority than those defined in the flow.\nFormat:projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/transitionRouteGroups/\u003cTransitionRouteGroup ID\u003e.",
+        "Description": "A flow's transition route group serve two purposes:\nThey are responsible for matching the user's first utterances in the flow.\nThey are inherited by every page's [transition route groups][Page.transition_route_groups]. Transition route groups defined in the page have higher priority than those defined in the flow.\nFormat:projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/transitionRouteGroups/<TransitionRouteGroup ID>.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -48191,7 +48191,7 @@
             "intent": {
               "Type": "String",
               "Optional": true,
-              "Description": "The unique identifier of an Intent. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/intents/\u003cIntent ID\u003e. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
+              "Description": "The unique identifier of an Intent. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/intents/<Intent ID>. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
             },
             "name": {
               "Type": "String",
@@ -48201,12 +48201,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
+              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
+              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -48271,7 +48271,7 @@
                   "webhook": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The webhook to call. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e."
+                    "Description": "The webhook to call. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/webhooks/<Webhook ID>."
                   }
                 }
               }
@@ -48318,7 +48318,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the intent.  \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/intents/\u003cIntent ID\u003e.",
+        "Description": "The unique identifier of the intent.  \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/intents/<Intent ID>.",
         "Computed": true
       },
       "parameters": {
@@ -48333,7 +48333,7 @@
             "entity_type": {
               "Type": "String",
               "Required": true,
-              "Description": "The entity type of the parameter. \nFormat: projects/-/locations/-/agents/-/entityTypes/\u003cSystem Entity Type ID\u003e for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/entityTypes/\u003cEntity Type ID\u003e for developer entity types."
+              "Description": "The entity type of the parameter. \nFormat: projects/-/locations/-/agents/-/entityTypes/<System Entity Type ID> for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/entityTypes/<Entity Type ID> for developer entity types."
             },
             "id": {
               "Type": "String",
@@ -48356,7 +48356,7 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The agent to create an intent for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
+        "Description": "The agent to create an intent for.\nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
       },
       "priority": {
         "Type": "Int",
@@ -48482,7 +48482,7 @@
             "webhook": {
               "Type": "String",
               "Optional": true,
-              "Description": "The webhook to call. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e."
+              "Description": "The webhook to call. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/webhooks/<Webhook ID>."
             }
           }
         }
@@ -48509,12 +48509,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
+              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
+              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -48579,7 +48579,7 @@
                   "webhook": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The webhook to call. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e."
+                    "Description": "The webhook to call. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/webhooks/<Webhook ID>."
                   }
                 }
               }
@@ -48614,7 +48614,7 @@
                   "entity_type": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The entity type of the parameter. \nFormat: projects/-/locations/-/agents/-/entityTypes/\u003cSystem Entity Type ID\u003e for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/entityTypes/\u003cEntity Type ID\u003e for developer entity types."
+                    "Description": "The entity type of the parameter. \nFormat: projects/-/locations/-/agents/-/entityTypes/<System Entity Type ID> for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/entityTypes/<Entity Type ID> for developer entity types."
                   },
                   "fill_behavior": {
                     "Type": "List",
@@ -48689,7 +48689,7 @@
                               "webhook": {
                                 "Type": "String",
                                 "Optional": true,
-                                "Description": "The webhook to call. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e."
+                                "Description": "The webhook to call. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/webhooks/<Webhook ID>."
                               }
                             }
                           }
@@ -48725,18 +48725,18 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the page. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e.",
+        "Description": "The unique identifier of the page. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>.",
         "Computed": true
       },
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The flow to create a page for. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
+        "Description": "The flow to create a page for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
       },
       "transition_route_groups": {
         "Type": "List",
         "Optional": true,
-        "Description": "Ordered list of TransitionRouteGroups associated with the page. Transition route groups must be unique within a page.\nIf multiple transition routes within a page scope refer to the same intent, then the precedence order is: page's transition route -\u003e page's transition route group -\u003e flow's transition routes.\nIf multiple transition route groups within a page contain the same intent, then the first group in the ordered list takes precedence.\nFormat:projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/transitionRouteGroups/\u003cTransitionRouteGroup ID\u003e.",
+        "Description": "Ordered list of TransitionRouteGroups associated with the page. Transition route groups must be unique within a page.\nIf multiple transition routes within a page scope refer to the same intent, then the precedence order is: page's transition route -> page's transition route group -> flow's transition routes.\nIf multiple transition route groups within a page contain the same intent, then the first group in the ordered list takes precedence.\nFormat:projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/transitionRouteGroups/<TransitionRouteGroup ID>.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -48760,7 +48760,7 @@
             "intent": {
               "Type": "String",
               "Optional": true,
-              "Description": "The unique identifier of an Intent. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/intents/\u003cIntent ID\u003e. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
+              "Description": "The unique identifier of an Intent. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/intents/<Intent ID>. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
             },
             "name": {
               "Type": "String",
@@ -48770,12 +48770,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
+              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
+              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -48840,7 +48840,7 @@
                   "webhook": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The webhook to call. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e."
+                    "Description": "The webhook to call. Format: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/webhooks/<Webhook ID>."
                   }
                 }
               }
@@ -48905,7 +48905,7 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Flow to create an Version for. \nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
+        "Description": "The Flow to create an Version for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
       },
       "state": {
         "Type": "String",
@@ -48963,7 +48963,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the entity type. \nFormat: projects/\u003cProject ID\u003e/agent/entityTypes/\u003cEntity type ID\u003e.",
+        "Description": "The unique identifier of the entity type. \nFormat: projects/<Project ID>/agent/entityTypes/<Entity type ID>.",
         "Computed": true
       },
       "project": {
@@ -49045,7 +49045,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the fulfillment. \nFormat: projects/\u003cProject ID\u003e/agent/fulfillment - projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agent/fulfillment",
+        "Description": "The unique identifier of the fulfillment. \nFormat: projects/<Project ID>/agent/fulfillment - projects/<Project ID>/locations/<Location ID>/agent/fulfillment",
         "Computed": true
       },
       "project": {
@@ -49103,12 +49103,12 @@
             "followup_intent_name": {
               "Type": "String",
               "Optional": true,
-              "Description": "The unique identifier of the followup intent.\nFormat: projects/\u003cProject ID\u003e/agent/intents/\u003cIntent ID\u003e."
+              "Description": "The unique identifier of the followup intent.\nFormat: projects/<Project ID>/agent/intents/<Intent ID>."
             },
             "parent_followup_intent_name": {
               "Type": "String",
               "Optional": true,
-              "Description": "The unique identifier of the followup intent's parent.\nFormat: projects/\u003cProject ID\u003e/agent/intents/\u003cIntent ID\u003e."
+              "Description": "The unique identifier of the followup intent's parent.\nFormat: projects/<Project ID>/agent/intents/<Intent ID>."
             }
           }
         }
@@ -49116,7 +49116,7 @@
       "input_context_names": {
         "Type": "List",
         "Optional": true,
-        "Description": "The list of context names required for this intent to be triggered.\nFormat: projects/\u003cProject ID\u003e/agent/sessions/-/contexts/\u003cContext ID\u003e.",
+        "Description": "The list of context names required for this intent to be triggered.\nFormat: projects/<Project ID>/agent/sessions/-/contexts/<Context ID>.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -49137,13 +49137,13 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of this intent. \nFormat: projects/\u003cProject ID\u003e/agent/intents/\u003cIntent ID\u003e.",
+        "Description": "The unique identifier of this intent. \nFormat: projects/<Project ID>/agent/intents/<Intent ID>.",
         "Computed": true
       },
       "parent_followup_intent_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The unique identifier of the parent intent in the chain of followup intents.\nFormat: projects/\u003cProject ID\u003e/agent/intents/\u003cIntent ID\u003e.",
+        "Description": "The unique identifier of the parent intent in the chain of followup intents.\nFormat: projects/<Project ID>/agent/intents/<Intent ID>.",
         "Computed": true
       },
       "priority": {
@@ -49165,7 +49165,7 @@
       },
       "root_followup_intent_name": {
         "Type": "String",
-        "Description": "The unique identifier of the root intent in the chain of followup intents. It identifies the correct followup\nintents chain for this intent.\nFormat: projects/\u003cProject ID\u003e/agent/intents/\u003cIntent ID\u003e.",
+        "Description": "The unique identifier of the root intent in the chain of followup intents. It identifies the correct followup\nintents chain for this intent.\nFormat: projects/<Project ID>/agent/intents/<Intent ID>.",
         "Computed": true
       },
       "webhook_state": {
@@ -50894,7 +50894,7 @@
             "order": {
               "Type": "String",
               "Optional": true,
-              "Description": "Indicates that this field supports ordering by the specified order or comparing using =, \u003c, \u003c=, \u003e, \u003e=.\nOnly one of 'order' and 'arrayConfig' can be specified. Possible values: [\"ASCENDING\", \"DESCENDING\"]"
+              "Description": "Indicates that this field supports ordering by the specified order or comparing using =, <, <=, >, >=.\nOnly one of 'order' and 'arrayConfig' can be specified. Possible values: [\"ASCENDING\", \"DESCENDING\"]"
             }
           }
         }
@@ -52147,7 +52147,7 @@
             "issuer": {
               "Type": "String",
               "Required": true,
-              "Description": "A JSON Web Token (JWT) issuer URI. 'issuer' must start with 'https://' and // be a valid \nwith length \u003c2000 characters. For example: 'https://container.googleapis.com/v1/projects/my-project/locations/us-west1/clusters/my-cluster' (must be 'locations' rather than 'zones'). If the cluster is provisioned with Terraform, this is '\"https://container.googleapis.com/v1/${google_container_cluster.my-cluster.id}\"'."
+              "Description": "A JSON Web Token (JWT) issuer URI. 'issuer' must start with 'https://' and // be a valid \nwith length <2000 characters. For example: 'https://container.googleapis.com/v1/projects/my-project/locations/us-west1/clusters/my-cluster' (must be 'locations' rather than 'zones'). If the cluster is provisioned with Terraform, this is '\"https://container.googleapis.com/v1/${google_container_cluster.my-cluster.id}\"'."
             }
           }
         }
@@ -53101,7 +53101,7 @@
       "notification_configs": {
         "Type": "List",
         "Optional": true,
-        "Description": "A list of notification configs. Each configuration uses a filter to determine whether to publish a\nmessage (both Ingest \u0026 Create) on the corresponding notification destination. Only the message name\nis sent as part of the notification. Supplied by the client.",
+        "Description": "A list of notification configs. Each configuration uses a filter to determine whether to publish a\nmessage (both Ingest & Create) on the corresponding notification destination. Only the message name\nis sent as part of the notification. Supplied by the client.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -53110,7 +53110,7 @@
             "filter": {
               "Type": "String",
               "Optional": true,
-              "Description": "Restricts notifications sent for messages matching a filter. If this is empty, all messages\nare matched. Syntax: https://cloud.google.com/appengine/docs/standard/python/search/query_strings\n\nFields/functions available for filtering are:\n\n* messageType, from the MSH-9.1 field. For example, NOT messageType = \"ADT\".\n* send_date or sendDate, the YYYY-MM-DD date the message was sent in the dataset's timeZone, from the MSH-7 segment. For example, send_date \u003c \"2017-01-02\".\n* sendTime, the timestamp when the message was sent, using the RFC3339 time format for comparisons, from the MSH-7 segment. For example, sendTime \u003c \"2017-01-02T00:00:00-05:00\".\n* sendFacility, the care center that the message came from, from the MSH-4 segment. For example, sendFacility = \"ABC\".\n* PatientId(value, type), which matches if the message lists a patient having an ID of the given value and type in the PID-2, PID-3, or PID-4 segments. For example, PatientId(\"123456\", \"MRN\").\n* labels.x, a string value of the label with key x as set using the Message.labels map. For example, labels.\"priority\"=\"high\". The operator :* can be used to assert the existence of a label. For example, labels.\"priority\":*."
+              "Description": "Restricts notifications sent for messages matching a filter. If this is empty, all messages\nare matched. Syntax: https://cloud.google.com/appengine/docs/standard/python/search/query_strings\n\nFields/functions available for filtering are:\n\n* messageType, from the MSH-9.1 field. For example, NOT messageType = \"ADT\".\n* send_date or sendDate, the YYYY-MM-DD date the message was sent in the dataset's timeZone, from the MSH-7 segment. For example, send_date < \"2017-01-02\".\n* sendTime, the timestamp when the message was sent, using the RFC3339 time format for comparisons, from the MSH-7 segment. For example, sendTime < \"2017-01-02T00:00:00-05:00\".\n* sendFacility, the care center that the message came from, from the MSH-4 segment. For example, sendFacility = \"ABC\".\n* PatientId(value, type), which matches if the message lists a patient having an ID of the given value and type in the PID-2, PID-3, or PID-4 segments. For example, PatientId(\"123456\", \"MRN\").\n* labels.x, a string value of the label with key x as set using the Message.labels map. For example, labels.\"priority\"=\"high\". The operator :* can be used to assert the existence of a label. For example, labels.\"priority\":*."
             },
             "pubsub_topic": {
               "Type": "String",
@@ -53511,7 +53511,7 @@
             "allowed_audiences": {
               "Type": "List",
               "Optional": true,
-              "Description": "Acceptable values for the 'aud' field (audience) in the OIDC token. Token exchange\nrequests are rejected if the token audience does not match one of the configured\nvalues. Each audience may be at most 256 characters. A maximum of 10 audiences may\nbe configured.\n\nIf this list is empty, the OIDC token audience must be equal to the full canonical\nresource name of the WorkloadIdentityPoolProvider, with or without the HTTPS prefix.\nFor example:\n'''\n//iam.googleapis.com/projects/\u003cproject-number\u003e/locations/\u003clocation\u003e/workloadIdentityPools/\u003cpool-id\u003e/providers/\u003cprovider-id\u003e\nhttps://iam.googleapis.com/projects/\u003cproject-number\u003e/locations/\u003clocation\u003e/workloadIdentityPools/\u003cpool-id\u003e/providers/\u003cprovider-id\u003e\n'''",
+              "Description": "Acceptable values for the 'aud' field (audience) in the OIDC token. Token exchange\nrequests are rejected if the token audience does not match one of the configured\nvalues. Each audience may be at most 256 characters. A maximum of 10 audiences may\nbe configured.\n\nIf this list is empty, the OIDC token audience must be equal to the full canonical\nresource name of the WorkloadIdentityPoolProvider, with or without the HTTPS prefix.\nFor example:\n'''\n//iam.googleapis.com/projects/<project-number>/locations/<location>/workloadIdentityPools/<pool-id>/providers/<provider-id>\nhttps://iam.googleapis.com/projects/<project-number>/locations/<location>/workloadIdentityPools/<pool-id>/providers/<provider-id>\n'''",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -57330,12 +57330,12 @@
             "ingest_delay": {
               "Type": "String",
               "Optional": true,
-              "Description": "The delay of data points caused by ingestion. Data points older than this age are guaranteed to be ingested and available to be read, excluding data loss due to errors. In '[duration format](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf?\u0026_ga=2.264881487.1507873253.1593446723-935052455.1591817775#google.protobuf.Duration)'."
+              "Description": "The delay of data points caused by ingestion. Data points older than this age are guaranteed to be ingested and available to be read, excluding data loss due to errors. In '[duration format](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf?&_ga=2.264881487.1507873253.1593446723-935052455.1591817775#google.protobuf.Duration)'."
             },
             "sample_period": {
               "Type": "String",
               "Optional": true,
-              "Description": "The sampling period of metric data points. For metrics which are written periodically, consecutive data points are stored at this time interval, excluding data loss due to errors. Metrics with a higher granularity have a smaller sampling period. In '[duration format](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf?\u0026_ga=2.264881487.1507873253.1593446723-935052455.1591817775#google.protobuf.Duration)'."
+              "Description": "The sampling period of metric data points. For metrics which are written periodically, consecutive data points are stored at this time interval, excluding data loss due to errors. Metrics with a higher granularity have a smaller sampling period. In '[duration format](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf?&_ga=2.264881487.1507873253.1593446723-935052455.1591817775#google.protobuf.Duration)'."
             }
           }
         }
@@ -57588,7 +57588,7 @@
       "calendar_period": {
         "Type": "String",
         "Optional": true,
-        "Description": "A calendar period, semantically \"since the start of the current\n\u003ccalendarPeriod\u003e\". Possible values: [\"DAY\", \"WEEK\", \"FORTNIGHT\", \"MONTH\"]"
+        "Description": "A calendar period, semantically \"since the start of the current\n<calendarPeriod>\". Possible values: [\"DAY\", \"WEEK\", \"FORTNIGHT\", \"MONTH\"]"
       },
       "display_name": {
         "Type": "String",
@@ -57598,7 +57598,7 @@
       "goal": {
         "Type": "Float",
         "Required": true,
-        "Description": "The fraction of service that must be good in order for this objective\nto be met. 0 \u003c goal \u003c= 0.999"
+        "Description": "The fraction of service that must be good in order for this objective\nto be met. 0 < goal <= 0.999"
       },
       "name": {
         "Type": "String",
@@ -57638,7 +57638,7 @@
                   "range": {
                     "Type": "List",
                     "Required": true,
-                    "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min \u003c= x \u003c= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max.",
+                    "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min <= x <= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max.",
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -57648,12 +57648,12 @@
                         "max": {
                           "Type": "Float",
                           "Optional": true,
-                          "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\"\u003e= range.min\""
+                          "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\">= range.min\""
                         },
                         "min": {
                           "Type": "Float",
                           "Optional": true,
-                          "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"\u003c range.max\""
+                          "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"< range.max\""
                         }
                       }
                     }
@@ -57854,7 +57854,7 @@
                               "range": {
                                 "Type": "List",
                                 "Required": true,
-                                "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min \u003c= x \u003c= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max.",
+                                "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min <= x <= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max.",
                                 "MaxItems": 1,
                                 "IsBlock": true,
                                 "ConfigImplicitMode": "Block",
@@ -57864,12 +57864,12 @@
                                     "max": {
                                       "Type": "Float",
                                       "Optional": true,
-                                      "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\"\u003e= range.min\""
+                                      "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\">= range.min\""
                                     },
                                     "min": {
                                       "Type": "Float",
                                       "Optional": true,
-                                      "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"\u003c range.max\""
+                                      "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"< range.max\""
                                     }
                                   }
                                 }
@@ -57911,7 +57911,7 @@
                   "threshold": {
                     "Type": "Float",
                     "Optional": true,
-                    "Description": "If window performance \u003e= threshold, the window is counted\nas good."
+                    "Description": "If window performance >= threshold, the window is counted\nas good."
                   }
                 }
               }
@@ -57919,7 +57919,7 @@
             "metric_mean_in_range": {
               "Type": "List",
               "Optional": true,
-              "Description": "Criterion that describes a window as good if the metric's value\nis in a good range, *averaged* across returned streams.\nOne of 'good_bad_metric_filter',\n\n'good_total_ratio_threshold', 'metric_mean_in_range',\n'metric_sum_in_range' must be set for 'windows_based_sli'.\nAverage value X of 'time_series' should satisfy\n'range.min \u003c= X \u003c= range.max' for a good window.",
+              "Description": "Criterion that describes a window as good if the metric's value\nis in a good range, *averaged* across returned streams.\nOne of 'good_bad_metric_filter',\n\n'good_total_ratio_threshold', 'metric_mean_in_range',\n'metric_sum_in_range' must be set for 'windows_based_sli'.\nAverage value X of 'time_series' should satisfy\n'range.min <= X <= range.max' for a good window.",
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -57929,7 +57929,7 @@
                   "range": {
                     "Type": "List",
                     "Required": true,
-                    "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min \u003c= x \u003c= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max. Mean value 'X' of 'time_series'\nvalues should satisfy 'range.min \u003c= X \u003c= range.max' for a\ngood service.",
+                    "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min <= x <= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max. Mean value 'X' of 'time_series'\nvalues should satisfy 'range.min <= X <= range.max' for a\ngood service.",
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -57939,12 +57939,12 @@
                         "max": {
                           "Type": "Float",
                           "Optional": true,
-                          "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\"\u003e= range.min\""
+                          "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\">= range.min\""
                         },
                         "min": {
                           "Type": "Float",
                           "Optional": true,
-                          "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"\u003c range.max\""
+                          "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"< range.max\""
                         }
                       }
                     }
@@ -57952,7 +57952,7 @@
                   "time_series": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "A [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)\nspecifying the TimeSeries to use for evaluating window\nThe provided TimeSeries must have ValueType = INT64 or\nValueType = DOUBLE and MetricKind = GAUGE. Mean value 'X'\nshould satisfy 'range.min \u003c= X \u003c= range.max'\nunder good service."
+                    "Description": "A [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)\nspecifying the TimeSeries to use for evaluating window\nThe provided TimeSeries must have ValueType = INT64 or\nValueType = DOUBLE and MetricKind = GAUGE. Mean value 'X'\nshould satisfy 'range.min <= X <= range.max'\nunder good service."
                   }
                 }
               }
@@ -57960,7 +57960,7 @@
             "metric_sum_in_range": {
               "Type": "List",
               "Optional": true,
-              "Description": "Criterion that describes a window as good if the metric's value\nis in a good range, *summed* across returned streams.\nSummed value 'X' of 'time_series' should satisfy\n'range.min \u003c= X \u003c= range.max' for a good window.\n\nOne of 'good_bad_metric_filter',\n'good_total_ratio_threshold', 'metric_mean_in_range',\n'metric_sum_in_range' must be set for 'windows_based_sli'.",
+              "Description": "Criterion that describes a window as good if the metric's value\nis in a good range, *summed* across returned streams.\nSummed value 'X' of 'time_series' should satisfy\n'range.min <= X <= range.max' for a good window.\n\nOne of 'good_bad_metric_filter',\n'good_total_ratio_threshold', 'metric_mean_in_range',\n'metric_sum_in_range' must be set for 'windows_based_sli'.",
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -57970,7 +57970,7 @@
                   "range": {
                     "Type": "List",
                     "Required": true,
-                    "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min \u003c= x \u003c= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max. Summed value 'X' should satisfy\n'range.min \u003c= X \u003c= range.max' for a good window.",
+                    "Description": "Range of numerical values. The computed good_service\nwill be the count of values x in the Distribution such\nthat range.min <= x <= range.max. inclusive of min and\nmax. Open ranges can be defined by setting\njust one of min or max. Summed value 'X' should satisfy\n'range.min <= X <= range.max' for a good window.",
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -57980,12 +57980,12 @@
                         "max": {
                           "Type": "Float",
                           "Optional": true,
-                          "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\"\u003e= range.min\""
+                          "Description": "max value for the range (inclusive). If not given,\nwill be set to \"infinity\", defining an open range\n\">= range.min\""
                         },
                         "min": {
                           "Type": "Float",
                           "Optional": true,
-                          "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"\u003c range.max\""
+                          "Description": "Min value for the range (inclusive). If not given,\nwill be set to \"-infinity\", defining an open range\n\"< range.max\""
                         }
                       }
                     }
@@ -57993,7 +57993,7 @@
                   "time_series": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "A [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)\nspecifying the TimeSeries to use for evaluating window\nquality. The provided TimeSeries must have\nValueType = INT64 or ValueType = DOUBLE and\nMetricKind = GAUGE.\n\nSummed value 'X' should satisfy\n'range.min \u003c= X \u003c= range.max' for a good window."
+                    "Description": "A [monitoring filter](https://cloud.google.com/monitoring/api/v3/filters)\nspecifying the TimeSeries to use for evaluating window\nquality. The provided TimeSeries must have\nValueType = INT64 or ValueType = DOUBLE and\nMetricKind = GAUGE.\n\nSummed value 'X' should satisfy\n'range.min <= X <= range.max' for a good window."
                   }
                 }
               }
@@ -58788,7 +58788,7 @@
       "protocol": {
         "Type": "String",
         "Optional": true,
-        "Description": "The protocol to use to connect to the configured origin. Defaults to HTTP2, and it is strongly recommended that users use HTTP2 for both security \u0026 performance.\n\nWhen using HTTP2 or HTTPS as the protocol, a valid, publicly-signed, unexpired TLS (SSL) certificate must be presented by the origin server. Possible values: [\"HTTP2\", \"HTTPS\", \"HTTP\"]",
+        "Description": "The protocol to use to connect to the configured origin. Defaults to HTTP2, and it is strongly recommended that users use HTTP2 for both security & performance.\n\nWhen using HTTP2 or HTTPS as the protocol, a valid, publicly-signed, unexpired TLS (SSL) certificate must be presented by the origin server. Possible values: [\"HTTP2\", \"HTTPS\", \"HTTP\"]",
         "Computed": true
       },
       "retry_conditions": {
@@ -59030,7 +59030,7 @@
                         "header_action": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "The header actions, including adding \u0026 removing headers, for requests that match this route.",
+                          "Description": "The header actions, including adding & removing headers, for requests that match this route.",
                           "MaxItems": 1,
                           "IsBlock": true,
                           "ConfigImplicitMode": "Block",
@@ -59301,7 +59301,7 @@
                                           "excluded_query_parameters": {
                                             "Type": "List",
                                             "Optional": true,
-                                            "Description": "Names of query string parameters to exclude from cache keys. All other parameters will be included.\n\nEither specify includedQueryParameters or excludedQueryParameters, not both. '\u0026' and '=' will be percent encoded and not treated as delimiters.",
+                                            "Description": "Names of query string parameters to exclude from cache keys. All other parameters will be included.\n\nEither specify includedQueryParameters or excludedQueryParameters, not both. '&' and '=' will be percent encoded and not treated as delimiters.",
                                             "MaxItems": 10,
                                             "ConfigImplicitMode": "Attr",
                                             "Elem": {
@@ -59340,7 +59340,7 @@
                                           "included_query_parameters": {
                                             "Type": "List",
                                             "Optional": true,
-                                            "Description": "Names of query string parameters to include in cache keys. All other parameters will be excluded.\n\nEither specify includedQueryParameters or excludedQueryParameters, not both. '\u0026' and '=' will be percent encoded and not treated as delimiters.",
+                                            "Description": "Names of query string parameters to include in cache keys. All other parameters will be excluded.\n\nEither specify includedQueryParameters or excludedQueryParameters, not both. '&' and '=' will be percent encoded and not treated as delimiters.",
                                             "MaxItems": 10,
                                             "ConfigImplicitMode": "Attr",
                                             "Elem": {
@@ -59360,18 +59360,18 @@
                                     "client_ttl": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "Specifies a separate client (e.g. browser client) TTL, separate from the TTL used by the edge caches. Leaving this empty will use the same cache TTL for both the CDN and the client-facing response.\n\n- The TTL must be \u003e 0 and \u003c= 86400s (1 day)\n- The clientTtl cannot be larger than the defaultTtl (if set)\n- Fractions of a second are not allowed.\n\nOmit this field to use the defaultTtl, or the max-age set by the origin, as the client-facing TTL.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\nA duration in seconds terminated by 's'. Example: \"3s\"."
+                                      "Description": "Specifies a separate client (e.g. browser client) TTL, separate from the TTL used by the edge caches. Leaving this empty will use the same cache TTL for both the CDN and the client-facing response.\n\n- The TTL must be > 0 and <= 86400s (1 day)\n- The clientTtl cannot be larger than the defaultTtl (if set)\n- Fractions of a second are not allowed.\n\nOmit this field to use the defaultTtl, or the max-age set by the origin, as the client-facing TTL.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\nA duration in seconds terminated by 's'. Example: \"3s\"."
                                     },
                                     "default_ttl": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "Specifies the default TTL for cached content served by this origin for responses that do not have an existing valid TTL (max-age or s-max-age).\n\nDefaults to 3600s (1 hour).\n\n- The TTL must be \u003e= 0 and \u003c= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\" (equivalent to must-revalidate)\n- The value of defaultTTL cannot be set to a value greater than that of maxTTL.\n- Fractions of a second are not allowed.\n- When the cacheMode is set to FORCE_CACHE_ALL, the defaultTTL will overwrite the TTL set in all responses.\n\nNote that infrequently accessed objects may be evicted from the cache before the defined TTL. Objects that expire will be revalidated with the origin.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
+                                      "Description": "Specifies the default TTL for cached content served by this origin for responses that do not have an existing valid TTL (max-age or s-max-age).\n\nDefaults to 3600s (1 hour).\n\n- The TTL must be >= 0 and <= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\" (equivalent to must-revalidate)\n- The value of defaultTTL cannot be set to a value greater than that of maxTTL.\n- Fractions of a second are not allowed.\n- When the cacheMode is set to FORCE_CACHE_ALL, the defaultTTL will overwrite the TTL set in all responses.\n\nNote that infrequently accessed objects may be evicted from the cache before the defined TTL. Objects that expire will be revalidated with the origin.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                       "Computed": true
                                     },
                                     "max_ttl": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "Specifies the maximum allowed TTL for cached content served by this origin.\n\nDefaults to 86400s (1 day).\n\nCache directives that attempt to set a max-age or s-maxage higher than this, or an Expires header more than maxTtl seconds in the future will be capped at the value of maxTTL, as if it were the value of an s-maxage Cache-Control directive.\n\n- The TTL must be \u003e= 0 and \u003c= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\"\n- The value of maxTtl must be equal to or greater than defaultTtl.\n- Fractions of a second are not allowed.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\", \"FORCE_CACHE_ALL\", or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
+                                      "Description": "Specifies the maximum allowed TTL for cached content served by this origin.\n\nDefaults to 86400s (1 day).\n\nCache directives that attempt to set a max-age or s-maxage higher than this, or an Expires header more than maxTtl seconds in the future will be capped at the value of maxTTL, as if it were the value of an s-maxage Cache-Control directive.\n\n- The TTL must be >= 0 and <= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\"\n- The value of maxTtl must be equal to or greater than defaultTtl.\n- Fractions of a second are not allowed.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\", \"FORCE_CACHE_ALL\", or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                       "Computed": true
                                     },
                                     "negative_caching": {
@@ -59382,7 +59382,7 @@
                                     "negative_caching_policy": {
                                       "Type": "Map",
                                       "Optional": true,
-                                      "Description": "Sets a cache TTL for the specified HTTP status code. negativeCaching must be enabled to configure negativeCachingPolicy.\n\n- Omitting the policy and leaving negativeCaching enabled will use the default TTLs for each status code, defined in negativeCaching.\n- TTLs must be \u003e= 0 (where 0 is \"always revalidate\") and \u003c= 86400s (1 day)\n\nNote that when specifying an explicit negativeCachingPolicy, you should take care to specify a cache TTL for all response codes that you wish to cache. The CDNPolicy will not apply any default negative caching when a policy exists.",
+                                      "Description": "Sets a cache TTL for the specified HTTP status code. negativeCaching must be enabled to configure negativeCachingPolicy.\n\n- Omitting the policy and leaving negativeCaching enabled will use the default TTLs for each status code, defined in negativeCaching.\n- TTLs must be >= 0 (where 0 is \"always revalidate\") and <= 86400s (1 day)\n\nNote that when specifying an explicit negativeCachingPolicy, you should take care to specify a cache TTL for all response codes that you wish to cache. The CDNPolicy will not apply any default negative caching when a policy exists.",
                                       "ConfigImplicitMode": "Attr",
                                       "Elem": {
                                         "Type": "SchemaElements",
@@ -60573,7 +60573,7 @@
                   "network": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The Compute Engine network to be used for machine communications.\nCannot be specified with subnetwork. If neither 'network' nor\n'subnet' is specified, the \"default\" network of the project is\nused, if it exists. A full URL or partial URI. Examples:\n  * 'https://www.googleapis.com/compute/v1/projects/[project_id]/\n  regions/global/default'\n  * 'projects/[project_id]/regions/global/default'\nRuntimes are managed resources inside Google Infrastructure.\nRuntimes support the following network configurations:\n  * Google Managed Network (Network \u0026 subnet are empty)\n  * Consumer Project VPC (network \u0026 subnet are required). Requires\n  configuring Private Service Access.\n  * Shared VPC (network \u0026 subnet are required). Requires\n  configuring Private Service Access."
+                    "Description": "The Compute Engine network to be used for machine communications.\nCannot be specified with subnetwork. If neither 'network' nor\n'subnet' is specified, the \"default\" network of the project is\nused, if it exists. A full URL or partial URI. Examples:\n  * 'https://www.googleapis.com/compute/v1/projects/[project_id]/\n  regions/global/default'\n  * 'projects/[project_id]/regions/global/default'\nRuntimes are managed resources inside Google Infrastructure.\nRuntimes support the following network configurations:\n  * Google Managed Network (Network & subnet are empty)\n  * Consumer Project VPC (network & subnet are required). Requires\n  configuring Private Service Access.\n  * Shared VPC (network & subnet are required). Requires\n  configuring Private Service Access."
                   },
                   "nic_type": {
                     "Type": "String",
@@ -60832,7 +60832,7 @@
                   "condition": {
                     "Type": "List",
                     "Optional": true,
-                    "Description": "A condition which determines whether this rule is used in the evaluation of the policy. When set, the `expression` field in the `Expr' must include from 1 to 10 subexpressions, joined by the \"||\" or \"\u0026\u0026\" operators. Each subexpression must be of the form \"resource.matchTag('/tag_key_short_name, 'tag_value_short_name')\". or \"resource.matchTagId('tagKeys/key_id', 'tagValues/value_id')\". where key_name and value_name are the resource names for Label Keys and Values. These names are available from the Tag Manager Service. An example expression is: \"resource.matchTag('123456789/environment, 'prod')\". or \"resource.matchTagId('tagKeys/123', 'tagValues/456')\".",
+                    "Description": "A condition which determines whether this rule is used in the evaluation of the policy. When set, the `expression` field in the `Expr' must include from 1 to 10 subexpressions, joined by the \"||\" or \"&&\" operators. Each subexpression must be of the form \"resource.matchTag('/tag_key_short_name, 'tag_value_short_name')\". or \"resource.matchTagId('tagKeys/key_id', 'tagValues/value_id')\". where key_name and value_name are the resource names for Label Keys and Values. These names are available from the Tag Manager Service. An example expression is: \"resource.matchTag('123456789/environment, 'prod')\". or \"resource.matchTagId('tagKeys/123', 'tagValues/456')\".",
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -62821,7 +62821,7 @@
                                     "pull_deps": {
                                       "Type": "Bool",
                                       "Optional": true,
-                                      "Description": "Whether dependencies should also be installed. - install when false: `dpkg -i package` - install when true: `apt-get update \u0026\u0026 apt-get -y install package.deb`"
+                                      "Description": "Whether dependencies should also be installed. - install when false: `dpkg -i package` - install when true: `apt-get update && apt-get -y install package.deb`"
                                     },
                                     "source": {
                                       "Type": "List",
@@ -66665,7 +66665,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Type of this CertificateAuthority.\n\n~\u003e **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
+        "Description": "The Type of this CertificateAuthority.\n\n~> **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
         "Default": {
           "Type": "string",
           "Value": "SELF_SIGNED"
@@ -67929,12 +67929,12 @@
                   "publish_mib_per_sec": {
                     "Type": "Int",
                     "Required": true,
-                    "Description": "Subscribe throughput capacity per partition in MiB/s. Must be \u003e= 4 and \u003c= 16."
+                    "Description": "Subscribe throughput capacity per partition in MiB/s. Must be >= 4 and <= 16."
                   },
                   "subscribe_mib_per_sec": {
                     "Type": "Int",
                     "Required": true,
-                    "Description": "Publish throughput capacity per partition in MiB/s. Must be \u003e= 4 and \u003c= 16."
+                    "Description": "Publish throughput capacity per partition in MiB/s. Must be >= 4 and <= 16."
                   }
                 }
               }
@@ -69366,7 +69366,7 @@
             "filter": {
               "Type": "String",
               "Required": true,
-              "Description": "Expression that defines the filter to apply across create/update\nevents of assets or findings as specified by the event type. The\nexpression is a list of zero or more restrictions combined via\nlogical operators AND and OR. Parentheses are supported, and OR\nhas higher precedence than AND.\n\nRestrictions have the form \u003cfield\u003e \u003coperator\u003e \u003cvalue\u003e and may have\na - character in front of them to indicate negation. The fields\nmap to those defined in the corresponding resource.\n\nThe supported operators are:\n\n* = for all value types.\n* \u003e, \u003c, \u003e=, \u003c= for integer values.\n* :, meaning substring matching, for strings.\n\nThe supported value types are:\n\n* string literals in quotes.\n* integer literals without quotes.\n* boolean literals true and false without quotes.\n\nSee\n[Filtering notifications](https://cloud.google.com/security-command-center/docs/how-to-api-filter-notifications)\nfor information on how to write a filter."
+              "Description": "Expression that defines the filter to apply across create/update\nevents of assets or findings as specified by the event type. The\nexpression is a list of zero or more restrictions combined via\nlogical operators AND and OR. Parentheses are supported, and OR\nhas higher precedence than AND.\n\nRestrictions have the form <field> <operator> <value> and may have\na - character in front of them to indicate negation. The fields\nmap to those defined in the corresponding resource.\n\nThe supported operators are:\n\n* = for all value types.\n* >, <, >=, <= for integer values.\n* :, meaning substring matching, for strings.\n\nThe supported value types are:\n\n* string literals in quotes.\n* integer literals without quotes.\n* boolean literals true and false without quotes.\n\nSee\n[Filtering notifications](https://cloud.google.com/security-command-center/docs/how-to-api-filter-notifications)\nfor information on how to write a filter."
             }
           }
         }
@@ -70524,7 +70524,7 @@
       "limit": {
         "Type": "String",
         "Required": true,
-        "Description": "The limit on the metric, e.g. '/project/region'.\n\n~\u003e Make sure that 'limit' is in a format that doesn't start with '1/' or contain curly braces.\nE.g. use '/project/user' instead of '1/{project}/{user}'."
+        "Description": "The limit on the metric, e.g. '/project/region'.\n\n~> Make sure that 'limit' is in a format that doesn't start with '1/' or contain curly braces.\nE.g. use '/project/user' instead of '1/{project}/{user}'."
       },
       "metric": {
         "Type": "String",
@@ -72245,7 +72245,7 @@
       "logging": {
         "Type": "List",
         "Optional": true,
-        "Description": "The bucket's Access \u0026 Storage Logs configuration.",
+        "Description": "The bucket's Access & Storage Logs configuration.",
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -72337,7 +72337,7 @@
       },
       "url": {
         "Type": "String",
-        "Description": "The base URL of the bucket, in the format gs://\u003cbucket-name\u003e.",
+        "Description": "The base URL of the bucket, in the format gs://<bucket-name>.",
         "Computed": true
       },
       "versioning": {
@@ -74993,7 +74993,7 @@
                                           },
                                           "name": {
                                             "Type": "String",
-                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/\u003cproject-id|project-number\u003e/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation.",
+                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/<project-id|project-number>/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation.",
                                             "Computed": true
                                           }
                                         }
@@ -75106,7 +75106,7 @@
                             "Info": {
                               "container_port": {
                                 "Type": "Int",
-                                "Description": "Port number the container listens on. This must be a valid port number, 0 \u003c x \u003c 65536.",
+                                "Description": "Port number the container listens on. This must be a valid port number, 0 < x < 65536.",
                                 "Computed": true
                               },
                               "name": {
@@ -75256,7 +75256,7 @@
                               },
                               "secret_name": {
                                 "Type": "String",
-                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n\u003calias\u003e:projects/\u003cproject-id|project-number\u003e/secrets/\u003csecret-name\u003e.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation.",
+                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n<alias>:projects/<project-id|project-number>/secrets/<secret-name>.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation.",
                                 "Computed": true
                               }
                             }
@@ -75905,7 +75905,7 @@
                   },
                   "pypi_packages": {
                     "Type": "Map",
-                    "Description": "Custom Python Package Index (PyPI) packages to be installed in the environment. Keys refer to the lowercase package name (e.g. \"numpy\"). Values are the lowercase extras and version specifier (e.g. \"==1.12.0\", \"[devel,gcp_api]\", \"[devel]\u003e=1.8.2, \u003c1.9.2\"). To specify a package without pinning it to a version specifier, use the empty string as the value.",
+                    "Description": "Custom Python Package Index (PyPI) packages to be installed in the environment. Keys refer to the lowercase package name (e.g. \"numpy\"). Values are the lowercase extras and version specifier (e.g. \"==1.12.0\", \"[devel,gcp_api]\", \"[devel]>=1.8.2, <1.9.2\"). To specify a package without pinning it to a version specifier, use the empty string as the value.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -76090,7 +76090,7 @@
       },
       "labels": {
         "Type": "Map",
-        "Description": "User-defined labels for this environment. The labels map can contain no more than 64 entries. Entries of the labels map are UTF8 strings that comply with the following restrictions: Label keys must be between 1 and 63 characters long and must conform to the following regular expression: [a-z]([-a-z0-9]*[a-z0-9])?. Label values must be between 0 and 63 characters long and must conform to the regular expression ([a-z]([-a-z0-9]*[a-z0-9])?)?. No more than 64 labels can be associated with a given environment. Both keys and values must be \u003c= 128 bytes in size.",
+        "Description": "User-defined labels for this environment. The labels map can contain no more than 64 entries. Entries of the labels map are UTF8 strings that comply with the following restrictions: Label keys must be between 1 and 63 characters long and must conform to the following regular expression: [a-z]([-a-z0-9]*[a-z0-9])?. Label values must be between 0 and 63 characters long and must conform to the regular expression ([a-z]([-a-z0-9]*[a-z0-9])?)?. No more than 64 labels can be associated with a given environment. Both keys and values must be <= 128 bytes in size.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -76231,7 +76231,7 @@
                   },
                   "query_string_whitelist": {
                     "Type": "List",
-                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '\u0026' and '=' will\nbe percent encoded and not treated as delimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '&' and '=' will\nbe percent encoded and not treated as delimiters.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -76469,7 +76469,7 @@
                   },
                   "query_string_blacklist": {
                     "Type": "Set",
-                    "Description": "Names of query string parameters to exclude in cache keys.\n\nAll other parameters will be included. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'\u0026' and '=' will be percent encoded and not treated as\ndelimiters.",
+                    "Description": "Names of query string parameters to exclude in cache keys.\n\nAll other parameters will be included. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'&' and '=' will be percent encoded and not treated as\ndelimiters.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -76479,7 +76479,7 @@
                   },
                   "query_string_whitelist": {
                     "Type": "Set",
-                    "Description": "Names of query string parameters to include in cache keys.\n\nAll other parameters will be excluded. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'\u0026' and '=' will be percent encoded and not treated as\ndelimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\n\nAll other parameters will be excluded. Either specify\nquery_string_whitelist or query_string_blacklist, not both.\n'&' and '=' will be percent encoded and not treated as\ndelimiters.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -77039,7 +77039,7 @@
       },
       "labels": {
         "Type": "Map",
-        "Description": "Labels to apply to this disk.  A list of key-\u003evalue pairs.",
+        "Description": "Labels to apply to this disk.  A list of key->value pairs.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -77083,7 +77083,7 @@
       },
       "resource_policies": {
         "Type": "List",
-        "Description": "Resource policies applied to this disk for automatic snapshot creations.\n\n~\u003e**NOTE** This value does not support updating the\nresource policy, as resource policies can not be updated more than\none at a time. Use\n['google_compute_disk_resource_policy_attachment'](https://www.terraform.io/docs/providers/google/r/compute_disk_resource_policy_attachment.html)\nto allow for updating the resource policy attached to the disk.",
+        "Description": "Resource policies applied to this disk for automatic snapshot creations.\n\n~>**NOTE** This value does not support updating the\nresource policy, as resource policies can not be updated more than\none at a time. Use\n['google_compute_disk_resource_policy_attachment'](https://www.terraform.io/docs/providers/google/r/compute_disk_resource_policy_attachment.html)\nto allow for updating the resource policy attached to the disk.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -77097,7 +77097,7 @@
       },
       "size": {
         "Type": "Int",
-        "Description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~\u003e**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
+        "Description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~>**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
         "Computed": true
       },
       "snapshot": {
@@ -77425,7 +77425,7 @@
       },
       "metadata_filters": {
         "Type": "List",
-        "Description": "Opaque filter criteria used by Loadbalancer to restrict routing configuration to a limited set of [xDS](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md) compliant clients. In their xDS requests to Loadbalancer, xDS clients present [node metadata](https://github.com/envoyproxy/data-plane-api/search?q=%22message+Node%22+in%3A%2Fenvoy%2Fapi%2Fv2%2Fcore%2Fbase.proto\u0026). If a match takes place, the relevant configuration is made available to those proxies. Otherwise, all the resources (e.g. `TargetHttpProxy`, `UrlMap`) referenced by the `ForwardingRule` will not be visible to those proxies.\n\nFor each `metadataFilter` in this list, if its `filterMatchCriteria` is set to MATCH_ANY, at least one of the `filterLabel`s must match the corresponding label provided in the metadata. If its `filterMatchCriteria` is set to MATCH_ALL, then all of its `filterLabel`s must match with corresponding labels provided in the metadata.\n\n`metadataFilters` specified here will be applifed before those specified in the `UrlMap` that this `ForwardingRule` references.\n\n`metadataFilters` only applies to Loadbalancers that have their loadBalancingScheme set to `INTERNAL_SELF_MANAGED`.",
+        "Description": "Opaque filter criteria used by Loadbalancer to restrict routing configuration to a limited set of [xDS](https://github.com/envoyproxy/data-plane-api/blob/master/XDS_PROTOCOL.md) compliant clients. In their xDS requests to Loadbalancer, xDS clients present [node metadata](https://github.com/envoyproxy/data-plane-api/search?q=%22message+Node%22+in%3A%2Fenvoy%2Fapi%2Fv2%2Fcore%2Fbase.proto&). If a match takes place, the relevant configuration is made available to those proxies. Otherwise, all the resources (e.g. `TargetHttpProxy`, `UrlMap`) referenced by the `ForwardingRule` will not be visible to those proxies.\n\nFor each `metadataFilter` in this list, if its `filterMatchCriteria` is set to MATCH_ANY, at least one of the `filterLabel`s must match the corresponding label provided in the metadata. If its `filterMatchCriteria` is set to MATCH_ALL, then all of its `filterLabel`s must match with corresponding labels provided in the metadata.\n\n`metadataFilters` specified here will be applifed before those specified in the `UrlMap` that this `ForwardingRule` references.\n\n`metadataFilters` only applies to Loadbalancers that have their loadBalancingScheme set to `INTERNAL_SELF_MANAGED`.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -78872,12 +78872,12 @@
             },
             "source": {
               "Type": "String",
-              "Description": "The name (not self_link) of the disk (such as those managed by google_compute_disk) to attach. ~\u003e Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.",
+              "Description": "The name (not self_link) of the disk (such as those managed by google_compute_disk) to attach. ~> Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.",
               "Computed": true
             },
             "source_image": {
               "Type": "String",
-              "Description": "The image from which to initialize this disk. This can be one of: the image's self_link, projects/{project}/global/images/{image}, projects/{project}/global/images/family/{family}, global/images/{image}, global/images/family/{family}, family/{family}, {project}/{family}, {project}/{image}, {family}, or {image}. ~\u003e Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.",
+              "Description": "The image from which to initialize this disk. This can be one of: the image's self_link, projects/{project}/global/images/{image}, projects/{project}/global/images/family/{family}, global/images/{image}, global/images/family/{family}, family/{family}, {project}/{family}, {project}/{image}, {family}, or {image}. ~> Note: Either source or source_image is required when creating a new instance except for when creating a local SSD.",
               "Computed": true
             },
             "type": {
@@ -81648,12 +81648,12 @@
                 "Info": {
                   "max_node_count": {
                     "Type": "Int",
-                    "Description": "Maximum number of nodes in the NodePool. Must be \u003e= min_node_count.",
+                    "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count.",
                     "Computed": true
                   },
                   "min_node_count": {
                     "Type": "Int",
-                    "Description": "Minimum number of nodes in the NodePool. Must be \u003e=0 and \u003c= max_node_count.",
+                    "Description": "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count.",
                     "Computed": true
                   }
                 }
@@ -83587,7 +83587,7 @@
           "Info": {
             "allowed_audiences": {
               "Type": "List",
-              "Description": "Acceptable values for the 'aud' field (audience) in the OIDC token. Token exchange\nrequests are rejected if the token audience does not match one of the configured\nvalues. Each audience may be at most 256 characters. A maximum of 10 audiences may\nbe configured.\n\nIf this list is empty, the OIDC token audience must be equal to the full canonical\nresource name of the WorkloadIdentityPoolProvider, with or without the HTTPS prefix.\nFor example:\n'''\n//iam.googleapis.com/projects/\u003cproject-number\u003e/locations/\u003clocation\u003e/workloadIdentityPools/\u003cpool-id\u003e/providers/\u003cprovider-id\u003e\nhttps://iam.googleapis.com/projects/\u003cproject-number\u003e/locations/\u003clocation\u003e/workloadIdentityPools/\u003cpool-id\u003e/providers/\u003cprovider-id\u003e\n'''",
+              "Description": "Acceptable values for the 'aud' field (audience) in the OIDC token. Token exchange\nrequests are rejected if the token audience does not match one of the configured\nvalues. Each audience may be at most 256 characters. A maximum of 10 audiences may\nbe configured.\n\nIf this list is empty, the OIDC token audience must be equal to the full canonical\nresource name of the WorkloadIdentityPoolProvider, with or without the HTTPS prefix.\nFor example:\n'''\n//iam.googleapis.com/projects/<project-number>/locations/<location>/workloadIdentityPools/<pool-id>/providers/<provider-id>\nhttps://iam.googleapis.com/projects/<project-number>/locations/<location>/workloadIdentityPools/<pool-id>/providers/<provider-id>\n'''",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -84819,7 +84819,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The Type of this CertificateAuthority.\n\n~\u003e **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
+        "Description": "The Type of this CertificateAuthority.\n\n~> **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
         "Computed": true
       },
       "update_time": {
@@ -86881,7 +86881,7 @@
       },
       "logging": {
         "Type": "List",
-        "Description": "The bucket's Access \u0026 Storage Logs configuration.",
+        "Description": "The bucket's Access & Storage Logs configuration.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -86960,7 +86960,7 @@
       },
       "url": {
         "Type": "String",
-        "Description": "The base URL of the bucket, in the format gs://\u003cbucket-name\u003e.",
+        "Description": "The base URL of the bucket, in the format gs://<bucket-name>.",
         "Computed": true
       },
       "versioning": {

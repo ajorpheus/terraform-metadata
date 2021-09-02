@@ -490,6 +490,18 @@
         "Description": "The partition name. This must be a valid DNS hostname label."
       }
     },
+    "consul_acl_token_role_attachment": {
+      "role": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The role name."
+      },
+      "token_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The token accessor id."
+      }
+    },
     "consul_agent_service": {
       "address": {
         "Type": "String",
@@ -869,13 +881,6 @@
       },
       "features": {
         "Type": "List",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
       "installation_id": {
         "Type": "String",
         "Computed": true
@@ -954,6 +959,30 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "consul_namespace_policy_attachment": {
+      "namespace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The namespace to attach the policy to."
+      },
+      "policy": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The policy name."
+      }
+    },
+    "consul_namespace_role_attachment": {
+      "namespace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The namespace to attach the role to."
+      },
+      "role": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The role name."
       }
     },
     "consul_namespace_policy_attachment": {
@@ -2255,6 +2284,10 @@
         "Type": "String",
         "Optional": true
       },
+      "filter": {
+        "Type": "String",
+        "Optional": true
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -2851,6 +2884,10 @@
     },
     "consul_service": {
       "datacenter": {
+        "Type": "String",
+        "Optional": true
+      },
+      "filter": {
         "Type": "String",
         "Optional": true
       },

@@ -245,7 +245,7 @@
       "devel": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Use chart development versions, too. Equivalent to version '\u003e0.0.0-0'. If `version` is set, this is ignored"
+        "Description": "Use chart development versions, too. Equivalent to version '>0.0.0-0'. If `version` is set, this is ignored"
       },
       "disable_crd_hooks": {
         "Type": "Bool",
@@ -634,7 +634,7 @@
       "devel": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Use chart development versions, too. Equivalent to version '\u003e0.0.0-0'. If `version` is set, this is ignored"
+        "Description": "Use chart development versions, too. Equivalent to version '>0.0.0-0'. If `version` is set, this is ignored"
       },
       "disable_openapi_validation": {
         "Type": "Bool",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "azuread",
   "type": "provider",
-  "version": "v2.28.1",
+  "version": "v2.0.1",
   "provider": {
     "client_certificate": {
       "Type": "String",
@@ -44,7 +44,7 @@
     "environment": {
       "Type": "String",
       "Required": true,
-      "Description": "The cloud environment which should be used. Possible values are: `global` (also `public`), `usgovernmentl4` (also `usgovernment`), `usgovernmentl5` (also `dod`), and `china`. Defaults to `global`",
+      "Description": "The cloud environment which should be used. Possible values are `global` (formerly `public`), `usgovernment`, `dod`, `germany`, and `china`. Defaults to `global`",
       "DefaultFunc": "ENV(ARM_ENVIRONMENT)"
     },
     "msi_endpoint": {
@@ -52,24 +52,6 @@
       "Optional": true,
       "Description": "The path to a custom endpoint for Managed Identity - in most circumstances this should be detected automatically",
       "DefaultFunc": "ENV(ARM_MSI_ENDPOINT)"
-    },
-    "oidc_request_token": {
-      "Type": "String",
-      "Optional": true,
-      "Description": "The bearer token for the request to the OIDC provider. For use when authenticating as a Service Principal using OpenID Connect.",
-      "DefaultFunc": "MENV(ARM_OIDC_REQUEST_TOKEN,ACTIONS_ID_TOKEN_REQUEST_TOKEN)"
-    },
-    "oidc_request_url": {
-      "Type": "String",
-      "Optional": true,
-      "Description": "The URL for the OIDC provider from which to request an ID token. For use when authenticating as a Service Principal using OpenID Connect.",
-      "DefaultFunc": "MENV(ARM_OIDC_REQUEST_URL,ACTIONS_ID_TOKEN_REQUEST_URL)"
-    },
-    "oidc_token": {
-      "Type": "String",
-      "Optional": true,
-      "Description": "The ID token for use when authenticating as a Service Principal using OpenID Connect.",
-      "DefaultFunc": "ENV(ARM_OIDC_TOKEN)"
     },
     "partner_id": {
       "Type": "String",
@@ -94,118 +76,9 @@
       "Optional": true,
       "Description": "Allow Managed Identity to be used for Authentication",
       "DefaultFunc": "ENV(ARM_USE_MSI)"
-    },
-    "use_oidc": {
-      "Type": "Bool",
-      "Optional": true,
-      "Description": "Allow OpenID Connect to be used for authentication",
-      "DefaultFunc": "ENV(ARM_USE_OIDC)"
     }
   },
   "resources": {
-    "azuread_administrative_unit": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "description": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The description for the administrative unit"
-      },
-      "display_name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The display name for the administrative unit"
-      },
-      "hidden_membership_enabled": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether the administrative unit and its members are hidden or publicly viewable in the directory"
-      },
-      "members": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "A set of object IDs of members who should be present in this administrative unit. Supported object types are Users or Groups",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "object_id": {
-        "Type": "String",
-        "Description": "The object ID of the administrative unit",
-        "Computed": true
-      },
-      "prevent_duplicate_names": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "If `true`, will return an error if an existing administrative unit is found with the same name",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      }
-    },
-    "azuread_administrative_unit_member": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "administrative_unit_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the administrative unit"
-      },
-      "member_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the member"
-      }
-    },
-    "azuread_app_role_assignment": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "delete"
-      ],
-      "app_role_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The ID of the app role to be assigned"
-      },
-      "principal_display_name": {
-        "Type": "String",
-        "Description": "The display name of the principal to which the app role is assigned",
-        "Computed": true
-      },
-      "principal_object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the user, group or service principal to be assigned this app role"
-      },
-      "principal_type": {
-        "Type": "String",
-        "Description": "The object type of the principal to which the app role is assigned",
-        "Computed": true
-      },
-      "resource_display_name": {
-        "Type": "String",
-        "Description": "The display name of the application representing the resource",
-        "Computed": true
-      },
-      "resource_object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the service principal representing the resource"
-      }
-    },
     "azuread_application": {
       "__timeouts__": [
         "create",
@@ -395,42 +268,6 @@
         "Optional": true,
         "Description": "Specifies whether the application is a public client. Appropriate for apps using token grant flows that don't use a redirect URI"
       },
-      "feature_tags": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Block of features to configure for this application using tags",
-        "Computed": true,
-        "ConflictsWith": [
-          "tags"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "custom_single_sign_on": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application represents a custom SAML application for linked service principals"
-            },
-            "enterprise": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application represents an Enterprise Application for linked service principals"
-            },
-            "gallery": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application represents a gallery application for linked service principals"
-            },
-            "hide": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application is invisible to users in My Apps and Office 365 Launcher"
-            }
-          }
-        }
-      },
       "group_membership_claims": {
         "Type": "Set",
         "Optional": true,
@@ -450,11 +287,6 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "logo_image": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Base64 encoded logo image in gif, png or jpeg format"
       },
       "logo_url": {
         "Type": "String",
@@ -742,26 +574,6 @@
         "Optional": true,
         "Description": "URL of the application's support page"
       },
-      "tags": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "A set of tags to apply to the application",
-        "Computed": true,
-        "ConflictsWith": [
-          "feature_tags"
-        ],
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "template_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Unique ID of the application template from which this application is created",
-        "Computed": true
-      },
       "terms_of_service_url": {
         "Type": "String",
         "Optional": true,
@@ -884,54 +696,6 @@
         "Description": "The certificate data, which can be PEM encoded, base64 encoded DER or hexadecimal encoded DER. See also the `encoding` argumen"
       }
     },
-    "azuread_application_federated_identity_credential": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "application_object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the application for which this federated identity credential should be created"
-      },
-      "audiences": {
-        "Type": "List",
-        "Required": true,
-        "Description": "List of audiences that can appear in the external token. This specifies what should be accepted in the `aud` claim of incoming tokens.",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "credential_id": {
-        "Type": "String",
-        "Description": "A UUID used to uniquely identify this federated identity credential",
-        "Computed": true
-      },
-      "description": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A description for the federated identity credential"
-      },
-      "display_name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "A unique display name for the federated identity credential"
-      },
-      "issuer": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The URL of the external identity provider, which must match the issuer claim of the external token being exchanged. The combination of the values of issuer and subject must be unique on the app."
-      },
-      "subject": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The identifier of the external software workload within the external identity provider. The combination of issuer and subject must be unique on the app."
-      }
-    },
     "azuread_application_password": {
       "__timeouts__": [
         "create",
@@ -967,12 +731,7 @@
           "end_date"
         ]
       },
-      "key_id": {
-        "Type": "String",
-        "Description": "A UUID used to uniquely identify this password credential",
-        "Computed": true
-      },
-      "rotate_when_changed": {
+      "keepers": {
         "Type": "Map",
         "Optional": true,
         "Description": "Arbitrary map of values that, when changed, will trigger rotation of the password",
@@ -981,6 +740,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "key_id": {
+        "Type": "String",
+        "Description": "A UUID used to uniquely identify this password credential",
+        "Computed": true
       },
       "start_date": {
         "Type": "String",
@@ -1022,522 +786,6 @@
         }
       }
     },
-    "azuread_claims_mapping_policy": {
-      "definition": {
-        "Type": "List",
-        "Required": true,
-        "Description": "A string collection containing a JSON string that defines the rules and settings for this policy",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "display_name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Display name for this policy"
-      }
-    },
-    "azuread_conditional_access_policy": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "conditions": {
-        "Type": "List",
-        "Required": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "applications": {
-              "Type": "List",
-              "Required": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "excluded_applications": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_applications": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_user_actions": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  }
-                }
-              }
-            },
-            "client_app_types": {
-              "Type": "List",
-              "Required": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "devices": {
-              "Type": "List",
-              "Optional": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "filter": {
-                    "Type": "List",
-                    "Optional": true,
-                    "MaxItems": 1,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "mode": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "rule": {
-                          "Type": "String",
-                          "Required": true
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "locations": {
-              "Type": "List",
-              "Optional": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "excluded_locations": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_locations": {
-                    "Type": "List",
-                    "Required": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  }
-                }
-              }
-            },
-            "platforms": {
-              "Type": "List",
-              "Optional": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "excluded_platforms": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_platforms": {
-                    "Type": "List",
-                    "Required": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  }
-                }
-              }
-            },
-            "sign_in_risk_levels": {
-              "Type": "List",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "user_risk_levels": {
-              "Type": "List",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "users": {
-              "Type": "List",
-              "Required": true,
-              "MaxItems": 1,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "excluded_groups": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "excluded_roles": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "excluded_users": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_groups": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_roles": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "included_users": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "display_name": {
-        "Type": "String",
-        "Required": true
-      },
-      "grant_controls": {
-        "Type": "List",
-        "Required": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "built_in_controls": {
-              "Type": "List",
-              "Required": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "custom_authentication_factors": {
-              "Type": "List",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "operator": {
-              "Type": "String",
-              "Required": true
-            },
-            "terms_of_use": {
-              "Type": "List",
-              "Optional": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            }
-          }
-        }
-      },
-      "session_controls": {
-        "Type": "List",
-        "Optional": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "application_enforced_restrictions_enabled": {
-              "Type": "Bool",
-              "Optional": true
-            },
-            "cloud_app_security_policy": {
-              "Type": "String",
-              "Optional": true
-            },
-            "persistent_browser_mode": {
-              "Type": "String",
-              "Optional": true
-            },
-            "sign_in_frequency": {
-              "Type": "Int",
-              "Optional": true
-            },
-            "sign_in_frequency_period": {
-              "Type": "String",
-              "Optional": true
-            }
-          }
-        }
-      },
-      "state": {
-        "Type": "String",
-        "Required": true
-      }
-    },
-    "azuread_custom_directory_role": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "description": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The description of the custom directory role"
-      },
-      "display_name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The display name of the custom directory role"
-      },
-      "enabled": {
-        "Type": "Bool",
-        "Required": true,
-        "Description": "Indicates whether the role is enabled for assignment"
-      },
-      "object_id": {
-        "Type": "String",
-        "Description": "The object ID of the directory role",
-        "Computed": true
-      },
-      "permissions": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "List of permissions that are included in the custom directory role",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "allowed_resource_actions": {
-              "Type": "Set",
-              "Required": true,
-              "Description": "Set of tasks that can be performed on a resource",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            }
-          }
-        }
-      },
-      "template_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Custom template identifier that is typically used if one needs an identifier to be the same across different directories.",
-        "Computed": true
-      },
-      "version": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The version of the role definition."
-      }
-    },
-    "azuread_directory_role": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "description": {
-        "Type": "String",
-        "Description": "The description of the directory role",
-        "Computed": true
-      },
-      "display_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The display name of the directory role",
-        "Computed": true
-      },
-      "object_id": {
-        "Type": "String",
-        "Description": "The object ID of the directory role",
-        "Computed": true
-      },
-      "template_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the template associated with the directory role",
-        "Computed": true
-      }
-    },
-    "azuread_directory_role_assignment": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "app_scope_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Identifier of the app-specific scope when the assignment scope is app-specific",
-        "Computed": true,
-        "ConflictsWith": [
-          "app_scope_object_id",
-          "directory_scope_id",
-          "directory_scope_object_id"
-        ]
-      },
-      "app_scope_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Identifier of the app-specific scope when the assignment scope is app-specific",
-        "Computed": true,
-        "ConflictsWith": [
-          "app_scope_id",
-          "directory_scope_id",
-          "directory_scope_object_id"
-        ],
-        "Deprecated": "`app_scope_object_id` has been renamed to `app_scope_id` and will be removed in version 3.0 or the AzureAD Provider"
-      },
-      "directory_scope_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Identifier of the directory object representing the scope of the assignment",
-        "Computed": true,
-        "ConflictsWith": [
-          "app_scope_id",
-          "app_scope_object_id",
-          "directory_scope_object_id"
-        ]
-      },
-      "directory_scope_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Identifier of the directory object representing the scope of the assignment",
-        "Computed": true,
-        "ConflictsWith": [
-          "app_scope_id",
-          "app_scope_object_id",
-          "directory_scope_id"
-        ]
-      },
-      "principal_object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the member principal"
-      },
-      "role_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the directory role for this assignment"
-      }
-    },
-    "azuread_directory_role_member": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "member_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the member"
-      },
-      "role_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the directory role"
-      }
-    },
     "azuread_group": {
       "__timeouts__": [
         "create",
@@ -1549,12 +797,6 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "Indicates whether this group can be assigned to an Azure Active Directory role. This property can only be `true` for security-enabled groups."
-      },
-      "auto_subscribe_new_members": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Indicates whether new members added to the group will be auto-subscribed to receive email notifications.",
-        "Computed": true
       },
       "behaviors": {
         "Type": "Set",
@@ -1575,49 +817,6 @@
         "Type": "String",
         "Required": true,
         "Description": "The display name for the group"
-      },
-      "dynamic_membership": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "An optional block to configure dynamic membership for the group. Cannot be used with `members`",
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "members"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "enabled": {
-              "Type": "Bool",
-              "Required": true
-            },
-            "rule": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Rule to determine members for a dynamic group. Required when `group_types` contains 'DynamicMembership'"
-            }
-          }
-        }
-      },
-      "external_senders_allowed": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Indicates whether people external to the organization can send messages to the group.",
-        "Computed": true
-      },
-      "hide_from_address_lists": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Indicates whether the group is displayed in certain parts of the Outlook user interface: in the Address Book, in address lists for selecting message recipients, and in the Browse Groups dialog for searching groups.",
-        "Computed": true
-      },
-      "hide_from_outlook_clients": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Indicates whether the group is displayed in Outlook clients, such as Outlook for Windows and Outlook on the web.",
-        "Computed": true
       },
       "mail": {
         "Type": "String",
@@ -1640,9 +839,6 @@
         "Optional": true,
         "Description": "A set of members who should be present in this group. Supported object types are Users, Groups or Service Principals",
         "Computed": true,
-        "ConflictsWith": [
-          "dynamic_membership"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1739,7 +935,7 @@
       "types": {
         "Type": "Set",
         "Optional": true,
-        "Description": "A set of group types to configure for the group. `Unified` specifies a Microsoft 365 group. Required when `mail_enabled` is true",
+        "Description": "A set of group types to configure for the group. The only supported type is `Unified`, which specifies a Microsoft 365 group. Required when `mail_enabled` is true",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1769,150 +965,6 @@
         "Type": "String",
         "Required": true,
         "Description": "The object ID of the principal you want to add as a member to the group. Supported object types are Users, Groups or Service Principals"
-      }
-    },
-    "azuread_invitation": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "message": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Customize the message sent to the invited user",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "additional_recipients": {
-              "Type": "List",
-              "Optional": true,
-              "Description": "Email addresses of additional recipients the invitation message should be sent to",
-              "MaxItems": 1,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "body": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Customized message body you want to send if you don't want to send the default message",
-              "ConflictsWith": [
-                "message.0.language"
-              ]
-            },
-            "language": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The language you want to send the default message in",
-              "ConflictsWith": [
-                "message.0.body"
-              ]
-            }
-          }
-        }
-      },
-      "redeem_url": {
-        "Type": "String",
-        "Description": "The URL the user can use to redeem their invitation",
-        "Computed": true
-      },
-      "redirect_url": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The URL that the user should be redirected to once the invitation is redeemed"
-      },
-      "user_display_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The display name of the user being invited"
-      },
-      "user_email_address": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The email address of the user being invited"
-      },
-      "user_id": {
-        "Type": "String",
-        "Description": "Object ID of the invited user",
-        "Computed": true
-      },
-      "user_type": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The user type of the user being invited",
-        "Default": {
-          "Type": "string",
-          "Value": "Guest"
-        }
-      }
-    },
-    "azuread_named_location": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "country": {
-        "Type": "List",
-        "Optional": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "countries_and_regions": {
-              "Type": "List",
-              "Required": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "include_unknown_countries_and_regions": {
-              "Type": "Bool",
-              "Optional": true
-            }
-          }
-        }
-      },
-      "display_name": {
-        "Type": "String",
-        "Required": true
-      },
-      "ip": {
-        "Type": "List",
-        "Optional": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "ip_ranges": {
-              "Type": "List",
-              "Required": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "trusted": {
-              "Type": "Bool",
-              "Optional": true
-            }
-          }
-        }
       }
     },
     "azuread_service_principal": {
@@ -2021,85 +1073,6 @@
         "Type": "String",
         "Description": "The display name of the application associated with this service principal",
         "Computed": true
-      },
-      "feature_tags": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Block of features to configure for this service principal using tags",
-        "Computed": true,
-        "ConflictsWith": [
-          "features",
-          "tags"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "custom_single_sign_on": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this service principal represents a custom SAML application"
-            },
-            "enterprise": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this service principal represents an Enterprise Application"
-            },
-            "gallery": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this service principal represents a gallery application"
-            },
-            "hide": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this app is invisible to users in My Apps and Office 365 Launcher"
-            }
-          }
-        }
-      },
-      "features": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Block of features to configure for this service principal using tags",
-        "Computed": true,
-        "ConflictsWith": [
-          "feature_tags",
-          "tags"
-        ],
-        "Deprecated": "This block has been renamed to `feature_tags` and will be removed in version 3.0 of the provider",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "custom_single_sign_on_app": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this service principal represents a custom SAML application"
-            },
-            "enterprise_application": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this service principal represents an Enterprise Application"
-            },
-            "gallery_application": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this service principal represents a gallery application"
-            },
-            "visible_to_users": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this app is visible to users in My Apps and Office 365 Launcher",
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
-              }
-            }
-          }
-        }
       },
       "homepage_url": {
         "Type": "String",
@@ -2227,24 +1200,6 @@
         "Description": "The URL where the service exposes SAML metadata for federation",
         "Computed": true
       },
-      "saml_single_sign_on": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Settings related to SAML single sign-on",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "relay_state": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The relative URI the service provider would redirect to after completion of the single sign-on flow"
-            }
-          }
-        }
-      },
       "service_principal_names": {
         "Type": "List",
         "Description": "A list of identifier URI(s), copied over from the associated application",
@@ -2264,11 +1219,6 @@
         "Type": "Set",
         "Optional": true,
         "Description": "A set of tags to apply to the service principal",
-        "Computed": true,
-        "ConflictsWith": [
-          "features",
-          "feature_tags"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2347,52 +1297,6 @@
         "Description": "The certificate data, which can be PEM encoded, base64 encoded DER or hexadecimal encoded DER"
       }
     },
-    "azuread_service_principal_claims_mapping_policy_assignment": {
-      "claims_mapping_policy_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "ID of the claims mapping policy to assign"
-      },
-      "service_principal_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Object ID of the service principal for which to assign the policy"
-      }
-    },
-    "azuread_service_principal_delegated_permission_grant": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "claim_values": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "A set of claim values for delegated permission scopes which should be included in access tokens for the resource",
-        "MinItems": 1,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "resource_service_principal_object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the service principal representing the resource to be accessed"
-      },
-      "service_principal_object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the service principal for which this delegated permission grant should be created"
-      },
-      "user_object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the user on behalf of whom the service principal is authorized to access the resource"
-      }
-    },
     "azuread_service_principal_password": {
       "__timeouts__": [
         "create",
@@ -2402,33 +1306,15 @@
       ],
       "display_name": {
         "Type": "String",
-        "Optional": true,
-        "Description": "A display name for the password",
+        "Description": "The display name for the password",
         "Computed": true
       },
       "end_date": {
         "Type": "String",
-        "Optional": true,
         "Description": "The end date until which the password is valid, formatted as an RFC3339 date string (e.g. `2018-01-01T01:02:03Z`)",
-        "Computed": true,
-        "ConflictsWith": [
-          "end_date_relative"
-        ]
-      },
-      "end_date_relative": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A relative duration for which the password is valid until, for example `240h` (10 days) or `2400h30m`. Changing this field forces a new resource to be created",
-        "ConflictsWith": [
-          "end_date"
-        ]
-      },
-      "key_id": {
-        "Type": "String",
-        "Description": "A UUID used to uniquely identify this password credential",
         "Computed": true
       },
-      "rotate_when_changed": {
+      "keepers": {
         "Type": "Map",
         "Optional": true,
         "Description": "Arbitrary map of values that, when changed, will trigger rotation of the password",
@@ -2438,6 +1324,11 @@
           "ElementsType": "String"
         }
       },
+      "key_id": {
+        "Type": "String",
+        "Description": "A UUID used to uniquely identify this password credential",
+        "Computed": true
+      },
       "service_principal_id": {
         "Type": "String",
         "Required": true,
@@ -2445,8 +1336,7 @@
       },
       "start_date": {
         "Type": "String",
-        "Optional": true,
-        "Description": "The start date from which the password is valid, formatted as an RFC3339 date string (e.g. `2018-01-01T01:02:03Z`). If this isn't specified, the current date is used",
+        "Description": "The start date from which the password is valid, formatted as an RFC3339 date string (e.g. `2018-01-01T01:02:03Z`)",
         "Computed": true
       },
       "value": {
@@ -2507,11 +1397,6 @@
         "Optional": true,
         "Description": "Whether consent has been obtained for minors"
       },
-      "cost_center": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The cost center associated with the user."
-      },
       "country": {
         "Type": "String",
         "Optional": true,
@@ -2527,43 +1412,15 @@
         "Optional": true,
         "Description": "The name for the department in which the user works"
       },
-      "disable_password_expiration": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether the users password is exempt from expiring",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "disable_strong_password": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether the user is allowed weaker passwords than the default policy to be specified.",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
       "display_name": {
         "Type": "String",
         "Required": true,
         "Description": "The name to display in the address book for the user"
       },
-      "division": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The name of the division in which the user works."
-      },
       "employee_id": {
         "Type": "String",
         "Optional": true,
         "Description": "The employee identifier assigned to the user by the organisation"
-      },
-      "employee_type": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Captures enterprise worker type. For example, Employee, Contractor, Consultant, or Vendor."
       },
       "external_user_state": {
         "Type": "String",
@@ -2615,11 +1472,6 @@
         "Optional": true,
         "Description": "The mail alias for the user. Defaults to the user name part of the user principal name (UPN)",
         "Computed": true
-      },
-      "manager_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the user's manager"
       },
       "mobile_phone": {
         "Type": "String",
@@ -2750,46 +1602,6 @@
     }
   },
   "data-sources": {
-    "azuread_administrative_unit": {
-      "__timeouts__": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "description": {
-        "Type": "String",
-        "Description": "The description for the administrative unit",
-        "Computed": true
-      },
-      "display_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The display name for the administrative unit",
-        "Computed": true
-      },
-      "members": {
-        "Type": "List",
-        "Description": "A list of object IDs of members who are be present in this administrative unit.",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "object_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The object ID of the administrative unit",
-        "Computed": true
-      },
-      "visibility": {
-        "Type": "String",
-        "Description": "Whether the administrative unit and its members are hidden or publicly viewable in the directory",
-        "Computed": true
-      }
-    },
     "azuread_application": {
       "__timeouts__": [
         "read"
@@ -2960,42 +1772,6 @@
         "Type": "Bool",
         "Description": "The fallback application type as public client, such as an installed application running on a mobile device",
         "Computed": true
-      },
-      "feature_tags": {
-        "Type": "List",
-        "Description": "Block of features configured for this application using tags",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "custom_single_sign_on": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application principal represents a custom SAML application for linked service principals"
-            },
-            "enterprise": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application represents an Enterprise Application for linked service principals"
-            },
-            "gallery": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this application represents a gallery application for linked service principals"
-            },
-            "hide": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether this app is invisible to users in My Apps and Office 365 Launcher",
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
-              }
-            }
-          }
-        }
       },
       "group_membership_claims": {
         "Type": "List",
@@ -3289,16 +2065,6 @@
         "Description": "URL of the application's support page",
         "Computed": true
       },
-      "tags": {
-        "Type": "Set",
-        "Description": "A set of tags applied to the application",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
       "terms_of_service_url": {
         "Type": "String",
         "Description": "URL of the application's terms of service statement",
@@ -3372,68 +2138,6 @@
         }
       }
     },
-    "azuread_application_template": {
-      "__timeouts__": [
-        "read"
-      ],
-      "categories": {
-        "Type": "List",
-        "Description": "List of categories for this templated application",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "display_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The display name for the application template",
-        "Computed": true
-      },
-      "homepage_url": {
-        "Type": "String",
-        "Description": "Home page URL of the templated application",
-        "Computed": true
-      },
-      "logo_url": {
-        "Type": "String",
-        "Description": "URL to retrieve the logo for this templated application",
-        "Computed": true
-      },
-      "publisher": {
-        "Type": "String",
-        "Description": "Name of the publisher for this templated application",
-        "Computed": true
-      },
-      "supported_provisioning_types": {
-        "Type": "List",
-        "Description": "The provisioning modes supported by this templated application",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "supported_single_sign_on_modes": {
-        "Type": "List",
-        "Description": "The single sign on modes supported by this templated application",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "template_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The application template's ID",
-        "Computed": true
-      }
-    },
     "azuread_client_config": {
       "__timeouts__": [
         "read"
@@ -3451,21 +2155,6 @@
       "tenant_id": {
         "Type": "String",
         "Description": "The tenant ID of the authenticated principal",
-        "Computed": true
-      }
-    },
-    "azuread_directory_object": {
-      "__timeouts__": [
-        "read"
-      ],
-      "object_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The object ID of the principal"
-      },
-      "type": {
-        "Type": "String",
-        "Description": "The OData type of the principal",
         "Computed": true
       }
     },
@@ -3591,11 +2280,6 @@
         "Description": "Indicates whether this group can be assigned to an Azure Active Directory role",
         "Computed": true
       },
-      "auto_subscribe_new_members": {
-        "Type": "Bool",
-        "Description": "Indicates whether new members added to the group will be auto-subscribed to receive email notifications.",
-        "Computed": true
-      },
       "behaviors": {
         "Type": "List",
         "Description": "The group behaviors for a Microsoft 365 group",
@@ -3615,42 +2299,6 @@
         "Type": "String",
         "Optional": true,
         "Description": "The display name for the group",
-        "Computed": true
-      },
-      "dynamic_membership": {
-        "Type": "List",
-        "Description": "An optional block to configure dynamic membership for the group. Cannot be used with `members`",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "enabled": {
-              "Type": "Bool",
-              "Computed": true
-            },
-            "rule": {
-              "Type": "String",
-              "Description": "Rule to determine members for a dynamic group. Required when `group_types` contains 'DynamicMembership'",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "external_senders_allowed": {
-        "Type": "Bool",
-        "Description": "Indicates whether people external to the organization can send messages to the group.",
-        "Computed": true
-      },
-      "hide_from_address_lists": {
-        "Type": "Bool",
-        "Description": "Indicates whether the group is displayed in certain parts of the Outlook user interface: in the Address Book, in address lists for selecting message recipients, and in the Browse Groups dialog for searching groups.",
-        "Computed": true
-      },
-      "hide_from_outlook_clients": {
-        "Type": "Bool",
-        "Description": "Indicates whether the group is displayed in Outlook clients, such as Outlook for Windows and Outlook on the web.",
         "Computed": true
       },
       "mail": {
@@ -3776,12 +2424,6 @@
       "__timeouts__": [
         "read"
       ],
-      "display_name_prefix": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Common display name prefix of the groups",
-        "Computed": true
-      },
       "display_names": {
         "Type": "List",
         "Optional": true,
@@ -3793,27 +2435,6 @@
           "ElementsType": "String"
         }
       },
-      "ignore_missing": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Ignore missing groups and return groups that were found. The data source will still fail if no groups are found",
-        "ConflictsWith": [
-          "return_all"
-        ],
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "mail_enabled": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether the groups are mail-enabled",
-        "Computed": true,
-        "ConflictsWith": [
-          "object_ids"
-        ]
-      },
       "object_ids": {
         "Type": "List",
         "Optional": true,
@@ -3824,23 +2445,6 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "return_all": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Retrieve all groups with no filter",
-        "ConflictsWith": [
-          "ignore_missing"
-        ]
-      },
-      "security_enabled": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether the groups are security-enabled",
-        "Computed": true,
-        "ConflictsWith": [
-          "object_ids"
-        ]
       }
     },
     "azuread_service_principal": {
@@ -3944,71 +2548,6 @@
         "Optional": true,
         "Description": "The display name of the application associated with this service principal",
         "Computed": true
-      },
-      "feature_tags": {
-        "Type": "List",
-        "Description": "Block of features configured for this service principal using tags",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "custom_single_sign_on": {
-              "Type": "Bool",
-              "Description": "Whether this service principal represents a custom SAML application",
-              "Computed": true
-            },
-            "enterprise": {
-              "Type": "Bool",
-              "Description": "Whether this service principal represents an Enterprise Application",
-              "Computed": true
-            },
-            "gallery": {
-              "Type": "Bool",
-              "Description": "Whether this service principal represents a gallery application",
-              "Computed": true
-            },
-            "hide": {
-              "Type": "Bool",
-              "Description": "Whether this app is invisible to users in My Apps and Office 365 Launcher",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "features": {
-        "Type": "List",
-        "Description": "Block of features configured for this service principal using tags",
-        "Computed": true,
-        "Deprecated": "This block has been renamed to `feature_tags` and will be removed in version 3.0 of the provider",
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "custom_single_sign_on_app": {
-              "Type": "Bool",
-              "Description": "Whether this service principal represents a custom SAML application",
-              "Computed": true
-            },
-            "enterprise_application": {
-              "Type": "Bool",
-              "Description": "Whether this service principal represents an Enterprise Application",
-              "Computed": true
-            },
-            "gallery_application": {
-              "Type": "Bool",
-              "Description": "Whether this service principal represents a gallery application",
-              "Computed": true
-            },
-            "visible_to_users": {
-              "Type": "Bool",
-              "Description": "Whether this app is visible to users in My Apps and Office 365 Launcher",
-              "Computed": true
-            }
-          }
-        }
       },
       "homepage_url": {
         "Type": "String",
@@ -4127,23 +2666,6 @@
         "Description": "The URL where the service exposes SAML metadata for federation",
         "Computed": true
       },
-      "saml_single_sign_on": {
-        "Type": "List",
-        "Description": "Settings related to SAML single sign-on",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "relay_state": {
-              "Type": "String",
-              "Description": "The relative URI the service provider would redirect to after completion of the single sign-on flow",
-              "Computed": true
-            }
-          }
-        }
-      },
       "service_principal_names": {
         "Type": "List",
         "Description": "A list of identifier URI(s), copied over from the associated application",
@@ -4173,150 +2695,6 @@
         "Type": "String",
         "Description": "Identifies whether the service principal represents an application or a managed identity",
         "Computed": true
-      }
-    },
-    "azuread_service_principals": {
-      "__timeouts__": [
-        "read"
-      ],
-      "application_ids": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "The application IDs (client IDs) of the applications associated with the service principals",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "display_names": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "The display names of the applications associated with the service principals",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "ignore_missing": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Ignore missing service principals and return the service principals that were found. The data source will still fail if no service principals are found",
-        "ConflictsWith": [
-          "return_all"
-        ],
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "object_ids": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "The object IDs of the service principals",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "return_all": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Fetch all service principals with no filter and return all that were found. The data source will still fail if no service principals are found.",
-        "ConflictsWith": [
-          "ignore_missing"
-        ],
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "service_principals": {
-        "Type": "List",
-        "Description": "A list of service_principals",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "account_enabled": {
-              "Type": "Bool",
-              "Description": "Whether or not the service principal account is enabled",
-              "Computed": true
-            },
-            "app_role_assignment_required": {
-              "Type": "Bool",
-              "Description": "Whether this service principal requires an app role assignment to a user or group before Azure AD will issue a user or access token to the application",
-              "Computed": true
-            },
-            "application_id": {
-              "Type": "String",
-              "Description": "The application ID (client ID) for the associated application",
-              "Computed": true
-            },
-            "application_tenant_id": {
-              "Type": "String",
-              "Description": "The tenant ID where the associated application is registered",
-              "Computed": true
-            },
-            "display_name": {
-              "Type": "String",
-              "Description": "The display name of the application associated with this service principal",
-              "Computed": true
-            },
-            "object_id": {
-              "Type": "String",
-              "Description": "The object ID of the service principal",
-              "Computed": true
-            },
-            "preferred_single_sign_on_mode": {
-              "Type": "String",
-              "Description": "The single sign-on mode configured for this application. Azure AD uses the preferred single sign-on mode to launch the application from Microsoft 365 or the Azure AD My Apps",
-              "Computed": true
-            },
-            "saml_metadata_url": {
-              "Type": "String",
-              "Description": "The URL where the service exposes SAML metadata for federation",
-              "Computed": true
-            },
-            "service_principal_names": {
-              "Type": "List",
-              "Description": "A list of identifier URI(s), copied over from the associated application",
-              "Computed": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "sign_in_audience": {
-              "Type": "String",
-              "Description": "The Microsoft account types that are supported for the associated application",
-              "Computed": true
-            },
-            "tags": {
-              "Type": "List",
-              "Description": "A set of tags to apply to the service principal",
-              "Computed": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "type": {
-              "Type": "String",
-              "Description": "Identifies whether the service principal represents an application or a managed identity",
-              "Computed": true
-            }
-          }
-        }
       }
     },
     "azuread_user": {
@@ -4358,11 +2736,6 @@
         "Description": "Whether consent has been obtained for minors",
         "Computed": true
       },
-      "cost_center": {
-        "Type": "String",
-        "Description": "The cost center associated with the user.",
-        "Computed": true
-      },
       "country": {
         "Type": "String",
         "Description": "The country/region in which the user is located, e.g. `US` or `UK`",
@@ -4383,19 +2756,9 @@
         "Description": "The display name of the user",
         "Computed": true
       },
-      "division": {
-        "Type": "String",
-        "Description": "The name of the division in which the user works.",
-        "Computed": true
-      },
       "employee_id": {
         "Type": "String",
         "Description": "The employee identifier assigned to the user by the organisation",
-        "Computed": true
-      },
-      "employee_type": {
-        "Type": "String",
-        "Description": "Captures enterprise worker type. For example, Employee, Contractor, Consultant, or Vendor.",
         "Computed": true
       },
       "external_user_state": {
@@ -4437,11 +2800,6 @@
         "Type": "String",
         "Optional": true,
         "Description": "The email alias of the user",
-        "Computed": true
-      },
-      "manager_id": {
-        "Type": "String",
-        "Description": "The object ID of the user's manager",
         "Computed": true
       },
       "mobile_phone": {
@@ -4570,9 +2928,6 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "Ignore missing users and return users that were found. The data source will still fail if no users are found",
-        "ConflictsWith": [
-          "return_all"
-        ],
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -4598,18 +2953,6 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
-        }
-      },
-      "return_all": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Fetch all users with no filter and return all that were found. The data source will still fail if no users are found.",
-        "ConflictsWith": [
-          "ignore_missing"
-        ],
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
         }
       },
       "user_principal_names": {
