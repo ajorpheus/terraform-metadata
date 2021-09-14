@@ -1754,7 +1754,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The type of channel. One of: (webhook, email, opsgenie, pagerduty, slack, user, victorops).",
+        "Description": "The type of channel. One of: (opsgenie, pagerduty, slack, user, victorops, webhook, email).",
         "Computed": true
       }
     },
