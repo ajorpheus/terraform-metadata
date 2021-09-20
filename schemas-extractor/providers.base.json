@@ -248,7 +248,10 @@
     "repository": "github.com/logicmonitor/terraform-provider-__NAME__"
   },
   "mailgun": {},
-  "metalcloud": {"repository": "github.com/metalsoft-io/terraform-provider-__NAME__"},
+  "metalcloud": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
+    "repository": "github.com/metalsoft-io/terraform-provider-__NAME__"
+  },
   "mongodbatlas": {"repository": "github.com/mongodb/terraform-provider-__NAME__"},
   "mso": {"repository": "github.com/ciscodevnet/terraform-provider-__NAME__"},
   "mysql": {},
