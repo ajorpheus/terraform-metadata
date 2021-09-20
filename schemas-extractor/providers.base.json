@@ -110,26 +110,24 @@
     "skip_generation": true,
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
-  "aci": {
-    "repository": "github.com/CiscoDevNet/terraform-provider-aci"
-  },
-  "acme": {},
-  "akamai": {},
+  "aci": {"repository": "github.com/ciscodevnet/terraform-provider-__NAME__"},
+  "acme": {"repository": "github.com/vancluever/terraform-provider-__NAME__"},
+  "akamai": {"repository": "github.com/__NAME__/terraform-provider-__NAME__"},
   "alicloud": {
-    "repository": "github.com/aliyun/terraform-provider-alicloud",
+    "repository": "github.com/aliyun/terraform-provider-__NAME__",
     "go_envs": "GO111MODULE=on"
   },
   "arukas": {},
-  "auth0": {},
-  "avi": {},
-  "aviatrix": {},
+  "auth0": {"repository": "github.com/alexkappa/terraform-provider-__NAME__"},
+  "avi": {"repository": "github.com/vmware/terraform-provider-__NAME__"},
+  "aviatrix": {"repository": "github.com/AviatrixSystems/terraform-provider-__NAME__"},
   "aws": {},
   "azuread": {
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.AzureADProvider()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
-  "azuredevops": {},
+  "azuredevops": {"repository": "github.com/microsoft/terraform-provider-__NAME__"},
   "azurerm": {
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.AzureProvider()",
@@ -226,9 +224,9 @@
   "ignition": {},
   "incapsula": {},
   "influxdb": {},
-  "infoblox": {},
+  "infoblox": {"repository": "github.com/infobloxopen/terraform-provider-__NAME__"},
   "jdcloud": {},
-  "ksyun": {},
+  "ksyun": {"repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"},
   "kubernetes": {},
   "kubernetes-alpha": {
     "skip_generation": true,
@@ -245,13 +243,13 @@
     "repository": "github.com/logicmonitor/terraform-provider-__NAME__"
   },
   "mailgun": {},
-  "metalcloud": {},
-  "mongodbatlas": {},
-  "mso": {},
+  "metalcloud": {"repository": "github.com/metalsoft-io/terraform-provider-__NAME__"},
+  "mongodbatlas": {"repository": "github.com/mongodb/terraform-provider-__NAME__"},
+  "mso": {"repository": "github.com/ciscodevnet/terraform-provider-__NAME__"},
   "mysql": {},
-  "ncloud": {},
+  "ncloud": {"repository": "github.com/NaverCloudPlatform/terraform-provider-__NAME__"},
   "netlify": {},
-  "newrelic": {},
+  "newrelic": {"repository": "github.com/newrelic/terraform-provider-__NAME__"},
   "nks": {},
   "nomad": {
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
