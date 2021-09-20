@@ -112,7 +112,12 @@
   },
   "aci": {"repository": "github.com/ciscodevnet/terraform-provider-__NAME__"},
   "acme": {"repository": "github.com/vancluever/terraform-provider-__NAME__"},
-  "akamai": {"repository": "github.com/__NAME__/terraform-provider-__NAME__"},
+  "akamai": {
+    "pkg_name": "pkg/__NAME__",
+    "provider_constr": "prvdr.Provider(__PROVIDER_ARGS__)()",
+    "TODO": "Fix complex provider_constr",
+    "repository": "github.com/__NAME__/terraform-provider-__NAME__"
+  },
   "alicloud": {
     "repository": "github.com/aliyun/terraform-provider-__NAME__",
     "go_envs": "GO111MODULE=on"
