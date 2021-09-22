@@ -37,26 +37,31 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "external": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "http": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "local": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "null": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "random": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
@@ -74,6 +79,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "tls": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
@@ -111,8 +117,12 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "aci": {"repository": "github.com/ciscodevnet/terraform-provider-__NAME__"},
-  "acme": {"repository": "github.com/vancluever/terraform-provider-__NAME__"},
+  "acme": {
+    "pkg_prefix": "__REPOSITORY__/v2",
+    "repository": "github.com/vancluever/terraform-provider-__NAME__"
+  },
   "akamai": {
+    "pkg_prefix": "__REPOSITORY__/v2",
     "pkg_name": "pkg/__NAME__",
     "provider_constr": "prvdr.Provider(__PROVIDER_ARGS__)()",
     "TODO": "Fix complex provider_constr",
@@ -125,7 +135,10 @@
   "arukas": {},
   "auth0": {"repository": "github.com/alexkappa/terraform-provider-__NAME__"},
   "avi": {"repository": "github.com/vmware/terraform-provider-__NAME__"},
-  "aviatrix": {"repository": "github.com/AviatrixSystems/terraform-provider-__NAME__"},
+  "aviatrix": {
+    "pkg_prefix": "__REPOSITORY__/v2",
+    "repository": "github.com/AviatrixSystems/terraform-provider-__NAME__"
+  },
   "aws": {},
   "azuread": {
     "pkg_name": "internal/provider",
@@ -232,7 +245,9 @@
   "infoblox": {"repository": "github.com/infobloxopen/terraform-provider-__NAME__"},
   "jdcloud": {},
   "ksyun": {"repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"},
-  "kubernetes": {},
+  "kubernetes": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__"
+  },
   "kubernetes-alpha": {
     "skip_generation": true,
     "pkg_name": "provider"
@@ -255,9 +270,15 @@
   "mongodbatlas": {"repository": "github.com/mongodb/terraform-provider-__NAME__"},
   "mso": {"repository": "github.com/ciscodevnet/terraform-provider-__NAME__"},
   "mysql": {},
-  "ncloud": {"repository": "github.com/NaverCloudPlatform/terraform-provider-__NAME__"},
+  "ncloud": {
+    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
+    "repository": "github.com/NaverCloudPlatform/terraform-provider-__NAME__"
+  },
   "netlify": {},
-  "newrelic": {"repository": "github.com/newrelic/terraform-provider-__NAME__"},
+  "newrelic": {
+    "pkg_prefix": "__REPOSITORY__/v2",
+    "repository": "github.com/newrelic/terraform-provider-__NAME__"
+  },
   "nks": {},
   "nomad": {
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
