@@ -40,30 +40,35 @@
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
+    "go_envs": "GO111MODULE=on",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "http": {
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
+    "go_envs": "GO111MODULE=on",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "local": {
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
+    "go_envs": "GO111MODULE=on",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "null": {
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
+    "go_envs": "GO111MODULE=on",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "random": {
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
+    "go_envs": "GO111MODULE=on",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "template": {
@@ -82,6 +87,7 @@
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
+    "go_envs": "GO111MODULE=on",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "boundary": {
@@ -246,7 +252,8 @@
   "jdcloud": {},
   "ksyun": {"repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"},
   "kubernetes": {
-    "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__"
+    "pkg_prefix": "github.com/hashicorp/terraform-provider-__NAME__",
+    "go_envs": "GO111MODULE=on"
   },
   "kubernetes-alpha": {
     "skip_generation": true,
@@ -279,7 +286,9 @@
     "pkg_prefix": "__REPOSITORY__/v2",
     "repository": "github.com/newrelic/terraform-provider-__NAME__"
   },
-  "nks": {},
+  "nks": {
+    "skip_generation": true
+  },
   "nomad": {
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
