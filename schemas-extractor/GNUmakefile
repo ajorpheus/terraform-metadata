@@ -1,7 +1,7 @@
 default: build
 
 clean:
-	rm -f repositories.list.full providers.list
+	rm -f repositories.list.full providers.registry.json
 	rm -rf schemas logs
 
 build: schemas
@@ -24,10 +24,10 @@ backends: providers.json
 functions: providers.json
 	@sh -c "'$(CURDIR)/build-functions.sh'"
 
-providers.list:
-	@sh -c "'$(CURDIR)/fetch-providers.sh'"
+providers.registry.json:
+	@sh -c "'$(CURDIR)/fetch-providers-registry.sh'"
 
-providers.json: providers.list providers.base.json
+providers.json: providers.registry.json providers.base.json
 	@sh -c "'$(CURDIR)/check-providers.sh'"
 	cp providers.base.json providers.json
 
