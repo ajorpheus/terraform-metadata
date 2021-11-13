@@ -620,6 +620,172 @@
                 "ElementsType": "String"
               }
             },
+            "invalidate_on_update": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "scope": {
+              "Type": "List",
+              "Required": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "Exact"
+                    }
+                  },
+                  "repository_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "repository_ref": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "azuredevops_branch_policy_work_item_linking": {
+      "blocking": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "settings": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "List",
+              "Required": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "Exact"
+                    }
+                  },
+                  "repository_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "repository_ref": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "azuredevops_branch_policy_status_check": {
+      "blocking": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "settings": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "applicability": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "default"
+              }
+            },
+            "author_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "display_name": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "filename_patterns": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "genre": {
               "Type": "String",
               "Optional": true
@@ -3633,6 +3799,505 @@
           "Type": "bool",
           "Value": "true"
         }
+      }
+    },
+    "azuredevops_team": {
+      "administrators": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "ConfigExplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "members": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "ConfigExplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_team_administrators": {
+      "administrators": {
+        "Type": "Set",
+        "Required": true,
+        "MinItems": 1,
+        "ConfigExplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "add"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "team_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_team_members": {
+      "members": {
+        "Type": "Set",
+        "Required": true,
+        "MinItems": 1,
+        "ConfigExplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "add"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "team_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_serviceendpoint_npm": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "access_token": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The access token for npm registry"
+      },
+      "access_token_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'access_token'",
+        "Computed": true
+      },
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "url": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Url for the npm registry"
+      }
+    },
+    "azuredevops_serviceendpoint_runpipeline": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "auth_personal": {
+        "Type": "Set",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "personal_access_token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Azure DevOps personal access token which should be used.",
+              "DefaultFunc": "ENV(AZDO_PERSONAL_ACCESS_TOKEN)"
+            },
+            "personal_access_token_hash": {
+              "Type": "String",
+              "Description": "A bcrypted hash of the attribute 'personal_access_token'",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "organization_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Azure DevOps organization name"
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_serviceendpoint_servicefabric": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "azure_active_directory": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "certificate",
+          "none"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Password for the Azure Active Directory account."
+            },
+            "password_hash": {
+              "Type": "String",
+              "Description": "A bcrypted hash of the attribute 'password'",
+              "Computed": true
+            },
+            "server_certificate_common_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The common name(s) of the cluster's certificate(s). This is used to verify the identity of the cluster. This value overrides the publish profile. Separate multiple common names with a comma (',')",
+              "ConflictsWith": [
+                "azure_active_directory.0.server_certificate_thumbprint"
+              ]
+            },
+            "server_certificate_lookup": {
+              "Type": "String",
+              "Required": true
+            },
+            "server_certificate_thumbprint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The thumbprint(s) of the cluster's certificate(s). This is used to verify the identity of the cluster. This value overrides the publish profile. Separate multiple thumbprints with a comma (',')",
+              "ConflictsWith": [
+                "azure_active_directory.0.server_certificate_common_name"
+              ]
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Specify an Azure Active Directory account."
+            }
+          }
+        }
+      },
+      "certificate": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "azure_active_directory",
+          "none"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "client_certificate": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Base64 encoding of the cluster's client certificate file."
+            },
+            "client_certificate_hash": {
+              "Type": "String",
+              "Description": "A bcrypted hash of the attribute 'client_certificate'",
+              "Computed": true
+            },
+            "client_certificate_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Password for the certificate."
+            },
+            "client_certificate_password_hash": {
+              "Type": "String",
+              "Description": "A bcrypted hash of the attribute 'client_certificate_password'",
+              "Computed": true
+            },
+            "server_certificate_common_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The common name(s) of the cluster's certificate(s). This is used to verify the identity of the cluster. This value overrides the publish profile. Separate multiple common names with a comma (',')",
+              "ConflictsWith": [
+                "certificate.0.server_certificate_thumbprint"
+              ]
+            },
+            "server_certificate_lookup": {
+              "Type": "String",
+              "Required": true
+            },
+            "server_certificate_thumbprint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The thumbprint(s) of the cluster's certificate(s). This is used to verify the identity of the cluster. This value overrides the publish profile. Separate multiple thumbprints with a comma (',')",
+              "ConflictsWith": [
+                "certificate.0.server_certificate_common_name"
+              ]
+            }
+          }
+        }
+      },
+      "cluster_endpoint": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Client connection endpoint for the cluster. Prefix the value with 'tcp://';. This value overrides the publish profile."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "none": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "certificate",
+          "azure_active_directory"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cluster_spn": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Fully qualified domain SPN for gMSA account. This is applicable only if `unsecured` option is disabled."
+            },
+            "unsecured": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Skip using windows security for authentication.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "azuredevops_serviceendpoint_sonarqube": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "token": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Authentication Token generated through SonarQube (go to My Account \u003e Security \u003e Generate Tokens)"
+      },
+      "token_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'token'",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Url for the SonarQube Server"
+      }
+    },
+    "azuredevops_serviceendpoint_ssh": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "authorization": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "host": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Organization Url."
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true
+      },
+      "password_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'password'",
+        "Computed": true
+      },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "22"
+        }
+      },
+      "private_key": {
+        "Type": "String",
+        "Optional": true
+      },
+      "private_key_hash": {
+        "Type": "String",
+        "Description": "A bcrypted hash of the attribute 'private_key'",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_endpoint_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true
       }
     },
     "azuredevops_team": {

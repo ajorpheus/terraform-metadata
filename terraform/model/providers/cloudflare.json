@@ -2229,6 +2229,87 @@
         "Required": true
       }
     },
+    "cloudflare_argo_tunnel": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "cname": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "secret": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "cloudflare_authenticated_origin_pulls": {
+      "authenticated_origin_pulls_certificate": {
+        "Type": "String",
+        "Optional": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Optional": true
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "cloudflare_authenticated_origin_pulls_certificate": {
+      "__timeouts__": [
+        "create"
+      ],
+      "certificate": {
+        "Type": "String",
+        "Required": true
+      },
+      "expires_on": {
+        "Type": "String",
+        "Computed": true
+      },
+      "issuer": {
+        "Type": "String",
+        "Computed": true
+      },
+      "private_key": {
+        "Type": "String",
+        "Required": true
+      },
+      "serial_number": {
+        "Type": "String",
+        "Computed": true
+      },
+      "signature": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "uploaded_on": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "cloudflare_byo_ip_prefix": {
       "account_id": {
         "Type": "String",
@@ -3257,6 +3338,43 @@
         "Required": true
       }
     },
+    "cloudflare_ip_list": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "item": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comment": {
+              "Type": "String",
+              "Optional": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "kind": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "cloudflare_load_balancer": {
       "created_on": {
         "Type": "String",
@@ -4058,6 +4176,163 @@
               }
             }
           }
+        }
+      },
+      "modified": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "pagerduty_integration": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "webhooks_integration": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "cloudflare_notification_policy_webhooks": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_failure": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_success": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "secret": {
+        "Type": "String",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "cloudflare_magic_firewall_ruleset": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "rules": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Map"
+        }
+      }
+    },
+    "cloudflare_notification_policy": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "alert_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "conditions": {
+        "Type": "Map",
+        "Optional": true
+      },
+      "created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "email_integration": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "filters": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "List"
         }
       },
       "modified": {
@@ -6183,6 +6458,366 @@
       "tunnel_id": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "cloudflare_split_tunnel": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "mode": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The mode of the split tunnel policy. Either 'include' or 'exclude'."
+      },
+      "tunnels": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The address for the tunnel."
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A description for the tunnel."
+            },
+            "host": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The domain name for the tunnel."
+            }
+          }
+        }
+      }
+    },
+    "cloudflare_static_route": {
+      "account_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "colo_names": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "colo_regions": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "nexthop": {
+        "Type": "String",
+        "Required": true
+      },
+      "prefix": {
+        "Type": "String",
+        "Required": true
+      },
+      "priority": {
+        "Type": "Int",
+        "Required": true
+      },
+      "weight": {
+        "Type": "Int",
+        "Optional": true
+      }
+    },
+    "cloudflare_teams_account": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "activity_log_enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "antivirus": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled_download_phase": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "enabled_upload_phase": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "fail_closed": {
+              "Type": "Bool",
+              "Required": true
+            }
+          }
+        }
+      },
+      "block_page": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "background_color": {
+              "Type": "String",
+              "Optional": true
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "footer_text": {
+              "Type": "String",
+              "Optional": true
+            },
+            "header_text": {
+              "Type": "String",
+              "Optional": true
+            },
+            "logo_path": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "tls_decrypt_enabled": {
+        "Type": "Bool",
+        "Optional": true
+      }
+    },
+    "cloudflare_teams_list": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "items": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "cloudflare_teams_location": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "anonymized_logs_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "client_default": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "doh_subdomain": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ipv4_destination": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "networks": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "policy_ids": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "cloudflare_teams_rule": {
+      "account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "action": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Required": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "filters": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "identity": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "precedence": {
+        "Type": "Int",
+        "Required": true
+      },
+      "rule_settings": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "biso_admin_controls": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disable_copy_paste": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "disable_printing": {
+                    "Type": "Bool",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "block_page_enabled": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "block_page_reason": {
+              "Type": "String",
+              "Optional": true
+            },
+            "l4override": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ip": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "port": {
+                    "Type": "Int",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "override_host": {
+              "Type": "String",
+              "Optional": true
+            },
+            "override_ips": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "traffic": {
+        "Type": "String",
+        "Optional": true
+      },
+      "version": {
+        "Type": "Int",
+        "Computed": true
       }
     },
     "cloudflare_waf_group": {

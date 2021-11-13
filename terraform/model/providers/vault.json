@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vault",
   "type": "provider",
-  "version": "v3.6.0",
+  "version": "v2.23.0",
   "provider": {
     "add_address_to_env": {
       "Type": "String",
@@ -2188,7 +2188,8 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "redshift"
+          "elasticsearch"
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2380,8 +2381,7 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake",
-          "redshift"
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2464,8 +2464,8 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake",
-          "redshift"
+          "elasticsearch",
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2625,7 +2625,8 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "redshift"
+          "elasticsearch"
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2694,7 +2695,8 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "redshift"
+          "elasticsearch"
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2739,7 +2741,8 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "redshift"
+          "elasticsearch"
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2818,7 +2821,8 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "redshift"
+          "elasticsearch",
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2896,8 +2900,8 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake",
-          "redshift"
+          "elasticsearch",
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2965,8 +2969,8 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake",
-          "redshift"
+          "elasticsearch",
+          "snowflake"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3022,237 +3026,15 @@
         "MaxItems": 1,
         "ConflictsWith": [
           "cassandra",
-          "couchbase",
-          "elasticsearch",
           "hana",
-          "influxdb",
-          "mssql",
           "mongodb",
-          "mongodbatlas",
+          "mssql",
           "mysql",
           "mysql_aurora",
           "mysql_legacy",
           "postgresql",
           "oracle",
-          "snowflake",
-          "redshift"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "connection_url": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Connection string to use to connect to the database."
-            },
-            "max_connection_lifetime": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of seconds a connection may be reused."
-            },
-            "max_idle_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of idle connections to the database."
-            },
-            "max_open_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of open connections to the database.",
-              "Default": {
-                "Type": "int",
-                "Value": "2"
-              }
-            },
-            "password": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential password used in the connection URL"
-            },
-            "username": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential username used in the connection URL"
-            },
-            "username_template": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Username generation template."
-            }
-          }
-        }
-      },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Name of the database connection."
-      },
-      "oracle": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Connection parameters for the oracle-database-plugin plugin.",
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "cassandra",
-          "couchbase",
           "elasticsearch",
-          "hana",
-          "influxdb",
-          "mssql",
-          "mongodb",
-          "mongodbatlas",
-          "mysql",
-          "mysql_aurora",
-          "mysql_legacy",
-          "mysql_rds",
-          "postgresql",
-          "snowflake",
-          "redshift"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "connection_url": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Connection string to use to connect to the database."
-            },
-            "max_connection_lifetime": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of seconds a connection may be reused."
-            },
-            "max_idle_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of idle connections to the database."
-            },
-            "max_open_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of open connections to the database.",
-              "Default": {
-                "Type": "int",
-                "Value": "2"
-              }
-            },
-            "password": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential password used in the connection URL"
-            },
-            "username": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential username used in the connection URL"
-            },
-            "username_template": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Username generation template."
-            }
-          }
-        }
-      },
-      "plugin_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Specifies the name of the plugin to use for this connection. Must be prefixed with the name of one of the supported database engine types.",
-        "Computed": true
-      },
-      "postgresql": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Connection parameters for the postgresql-database-plugin plugin.",
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "cassandra",
-          "couchbase",
-          "elasticsearch",
-          "hana",
-          "influxdb",
-          "mssql",
-          "mongodb",
-          "mongodbatlas",
-          "mysql",
-          "mysql_aurora",
-          "mysql_legacy",
-          "mysql_rds",
-          "oracle",
-          "snowflake",
-          "redshift"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "connection_url": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Connection string to use to connect to the database."
-            },
-            "max_connection_lifetime": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of seconds a connection may be reused."
-            },
-            "max_idle_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of idle connections to the database."
-            },
-            "max_open_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of open connections to the database.",
-              "Default": {
-                "Type": "int",
-                "Value": "2"
-              }
-            },
-            "password": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential password used in the connection URL"
-            },
-            "username": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential username used in the connection URL"
-            },
-            "username_template": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Username generation template."
-            }
-          }
-        }
-      },
-      "redshift": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Connection parameters for the redshift-database-plugin plugin.",
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "cassandra",
-          "couchbase",
-          "elasticsearch",
-          "hana",
-          "influxdb",
-          "mssql",
-          "mongodb",
-          "mongodbatlas",
-          "mysql",
-          "mysql_aurora",
-          "mysql_legacy",
-          "mysql_rds",
-          "postgresql",
-          "oracle",
           "snowflake"
         ],
         "IsBlock": true,
@@ -3284,15 +3066,120 @@
                 "Value": "2"
               }
             },
-            "password": {
+            "username_template": {
               "Type": "String",
               "Optional": true,
-              "Description": "The root credential password used in the connection URL"
+              "Description": "Username generation template."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the database connection."
+      },
+      "oracle": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the oracle-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "hana",
+          "mongodb",
+          "mssql",
+          "mysql",
+          "mysql_rds",
+          "mysql_aurora",
+          "mysql_legacy",
+          "postgresql",
+          "elasticsearch",
+          "snowflake"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Connection string to use to connect to the database."
             },
-            "username": {
+            "max_connection_lifetime": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of seconds a connection may be reused."
+            },
+            "max_idle_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of idle connections to the database."
+            },
+            "max_open_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of open connections to the database.",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "username_template": {
               "Type": "String",
               "Optional": true,
-              "Description": "The root credential username used in the connection URL"
+              "Description": "Username generation template."
+            }
+          }
+        }
+      },
+      "postgresql": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the postgresql-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "hana",
+          "mongodb",
+          "mssql",
+          "mysql",
+          "mysql_rds",
+          "mysql_aurora",
+          "mysql_legacy",
+          "oracle",
+          "elasticsearch",
+          "snowflake"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Connection string to use to connect to the database."
+            },
+            "max_connection_lifetime": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of seconds a connection may be reused."
+            },
+            "max_idle_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of idle connections to the database."
+            },
+            "max_open_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of open connections to the database.",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
             },
             "username_template": {
               "Type": "String",
@@ -3319,19 +3206,16 @@
         "MaxItems": 1,
         "ConflictsWith": [
           "cassandra",
-          "couchbase",
-          "elasticsearch",
           "hana",
-          "influxdb",
-          "mssql",
           "mongodb",
-          "mongodbatlas",
+          "mssql",
           "mysql",
+          "mysql_rds",
           "mysql_aurora",
           "mysql_legacy",
-          "mysql_rds",
           "postgresql",
           "oracle",
+          "snowflake",
           "redshift"
         ],
         "IsBlock": true,
@@ -3366,12 +3250,12 @@
             "password": {
               "Type": "String",
               "Optional": true,
-              "Description": "The root credential password used in the connection URL"
+              "Description": "The password with the provided user"
             },
             "username": {
               "Type": "String",
               "Optional": true,
-              "Description": "The root credential username used in the connection URL"
+              "Description": "The AccountAdmin level user using to connect to snowflake"
             },
             "username_template": {
               "Type": "String",
@@ -9542,6 +9426,151 @@
           "Type": "string",
           "Value": "10s"
         }
+      }
+    },
+    "vault_raft_snapshot_agent_config": {
+      "aws_access_key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "AWS access key ID."
+      },
+      "aws_s3_bucket": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "S3 bucket to write snapshots to."
+      },
+      "aws_s3_disable_tls": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Disable TLS for the S3 endpoint. This should only be used for testing purposes."
+      },
+      "aws_s3_enable_kms": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Use KMS to encrypt bucket contents."
+      },
+      "aws_s3_endpoint": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "AWS endpoint. This is typically only set when using a non-AWS S3 implementation like Minio."
+      },
+      "aws_s3_force_path_style": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Use the endpoint/bucket URL style instead of bucket.endpoint."
+      },
+      "aws_s3_kms_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Use named KMS key, when aws_s3_enable_kms=true"
+      },
+      "aws_s3_region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "AWS region bucket is in."
+      },
+      "aws_s3_server_side_encryption": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Use AES256 to encrypt bucket contents."
+      },
+      "aws_secret_access_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "AWS secret access key."
+      },
+      "aws_session_token": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "AWS session token."
+      },
+      "azure_account_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Azure account key."
+      },
+      "azure_account_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Azure account name."
+      },
+      "azure_blob_environment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Azure blob environment."
+      },
+      "azure_container_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Azure container name to write snapshots to."
+      },
+      "azure_endpoint": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Azure blob storage endpoint. This is typically only set when using a non-Azure implementation like Azurite."
+      },
+      "file_prefix": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The file or object name of snapshot files will start with this string.",
+        "Default": {
+          "Type": "string",
+          "Value": "vault-snapshot"
+        }
+      },
+      "google_disable_tls": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Disable TLS for the GCS endpoint."
+      },
+      "google_endpoint": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "GCS endpoint. This is typically only set when using a non-Google GCS implementation like fake-gcs-server."
+      },
+      "google_gcs_bucket": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "GCS bucket to write snapshots to."
+      },
+      "google_service_account_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Google service account key in JSON format."
+      },
+      "interval_seconds": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Number of seconds between snapshots."
+      },
+      "local_max_space": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The maximum space, in bytes, to use for snapshots."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the snapshot agent configuration."
+      },
+      "path_prefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The directory or bucket prefix to to use."
+      },
+      "retain": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "How many snapshots are to be kept.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "storage_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "What storage service to send snapshots to. One of \"local\", \"azure-blob\", \"aws-s3\", or \"google-gcs\"."
       }
     },
     "vault_raft_snapshot_agent_config": {

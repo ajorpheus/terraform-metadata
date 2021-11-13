@@ -13363,6 +13363,11 @@
           }
         }
       },
+      "service_account": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The service account used for all user-controlled operations including\ntriggers.patch, triggers.run, builds.create, and builds.cancel.\n\nIf no service account is set, then the standard Cloud Build service account\n([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.\n\nFormat: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL}"
+      },
       "substitutions": {
         "Type": "Map",
         "Optional": true,
@@ -15363,7 +15368,7 @@
             "encryption_config": {
               "Type": "List",
               "Optional": true,
-              "Description": "The encryption options for the Composer environment and its dependencies.",
+              "Description": "The encryption options for the Composer environment and its dependencies. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
               "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
@@ -15680,7 +15685,7 @@
                   "env_variables": {
                     "Type": "Map",
                     "Optional": true,
-                    "Description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                    "Description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -15767,6 +15772,119 @@
                           "Type": "String",
                           "Required": true,
                           "Description": "IP address or range, defined using CIDR notation, of requests that this rule applies to. Examples: 192.168.1.1 or 192.168.0.0/16 or 2001:db8::/32 or 2001:0db8:0000:0042:0000:8a2e:0370:7334. IP range prefixes should be properly truncated. For example, 1.2.3.4/24 should be truncated to 1.2.3.0/24. Similarly, for IPv6, 2001:db8::1/32 should be truncated to 2001:db8::/32."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "workloads_config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "scheduler": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Configuration for resources used by Airflow schedulers.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "count": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "The number of schedulers."
+                        },
+                        "cpu": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "CPU request and limit for a single Airflow scheduler replica"
+                        },
+                        "memory_gb": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "Memory (GB) request and limit for a single Airflow scheduler replica."
+                        },
+                        "storage_gb": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "Storage (GB) request and limit for a single Airflow scheduler replica."
+                        }
+                      }
+                    }
+                  },
+                  "web_server": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Configuration for resources used by Airflow web server.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "cpu": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "CPU request and limit for Airflow web server."
+                        },
+                        "memory_gb": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "Memory (GB) request and limit for Airflow web server."
+                        },
+                        "storage_gb": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "Storage (GB) request and limit for Airflow web server."
+                        }
+                      }
+                    }
+                  },
+                  "worker": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Configuration for resources used by Airflow workers.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "cpu": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "CPU request and limit for a single Airflow worker replica."
+                        },
+                        "max_count": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "Maximum number of workers for autoscaling."
+                        },
+                        "memory_gb": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "Memory (GB) request and limit for a single Airflow worker replica."
+                        },
+                        "min_count": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "Minimum number of workers for autoscaling."
+                        },
+                        "storage_gb": {
+                          "Type": "Float",
+                          "Optional": true,
+                          "Description": "Storage (GB) request and limit for a single Airflow worker replica."
                         }
                       }
                     }
@@ -47054,7 +47172,7 @@
                         "secondary_worker_config": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
+                          "Description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
                           "Computed": true,
                           "MaxItems": 1,
                           "IsBlock": true,
@@ -49681,6 +49799,7 @@
       "project": {
         "Type": "String",
         "Optional": true,
+        "Description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
         "Computed": true
       },
       "response_policy_name": {
@@ -55048,7 +55167,6 @@
         "Type": "String",
         "Optional": true,
         "Description": "Every time this period passes, generate a new CryptoKeyVersion and set it as the primary.\nThe first rotation will take place after the specified period. The rotation period has\nthe format of a decimal number with up to 9 fractional digits, followed by the\nletter 's' (seconds). It must be greater than a day (ie, 86400)."
-      },
       "skip_initial_version_creation": {
         "Type": "Bool",
         "Optional": true,
@@ -57379,6 +57497,27 @@
         "Type": "String",
         "Required": true,
         "Description": "Whether the measurement is an integer, a floating-point number, etc. Some combinations of metricKind and valueType might not be supported. Possible values: [\"BOOL\", \"INT64\", \"DOUBLE\", \"STRING\", \"DISTRIBUTION\"]"
+      }
+    },
+    "google_monitoring_monitored_project": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Description": "Output only. The time when this `MonitoredProject` was created.",
+        "Computed": true
+      },
+      "metrics_scope": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Required. The resource name of the existing Metrics Scope that will monitor this project. Example: locations/global/metricsScopes/{SCOPING_PROJECT_ID_OR_NUMBER}"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Immutable. The resource name of the `MonitoredProject`. On input, the resource name includes the scoping project ID and monitored project ID. On output, it contains the equivalent project numbers. Example: `locations/global/metricsScopes/{SCOPING_PROJECT_ID_OR_NUMBER}/projects/{MONITORED_PROJECT_ID_OR_NUMBER}`"
       }
     },
     "google_monitoring_monitored_project": {
@@ -67845,6 +67984,33 @@
         "Description": "The reserved throughput capacity. Every unit of throughput capacity is\nequivalent to 1 MiB/s of published messages or 2 MiB/s of subscribed\nmessages."
       }
     },
+    "google_pubsub_lite_reservation": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the reservation."
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The region of the pubsub lite reservation."
+      },
+      "throughput_capacity": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The reserved throughput capacity. Every unit of throughput capacity is\nequivalent to 1 MiB/s of published messages or 2 MiB/s of subscribed\nmessages."
+      }
+    },
     "google_pubsub_lite_subscription": {
       "__timeouts__": [
         "create",
@@ -71203,8 +71369,7 @@
       },
       "encryption_key_name": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "first_ip_address": {
         "Type": "String",
@@ -75617,7 +75782,7 @@
             },
             "encryption_config": {
               "Type": "List",
-              "Description": "The encryption options for the Composer environment and its dependencies.",
+              "Description": "The encryption options for the Composer environment and its dependencies. This field is supported for Cloud Composer environments in versions composer-1.*.*-airflow-*.*.*.",
               "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
@@ -75890,7 +76055,7 @@
                   },
                   "env_variables": {
                     "Type": "Map",
-                    "Description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                    "Description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -75969,6 +76134,114 @@
                         "value": {
                           "Type": "String",
                           "Description": "IP address or range, defined using CIDR notation, of requests that this rule applies to. Examples: 192.168.1.1 or 192.168.0.0/16 or 2001:db8::/32 or 2001:0db8:0000:0042:0000:8a2e:0370:7334. IP range prefixes should be properly truncated. For example, 1.2.3.4/24 should be truncated to 1.2.3.0/24. Similarly, for IPv6, 2001:db8::1/32 should be truncated to 2001:db8::/32.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "workloads_config": {
+              "Type": "List",
+              "Description": "The workloads configuration settings for the GKE cluster associated with the Cloud Composer environment. Supported for Cloud Composer environments in versions composer-2.*.*-airflow-*.*.* and newer.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "scheduler": {
+                    "Type": "List",
+                    "Description": "Configuration for resources used by Airflow schedulers.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "count": {
+                          "Type": "Int",
+                          "Description": "The number of schedulers.",
+                          "Computed": true
+                        },
+                        "cpu": {
+                          "Type": "Float",
+                          "Description": "CPU request and limit for a single Airflow scheduler replica",
+                          "Computed": true
+                        },
+                        "memory_gb": {
+                          "Type": "Float",
+                          "Description": "Memory (GB) request and limit for a single Airflow scheduler replica.",
+                          "Computed": true
+                        },
+                        "storage_gb": {
+                          "Type": "Float",
+                          "Description": "Storage (GB) request and limit for a single Airflow scheduler replica.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "web_server": {
+                    "Type": "List",
+                    "Description": "Configuration for resources used by Airflow web server.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "cpu": {
+                          "Type": "Float",
+                          "Description": "CPU request and limit for Airflow web server.",
+                          "Computed": true
+                        },
+                        "memory_gb": {
+                          "Type": "Float",
+                          "Description": "Memory (GB) request and limit for Airflow web server.",
+                          "Computed": true
+                        },
+                        "storage_gb": {
+                          "Type": "Float",
+                          "Description": "Storage (GB) request and limit for Airflow web server.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "worker": {
+                    "Type": "List",
+                    "Description": "Configuration for resources used by Airflow workers.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "cpu": {
+                          "Type": "Float",
+                          "Description": "CPU request and limit for a single Airflow worker replica.",
+                          "Computed": true
+                        },
+                        "max_count": {
+                          "Type": "Int",
+                          "Description": "Maximum number of workers for autoscaling.",
+                          "Computed": true
+                        },
+                        "memory_gb": {
+                          "Type": "Float",
+                          "Description": "Memory (GB) request and limit for a single Airflow worker replica.",
+                          "Computed": true
+                        },
+                        "min_count": {
+                          "Type": "Int",
+                          "Description": "Minimum number of workers for autoscaling.",
+                          "Computed": true
+                        },
+                        "storage_gb": {
+                          "Type": "Float",
+                          "Description": "Storage (GB) request and limit for a single Airflow worker replica.",
                           "Computed": true
                         }
                       }
@@ -76982,12 +77255,12 @@
     "google_compute_disk": {
       "creation_timestamp": {
         "Type": "String",
-        "Description": "Creation timestamp in RFC3339 text format.",
+        "Description": "[Output Only] Creation timestamp in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Description": "An optional description of this resource. Provide this property when\nyou create the resource.",
+        "Description": "An optional description of this resource. Provide this property when you create the resource.",
         "Computed": true
       },
       "disk_encryption_key": {
@@ -77034,7 +77307,7 @@
       },
       "label_fingerprint": {
         "Type": "String",
-        "Description": "The fingerprint used for optimistic locking of this resource.  Used\ninternally during updates.",
+        "Description": "Used internally during label updates.",
         "Computed": true
       },
       "labels": {
@@ -83684,8 +83957,6 @@
       "rotation_period": {
         "Type": "String",
         "Description": "Every time this period passes, generate a new CryptoKeyVersion and set it as the primary.\nThe first rotation will take place after the specified period. The rotation period has\nthe format of a decimal number with up to 9 fractional digits, followed by the\nletter 's' (seconds). It must be greater than a day (ie, 86400).",
-        "Computed": true
-      },
       "skip_initial_version_creation": {
         "Type": "Bool",
         "Description": "If set to true, the request will create a CryptoKey without any CryptoKeyVersions. \nYou must use the 'google_kms_key_ring_import_job' resource to import the CryptoKeyVersion.",

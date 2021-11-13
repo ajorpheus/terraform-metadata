@@ -571,6 +571,14 @@
           "Value": "false"
         }
       },
+      "required_linear_history": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "required_pull_request_reviews": {
         "Type": "List",
         "Optional": true,
@@ -603,6 +611,10 @@
                 "Type": "int",
                 "Value": "1"
               }
+            },
+            "restrict_dismissals": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -627,6 +639,172 @@
             "strict": {
               "Type": "Bool",
               "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "github_branch_protection_v3": {
+      "branch": {
+        "Type": "String",
+        "Required": true
+      },
+      "enforce_admins": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "require_signed_commits": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "required_pull_request_reviews": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dismiss_stale_reviews": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "dismissal_teams": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "dismissal_users": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "include_admins": {
+              "Type": "Bool",
+              "Optional": true,
+              "Deprecated": "Use enforce_admins instead",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "require_code_owner_reviews": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "required_approving_review_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "1"
+              }
+            }
+          }
+        }
+      },
+      "required_status_checks": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "contexts": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "include_admins": {
+              "Type": "Bool",
+              "Optional": true,
+              "Deprecated": "Use enforce_admins instead",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "strict": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "restrictions": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "apps": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "teams": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "users": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             }
           }
         }
@@ -2330,6 +2508,69 @@
             "group_name": {
               "Type": "String",
               "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "github_organization_teams": {
+      "root_teams_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "teams": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "members": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "node_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "privacy": {
+              "Type": "String",
+              "Computed": true
+            },
+            "repositories": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "slug": {
+              "Type": "String",
+              "Required": true
             }
           }
         }

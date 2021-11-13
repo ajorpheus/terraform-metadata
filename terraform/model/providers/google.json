@@ -12562,6 +12562,11 @@
           }
         }
       },
+      "service_account": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The service account used for all user-controlled operations including\ntriggers.patch, triggers.run, builds.create, and builds.cancel.\n\nIf no service account is set, then the standard Cloud Build service account\n([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.\n\nFormat: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL}"
+      },
       "substitutions": {
         "Type": "Map",
         "Optional": true,
@@ -14873,7 +14878,7 @@
                   "env_variables": {
                     "Type": "Map",
                     "Optional": true,
-                    "Description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                    "Description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -20878,7 +20883,6 @@
             }
           }
         }
-      },
       "guest_accelerator": {
         "Type": "List",
         "Optional": true,
@@ -23076,6 +23080,34 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "iap": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Settings for enabling Cloud Identity Aware Proxy",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "oauth2_client_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "OAuth2 Client ID for IAP"
+            },
+            "oauth2_client_secret": {
+              "Type": "String",
+              "Required": true,
+              "Description": "OAuth2 Client Secret for IAP"
+            },
+            "oauth2_client_secret_sha256": {
+              "Type": "String",
+              "Description": "OAuth2 Client Secret SHA-256 for IAP",
+              "Computed": true
+            }
+          }
         }
       },
       "iap": {
@@ -43061,7 +43093,7 @@
                         "secondary_worker_config": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
+                          "Description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
                           "Computed": true,
                           "MaxItems": 1,
                           "IsBlock": true,
@@ -45598,7 +45630,7 @@
       },
       "rrdatas": {
         "Type": "List",
-        "Optional": true,
+        "Required": true,
         "Description": "The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \\\" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \\\"\\\" inside the Terraform configuration string (e.g. \"first255characters\\\"\\\"morecharacters\").",
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -50277,7 +50309,6 @@
         "Type": "String",
         "Optional": true,
         "Description": "Every time this period passes, generate a new CryptoKeyVersion and set it as the primary.\nThe first rotation will take place after the specified period. The rotation period has\nthe format of a decimal number with up to 9 fractional digits, followed by the\nletter 's' (seconds). It must be greater than a day (ie, 86400)."
-      },
       "skip_initial_version_creation": {
         "Type": "Bool",
         "Optional": true,
@@ -63465,8 +63496,6 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      }
-    },
     "google_scc_notification_config": {
       "__timeouts__": [
         "create",
@@ -69190,7 +69219,7 @@
                   },
                   "env_variables": {
                     "Type": "Map",
-                    "Description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                    "Description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -70260,12 +70289,12 @@
     "google_compute_disk": {
       "creation_timestamp": {
         "Type": "String",
-        "Description": "Creation timestamp in RFC3339 text format.",
+        "Description": "[Output Only] Creation timestamp in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Description": "An optional description of this resource. Provide this property when\nyou create the resource.",
+        "Description": "An optional description of this resource. Provide this property when you create the resource.",
         "Computed": true
       },
       "disk_encryption_key": {
@@ -72128,7 +72157,6 @@
             }
           }
         }
-      },
       "filter": {
         "Type": "String",
         "Optional": true
@@ -72322,6 +72350,11 @@
             "nic_type": {
               "Type": "String",
               "Description": "The type of vNIC to be used on this interface. Possible values:GVNIC, VIRTIO_NET",
+              "Computed": true
+            },
+            "stack_type": {
+              "Type": "String",
+              "Description": "The stack type for this network interface to identify whether the IPv6 feature is enabled or not. If not specified, IPV4_ONLY will be used.",
               "Computed": true
             },
             "queue_count": {
@@ -73145,6 +73178,11 @@
       "description": {
         "Type": "String",
         "Description": "An optional description of this resource.",
+        "Computed": true
+      },
+      "encrypted_interconnect_router": {
+        "Type": "Bool",
+        "Description": "Field to indicate if a router is dedicated to use with encrypted\nInterconnect Attachment (IPsec-encrypted Cloud Interconnect feature).\n\nNot currently available publicly.",
         "Computed": true
       },
       "encrypted_interconnect_router": {
@@ -76244,8 +76282,6 @@
       "rotation_period": {
         "Type": "String",
         "Description": "Every time this period passes, generate a new CryptoKeyVersion and set it as the primary.\nThe first rotation will take place after the specified period. The rotation period has\nthe format of a decimal number with up to 9 fractional digits, followed by the\nletter 's' (seconds). It must be greater than a day (ie, 86400).",
-        "Computed": true
-      },
       "skip_initial_version_creation": {
         "Type": "Bool",
         "Description": "If set to true, the request will create a CryptoKey without any CryptoKeyVersions. \nYou must use the 'google_kms_key_ring_import_job' resource to import the CryptoKeyVersion.",
@@ -78007,8 +78043,6 @@
         "Type": "String",
         "Description": "The TLS mode of the Redis instance, If not provided, TLS is disabled for the instance.\n\n- SERVER_AUTHENTICATION: Client to Server traffic encryption enabled with server authentication Default value: \"DISABLED\" Possible values: [\"SERVER_AUTHENTICATION\", \"DISABLED\"]",
         "Computed": true
-      }
-    },
     "google_secret_manager_secret": {
       "create_time": {
         "Type": "String",

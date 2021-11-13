@@ -1591,6 +1591,28 @@
         "Type": "String",
         "Optional": true
       },
+      "node_identities": {
+        "Type": "List",
+        "Description": "The list of node identities that should be applied to the token.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datacenter": {
+              "Type": "String",
+              "Description": "Specifies the node's datacenter.",
+              "Computed": true
+            },
+            "node_name": {
+              "Type": "String",
+              "Description": "The list of node identities that should be applied to the token.",
+              "Computed": true
+            }
+          }
+        }
+      },
       "policies": {
         "Type": "List",
         "Computed": true,
