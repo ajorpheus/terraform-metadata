@@ -13612,6 +13612,116 @@
         "Computed": true
       }
     },
+    "google_cloudbuild_worker_pool": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "annotations": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "User specified annotations. See https://google.aip.dev/128#annotations for more details such as format and size limitations.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "create_time": {
+        "Type": "String",
+        "Description": "Output only. Time at which the request to create the `WorkerPool` was received.",
+        "Computed": true
+      },
+      "delete_time": {
+        "Type": "String",
+        "Description": "Output only. Time at which the request to delete the `WorkerPool` was received.",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A user-specified, human-readable name for the `WorkerPool`. If provided, this value must be 1-63 characters."
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The location for the resource"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User-defined name of the `WorkerPool`."
+      },
+      "network_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Network configuration for the `WorkerPool`.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "peered_network": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Required. Immutable. The network definition that the workers are peered to. If this section is left empty, the workers will be peered to `WorkerPool.project_id` on the service producer network. Must be in the format `projects/{project}/global/networks/{network}`, where `{project}` is a project number, such as `12345`, and `{network}` is the name of a VPC network in the project. See [Understanding network configuration options](https://cloud.google.com/cloud-build/docs/custom-workers/set-up-custom-worker-pool-environment#understanding_the_network_configuration_options)"
+            }
+          }
+        }
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The project for the resource",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "Output only. `WorkerPool` state. Possible values: STATE_UNSPECIFIED, PENDING, APPROVED, REJECTED, CANCELLED",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Description": "Output only. A unique identifier for the `WorkerPool`.",
+        "Computed": true
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "Output only. Time at which the request to update the `WorkerPool` was received.",
+        "Computed": true
+      },
+      "worker_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configuration to be used for a creating workers in the `WorkerPool`.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disk_size_gb": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Size of the disk attached to the worker, in GB. See [Worker pool config file](https://cloud.google.com/cloud-build/docs/custom-workers/worker-pool-config-file). Specify a value of up to 1000. If `0` is specified, Cloud Build will use a standard disk size."
+            },
+            "machine_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Machine type of a worker, such as `n1-standard-1`. See [Worker pool config file](https://cloud.google.com/cloud-build/docs/custom-workers/worker-pool-config-file). If left blank, Cloud Build will use `n1-standard-1`."
+            },
+            "no_external_ip": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If true, workers are created without any public address, which prevents network egress to public IPs."
+            }
+          }
+        }
+      }
+    },
     "google_cloudfunctions_function": {
       "__timeouts__": [
         "create",
@@ -68753,6 +68863,11 @@
         "Description": "The limit on the minimum number of function instances that may coexist at a given time.",
         "Computed": true
       },
+      "min_instances": {
+        "Type": "Int",
+        "Description": "The limit on the minimum number of function instances that may coexist at a given time.",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -72352,6 +72467,11 @@
               "Description": "The type of vNIC to be used on this interface. Possible values:GVNIC, VIRTIO_NET",
               "Computed": true
             },
+            "queue_count": {
+              "Type": "Int",
+              "Description": "The networking queue count that's specified by users for the network interface. Both Rx and Tx queues will be set to this number. It will be empty if not specified.",
+              "Computed": true
+            },
             "stack_type": {
               "Type": "String",
               "Description": "The stack type for this network interface to identify whether the IPv6 feature is enabled or not. If not specified, IPV4_ONLY will be used.",
@@ -73211,6 +73331,209 @@
       },
       "self_link": {
         "Type": "String",
+        "Computed": true
+      }
+    },
+    "google_compute_router_status": {
+      "best_routes": {
+        "Type": "List",
+        "Description": "Best routes for this router's network.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "An optional description of this resource. Provide this property\nwhen you create the resource.",
+              "Computed": true
+            },
+            "dest_range": {
+              "Type": "String",
+              "Description": "The destination range of outgoing packets that this route applies to.\nOnly IPv4 is supported.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Description": "The network that this route applies to.",
+              "Computed": true
+            },
+            "next_hop_gateway": {
+              "Type": "String",
+              "Description": "URL to a gateway that should handle matching packets.\nCurrently, you can only specify the internet gateway, using a full or\npartial valid URL:\n* 'https://www.googleapis.com/compute/v1/projects/project/global/gateways/default-internet-gateway'\n* 'projects/project/global/gateways/default-internet-gateway'\n* 'global/gateways/default-internet-gateway'\n* The string 'default-internet-gateway'.",
+              "Computed": true
+            },
+            "next_hop_ilb": {
+              "Type": "String",
+              "Description": "The IP address or URL to a forwarding rule of type\nloadBalancingScheme=INTERNAL that should handle matching\npackets.\n\nWith the GA provider you can only specify the forwarding\nrule as a partial or full URL. For example, the following\nare all valid values:\n* 10.128.0.56\n* https://www.googleapis.com/compute/v1/projects/project/regions/region/forwardingRules/forwardingRule\n* regions/region/forwardingRules/forwardingRule\n\nWhen the beta provider, you can also specify the IP address\nof a forwarding rule from the same VPC or any peered VPC.\n\nNote that this can only be used when the destinationRange is\na public (non-RFC 1918) IP CIDR range.",
+              "Computed": true
+            },
+            "next_hop_instance": {
+              "Type": "String",
+              "Description": "URL to an instance that should handle matching packets.\nYou can specify this as a full or partial URL. For example:\n* 'https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/instance'\n* 'projects/project/zones/zone/instances/instance'\n* 'zones/zone/instances/instance'\n* Just the instance name, with the zone in 'next_hop_instance_zone'.",
+              "Computed": true
+            },
+            "next_hop_instance_zone": {
+              "Type": "String",
+              "Description": "The zone of the instance specified in next_hop_instance. Omit if next_hop_instance is specified as a URL.",
+              "Computed": true
+            },
+            "next_hop_ip": {
+              "Type": "String",
+              "Description": "Network IP address of an instance that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_network": {
+              "Type": "String",
+              "Description": "URL to a Network that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_vpn_tunnel": {
+              "Type": "String",
+              "Description": "URL to a VpnTunnel that should handle matching packets.",
+              "Computed": true
+            },
+            "priority": {
+              "Type": "Int",
+              "Description": "The priority of this route. Priority is used to break ties in cases\nwhere there is more than one matching route of equal prefix length.\n\nIn the case of two routes with equal prefix length, the one with the\nlowest-numbered priority value wins.\n\nDefault value is 1000. Valid range is 0 through 65535.",
+              "Computed": true
+            },
+            "project": {
+              "Type": "String",
+              "Computed": true
+            },
+            "self_link": {
+              "Type": "String",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Set",
+              "Description": "A list of instance tags to which this route applies.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "best_routes_for_router": {
+        "Type": "List",
+        "Description": "Best routes learned by this router.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "An optional description of this resource. Provide this property\nwhen you create the resource.",
+              "Computed": true
+            },
+            "dest_range": {
+              "Type": "String",
+              "Description": "The destination range of outgoing packets that this route applies to.\nOnly IPv4 is supported.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Description": "The network that this route applies to.",
+              "Computed": true
+            },
+            "next_hop_gateway": {
+              "Type": "String",
+              "Description": "URL to a gateway that should handle matching packets.\nCurrently, you can only specify the internet gateway, using a full or\npartial valid URL:\n* 'https://www.googleapis.com/compute/v1/projects/project/global/gateways/default-internet-gateway'\n* 'projects/project/global/gateways/default-internet-gateway'\n* 'global/gateways/default-internet-gateway'\n* The string 'default-internet-gateway'.",
+              "Computed": true
+            },
+            "next_hop_ilb": {
+              "Type": "String",
+              "Description": "The IP address or URL to a forwarding rule of type\nloadBalancingScheme=INTERNAL that should handle matching\npackets.\n\nWith the GA provider you can only specify the forwarding\nrule as a partial or full URL. For example, the following\nare all valid values:\n* 10.128.0.56\n* https://www.googleapis.com/compute/v1/projects/project/regions/region/forwardingRules/forwardingRule\n* regions/region/forwardingRules/forwardingRule\n\nWhen the beta provider, you can also specify the IP address\nof a forwarding rule from the same VPC or any peered VPC.\n\nNote that this can only be used when the destinationRange is\na public (non-RFC 1918) IP CIDR range.",
+              "Computed": true
+            },
+            "next_hop_instance": {
+              "Type": "String",
+              "Description": "URL to an instance that should handle matching packets.\nYou can specify this as a full or partial URL. For example:\n* 'https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/instance'\n* 'projects/project/zones/zone/instances/instance'\n* 'zones/zone/instances/instance'\n* Just the instance name, with the zone in 'next_hop_instance_zone'.",
+              "Computed": true
+            },
+            "next_hop_instance_zone": {
+              "Type": "String",
+              "Description": "The zone of the instance specified in next_hop_instance. Omit if next_hop_instance is specified as a URL.",
+              "Computed": true
+            },
+            "next_hop_ip": {
+              "Type": "String",
+              "Description": "Network IP address of an instance that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_network": {
+              "Type": "String",
+              "Description": "URL to a Network that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_vpn_tunnel": {
+              "Type": "String",
+              "Description": "URL to a VpnTunnel that should handle matching packets.",
+              "Computed": true
+            },
+            "priority": {
+              "Type": "Int",
+              "Description": "The priority of this route. Priority is used to break ties in cases\nwhere there is more than one matching route of equal prefix length.\n\nIn the case of two routes with equal prefix length, the one with the\nlowest-numbered priority value wins.\n\nDefault value is 1000. Valid range is 0 through 65535.",
+              "Computed": true
+            },
+            "project": {
+              "Type": "String",
+              "Computed": true
+            },
+            "self_link": {
+              "Type": "String",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Set",
+              "Description": "A list of instance tags to which this route applies.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the router to query."
+      },
+      "network": {
+        "Type": "String",
+        "Description": "URI of the network to which this router belongs.",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Project ID of the target router."
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Region of the target router.",
         "Computed": true
       }
     },
@@ -74552,6 +74875,11 @@
               "Description": "Setting this field will assign instances of this pool to run on the specified node group. This is useful for running workloads on sole tenant nodes.",
               "Computed": true
             },
+            "node_group": {
+              "Type": "String",
+              "Description": "Setting this field will assign instances of this pool to run on the specified node group. This is useful for running workloads on sole tenant nodes.",
+              "Computed": true
+            },
             "oauth_scopes": {
               "Type": "Set",
               "Description": "The set of Google API scopes to be made available on all of the node VMs.",
@@ -74882,6 +75210,11 @@
                   "min_cpu_platform": {
                     "Type": "String",
                     "Description": "Minimum CPU platform to be used by this instance. The instance may be scheduled on the specified or newer CPU platform.",
+                    "Computed": true
+                  },
+                  "node_group": {
+                    "Type": "String",
+                    "Description": "Setting this field will assign instances of this pool to run on the specified node group. This is useful for running workloads on sole tenant nodes.",
                     "Computed": true
                   },
                   "node_group": {

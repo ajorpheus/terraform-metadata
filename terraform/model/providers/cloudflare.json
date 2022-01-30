@@ -2807,6 +2807,10 @@
           }
         }
       },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
       "identifier": {
         "Type": "String",
         "Optional": true
@@ -6713,6 +6717,10 @@
         "Type": "String",
         "Required": true
       },
+      "device_posture": {
+        "Type": "String",
+        "Optional": true
+      },
       "enabled": {
         "Type": "Bool",
         "Optional": true
@@ -6747,6 +6755,15 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "add_headers": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "biso_admin_controls": {
               "Type": "List",
               "Optional": true,
@@ -6760,7 +6777,19 @@
                     "Type": "Bool",
                     "Optional": true
                   },
+                  "disable_download": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "disable_keyboard": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "disable_printing": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "disable_upload": {
                     "Type": "Bool",
                     "Optional": true
                   }
@@ -6774,6 +6803,26 @@
             "block_page_reason": {
               "Type": "String",
               "Optional": true
+            },
+            "check_session": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "duration": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "enforce": {
+                    "Type": "Bool",
+                    "Required": true
+                  }
+                }
+              }
             },
             "l4override": {
               "Type": "List",

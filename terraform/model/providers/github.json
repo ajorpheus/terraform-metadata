@@ -665,6 +665,14 @@
         "Type": "String",
         "Required": true
       },
+      "require_conversation_resolution": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "require_signed_commits": {
         "Type": "Bool",
         "Optional": true,

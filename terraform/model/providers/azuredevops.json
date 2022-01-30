@@ -620,6 +620,10 @@
                 "ElementsType": "String"
               }
             },
+            "genre": {
+              "Type": "String",
+              "Optional": true
+            },
             "invalidate_on_update": {
               "Type": "Bool",
               "Optional": true,

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vault",
   "type": "provider",
-  "version": "v2.23.0",
+  "version": "v3.2.1",
   "provider": {
     "add_address_to_env": {
       "Type": "String",
@@ -233,13 +233,6 @@
         "Optional": true,
         "Description": "Use anonymous bind to discover the bind DN of a user."
       },
-      "formatter": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Text to insert the password into, ex. \"customPrefix{{PASSWORD}}customSuffix\".",
-        "Computed": true,
-        "Deprecated": "Formatter is deprecated and password_policy should be used with Vault \u003e= 1.5."
-      },
       "groupattr": {
         "Type": "String",
         "Optional": true,
@@ -265,13 +258,6 @@
         "Optional": true,
         "Description": "The number of seconds after a Vault rotation where, if Active Directory shows a later rotation, it should be considered out-of-band.",
         "Computed": true
-      },
-      "length": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The desired length of passwords that Vault generates.",
-        "Computed": true,
-        "Deprecated": "Length is deprecated and password_policy should be used with Vault \u003e= 1.5."
       },
       "local": {
         "Type": "Bool",
@@ -1215,7 +1201,6 @@
         "Type": "String",
         "Optional": true,
         "Description": "The type of inferencing Vault should do."
-      },
       "resolve_aws_unique_ids": {
         "Type": "Bool",
         "Optional": true,
@@ -1497,11 +1482,6 @@
         "Type": "String",
         "Required": true,
         "Description": "Unique name for the role."
-      },
-      "permissions_boundary_arn": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The ARN of the AWS Permissions Boundary to attach to IAM users created in the role. Valid only when credential_type is iam_user. If not specified, then no permissions boundary policy will be attached."
       },
       "policy_arns": {
         "Type": "Set",
@@ -2078,22 +2058,6 @@
         "Optional": true,
         "Description": "The path of the Consul Secret Backend the role belongs to."
       },
-      "consul_namespace": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The Consul namespace that the token will be created in. Applicable for Vault 1.10+ and Consul 1.7+",
-        "Computed": true
-      },
-      "consul_roles": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Set of Consul roles to attach to the token. Applicable for Vault 1.10+ with Consul 1.5+",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
       "local": {
         "Type": "Bool",
         "Optional": true,
@@ -2116,12 +2080,6 @@
         "Type": "String",
         "Required": true,
         "Description": "The name of an existing role against which to create this Consul credential"
-      },
-      "partition": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The Consul admin partition that the token will be created in. Applicable for Vault 1.10+ and Consul 1.11+",
-        "Computed": true
       },
       "policies": {
         "Type": "List",
@@ -2188,8 +2146,7 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "elasticsearch"
-          "snowflake"
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2381,7 +2338,8 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake"
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2464,8 +2422,158 @@
           "mysql_rds",
           "postgresql",
           "oracle",
+          "snowflake",
+          "redshift"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Connection string to use to connect to the database."
+            },
+            "max_connection_lifetime": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of seconds a connection may be reused."
+            },
+            "max_idle_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of idle connections to the database."
+            },
+            "max_open_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of open connections to the database.",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            }
+          }
+        }
+      },
+      "influxdb": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the influxdb-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
           "elasticsearch",
-          "snowflake"
+          "hana",
+          "mssql",
+          "mongodb",
+          "mongodbatlas",
+          "mysql",
+          "mysql_aurora",
+          "mysql_legacy",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake",
+          "redshift"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connect_timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The number of seconds to use as a connection timeout.",
+              "Default": {
+                "Type": "int",
+                "Value": "5"
+              }
+            },
+            "host": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Influxdb host to connect to."
+            },
+            "insecure_tls": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to skip verification of the server certificate when using TLS.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Specifies the password corresponding to the given username."
+            },
+            "pem_bundle": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Concatenated PEM blocks containing a certificate and private key; a certificate, private key, and issuing CA certificate; or just a CA certificate."
+            },
+            "pem_json": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specifies JSON containing a certificate and private key; a certificate, private key, and issuing CA certificate; or just a CA certificate."
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The transport port to use to connect to Influxdb.",
+              "Default": {
+                "Type": "int",
+                "Value": "8086"
+              }
+            },
+            "tls": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use TLS when connecting to Influxdb.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Specifies the username to use for superuser access."
+            },
+            "username_template": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Template describing how dynamic usernames are generated."
+            }
+          }
+        }
+      },
+      "mongodb": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the mongodb-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
+          "elasticsearch",
+          "hana",
+          "influxdb",
+          "mssql",
+          "mongodbatlas",
+          "mysql",
+          "mysql_aurora",
+          "mysql_legacy",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2695,8 +2803,7 @@
           "postgresql",
           "oracle",
           "snowflake",
-          "elasticsearch"
-          "snowflake"
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2735,86 +2842,6 @@
           "mongodb",
           "mongodbatlas",
           "mysql",
-          "mysql_aurora",
-          "mysql_legacy",
-          "mysql_rds",
-          "postgresql",
-          "oracle",
-          "snowflake",
-          "elasticsearch"
-          "snowflake"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "connection_url": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Connection string to use to connect to the database."
-            },
-            "contained_db": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Set to true when the target is a Contained Database, e.g. AzureSQL."
-            },
-            "disable_escaping": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Disable special character escaping in username and password"
-            },
-            "max_connection_lifetime": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of seconds a connection may be reused."
-            },
-            "max_idle_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of idle connections to the database."
-            },
-            "max_open_connections": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum number of open connections to the database.",
-              "Default": {
-                "Type": "int",
-                "Value": "2"
-              }
-            },
-            "password": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential password used in the connection URL"
-            },
-            "username": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The root credential username used in the connection URL"
-            },
-            "username_template": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Username generation template."
-            }
-          }
-        }
-      },
-      "mysql": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Connection parameters for the mysql-database-plugin plugin.",
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "cassandra",
-          "couchbase",
-          "elasticsearch",
-          "hana",
-          "influxdb",
-          "mssql",
-          "mongodb",
-          "mongodbatlas",
           "mysql_aurora",
           "mysql_legacy",
           "mysql_rds",
@@ -2900,8 +2927,8 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "elasticsearch",
-          "snowflake"
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2912,6 +2939,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "Connection string to use to connect to the database."
+            },
+            "contained_db": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Set to true when the target is a Contained Database, e.g. AzureSQL."
             },
             "max_connection_lifetime": {
               "Type": "Int",
@@ -2964,13 +2996,13 @@
           "mssql",
           "mongodb",
           "mongodbatlas",
-          "mysql",
           "mysql_aurora",
+          "mysql_legacy",
           "mysql_rds",
           "postgresql",
           "oracle",
-          "elasticsearch",
-          "snowflake"
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3001,7 +3033,52 @@
                 "Value": "2"
               }
             },
-            "password": {
+            "tls_ca": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "x509 CA file for validating the certificate presented by the MySQL server. Must be PEM encoded."
+            },
+            "tls_certificate_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "x509 certificate for connecting to the database. This must be a PEM encoded version of the private key and the certificate combined."
+            },
+            "username_template": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Username generation template."
+            }
+          }
+        }
+      },
+      "mysql_aurora": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the mysql-aurora-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
+          "elasticsearch",
+          "hana",
+          "influxdb",
+          "mssql",
+          "mongodb",
+          "mongodbatlas",
+          "mysql",
+          "mysql_legacy",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake",
+          "redshift"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
               "Type": "String",
               "Optional": true,
               "Description": "The root credential password used in the connection URL"
@@ -3009,7 +3086,61 @@
             "username": {
               "Type": "String",
               "Optional": true,
-              "Description": "The root credential username used in the connection URL"
+              "Description": "Username generation template."
+            }
+          }
+        }
+      },
+      "mysql_legacy": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the mysql-legacy-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
+          "elasticsearch",
+          "hana",
+          "influxdb",
+          "mssql",
+          "mongodb",
+          "mongodbatlas",
+          "mysql",
+          "mysql_aurora",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake",
+          "redshift"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Connection string to use to connect to the database."
+            },
+            "max_connection_lifetime": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of seconds a connection may be reused."
+            },
+            "max_idle_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of idle connections to the database."
+            },
+            "max_open_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of open connections to the database.",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
             },
             "username_template": {
               "Type": "String",
@@ -3026,16 +3157,20 @@
         "MaxItems": 1,
         "ConflictsWith": [
           "cassandra",
+          "couchbase",
+          "elasticsearch",
           "hana",
-          "mongodb",
+          "influxdb",
           "mssql",
+          "mongodb",
+          "mongodbatlas",
           "mysql",
           "mysql_aurora",
           "mysql_legacy",
           "postgresql",
           "oracle",
-          "elasticsearch",
-          "snowflake"
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3086,16 +3221,20 @@
         "MaxItems": 1,
         "ConflictsWith": [
           "cassandra",
+          "couchbase",
+          "elasticsearch",
           "hana",
-          "mongodb",
+          "influxdb",
           "mssql",
+          "mongodb",
+          "mongodbatlas",
           "mysql",
-          "mysql_rds",
           "mysql_aurora",
           "mysql_legacy",
+          "mysql_rds",
           "postgresql",
-          "elasticsearch",
-          "snowflake"
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3141,16 +3280,20 @@
         "MaxItems": 1,
         "ConflictsWith": [
           "cassandra",
+          "couchbase",
+          "elasticsearch",
           "hana",
-          "mongodb",
+          "influxdb",
           "mssql",
+          "mongodb",
+          "mongodbatlas",
           "mysql",
-          "mysql_rds",
           "mysql_aurora",
           "mysql_legacy",
+          "mysql_rds",
           "oracle",
-          "elasticsearch",
-          "snowflake"
+          "snowflake",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3189,6 +3332,75 @@
           }
         }
       },
+      "redshift": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the redshift-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
+          "elasticsearch",
+          "hana",
+          "influxdb",
+          "mssql",
+          "mongodb",
+          "mongodbatlas",
+          "mysql",
+          "mysql_aurora",
+          "mysql_legacy",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Connection string to use to connect to the database."
+            },
+            "max_connection_lifetime": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of seconds a connection may be reused."
+            },
+            "max_idle_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of idle connections to the database."
+            },
+            "max_open_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of open connections to the database.",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The root credential password used in the connection URL"
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The root credential username used in the connection URL"
+            },
+            "username_template": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Username generation template."
+            }
+          }
+        }
+      },
       "root_rotation_statements": {
         "Type": "List",
         "Optional": true,
@@ -3206,16 +3418,19 @@
         "MaxItems": 1,
         "ConflictsWith": [
           "cassandra",
+          "couchbase",
+          "elasticsearch",
           "hana",
-          "mongodb",
+          "influxdb",
           "mssql",
+          "mongodb",
+          "mongodbatlas",
           "mysql",
-          "mysql_rds",
           "mysql_aurora",
           "mysql_legacy",
+          "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake",
           "redshift"
         ],
         "IsBlock": true,
@@ -3250,12 +3465,12 @@
             "password": {
               "Type": "String",
               "Optional": true,
-              "Description": "The password with the provided user"
+              "Description": "The root credential password used in the connection URL"
             },
             "username": {
               "Type": "String",
               "Optional": true,
-              "Description": "The AccountAdmin level user using to connect to snowflake"
+              "Description": "The root credential username used in the connection URL"
             },
             "username_template": {
               "Type": "String",
@@ -10186,32 +10401,10 @@
           "ElementsType": "String"
         }
       },
-      "allowed_policies_glob": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Set of allowed policies with glob match for given role.",
-        "DefaultFunc": "UNKNOWN",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
       "disallowed_policies": {
         "Type": "Set",
         "Optional": true,
         "Description": "List of disallowed policies for given role.",
-        "DefaultFunc": "UNKNOWN",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "disallowed_policies_glob": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Set of disallowed policies with glob match for given role.",
         "DefaultFunc": "UNKNOWN",
         "ConfigImplicitMode": "Attr",
         "Elem": {

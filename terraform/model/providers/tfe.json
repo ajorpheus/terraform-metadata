@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "tfe",
   "type": "provider",
-  "version": "v0.19.0",
+  "version": "v0.27.1",
   "provider": {
     "hostname": {
       "Type": "String",
@@ -1467,6 +1467,117 @@
       "workspace_id": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "tfe_variables": {
+      "env": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "hcl": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sensitive": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "terraform": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "hcl": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sensitive": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "variables": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "hcl": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sensitive": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "workspace_id": {
+        "Type": "String",
+        "Required": true
       }
     },
     "tfe_workspace": {

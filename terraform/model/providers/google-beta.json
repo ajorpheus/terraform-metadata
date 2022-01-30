@@ -13545,6 +13545,11 @@
         "Description": "Output only. A unique identifier for the `WorkerPool`.",
         "Computed": true
       },
+      "uid": {
+        "Type": "String",
+        "Description": "Output only. A unique identifier for the `WorkerPool`.",
+        "Computed": true
+      },
       "update_time": {
         "Type": "String",
         "Description": "Output only. Time at which the request to update the `WorkerPool` was received.",
@@ -37501,6 +37506,24 @@
                 }
               }
             },
+            "gcfs_config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "GCFS configuration for this node.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Whether or not GCFS is enabled"
+                  }
+                }
+              }
+            },
             "guest_accelerator": {
               "Type": "List",
               "Optional": true,
@@ -37987,6 +38010,24 @@
                           "Type": "Int",
                           "Required": true,
                           "Description": "Number of local SSDs to use to back ephemeral storage. Uses NVMe interfaces. Each local SSD is 375 GB in size."
+                        }
+                      }
+                    }
+                  },
+                  "gcfs_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "GCFS configuration for this node.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "enabled": {
+                          "Type": "Bool",
+                          "Required": true,
+                          "Description": "Whether or not GCFS is enabled"
                         }
                       }
                     }
@@ -38875,6 +38916,24 @@
                     "Type": "Int",
                     "Required": true,
                     "Description": "Number of local SSDs to use to back ephemeral storage. Uses NVMe interfaces. Each local SSD is 375 GB in size."
+                  }
+                }
+              }
+            },
+            "gcfs_config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "GCFS configuration for this node.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Whether or not GCFS is enabled"
                   }
                 }
               }
@@ -62960,6 +63019,1152 @@
                                     "pull_deps": {
                                       "Type": "Bool",
                                       "Optional": true,
+                                      "Description": "Whether dependencies should also be installed. - install when false: `dpkg -i package` - install when true: `apt-get update \u0026\u0026 apt-get -y install package.deb`"
+                                    },
+                                    "source": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Required. A deb package.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "allow_insecure": {
+                                            "Type": "Bool",
+                                            "Optional": true,
+                                            "Description": "Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified."
+                                          },
+                                          "gcs": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A Cloud Storage object.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "bucket": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Bucket of the Cloud Storage object."
+                                                },
+                                                "generation": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "Generation number of the Cloud Storage object."
+                                                },
+                                                "object": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Name of the Cloud Storage object."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "local_path": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "A local path within the VM to use."
+                                          },
+                                          "remote": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A generic remote file.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "sha256_checksum": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "SHA256 checksum of the remote file."
+                                                },
+                                                "uri": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. URI from which to fetch the object. It should contain both the protocol and path following the format `{protocol}://{location}`."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "desired_state": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Required. The desired state the agent should maintain for this package. Possible values: DESIRED_STATE_UNSPECIFIED, INSTALLED, REMOVED"
+                              },
+                              "googet": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A package managed by GooGet.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. Package name."
+                                    }
+                                  }
+                                }
+                              },
+                              "msi": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "An MSI package.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "properties": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "Additional properties to use during installation. This should be in the format of Property=Setting. Appended to the defaults of `ACTION=INSTALL REBOOT=ReallySuppress`.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "source": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Required. The MSI package.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "allow_insecure": {
+                                            "Type": "Bool",
+                                            "Optional": true,
+                                            "Description": "Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified."
+                                          },
+                                          "gcs": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A Cloud Storage object.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "bucket": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Bucket of the Cloud Storage object."
+                                                },
+                                                "generation": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "Generation number of the Cloud Storage object."
+                                                },
+                                                "object": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Name of the Cloud Storage object."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "local_path": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "A local path within the VM to use."
+                                          },
+                                          "remote": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A generic remote file.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "sha256_checksum": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "SHA256 checksum of the remote file."
+                                                },
+                                                "uri": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. URI from which to fetch the object. It should contain both the protocol and path following the format `{protocol}://{location}`."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "rpm": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "An rpm package file.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "pull_deps": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Whether dependencies should also be installed. - install when false: `rpm --upgrade --replacepkgs package.rpm` - install when true: `yum -y install package.rpm` or `zypper -y install package.rpm`"
+                                    },
+                                    "source": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Required. An rpm package.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "allow_insecure": {
+                                            "Type": "Bool",
+                                            "Optional": true,
+                                            "Description": "Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified."
+                                          },
+                                          "gcs": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A Cloud Storage object.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "bucket": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Bucket of the Cloud Storage object."
+                                                },
+                                                "generation": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "Generation number of the Cloud Storage object."
+                                                },
+                                                "object": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Name of the Cloud Storage object."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "local_path": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "A local path within the VM to use."
+                                          },
+                                          "remote": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A generic remote file.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "sha256_checksum": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "SHA256 checksum of the remote file."
+                                                },
+                                                "uri": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. URI from which to fetch the object. It should contain both the protocol and path following the format `{protocol}://{location}`."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "yum": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A package managed by YUM.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. Package name."
+                                    }
+                                  }
+                                }
+                              },
+                              "zypper": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A package managed by Zypper.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. Package name."
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "repository": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Package repository resource",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "apt": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "An Apt Repository.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "archive_type": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. Type of archive files in this repository. Possible values: ARCHIVE_TYPE_UNSPECIFIED, DEB, DEB_SRC"
+                                    },
+                                    "components": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Required. List of components for this repository. Must contain at least one item.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "distribution": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. Distribution of this repository."
+                                    },
+                                    "gpg_key": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "URI of the key file for this repository. The agent maintains a keyring at `/etc/apt/trusted.gpg.d/osconfig_agent_managed.gpg`."
+                                    },
+                                    "uri": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. URI for this repository."
+                                    }
+                                  }
+                                }
+                              },
+                              "goo": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A Goo Repository.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. The name of the repository."
+                                    },
+                                    "url": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. The url of the repository."
+                                    }
+                                  }
+                                }
+                              },
+                              "yum": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A Yum Repository.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "base_url": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. The location of the repository directory."
+                                    },
+                                    "display_name": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The display name of the repository."
+                                    },
+                                    "gpg_keys": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "URIs of GPG keys.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "id": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. A one word, unique name for this repository. This is the `repo id` in the yum config file and also the `display_name` if `display_name` is omitted. This id is also used as the unique identifier when checking for resource conflicts."
+                                    }
+                                  }
+                                }
+                              },
+                              "zypper": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A Zypper Repository.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "base_url": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. The location of the repository directory."
+                                    },
+                                    "display_name": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The display name of the repository."
+                                    },
+                                    "gpg_keys": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "URIs of GPG keys.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "id": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. A one word, unique name for this repository. This is the `repo id` in the zypper config file and also the `display_name` if `display_name` is omitted. This id is also used as the unique identifier when checking for GuestPolicy conflicts."
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The project for the resource",
+        "Computed": true
+      },
+      "reconciling": {
+        "Type": "Bool",
+        "Description": "Output only. Indicates that reconciliation is in progress for the revision. This value is `true` when the `rollout_state` is one of: * IN_PROGRESS * CANCELLING",
+        "Computed": true
+      },
+      "revision_create_time": {
+        "Type": "String",
+        "Description": "Output only. The timestamp that the revision was created.",
+        "Computed": true
+      },
+      "revision_id": {
+        "Type": "String",
+        "Description": "Output only. The assignment revision ID A new revision is committed whenever a rollout is triggered for a OS policy assignment",
+        "Computed": true
+      },
+      "rollout": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Required. Rollout to deploy the OS policy assignment. A rollout is triggered in the following situations: 1) OSPolicyAssignment is created. 2) OSPolicyAssignment is updated and the update contains changes to one of the following fields: - instance_filter - os_policies 3) OSPolicyAssignment is deleted.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disruption_budget": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Required. The maximum number (or percentage) of VMs per zone to disrupt at any given moment.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "fixed": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "Specifies a fixed value."
+                  },
+                  "percent": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "Specifies the relative value defined as a percentage, which will be multiplied by a reference value."
+                  }
+                }
+              }
+            },
+            "min_wait_duration": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Required. This determines the minimum duration of time to wait after the configuration changes are applied through the current rollout. A VM continues to count towards the `disruption_budget` at least until this duration of time has passed after configuration changes are applied."
+            }
+          }
+        }
+      },
+      "rollout_state": {
+        "Type": "String",
+        "Description": "Output only. OS policy assignment rollout state Possible values: ROLLOUT_STATE_UNSPECIFIED, IN_PROGRESS, CANCELLING, CANCELLED, SUCCEEDED",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Description": "Output only. Server generated unique id for the OS policy assignment resource.",
+        "Computed": true
+      }
+    },
+    "google_os_config_os_policy_assignment": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "baseline": {
+        "Type": "Bool",
+        "Description": "Output only. Indicates that this revision has been successfully rolled out in this zone and new VMs will be assigned OS policies from this revision. For a given OS policy assignment, there is only one revision with a value of `true` for this field.",
+        "Computed": true
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Description": "Output only. Indicates that this revision deletes the OS policy assignment.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "OS policy assignment description. Length of the description is limited to 1024 characters."
+      },
+      "etag": {
+        "Type": "String",
+        "Description": "The etag for this OS policy assignment. If this is provided on update, it must match the server's etag.",
+        "Computed": true
+      },
+      "instance_filter": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Required. Filter to select VMs.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "all": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Target all VMs in the project. If true, no other criteria is permitted."
+            },
+            "exclusion_labels": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of label sets used for VM exclusion. If the list has more than one label set, the VM is excluded if any of the label sets are applicable for the VM.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "labels": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "inclusion_labels": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of label sets used for VM inclusion. If the list has more than one `LabelSet`, the VM is included if any of the label sets are applicable for the VM.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "labels": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "Labels are identified by key/value pairs in this map. A VM should contain all the key/value pairs specified in this map to be selected.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "inventories": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of inventories to select VMs. A VM is selected if its inventory data matches at least one of the following inventories.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "os_short_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Required. The OS short name"
+                  },
+                  "os_version": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The OS version Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of `7`, specify the following value for this field `7.*` An empty string matches all OS versions."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The location for the resource"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Resource name."
+      },
+      "os_policies": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Required. List of OS policies to be applied to the VMs.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_no_resource_group_match": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "This flag determines the OS policy compliance status when none of the resource groups within the policy are applicable for a VM. Set this value to `true` if the policy needs to be reported as compliant even if the policy has nothing to validate or enforce."
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Policy description. Length of the description is limited to 1024 characters."
+            },
+            "id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Required. The id of the OS policy with the following restrictions: * Must contain only lowercase letters, numbers, and hyphens. * Must start with a letter. * Must be between 1-63 characters. * Must end with a number or a letter. * Must be unique within the assignment."
+            },
+            "mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Required. Policy mode Possible values: MODE_UNSPECIFIED, VALIDATION, ENFORCEMENT"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Required. List of resource groups for the policy. For a particular VM, resource groups are evaluated in the order specified and the first resource group that is applicable is selected and the rest are ignored. If none of the resource groups are applicable for a VM, the VM is considered to be non-compliant w.r.t this policy. This behavior can be toggled by the flag `allow_no_resource_group_match`",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "inventory_filters": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "List of inventory filters for the resource group. The resources in this resource group are applied to the target VM if it satisfies at least one of the following inventory filters. For example, to apply this resource group to VMs running either `RHEL` or `CentOS` operating systems, specify 2 items for the list with following values: inventory_filters[0].os_short_name='rhel' and inventory_filters[1].os_short_name='centos' If the list is empty, this resource group will be applied to the target VM unconditionally.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "os_short_name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Required. The OS short name"
+                        },
+                        "os_version": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The OS version Prefix matches are supported if asterisk(*) is provided as the last character. For example, to match all versions with a major version of `7`, specify the following value for this field `7.*` An empty string matches all OS versions."
+                        }
+                      }
+                    }
+                  },
+                  "resources": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "Required. List of resources configured for this resource group. The resources are executed in the exact order specified here.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "exec": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Exec resource",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enforce": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "What to run to bring this resource into the desired state. An exit code of 100 indicates \"success\", any other exit code indicates a failure running enforce.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "args": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "Optional arguments to pass to the source during execution.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "file": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "A remote or local file.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "allow_insecure": {
+                                            "Type": "Bool",
+                                            "Optional": true,
+                                            "Description": "Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified."
+                                          },
+                                          "gcs": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A Cloud Storage object.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "bucket": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Bucket of the Cloud Storage object."
+                                                },
+                                                "generation": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "Generation number of the Cloud Storage object."
+                                                },
+                                                "object": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Name of the Cloud Storage object."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "local_path": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "A local path within the VM to use."
+                                          },
+                                          "remote": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A generic remote file.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "sha256_checksum": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "SHA256 checksum of the remote file."
+                                                },
+                                                "uri": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. URI from which to fetch the object. It should contain both the protocol and path following the format `{protocol}://{location}`."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "interpreter": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. The script interpreter to use. Possible values: INTERPRETER_UNSPECIFIED, NONE, SHELL, POWERSHELL"
+                                    },
+                                    "output_file_path": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes."
+                                    },
+                                    "script": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "An inline script. The size of the script is limited to 1024 characters."
+                                    }
+                                  }
+                                }
+                              },
+                              "validate": {
+                                "Type": "List",
+                                "Required": true,
+                                "Description": "Required. What to run to validate this resource is in the desired state. An exit code of 100 indicates \"in desired state\", and exit code of 101 indicates \"not in desired state\". Any other exit code indicates a failure running validate.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "args": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "Optional arguments to pass to the source during execution.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "file": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "A remote or local file.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "allow_insecure": {
+                                            "Type": "Bool",
+                                            "Optional": true,
+                                            "Description": "Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified."
+                                          },
+                                          "gcs": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A Cloud Storage object.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "bucket": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Bucket of the Cloud Storage object."
+                                                },
+                                                "generation": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "Generation number of the Cloud Storage object."
+                                                },
+                                                "object": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. Name of the Cloud Storage object."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "local_path": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "A local path within the VM to use."
+                                          },
+                                          "remote": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A generic remote file.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "sha256_checksum": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "SHA256 checksum of the remote file."
+                                                },
+                                                "uri": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Required. URI from which to fetch the object. It should contain both the protocol and path following the format `{protocol}://{location}`."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "interpreter": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. The script interpreter to use. Possible values: INTERPRETER_UNSPECIFIED, NONE, SHELL, POWERSHELL"
+                                    },
+                                    "output_file_path": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Only recorded for enforce Exec. Path to an output file (that is created by this Exec) whose content will be recorded in OSPolicyResourceCompliance after a successful run. Absence or failure to read this file will result in this ExecResource being non-compliant. Output file size is limited to 100K bytes."
+                                    },
+                                    "script": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "An inline script. The size of the script is limited to 1024 characters."
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "file": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "File resource",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "content": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "A a file with this content. The size of the content is limited to 1024 characters."
+                              },
+                              "file": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A remote or local source.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "allow_insecure": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Defaults to false. When false, files are subject to validations based on the file type: Remote: A checksum must be specified. Cloud Storage: An object generation number must be specified."
+                                    },
+                                    "gcs": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "A Cloud Storage object.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "bucket": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Required. Bucket of the Cloud Storage object."
+                                          },
+                                          "generation": {
+                                            "Type": "Int",
+                                            "Optional": true,
+                                            "Description": "Generation number of the Cloud Storage object."
+                                          },
+                                          "object": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Required. Name of the Cloud Storage object."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "local_path": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "A local path within the VM to use."
+                                    },
+                                    "remote": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "A generic remote file.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "sha256_checksum": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "SHA256 checksum of the remote file."
+                                          },
+                                          "uri": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Required. URI from which to fetch the object. It should contain both the protocol and path following the format `{protocol}://{location}`."
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "path": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Required. The absolute path of the file within the VM."
+                              },
+                              "permissions": {
+                                "Type": "String",
+                                "Description": "Consists of three octal digits which represent, in order, the permissions of the owner, group, and other users for the file (similarly to the numeric mode used in the linux chmod utility). Each digit represents a three bit number with the 4 bit corresponding to the read permissions, the 2 bit corresponds to the write bit, and the one bit corresponds to the execute permission. Default behavior is 755. Below are some examples of permissions and their associated values: read, write, and execute: 7 read and execute: 5 read and write: 6 read only: 4",
+                                "Computed": true
+                              },
+                              "state": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Required. Desired state of the file. Possible values: OS_POLICY_COMPLIANCE_STATE_UNSPECIFIED, COMPLIANT, NON_COMPLIANT, UNKNOWN, NO_OS_POLICIES_APPLICABLE"
+                              }
+                            }
+                          }
+                        },
+                        "id": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Required. The id of the resource with the following restrictions: * Must contain only lowercase letters, numbers, and hyphens. * Must start with a letter. * Must be between 1-63 characters. * Must end with a number or a letter. * Must be unique within the OS policy."
+                        },
+                        "pkg": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Package resource",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "apt": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A package managed by Apt.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Required. Package name."
+                                    }
+                                  }
+                                }
+                              },
+                              "deb": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A deb package file.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "pull_deps": {
+                                      "Type": "Bool",
+                                      "Optional": true,
                                       "Description": "Whether dependencies should also be installed. - install when false: `dpkg -i package` - install when true: `apt-get update && apt-get -y install package.deb`"
                                     },
                                     "source": {
@@ -69207,6 +70412,12 @@
         "Description": "Optional. The number of replica nodes. The valid range for the Standard Tier with \nread replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled\nfor a Standard Tier instance, the only valid value is 1 and the default is 1. \nThe valid value for basic tier is 0 and the default is also 0.",
         "Computed": true
       },
+      "replica_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Optional. The number of replica nodes. The valid range for the Standard Tier with \nread replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled\nfor a Standard Tier instance, the only valid value is 1 and the default is 1. \nThe valid value for basic tier is 0 and the default is also 0.",
+        "Computed": true
+      },
       "reserved_ip_range": {
         "Type": "String",
         "Optional": true,
@@ -72448,6 +73659,12 @@
         "Description": "Prevents public access to a bucket.",
         "Computed": true
       },
+      "public_access_prevention": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Prevents public access to a bucket.",
+        "Computed": true
+      },
       "requester_pays": {
         "Type": "Bool",
         "Optional": true,
@@ -75411,6 +76628,11 @@
                                       "Description": "Mode bits to use on this file, must be a value between 0000 and 0777. If\nnot specified, the volume defaultMode will be used. This might be in\nconflict with other options that affect the file mode, like fsGroup, and\nthe result can be other mode bits set.",
                                       "Computed": true
                                     },
+                                    "mode": {
+                                      "Type": "Int",
+                                      "Description": "Mode bits to use on this file, must be a value between 0000 and 0777. If\nnot specified, the volume defaultMode will be used. This might be in\nconflict with other options that affect the file mode, like fsGroup, and\nthe result can be other mode bits set.",
+                                      "Computed": true
+                                    },
                                     "path": {
                                       "Type": "String",
                                       "Description": "The relative path of the file to map the key to.\nMay not be an absolute path.\nMay not contain the path element '..'.\nMay not start with the string '..'.",
@@ -75577,6 +76799,11 @@
       "max_instances": {
         "Type": "Int",
         "Description": "The limit on the maximum number of function instances that may coexist at a given time.",
+        "Computed": true
+      },
+      "min_instances": {
+        "Type": "Int",
+        "Description": "The limit on the minimum number of function instances that may coexist at a given time.",
         "Computed": true
       },
       "min_instances": {
@@ -80433,6 +81660,209 @@
         "Computed": true
       }
     },
+    "google_compute_router_status": {
+      "best_routes": {
+        "Type": "List",
+        "Description": "Best routes for this router's network.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "An optional description of this resource. Provide this property\nwhen you create the resource.",
+              "Computed": true
+            },
+            "dest_range": {
+              "Type": "String",
+              "Description": "The destination range of outgoing packets that this route applies to.\nOnly IPv4 is supported.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Description": "The network that this route applies to.",
+              "Computed": true
+            },
+            "next_hop_gateway": {
+              "Type": "String",
+              "Description": "URL to a gateway that should handle matching packets.\nCurrently, you can only specify the internet gateway, using a full or\npartial valid URL:\n* 'https://www.googleapis.com/compute/v1/projects/project/global/gateways/default-internet-gateway'\n* 'projects/project/global/gateways/default-internet-gateway'\n* 'global/gateways/default-internet-gateway'\n* The string 'default-internet-gateway'.",
+              "Computed": true
+            },
+            "next_hop_ilb": {
+              "Type": "String",
+              "Description": "The IP address or URL to a forwarding rule of type\nloadBalancingScheme=INTERNAL that should handle matching\npackets.\n\nWith the GA provider you can only specify the forwarding\nrule as a partial or full URL. For example, the following\nare all valid values:\n* 10.128.0.56\n* https://www.googleapis.com/compute/v1/projects/project/regions/region/forwardingRules/forwardingRule\n* regions/region/forwardingRules/forwardingRule\n\nWhen the beta provider, you can also specify the IP address\nof a forwarding rule from the same VPC or any peered VPC.\n\nNote that this can only be used when the destinationRange is\na public (non-RFC 1918) IP CIDR range.",
+              "Computed": true
+            },
+            "next_hop_instance": {
+              "Type": "String",
+              "Description": "URL to an instance that should handle matching packets.\nYou can specify this as a full or partial URL. For example:\n* 'https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/instance'\n* 'projects/project/zones/zone/instances/instance'\n* 'zones/zone/instances/instance'\n* Just the instance name, with the zone in 'next_hop_instance_zone'.",
+              "Computed": true
+            },
+            "next_hop_instance_zone": {
+              "Type": "String",
+              "Description": "The zone of the instance specified in next_hop_instance. Omit if next_hop_instance is specified as a URL.",
+              "Computed": true
+            },
+            "next_hop_ip": {
+              "Type": "String",
+              "Description": "Network IP address of an instance that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_network": {
+              "Type": "String",
+              "Description": "URL to a Network that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_vpn_tunnel": {
+              "Type": "String",
+              "Description": "URL to a VpnTunnel that should handle matching packets.",
+              "Computed": true
+            },
+            "priority": {
+              "Type": "Int",
+              "Description": "The priority of this route. Priority is used to break ties in cases\nwhere there is more than one matching route of equal prefix length.\n\nIn the case of two routes with equal prefix length, the one with the\nlowest-numbered priority value wins.\n\nDefault value is 1000. Valid range is 0 through 65535.",
+              "Computed": true
+            },
+            "project": {
+              "Type": "String",
+              "Computed": true
+            },
+            "self_link": {
+              "Type": "String",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Set",
+              "Description": "A list of instance tags to which this route applies.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "best_routes_for_router": {
+        "Type": "List",
+        "Description": "Best routes learned by this router.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "An optional description of this resource. Provide this property\nwhen you create the resource.",
+              "Computed": true
+            },
+            "dest_range": {
+              "Type": "String",
+              "Description": "The destination range of outgoing packets that this route applies to.\nOnly IPv4 is supported.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Description": "The network that this route applies to.",
+              "Computed": true
+            },
+            "next_hop_gateway": {
+              "Type": "String",
+              "Description": "URL to a gateway that should handle matching packets.\nCurrently, you can only specify the internet gateway, using a full or\npartial valid URL:\n* 'https://www.googleapis.com/compute/v1/projects/project/global/gateways/default-internet-gateway'\n* 'projects/project/global/gateways/default-internet-gateway'\n* 'global/gateways/default-internet-gateway'\n* The string 'default-internet-gateway'.",
+              "Computed": true
+            },
+            "next_hop_ilb": {
+              "Type": "String",
+              "Description": "The IP address or URL to a forwarding rule of type\nloadBalancingScheme=INTERNAL that should handle matching\npackets.\n\nWith the GA provider you can only specify the forwarding\nrule as a partial or full URL. For example, the following\nare all valid values:\n* 10.128.0.56\n* https://www.googleapis.com/compute/v1/projects/project/regions/region/forwardingRules/forwardingRule\n* regions/region/forwardingRules/forwardingRule\n\nWhen the beta provider, you can also specify the IP address\nof a forwarding rule from the same VPC or any peered VPC.\n\nNote that this can only be used when the destinationRange is\na public (non-RFC 1918) IP CIDR range.",
+              "Computed": true
+            },
+            "next_hop_instance": {
+              "Type": "String",
+              "Description": "URL to an instance that should handle matching packets.\nYou can specify this as a full or partial URL. For example:\n* 'https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/instance'\n* 'projects/project/zones/zone/instances/instance'\n* 'zones/zone/instances/instance'\n* Just the instance name, with the zone in 'next_hop_instance_zone'.",
+              "Computed": true
+            },
+            "next_hop_instance_zone": {
+              "Type": "String",
+              "Description": "The zone of the instance specified in next_hop_instance. Omit if next_hop_instance is specified as a URL.",
+              "Computed": true
+            },
+            "next_hop_ip": {
+              "Type": "String",
+              "Description": "Network IP address of an instance that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_network": {
+              "Type": "String",
+              "Description": "URL to a Network that should handle matching packets.",
+              "Computed": true
+            },
+            "next_hop_vpn_tunnel": {
+              "Type": "String",
+              "Description": "URL to a VpnTunnel that should handle matching packets.",
+              "Computed": true
+            },
+            "priority": {
+              "Type": "Int",
+              "Description": "The priority of this route. Priority is used to break ties in cases\nwhere there is more than one matching route of equal prefix length.\n\nIn the case of two routes with equal prefix length, the one with the\nlowest-numbered priority value wins.\n\nDefault value is 1000. Valid range is 0 through 65535.",
+              "Computed": true
+            },
+            "project": {
+              "Type": "String",
+              "Computed": true
+            },
+            "self_link": {
+              "Type": "String",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Set",
+              "Description": "A list of instance tags to which this route applies.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the router to query."
+      },
+      "network": {
+        "Type": "String",
+        "Description": "URI of the network to which this router belongs.",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Project ID of the target router."
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Region of the target router.",
+        "Computed": true
+      }
+    },
     "google_compute_ssl_certificate": {
       "certificate": {
         "Type": "String",
@@ -81632,6 +83062,23 @@
                 }
               }
             },
+            "gcfs_config": {
+              "Type": "List",
+              "Description": "GCFS configuration for this node.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Description": "Whether or not GCFS is enabled",
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "guest_accelerator": {
               "Type": "List",
               "Description": "List of the type and count of accelerator cards attached to the instance.",
@@ -82057,6 +83504,23 @@
                         "local_ssd_count": {
                           "Type": "Int",
                           "Description": "Number of local SSDs to use to back ephemeral storage. Uses NVMe interfaces. Each local SSD is 375 GB in size.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "gcfs_config": {
+                    "Type": "List",
+                    "Description": "GCFS configuration for this node.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "enabled": {
+                          "Type": "Bool",
+                          "Description": "Whether or not GCFS is enabled",
                           "Computed": true
                         }
                       }
@@ -87180,6 +88644,11 @@
       "project": {
         "Type": "String",
         "Description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
+        "Computed": true
+      },
+      "public_access_prevention": {
+        "Type": "String",
+        "Description": "Prevents public access to a bucket.",
         "Computed": true
       },
       "public_access_prevention": {
