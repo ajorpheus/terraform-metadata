@@ -3,13 +3,13 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "cloudscale",
   "type": "provider",
-  "version": "v3.2.0-rc.2",
+  "version": "v4.0.0",
   "provider": {
     "token": {
       "Type": "String",
       "Required": true,
       "Description": "The token for API operations.",
-      "DefaultFunc": "ENV(CLOUDSCALE_TOKEN)"
+      "DefaultFunc": "ENV(CLOUDSCALE_API_TOKEN)"
     }
   },
   "resources": {
@@ -62,6 +62,15 @@
         "Type": "String",
         "Optional": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "user_data_handling": {
         "Type": "String",
         "Required": true
@@ -112,6 +121,15 @@
         "Type": "String",
         "Optional": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "type": {
         "Type": "String",
         "Optional": true,
@@ -159,6 +177,15 @@
           }
         }
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "zone_slug": {
         "Type": "String",
         "Optional": true,
@@ -191,6 +218,15 @@
               "Computed": true
             }
           }
+        }
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "user_id": {
@@ -409,6 +445,15 @@
         "Optional": true,
         "Computed": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "use_ipv6": {
         "Type": "Bool",
         "Optional": true
@@ -471,6 +516,15 @@
         "Type": "String",
         "Required": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "type": {
         "Type": "String",
         "Required": true
@@ -517,6 +571,15 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "cloudscale_volume": {
@@ -540,6 +603,15 @@
       "size_gb": {
         "Type": "Int",
         "Required": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "type": {
         "Type": "String",
@@ -582,6 +654,15 @@
       "slug": {
         "Type": "String",
         "Optional": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "user_data_handling": {
         "Type": "String",
@@ -637,6 +718,15 @@
         "Type": "String",
         "Computed": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "type": {
         "Type": "String",
         "Optional": true,
@@ -684,6 +774,15 @@
           }
         }
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "zone_slug": {
         "Type": "String",
         "Optional": true,
@@ -720,6 +819,15 @@
               "Computed": true
             }
           }
+        }
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "user_id": {
@@ -884,6 +992,15 @@
         "Type": "String",
         "Computed": true
       },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "volumes": {
         "Type": "List",
         "Computed": true,
@@ -929,6 +1046,15 @@
       "name": {
         "Type": "String",
         "Optional": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "type": {
         "Type": "String",
@@ -980,6 +1106,15 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "cloudscale_volume": {
@@ -1007,6 +1142,15 @@
       "size_gb": {
         "Type": "Int",
         "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "type": {
         "Type": "String",

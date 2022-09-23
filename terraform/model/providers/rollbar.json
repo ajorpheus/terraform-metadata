@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "rollbar",
   "type": "provider",
-  "version": "v1.4.0",
+  "version": "v1.7.0",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -25,6 +25,62 @@
     }
   },
   "resources": {
+    "rollbar_integration": {
+      "slack": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Slack integration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "channel": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Channel"
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Enabled"
+            },
+            "service_account_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Service account ID"
+            },
+            "show_message_buttons": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Show message buttons"
+            }
+          }
+        }
+      },
+      "webhook": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Webhook integration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Enabled"
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "URL"
+            }
+          }
+        }
+      }
+    },
     "rollbar_notification": {
       "channel": {
         "Type": "String",
@@ -43,6 +99,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "Channel (slack)"
+            },
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Format (webhook)"
             },
             "message_template": {
               "Type": "String",
@@ -72,6 +133,11 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "URL (webhook)"
             },
             "users": {
               "Type": "List",
@@ -118,6 +184,11 @@
                     "Optional": true,
                     "Description": "Operation"
                   },
+                  "path": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Path"
+                  },
                   "period": {
                     "Type": "Float",
                     "Optional": true,
@@ -130,7 +201,7 @@
                   "type": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "Operation"
+                    "Description": "Type"
                   },
                   "value": {
                     "Type": "String",
@@ -260,6 +331,18 @@
         }
       }
     },
+    "rollbar_service_link": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name"
+      },
+      "template": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template"
+      }
+    },
     "rollbar_team": {
       "access_level": {
         "Type": "String",
@@ -279,6 +362,33 @@
         "Type": "String",
         "Required": true,
         "Description": "Human readable name for the team"
+      }
+    },
+    "rollbar_team_user": {
+      "email": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user's email address"
+      },
+      "invite_id": {
+        "Type": "Int",
+        "Description": "Invitation ID if status is `invited`",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the user. Either `invited` or `registered`",
+        "Computed": true
+      },
+      "team_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of the team to which this user belongs"
+      },
+      "user_id": {
+        "Type": "Int",
+        "Description": "The ID of the user",
+        "Computed": true
       }
     },
     "rollbar_user": {
@@ -535,6 +645,31 @@
             }
           }
         }
+      }
+    },
+    "rollbar_team": {
+      "access_level": {
+        "Type": "String",
+        "Description": "The team's access level",
+        "Computed": true
+      },
+      "account_id": {
+        "Type": "Int",
+        "Description": "Account ID",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the team"
+      },
+      "team_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Team ID",
+        "ConflictsWith": [
+          "name"
+        ]
       }
     }
   }

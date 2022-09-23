@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "dcnm",
   "type": "provider",
-  "version": "v1.1.0",
+  "version": "v1.2.3",
   "provider": {
     "expiry": {
       "Type": "Int",
@@ -438,7 +438,7 @@
               "Optional": true,
               "Computed": true
             },
-            "free_from_config": {
+            "free_form_config": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -498,33 +498,27 @@
       },
       "dhcp_1": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "dhcp_2": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "dhcp_3": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "dhcp_vrf": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "dhcp_vrf_2": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "dhcp_vrf_3": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "display_name": {
         "Type": "String",
@@ -570,8 +564,7 @@
       },
       "loopback_id": {
         "Type": "Int",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "mcast_group": {
         "Type": "String",
@@ -763,7 +756,15 @@
       },
       "payload": {
         "Type": "String",
-        "Required": true
+        "Optional": true
+      },
+      "payload_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "json"
+        }
       }
     },
     "dcnm_route_peering": {
@@ -1735,7 +1736,7 @@
               "Optional": true,
               "Computed": true
             },
-            "free_from_config": {
+            "free_form_config": {
               "Type": "String",
               "Optional": true,
               "Computed": true

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "transloadit",
   "type": "provider",
-  "version": "v0.4.0",
+  "version": "v0.6.0",
   "provider": {
     "auth_key": {
       "Type": "String",
@@ -45,6 +45,31 @@
         "Type": "String",
         "Required": true,
         "Description": "template in json"
+      }
+    },
+    "transloadit_template_credential": {
+      "content": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template credential content in JSON"
+      },
+      "created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "modified": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template credential name"
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template credential type"
       }
     }
   },

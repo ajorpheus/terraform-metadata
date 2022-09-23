@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "oneview",
   "type": "provider",
-  "version": "v6.5.0-13",
+  "version": "v7.2.0-13",
   "provider": {
     "i3s_endpoint": {
       "Type": "String",
@@ -1084,6 +1084,7 @@
       },
       "managed_san_uri": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "modified": {
@@ -2478,7 +2479,6 @@
       "labels": {
         "Type": "List",
         "Optional": true,
-        "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -3149,6 +3149,10 @@
         "Type": "String",
         "Computed": true
       },
+      "consistency_checking_for_internal_networks": {
+        "Type": "String",
+        "Optional": true
+      },
       "created": {
         "Type": "String",
         "Computed": true
@@ -3311,6 +3315,10 @@
             "interconnect_type_name": {
               "Type": "String",
               "Required": true
+            },
+            "logical_downlink_uri": {
+              "Type": "String",
+              "Computed": true
             }
           }
         }
@@ -3324,53 +3332,105 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "fast_mac_cache_failover": {
-              "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
-              }
+            "category": {
+              "Type": "String",
+              "Optional": true
             },
-            "interconnect_utilization_alert": {
+            "consistency_checking": {
+              "Type": "String",
+              "Optional": true
+            },
+            "dependent_resource_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "domain_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "enable_cut_through": {
               "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
+              "Optional": true
+            },
+            "enable_ddns": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "enable_fast_mac_cache_failover": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "enable_interconnect_utilization_alert": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "enable_network_loop_protection": {
+              "Type": "String",
+              "Optional": true
+            },
+            "enable_pause_flood_protection": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "enable_rich_tlv": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "enable_storm_control": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "enable_tagged_lldp": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "interconnect_type": {
+              "Type": "String",
+              "Optional": true
+            },
+            "lldp_ip_address_mode": {
+              "Type": "String",
+              "Optional": true
+            },
+            "lldp_ipv4_address": {
+              "Type": "String",
+              "Optional": true
+            },
+            "lldp_ipv6_address": {
+              "Type": "String",
+              "Optional": true
             },
             "mac_refresh_interval": {
               "Type": "Int",
-              "Optional": true,
-              "Default": {
-                "Type": "int",
-                "Value": "5"
-              }
+              "Optional": true
             },
-            "network_loop_protection": {
-              "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
-              }
+            "name": {
+              "Type": "String",
+              "Optional": true
             },
-            "pause_flood_protection": {
-              "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
-              }
+            "state": {
+              "Type": "String",
+              "Optional": true
             },
-            "rich_tlv": {
-              "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
+            "status": {
+              "Type": "String",
+              "Optional": true
+            },
+            "storm_control_polling_interval": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "storm_control_threshold": {
+              "Type": "Int",
+              "Optional": true
             },
             "type": {
               "Type": "String",
@@ -3379,6 +3439,10 @@
                 "Type": "string",
                 "Value": "EthernetInterconnectSettingsV3"
               }
+            },
+            "uri": {
+              "Type": "String",
+              "Optional": true
             }
           }
         }
@@ -3937,21 +4001,41 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "category": {
+              "Type": "String",
+              "Optional": true
+            },
+            "consistency_checking": {
+              "Type": "String",
+              "Optional": true
+            },
+            "created": {
+              "Type": "String",
+              "Optional": true
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
             "enabled": {
               "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
-              }
+              "Optional": true
+            },
+            "etag": {
+              "Type": "String",
+              "Optional": true
+            },
+            "modified": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
             },
             "read_community": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "public"
-              }
+              "Optional": true
             },
             "snmp_access": {
               "Type": "Set",
@@ -3961,6 +4045,64 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "snmp_users": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "snmp_v3_user_name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "user_credentials": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "property_name": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "value_format": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "value_type": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "v3_auth_protocol": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "v3_privacy_protocol": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "state": {
+              "Type": "String",
+              "Optional": true
+            },
+            "status": {
+              "Type": "String",
+              "Optional": true
             },
             "system_contact": {
               "Type": "String",
@@ -3987,6 +4129,10 @@
                       "ElementsType": "String"
                     }
                   },
+                  "engine_id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
                   "fc_trap_categories": {
                     "Type": "Set",
                     "Optional": true,
@@ -3995,6 +4141,14 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
+                  },
+                  "inform": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "port": {
+                    "Type": "Int",
+                    "Optional": true
                   },
                   "trap_destination": {
                     "Type": "String",
@@ -4017,6 +4171,10 @@
                       "ElementsType": "String"
                     }
                   },
+                  "user_name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
                   "vcm_trap_categories": {
                     "Type": "Set",
                     "Optional": true,
@@ -4031,19 +4189,15 @@
             },
             "type": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "snmp-configuration"
-              }
+              "Optional": true
+            },
+            "uri": {
+              "Type": "String",
+              "Optional": true
             },
             "v3_enabled": {
               "Type": "Bool",
-              "Optional": true,
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
+              "Optional": true
             }
           }
         }
@@ -4109,21 +4263,65 @@
         }
       },
       "uplink_set": {
-        "Type": "Set",
+        "Type": "List",
         "Optional": true,
+        "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "consistency_checking": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "dcbx_override": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "rocev1": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "rocev2": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "ethernet_network_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fc_mode": {
               "Type": "String",
               "Optional": true,
               "Computed": true
             },
             "lacp_timer": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
+            },
+            "load_balancing_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "logical_port_config": {
               "Type": "Set",
@@ -4182,7 +4380,7 @@
             },
             "name": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             },
             "native_network_uri": {
               "Type": "String",
@@ -4204,6 +4402,10 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "reachability": {
+              "Type": "String",
+              "Optional": true
             }
           }
         }
@@ -5345,7 +5547,7 @@
           "Type": "SchemaInfo",
           "Info": {
             "controller": {
-              "Type": "Set",
+              "Type": "List",
               "Optional": true,
               "Computed": true,
               "IsBlock": true,
@@ -5370,7 +5572,7 @@
                     "Optional": true
                   },
                   "logical_drives": {
-                    "Type": "Set",
+                    "Type": "List",
                     "Optional": true,
                     "Computed": true,
                     "IsBlock": true,
@@ -5433,7 +5635,7 @@
               "Computed": true
             },
             "sas_logical_jbod": {
-              "Type": "Set",
+              "Type": "List",
               "Optional": true,
               "Computed": true,
               "IsBlock": true,
@@ -5530,7 +5732,6 @@
                   "administrator_account": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -5550,7 +5751,6 @@
                   "directory": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -5660,7 +5860,6 @@
                   "ilo_host_name": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -5677,7 +5876,6 @@
                   "key_manager": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -5735,7 +5933,23 @@
                           "Type": "String",
                           "Optional": true
                         },
+                        "host_bios_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "host_nic_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "host_storage_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
                         "ilo_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "login_priv": {
                           "Type": "Bool",
                           "Optional": true
                         },
@@ -5981,6 +6195,7 @@
       },
       "serial_number": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "serial_number_type": {
@@ -6169,10 +6384,6 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
-                  },
-                  "is_permanent": {
-                    "Type": "Bool",
-                    "Optional": true
                   },
                   "properties": {
                     "Type": "Set",
@@ -6727,8 +6938,9 @@
         "Computed": true
       },
       "local_storage": {
-        "Type": "Set",
+        "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6744,8 +6956,9 @@
               }
             },
             "controller": {
-              "Type": "Set",
+              "Type": "List",
               "Optional": true,
+              "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -6768,8 +6981,9 @@
                     "Optional": true
                   },
                   "logical_drives": {
-                    "Type": "Set",
+                    "Type": "List",
                     "Optional": true,
+                    "Computed": true,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -6796,7 +7010,7 @@
                           "Optional": true
                         },
                         "num_spare_drives": {
-                          "Type": "Int",
+                          "Type": "String",
                           "Optional": true
                         },
                         "raid_level": {
@@ -6910,7 +7124,6 @@
                   "administrator_account": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -6931,7 +7144,6 @@
                   "directory": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -7040,7 +7252,6 @@
                   "ilo_host_name": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -7057,7 +7268,6 @@
                   "key_manager": {
                     "Type": "List",
                     "Optional": true,
-                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -7115,7 +7325,23 @@
                           "Type": "String",
                           "Optional": true
                         },
+                        "host_bios_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "host_nic_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "host_storage_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
                         "ilo_config_priv": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "login_priv": {
                           "Type": "Bool",
                           "Optional": true
                         },
@@ -7357,6 +7583,10 @@
               "Type": "Int",
               "Optional": true
             },
+            "is_permanent": {
+              "Type": "Bool",
+              "Optional": true
+            },
             "lun": {
               "Type": "String",
               "Optional": true
@@ -7445,10 +7675,6 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
-                  },
-                  "is_permanent": {
-                    "Type": "Bool",
-                    "Optional": true
                   },
                   "properties": {
                     "Type": "List",
@@ -9527,18 +9753,13 @@
           "ElementsType": "String"
         }
       },
-      "is_permanent": {
-        "Type": "Bool",
-        "Optional": true,
-        "Computed": true
-      },
       "is_shareable": {
         "Type": "Bool",
         "Computed": true
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "properties": {
         "Type": "Set",
@@ -9556,6 +9777,11 @@
               "Type": "Int",
               "Optional": true
             },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "is_compressed": {
               "Type": "Bool",
               "Optional": true
@@ -9569,6 +9795,10 @@
               "Optional": true
             },
             "is_pinned": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "is_shared": {
               "Type": "Bool",
               "Optional": true
             },
@@ -13601,6 +13831,20 @@
       },
       "uri": {
         "Type": "String",
+        "Computed": true
+      }
+    },
+    "oneview_relative_value": {
+      "interconnect_type_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "port_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "port_num": {
+        "Type": "Int",
         "Computed": true
       }
     },

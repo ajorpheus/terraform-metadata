@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "ucloud",
   "type": "provider",
-  "version": "v1.31.0",
+  "version": "v1.32.2",
   "provider": {
     "base_url": {
       "Type": "String",
@@ -297,6 +297,10 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "rdma_cluster_id": {
+        "Type": "String",
+        "Optional": true
       },
       "status": {
         "Type": "String",
@@ -619,6 +623,10 @@
       "private_ip": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      },
+      "rdma_cluster_id": {
+        "Type": "String",
         "Computed": true
       },
       "remark": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "hcp",
   "type": "provider",
-  "version": "v0.22.0",
+  "version": "v0.44.0",
   "provider": {
     "client_id": {
       "Type": "String",
@@ -79,6 +79,11 @@
         "Type": "String",
         "Description": "A unique URL identifying the network peering.",
         "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the network peering.",
+        "Computed": true
       }
     },
     "hcp_aws_transit_gateway_attachment": {
@@ -141,6 +146,125 @@
         "Type": "String",
         "Required": true,
         "Description": "The ID of the user-owned transit gateway in AWS. The AWS region of the transit gateway must match the HVN."
+      }
+    },
+    "hcp_azure_peering_connection": {
+      "__timeouts__": [
+        "create",
+        "delete",
+        "default"
+      ],
+      "application_id": {
+        "Type": "String",
+        "Description": "The ID of the Azure application whose credentials are used to peer the HCP HVN's underlying VNet with the customer VNet.",
+        "Computed": true
+      },
+      "azure_peering_id": {
+        "Type": "String",
+        "Description": "The peering connection ID used by Azure.",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "The time that the peering connection was created.",
+        "Computed": true
+      },
+      "expires_at": {
+        "Type": "String",
+        "Description": "The time after which the peering connection will be considered expired if it hasn't transitioned into `ACCEPTED` or `ACTIVE` state.",
+        "Computed": true
+      },
+      "hvn_link": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The `self_link` of the HashiCorp Virtual Network (HVN)."
+      },
+      "organization_id": {
+        "Type": "String",
+        "Description": "The ID of the HCP organization where the peering connection is located. Always matches the HVN's organization.",
+        "Computed": true
+      },
+      "peer_resource_group_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The resource group name of the peer VNet in Azure."
+      },
+      "peer_subscription_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The subscription ID of the peer VNet in Azure."
+      },
+      "peer_tenant_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The tenant ID of the peer VNet in Azure."
+      },
+      "peer_vnet_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the peer VNet in Azure."
+      },
+      "peer_vnet_region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The region of the peer VNet in Azure."
+      },
+      "peering_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the peering connection."
+      },
+      "project_id": {
+        "Type": "String",
+        "Description": "The ID of the HCP project where the peering connection is located. Always matches the HVN's project.",
+        "Computed": true
+      },
+      "self_link": {
+        "Type": "String",
+        "Description": "A unique URL identifying the peering connection.",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the Azure peering connection.",
+        "Computed": true
+      }
+    },
+    "hcp_boundary_cluster": {
+      "__timeouts__": [
+        "create",
+        "delete",
+        "default"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the Boundary cluster"
+      },
+      "cluster_url": {
+        "Type": "String",
+        "Description": "A unique URL identifying the Boundary cluster.",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "The time that the Boundary cluster was created.",
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The password of the initial admin user. This must be at least 8 characters in length. Note that this may show up in logs, and it will be stored in the state file."
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the Boundary cluster.",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The username of the initial admin user. This must be at least 3 characters in length, alphanumeric, hyphen, or period."
       }
     },
     "hcp_consul_cluster": {
@@ -286,6 +410,11 @@
         "Description": "The t-shirt size representation of each server VM that this Consul cluster is provisioned with. Valid option for development tier - `x_small`. Valid options for other tiers - `small`, `medium`, `large`. For more details - https://cloud.hashicorp.com/pricing/consul. Upgrading the size of a cluster after creation is allowed.",
         "Computed": true
       },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the HCP Consul cluster.",
+        "Computed": true
+      },
       "tier": {
         "Type": "String",
         "Required": true,
@@ -363,6 +492,11 @@
         "Type": "String",
         "Required": true,
         "Description": "The name of the snapshot."
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of an HCP Consul snapshot.",
+        "Computed": true
       }
     },
     "hcp_hvn": {
@@ -380,7 +514,7 @@
       "cloud_provider": {
         "Type": "String",
         "Required": true,
-        "Description": "The provider where the HVN is located. Only 'aws' is available at this time."
+        "Description": "The provider where the HVN is located. The provider 'aws' is generally available and 'azure' is in public beta."
       },
       "created_at": {
         "Type": "String",
@@ -415,6 +549,11 @@
       "self_link": {
         "Type": "String",
         "Description": "A unique URL identifying the HVN.",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the HVN.",
         "Computed": true
       }
     },
@@ -462,6 +601,11 @@
       "self_link": {
         "Type": "String",
         "Description": "A unique URL identifying the peering connection",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the HVN peering connection.",
         "Computed": true
       }
     },
@@ -514,6 +658,54 @@
         "delete",
         "default"
       ],
+      "audit_log_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The audit logs configuration for export. (https://learn.hashicorp.com/tutorials/cloud/vault-metrics-guide#metrics-streaming-configuration)",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datadog_api_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Datadog api key for streaming audit logs"
+            },
+            "datadog_region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Datadog region for streaming audit logs"
+            },
+            "grafana_endpoint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Grafana endpoint for streaming audit logs"
+            },
+            "grafana_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Grafana password for streaming audit logs"
+            },
+            "grafana_user": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Grafana user for streaming audit logs"
+            },
+            "splunk_hecendpoint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Splunk endpoint for streaming audit logs"
+            },
+            "splunk_token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Splunk token for streaming audit logs"
+            }
+          }
+        }
+      },
       "cloud_provider": {
         "Type": "String",
         "Description": "The provider where the HCP Vault cluster is located.",
@@ -534,6 +726,83 @@
         "Required": true,
         "Description": "The ID of the HVN this HCP Vault cluster is associated to."
       },
+      "major_version_upgrade_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Major Version Upgrade configuration.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "maintenance_window_day": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The maintenance day of the week for scheduled upgrades. Valid options for maintenance window day - `MONDAY`, `TUESDAY`, `WEDNESDAY`, `THURSDAY`, `FRIDAY`, `SATURDAY`, `SUNDAY`"
+            },
+            "maintenance_window_time": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The maintenance time frame for scheduled upgrades. Valid options for maintenance window time - `WINDOW_12AM_4AM`, `WINDOW_6AM_10AM`, `WINDOW_12PM_4PM`, `WINDOW_6PM_10PM`"
+            },
+            "upgrade_type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The major upgrade type for the cluster. Valid options for upgrade type - `AUTOMATIC`, `SCHEDULED`, `MANUAL`"
+            }
+          }
+        }
+      },
+      "metrics_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The metrics configuration for export. (https://learn.hashicorp.com/tutorials/cloud/vault-metrics-guide#metrics-streaming-configuration)",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datadog_api_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Datadog api key for streaming metrics"
+            },
+            "datadog_region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Datadog region for streaming metrics"
+            },
+            "grafana_endpoint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Grafana endpoint for streaming metrics"
+            },
+            "grafana_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Grafana password for streaming metrics"
+            },
+            "grafana_user": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Grafana user for streaming metrics"
+            },
+            "splunk_hecendpoint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Splunk endpoint for streaming metrics"
+            },
+            "splunk_token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Splunk token for streaming metrics"
+            }
+          }
+        }
+      },
       "min_vault_version": {
         "Type": "String",
         "Optional": true,
@@ -548,6 +817,22 @@
         "Type": "String",
         "Description": "The ID of the organization this HCP Vault cluster is located in.",
         "Computed": true
+      },
+      "paths_filter": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The performance replication [paths filter](https://learn.hashicorp.com/tutorials/vault/paths-filter). Applies to performance replication secondaries only and operates in \"deny\" mode only.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "primary_link": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The `self_link` of the HCP Vault Plus tier cluster which is the primary in the performance replication setup with this HCP Vault Plus tier cluster. If not specified, it is a standalone Plus tier HCP Vault cluster."
       },
       "project_id": {
         "Type": "String",
@@ -568,10 +853,20 @@
         "Description": "The region where the HCP Vault cluster is located.",
         "Computed": true
       },
+      "self_link": {
+        "Type": "String",
+        "Description": "A unique URL identifying the Vault cluster.",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the Vault cluster.",
+        "Computed": true
+      },
       "tier": {
         "Type": "String",
         "Optional": true,
-        "Description": "Tier of the HCP Vault cluster. Valid options for tiers - `dev`, `standard_small`, `standard_medium`, `standard_large`, `starter_small`. See [pricing information](https://cloud.hashicorp.com/pricing/vault).",
+        "Description": "Tier of the HCP Vault cluster. Valid options for tiers - `dev`, `starter_small`, `standard_small`, `standard_medium`, `standard_large`, `plus_small`, `plus_medium`, `plus_large`. See [pricing information](https://cloud.hashicorp.com/pricing/vault).",
         "Computed": true
       },
       "vault_private_endpoint_url": {
@@ -616,7 +911,7 @@
   "data-sources": {
     "hcp_aws_network_peering": {
       "__timeouts__": [
-        "default"
+        "read"
       ],
       "created_at": {
         "Type": "String",
@@ -672,6 +967,20 @@
         "Type": "String",
         "Description": "A unique URL identifying the network peering.",
         "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the network peering.",
+        "Computed": true
+      },
+      "wait_for_active_state": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If `true`, Terraform will wait for the network peering to reach an `ACTIVE` state before continuing. Default `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       }
     },
     "hcp_aws_transit_gateway_attachment": {
@@ -736,6 +1045,120 @@
           "Type": "bool",
           "Value": "false"
         }
+      }
+    },
+    "hcp_azure_peering_connection": {
+      "__timeouts__": [
+        "read"
+      ],
+      "application_id": {
+        "Type": "String",
+        "Description": "The ID of the Azure application whose credentials are used to peer the HCP HVN's underlying VNet with the customer VNet.",
+        "Computed": true
+      },
+      "azure_peering_id": {
+        "Type": "String",
+        "Description": "The peering connection ID used by Azure.",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "The time that the peering connection was created.",
+        "Computed": true
+      },
+      "expires_at": {
+        "Type": "String",
+        "Description": "The time after which the peering connection will be considered expired if it hasn't transitioned into `ACCEPTED` or `ACTIVE` state.",
+        "Computed": true
+      },
+      "hvn_link": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The `self_link` of the HashiCorp Virtual Network (HVN)."
+      },
+      "organization_id": {
+        "Type": "String",
+        "Description": "The ID of the HCP organization where the peering connection is located. Always matches the HVN's organization.",
+        "Computed": true
+      },
+      "peer_resource_group_name": {
+        "Type": "String",
+        "Description": "The resource group name of the peer VNet in Azure.",
+        "Computed": true
+      },
+      "peer_subscription_id": {
+        "Type": "String",
+        "Description": "The subscription ID of the peer VNet in Azure.",
+        "Computed": true
+      },
+      "peer_tenant_id": {
+        "Type": "String",
+        "Description": "The tenant ID of the peer VNet in Azure.",
+        "Computed": true
+      },
+      "peer_vnet_name": {
+        "Type": "String",
+        "Description": "The name of the peer VNet in Azure.",
+        "Computed": true
+      },
+      "peer_vnet_region": {
+        "Type": "String",
+        "Description": "The region of the peer VNet in Azure.",
+        "Computed": true
+      },
+      "peering_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the peering connection."
+      },
+      "project_id": {
+        "Type": "String",
+        "Description": "The ID of the HCP project where the peering connection is located. Always matches the HVN's project.",
+        "Computed": true
+      },
+      "self_link": {
+        "Type": "String",
+        "Description": "A unique URL identifying the peering connection",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the Azure peering connection.",
+        "Computed": true
+      },
+      "wait_for_active_state": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If `true`, Terraform will wait for the peering connection to reach an `ACTIVE` state before continuing. Default `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
+    "hcp_boundary_cluster": {
+      "__timeouts__": [
+        "default"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the Boundary cluster"
+      },
+      "cluster_url": {
+        "Type": "String",
+        "Description": "A unique URL identifying the Boundary cluster.",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "The time that the Boundary cluster was created.",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the Boundary cluster.",
+        "Computed": true
       }
     },
     "hcp_consul_agent_helm_config": {
@@ -896,6 +1319,11 @@
         "Description": "The t-shirt size representation of each server VM that this Consul cluster is provisioned with. Valid option for development tier - `x_small`. Valid options for other tiers - `small`, `medium`, `large`. For more details - https://cloud.hashicorp.com/pricing/consul",
         "Computed": true
       },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the HCP Consul cluster.",
+        "Computed": true
+      },
       "tier": {
         "Type": "String",
         "Description": "The tier that the HCP Consul cluster will be provisioned as.  Only `development`, `standard` and `plus` are available at this time.",
@@ -980,6 +1408,11 @@
         "Type": "String",
         "Description": "A unique URL identifying the HVN.",
         "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the HVN route.",
+        "Computed": true
       }
     },
     "hcp_hvn_peering_connection": {
@@ -1024,6 +1457,11 @@
       "self_link": {
         "Type": "String",
         "Description": "A unique URL identifying the peering connection",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the HVN peering connection.",
         "Computed": true
       }
     },
@@ -1081,6 +1519,11 @@
         "Description": "HCP ID of this build.",
         "Computed": true
       },
+      "channel": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The channel that points to the version of the image being retrieved. Either this or `iteration_id` must be specified. Note: will incur a billable request"
+      },
       "cloud_image_id": {
         "Type": "String",
         "Description": "Cloud Image ID or URL string identifying this image for the builder that built it.",
@@ -1093,7 +1536,8 @@
       },
       "component_type": {
         "Type": "String",
-        "Description": "Name of the builder that built this. Ex: 'amazon-ebs.example'",
+        "Optional": true,
+        "Description": "Name of the builder that built this image. Ex: `amazon-ebs.example`.",
         "Computed": true
       },
       "created_at": {
@@ -1103,8 +1547,9 @@
       },
       "iteration_id": {
         "Type": "String",
-        "Required": true,
-        "Description": "HCP ID of this image."
+        "Optional": true,
+        "Description": "The iteration from which to get the image. Either this or `channel` must be specified.",
+        "Computed": true
       },
       "labels": {
         "Type": "Map",
@@ -1130,6 +1575,11 @@
         "Type": "String",
         "Required": true,
         "Description": "Region this image is stored in, if any."
+      },
+      "revoke_at": {
+        "Type": "String",
+        "Description": "The revocation time of this build. This field will be null for any build that has not been revoked or scheduled for revocation.",
+        "Computed": true
       }
     },
     "hcp_packer_image_iteration": {
@@ -1254,6 +1704,11 @@
         "Type": "String",
         "Description": "The ID of the project this HCP Packer registry is located in.",
         "Computed": true
+      },
+      "revoke_at": {
+        "Type": "String",
+        "Description": "The revocation time of this iteration. This field will be null for any iteration that has not been revoked or scheduled for revocation.",
+        "Computed": true
       }
     },
     "hcp_packer_iteration": {
@@ -1300,6 +1755,11 @@
         "Description": "The ID of the project this HCP Packer registry is located in.",
         "Computed": true
       },
+      "revoke_at": {
+        "Type": "String",
+        "Description": "The revocation time of this iteration. This field will be null for any iteration that has not been revoked or scheduled for revocation.",
+        "Computed": true
+      },
       "ulid": {
         "Type": "String",
         "Description": "The ULID of this iteration.",
@@ -1315,6 +1775,39 @@
       "__timeouts__": [
         "default"
       ],
+      "audit_log_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The audit logs configuration for export. (https://learn.hashicorp.com/tutorials/cloud/vault-metrics-guide#metrics-streaming-configuration)",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datadog_region": {
+              "Type": "String",
+              "Description": "Datadog region for streaming audit logs",
+              "Computed": true
+            },
+            "grafana_endpoint": {
+              "Type": "String",
+              "Description": "Grafana endpoint for streaming audit logs",
+              "Computed": true
+            },
+            "grafana_user": {
+              "Type": "String",
+              "Description": "Grafana user for streaming audit logs",
+              "Computed": true
+            },
+            "splunk_hecendpoint": {
+              "Type": "String",
+              "Description": "Splunk endpoint for streaming audit logs",
+              "Computed": true
+            }
+          }
+        }
+      },
       "cloud_provider": {
         "Type": "String",
         "Description": "The provider where the HCP Vault cluster is located.",
@@ -1335,6 +1828,65 @@
         "Description": "The ID of the HVN this HCP Vault cluster is associated to.",
         "Computed": true
       },
+      "major_version_upgrade_config": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "maintenance_window_day": {
+              "Type": "String",
+              "Description": "The maintenance day of the week for scheduled updates",
+              "Computed": true
+            },
+            "maintenance_window_time": {
+              "Type": "String",
+              "Description": "The maintenance time frame for scheduled updates",
+              "Computed": true
+            },
+            "upgrade_type": {
+              "Type": "String",
+              "Description": "The major upgrade type for the cluster",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "metrics_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The metrics configuration for export. (https://learn.hashicorp.com/tutorials/cloud/vault-metrics-guide#metrics-streaming-configuration)",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datadog_region": {
+              "Type": "String",
+              "Description": "Datadog region for streaming metrics",
+              "Computed": true
+            },
+            "grafana_endpoint": {
+              "Type": "String",
+              "Description": "Grafana endpoint for streaming metrics",
+              "Computed": true
+            },
+            "grafana_user": {
+              "Type": "String",
+              "Description": "Grafana user for streaming metrics",
+              "Computed": true
+            },
+            "splunk_hecendpoint": {
+              "Type": "String",
+              "Description": "Splunk endpoint for streaming metrics",
+              "Computed": true
+            }
+          }
+        }
+      },
       "min_vault_version": {
         "Type": "String",
         "Description": "The minimum Vault version to use when creating the cluster. If not specified, it is defaulted to the version that is currently recommended by HCP.",
@@ -1350,6 +1902,21 @@
         "Description": "The ID of the organization this HCP Vault cluster is located in.",
         "Computed": true
       },
+      "paths_filter": {
+        "Type": "List",
+        "Description": "The performance replication [paths filter](https://learn.hashicorp.com/tutorials/vault/paths-filter). Applies to performance replication secondaries only and operates in \"deny\" mode only.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "primary_link": {
+        "Type": "String",
+        "Description": "The `self_link` of the HCP Vault Plus tier cluster which is the primary in the performance replication setup with this HCP Vault Plus tier cluster. If not specified, it is a standalone Plus tier HCP Vault cluster.",
+        "Computed": true
+      },
       "project_id": {
         "Type": "String",
         "Description": "The ID of the project this HCP Vault cluster is located in.",
@@ -1363,6 +1930,16 @@
       "region": {
         "Type": "String",
         "Description": "The region where the HCP Vault cluster is located.",
+        "Computed": true
+      },
+      "self_link": {
+        "Type": "String",
+        "Description": "A unique URL identifying the Vault cluster.",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the Vault cluster.",
         "Computed": true
       },
       "tier": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "pagerduty",
   "type": "provider",
-  "version": "v2.2.1",
+  "version": "v2.6.2",
   "provider": {
     "api_url_override": {
       "Type": "String",
@@ -85,6 +85,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
+        "Deprecated": "This will change to a computed resource in the next major release.",
         "Default": {
           "Type": "string",
           "Value": "business_service"
@@ -172,6 +173,814 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      }
+    },
+    "pagerduty_event_orchestration": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "integration": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "parameters": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "routing_key": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "routes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "team": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "pagerduty_event_orchestration_router": {
+      "catch_all": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "actions": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "route_to": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "event_orchestration": {
+        "Type": "String",
+        "Required": true
+      },
+      "set": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "rule": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "actions": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "route_to": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "condition": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "expression": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "disabled": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "label": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pagerduty_event_orchestration_service": {
+      "catch_all": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "actions": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "annotate": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "automation_action": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "auto_send": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "header": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "key": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "value": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "parameter": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "key": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "value": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "url": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "event_action": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "extraction": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "regex": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "source": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "target": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "template": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "pagerduty_automation_action": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "action_id": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "priority": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "route_to": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "severity": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "suppress": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "suspend": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "variable": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "path": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "service": {
+        "Type": "String",
+        "Required": true
+      },
+      "set": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "rule": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "actions": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "annotate": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "automation_action": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "auto_send": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Default": {
+                                  "Type": "bool",
+                                  "Value": "false"
+                                }
+                              },
+                              "header": {
+                                "Type": "List",
+                                "Optional": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "key": {
+                                      "Type": "String",
+                                      "Required": true
+                                    },
+                                    "value": {
+                                      "Type": "String",
+                                      "Required": true
+                                    }
+                                  }
+                                }
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "parameter": {
+                                "Type": "List",
+                                "Optional": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "key": {
+                                      "Type": "String",
+                                      "Required": true
+                                    },
+                                    "value": {
+                                      "Type": "String",
+                                      "Required": true
+                                    }
+                                  }
+                                }
+                              },
+                              "url": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "event_action": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "extraction": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "regex": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "source": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "target": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "template": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "pagerduty_automation_action": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "action_id": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "priority": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "route_to": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "severity": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "suppress": {
+                          "Type": "Bool",
+                          "Optional": true
+                        },
+                        "suspend": {
+                          "Type": "Int",
+                          "Optional": true
+                        },
+                        "variable": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "name": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "path": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "type": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "value": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "condition": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "expression": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "disabled": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "label": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pagerduty_event_orchestration_unrouted": {
+      "catch_all": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "actions": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "event_action": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "extraction": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "regex": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "source": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "target": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "template": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "severity": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "suppress": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "variable": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "path": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "event_orchestration": {
+        "Type": "String",
+        "Required": true
+      },
+      "set": {
+        "Type": "List",
+        "Required": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "rule": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "actions": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "event_action": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "extraction": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "regex": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "source": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "target": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "template": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "route_to": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "severity": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "variable": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "name": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "path": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "type": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "value": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "condition": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "expression": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "disabled": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "label": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -695,6 +1504,10 @@
           }
         }
       },
+      "catch_all": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "conditions": {
         "Type": "List",
         "Optional": true,
@@ -868,6 +1681,25 @@
           "Value": "Managed by Terraform"
         }
       },
+      "final_schedule": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rendered_coverage_percentage": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "layer": {
         "Type": "List",
         "Required": true,
@@ -887,6 +1719,10 @@
             "name": {
               "Type": "String",
               "Optional": true,
+              "Computed": true
+            },
+            "rendered_coverage_percentage": {
+              "Type": "String",
               "Computed": true
             },
             "restriction": {
@@ -1047,6 +1883,29 @@
         ],
         "Deprecated": "Use `alert_grouping_parameters.config.timeout`"
       },
+      "auto_pause_notifications_parameters": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "auto_resolve_timeout": {
         "Type": "String",
         "Optional": true,
@@ -1146,6 +2005,10 @@
         "Type": "String",
         "Required": true
       },
+      "response_play": {
+        "Type": "String",
+        "Optional": true
+      },
       "scheduled_actions": {
         "Type": "List",
         "Optional": true,
@@ -1226,6 +2089,10 @@
             }
           }
         }
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "pagerduty_service_dependency": {
@@ -1592,6 +2459,177 @@
       }
     },
     "pagerduty_service_integration": {
+      "email_filter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_mode": {
+              "Type": "String",
+              "Optional": true
+            },
+            "body_regex": {
+              "Type": "String",
+              "Optional": true
+            },
+            "from_email_mode": {
+              "Type": "String",
+              "Optional": true
+            },
+            "from_email_regex": {
+              "Type": "String",
+              "Optional": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "subject_mode": {
+              "Type": "String",
+              "Optional": true
+            },
+            "subject_regex": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "email_filter_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "email_incident_creation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "email_parser": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Required": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "match_predicate": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "predicate": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "matcher": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "part": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "predicate": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "matcher": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "part": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "type": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "value_extractor": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ends_before": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "part": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "regex": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "starts_after": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value_name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "email_parsing_fallback": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "html_url": {
         "Type": "String",
         "Computed": true
@@ -1901,6 +2939,25 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "custom_header": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
             "temporarily_disabled": {
               "Type": "Bool",
               "Optional": true,
@@ -1968,9 +3025,54 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "pagerduty_escalation_policy": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "pagerduty_event_orchestration": {
+      "integration": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "parameters": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "routing_key": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -2022,6 +3124,10 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "pagerduty_service_integration": {
@@ -2109,6 +3215,41 @@
       "user_id": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "pagerduty_users": {
+      "team_ids": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "users": {
+        "Type": "List",
+        "Description": "List of users who are members of the team",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "email": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "pagerduty_vendor": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ionoscloud",
   "type": "provider",
-  "version": "v6.1.3",
+  "version": "v6.3.1",
   "provider": {
     "endpoint": {
       "Type": "String",
@@ -15,10 +15,7 @@
       "Type": "String",
       "Optional": true,
       "Description": "IonosCloud password for API operations. If token is provided, token is preferred",
-      "DefaultFunc": "ENV(IONOS_PASSWORD)",
-      "ConflictsWith": [
-        "token"
-      ]
+      "DefaultFunc": "ENV(IONOS_PASSWORD)"
     },
     "retries": {
       "Type": "Int",
@@ -33,23 +30,207 @@
       "Type": "String",
       "Optional": true,
       "Description": "IonosCloud bearer token for API operations.",
-      "DefaultFunc": "ENV(IONOS_TOKEN)",
-      "ConflictsWith": [
-        "username",
-        "password"
-      ]
+      "DefaultFunc": "ENV(IONOS_TOKEN)"
     },
     "username": {
       "Type": "String",
       "Optional": true,
       "Description": "IonosCloud username for API operations. If token is provided, token is preferred",
-      "DefaultFunc": "ENV(IONOS_USERNAME)",
-      "ConflictsWith": [
-        "token"
-      ]
+      "DefaultFunc": "ENV(IONOS_USERNAME)"
     }
   },
   "resources": {
+    "ionoscloud_application_loadbalancer": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "datacenter_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "ips": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of the Application Load Balancer IP addresses. (Inbound and outbound) IPs of the listenerLan are customer-reserved public IPs for the public Load Balancers, and private IPs for the private Load Balancers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "lb_private_ips": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of private IP addresses with the subnet mask of the Application Load Balancer. IPs must contain valid a subnet mask. If no IP is provided, the system will generate an IP with /24 subnet.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "listener_lan": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of the listening (inbound) LAN."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Application Load Balancer."
+      },
+      "target_lan": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of the balanced private target LAN (outbound)."
+      }
+    },
+    "ionoscloud_application_loadbalancer_forwardingrule": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "application_loadbalancer_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "client_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The maximum time in milliseconds to wait for the client to acknowledge or send data; default is 50,000 (50 seconds).",
+        "Computed": true
+      },
+      "datacenter_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "http_rules": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Array of items in that collection",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "conditions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "An array of items in the collection.The action is only performed if each and every condition is met; if no conditions are set, the rule will always be performed.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "condition": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Matching rule for the HTTP rule condition attribute; mandatory for HEADER, PATH, QUERY, METHOD, HOST, and COOKIE types; must be null when type is SOURCE_IP."
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Must be null when type is PATH, METHOD, HOST, or SOURCE_IP. Key can only be set when type is COOKIES, HEADER, or QUERY."
+                  },
+                  "negate": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Specifies whether the condition is negated or not; the default is False."
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Type of the HTTP rule condition."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Mandatory for conditions CONTAINS, EQUALS, MATCHES, STARTS_WITH, ENDS_WITH; must be null when condition is EXISTS; should be a valid CIDR if provided and if type is SOURCE_IP."
+                  }
+                }
+              }
+            },
+            "content_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Valid only for STATIC actions.",
+              "Computed": true
+            },
+            "drop_query": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Default is false; valid only for REDIRECT actions."
+            },
+            "location": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The location for redirecting; mandatory and valid only for REDIRECT actions."
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the Application Load Balancer HTTP rule."
+            },
+            "response_message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The response message of the request; mandatory for STATIC actions."
+            },
+            "status_code": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Valid only for REDIRECT and STATIC actions. For REDIRECT actions, default is 301 and possible values are 301, 302, 303, 307, and 308. For STATIC actions, default is 503 and valid range is 200 to 599.",
+              "Computed": true
+            },
+            "target_group": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The ID of the target group; mandatory and only valid for FORWARD actions."
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Type of the HTTP rule."
+            }
+          }
+        }
+      },
+      "listener_ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Listening (inbound) IP."
+      },
+      "listener_port": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Listening (inbound) port number; valid range is 1 to 65535."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Application Load Balancer forwarding rule."
+      },
+      "protocol": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Balancing protocol."
+      },
+      "server_certificates": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Array of items in the collection.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "ionoscloud_backup_unit": {
       "__timeouts__": [
         "create",
@@ -119,7 +300,7 @@
         "Computed": true
       },
       "features": {
-        "Type": "List",
+        "Type": "Set",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -220,15 +401,18 @@
       },
       "access_and_manage_certificates": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Privilege for a group to access and manage certificates."
       },
       "access_and_manage_monitoring": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Privilege for a group to access and manage monitoring related functionality (access metrics, CRUD on alarms, alarm-actions etc) using Monotoring-as-a-Service (MaaS)."
       },
       "create_backup_unit": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Create backup unit privilege."
       },
       "create_datacenter": {
         "Type": "Bool",
@@ -236,15 +420,18 @@
       },
       "create_flow_log": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Create Flow Logs privilege."
       },
       "create_internet_access": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Create internet access privilege."
       },
       "create_k8s_cluster": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Create Kubernetes cluster privilege."
       },
       "create_pcc": {
         "Type": "Bool",
@@ -253,6 +440,11 @@
       "create_snapshot": {
         "Type": "Bool",
         "Optional": true
+      },
+      "manage_dbaas": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Privilege for a group to manage DBaaS related functionality"
       },
       "name": {
         "Type": "String",
@@ -268,7 +460,23 @@
       },
       "user_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "ConflictsWith": [
+          "user_ids"
+        ],
+        "Deprecated": "Please use user_ids for adding users to the group, since user_id will pe removed in the future"
+      },
+      "user_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "ConflictsWith": [
+          "user_id"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "users": {
         "Type": "Set",
@@ -292,6 +500,10 @@
             },
             "force_sec_auth": {
               "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
               "Computed": true
             },
             "last_name": {
@@ -434,6 +646,7 @@
         "Type": "List",
         "Optional": true,
         "Description": "A maintenance window comprise of a day of the week and a time for maintenance to be allowed",
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -457,15 +670,6 @@
         "Type": "String",
         "Required": true,
         "Description": "The desired name for the cluster"
-      },
-      "public": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "The indicator if the cluster is public or private. Be aware that setting it to false is currently in beta phase.",
-        "Default": {
-          "Type": "bool",
-          "Value": "true"
-        }
       },
       "s3_buckets": {
         "Type": "List",
@@ -504,6 +708,15 @@
         "delete",
         "default"
       ],
+      "allow_replace": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "When set to true, allows the update of immutable fields by destroying and re-creating the node pool",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "annotations": {
         "Type": "Map",
         "Optional": true,
@@ -556,11 +769,6 @@
         "Required": true,
         "Description": "The UUID of the VDC"
       },
-      "gateway_ip": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Public IP address for the gateway performing source NAT for the node pool's nodes belonging to a private cluster. Required only if the node pool belongs to a private cluster."
-      },
       "k8s_cluster_id": {
         "Type": "String",
         "Required": true,
@@ -568,7 +776,7 @@
       },
       "k8s_version": {
         "Type": "String",
-        "Optional": true,
+        "Required": true,
         "Description": "The desired kubernetes version"
       },
       "labels": {
@@ -632,6 +840,7 @@
         "Type": "List",
         "Optional": true,
         "Description": "A maintenance window comprise of a day of the week and a time for maintenance to be allowed",
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -810,7 +1019,7 @@
         "Description": "Name of the NAT gateway"
       },
       "public_ips": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "Description": "Collection of public IP addresses of the NAT gateway. Should be customer reserved IP addresses in that location",
         "ConfigImplicitMode": "Attr",
@@ -920,6 +1129,7 @@
         "Type": "List",
         "Optional": true,
         "Description": "Collection of private IP addresses with subnet mask of the Network Load Balancer. IPs must contain valid subnet mask. If user will not provide any IP then the system will generate one IP with /24 subnet.",
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1021,7 +1231,7 @@
         "Description": "Protocol of the balancing."
       },
       "targets": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "Description": "Array of items in that collection",
         "IsBlock": true,
@@ -1150,6 +1360,12 @@
         "delete",
         "default"
       ],
+      "backup_location": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The S3 location where the backups will be stored.",
+        "Computed": true
+      },
       "connections": {
         "Type": "List",
         "Optional": true,
@@ -1278,7 +1494,7 @@
       "storage_size": {
         "Type": "Int",
         "Required": true,
-        "Description": "The amount of storage per instance in megabytes."
+        "Description": "The amount of storage per instance in megabytes. Has to be a multiple of 2048."
       },
       "storage_type": {
         "Type": "String",
@@ -1411,7 +1627,8 @@
       ],
       "availability_zone": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "boot_cdrom": {
         "Type": "String",
@@ -1447,10 +1664,7 @@
       "image_name": {
         "Type": "String",
         "Optional": true,
-        "Computed": true,
-        "ConflictsWith": [
-          "volume.0.image_name"
-        ]
+        "Computed": true
       },
       "image_password": {
         "Type": "String",
@@ -1543,6 +1757,10 @@
               "Optional": true,
               "Computed": true
             },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
             "ips": {
               "Type": "List",
               "Optional": true,
@@ -1578,6 +1796,7 @@
       },
       "primary_nic": {
         "Type": "String",
+        "Description": "Id of the primary network interface",
         "Computed": true
       },
       "ram": {
@@ -1657,14 +1876,6 @@
               "Type": "String",
               "Required": true
             },
-            "image_name": {
-              "Type": "String",
-              "Optional": true,
-              "ConflictsWith": [
-                "image_name"
-              ],
-              "Deprecated": "Please use image_name under server level"
-            },
             "image_password": {
               "Type": "String",
               "Optional": true,
@@ -1701,6 +1912,7 @@
             "size": {
               "Type": "Int",
               "Optional": true,
+              "Description": "The size of the volume in GB.",
               "Computed": true
             },
             "ssh_key_path": {
@@ -1834,6 +2046,142 @@
         "Required": true
       }
     },
+    "ionoscloud_target_group": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "algorithm": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Balancing algorithm."
+      },
+      "health_check": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Health check attributes for Application Load Balancer forwarding rule",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "check_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The interval in milliseconds between consecutive health checks; default is 2000.",
+              "Computed": true
+            },
+            "check_timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum time in milliseconds to wait for a target to respond to a check. For target VMs with 'Check Interval' set, the lesser of the two  values is used once the TCP connection is established.",
+              "Computed": true
+            },
+            "retries": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum number of attempts to reconnect to a target after a connection failure. Valid range is 0 to 65535, and default is three reconnection.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "http_health_check": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Http health check attributes for Target Group",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The method for the HTTP health check.",
+              "Computed": true
+            },
+            "negate": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The path (destination URL) for the HTTP health check request; the default is /.",
+              "Computed": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "response": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The response returned by the request, depending on the match type."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the target group."
+      },
+      "protocol": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Balancing protocol."
+      },
+      "targets": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Array of items in the collection.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "health_check_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Makes the target available only if it accepts periodic health check TCP connection attempts; when turned off, the target is considered always available. The health check only consists of a connection attempt to the address and port of the target. Default is True.",
+              "Computed": true
+            },
+            "ip": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The IP of the balanced target VM."
+            },
+            "maintenance_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Maintenance mode prevents the target from receiving balanced traffic."
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The port of the balanced target service; valid range is 1 to 65535."
+            },
+            "weight": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Traffic is distributed in proportion to target weight, relative to the combined weight of all targets. A target with higher weight receives a greater share of traffic. Valid range is 0 to 256 and default is 1; targets with weight of 0 do not participate in load balancing but still accept persistent connections. It is best use values in the middle of the range to leave room for later adjustments."
+            }
+          }
+        }
+      }
+    },
     "ionoscloud_user": {
       "__timeouts__": [
         "create",
@@ -1860,6 +2208,16 @@
       "force_sec_auth": {
         "Type": "Bool",
         "Optional": true
+      },
+      "group_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Ids of the groups that the user is a member of",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "last_name": {
         "Type": "String",
@@ -1999,6 +2357,219 @@
     }
   },
   "data-sources": {
+    "ionoscloud_application_loadbalancer": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "datacenter_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ips": {
+        "Type": "Set",
+        "Description": "Collection of the Application Load Balancer IP addresses. (Inbound and outbound) IPs of the listenerLan are customer-reserved public IPs for the public Load Balancers, and private IPs for the private Load Balancers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "lb_private_ips": {
+        "Type": "Set",
+        "Description": "Collection of private IP addresses with the subnet mask of the Application Load Balancer. IPs must contain valid a subnet mask. If no IP is provided, the system will generate an IP with /24 subnet.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "listener_lan": {
+        "Type": "Int",
+        "Description": "ID of the listening (inbound) LAN.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the Application Load Balancer."
+      },
+      "partial_match": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether partial matching is allowed or not when using name argument.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "target_lan": {
+        "Type": "Int",
+        "Description": "ID of the balanced private target LAN (outbound).",
+        "Computed": true
+      }
+    },
+    "ionoscloud_application_loadbalancer_forwardingrule": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "application_loadbalancer_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "client_timeout": {
+        "Type": "Int",
+        "Description": "The maximum time in milliseconds to wait for the client to acknowledge or send data; default is 50,000 (50 seconds).",
+        "Computed": true
+      },
+      "datacenter_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "http_rules": {
+        "Type": "List",
+        "Description": "Array of items in that collection",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "conditions": {
+              "Type": "List",
+              "Description": "An array of items in the collection.The action is only performed if each and every condition is met; if no conditions are set, the rule will always be performed.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "condition": {
+                    "Type": "String",
+                    "Description": "Matching rule for the HTTP rule condition attribute; mandatory for HEADER, PATH, QUERY, METHOD, HOST, and COOKIE types; must be null when type is SOURCE_IP.",
+                    "Computed": true
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Description": "Must be null when type is PATH, METHOD, HOST, or SOURCE_IP. Key can only be set when type is COOKIES, HEADER, or QUERY.",
+                    "Computed": true
+                  },
+                  "negate": {
+                    "Type": "Bool",
+                    "Description": "Specifies whether the condition is negated or not; the default is False.",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Description": "Type of the HTTP rule condition.",
+                    "Computed": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Description": "Mandatory for conditions CONTAINS, EQUALS, MATCHES, STARTS_WITH, ENDS_WITH; must be null when condition is EXISTS; should be a valid CIDR if provided and if type is SOURCE_IP.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "content_type": {
+              "Type": "String",
+              "Description": "Valid only for STATIC actions.",
+              "Computed": true
+            },
+            "drop_query": {
+              "Type": "Bool",
+              "Description": "Default is false; valid only for REDIRECT actions.",
+              "Computed": true
+            },
+            "location": {
+              "Type": "String",
+              "Description": "The location for redirecting; mandatory and valid only for REDIRECT actions.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The unique name of the Application Load Balancer HTTP rule.",
+              "Computed": true
+            },
+            "response_message": {
+              "Type": "String",
+              "Description": "The response message of the request; mandatory for STATIC actions.",
+              "Computed": true
+            },
+            "status_code": {
+              "Type": "Int",
+              "Description": "Valid only for REDIRECT and STATIC actions. For REDIRECT actions, default is 301 and possible values are 301, 302, 303, 307, and 308. For STATIC actions, default is 503 and valid range is 200 to 599.",
+              "Computed": true
+            },
+            "target_group": {
+              "Type": "String",
+              "Description": "The ID of the target group; mandatory and only valid for FORWARD actions.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Type of the HTTP rule.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "listener_ip": {
+        "Type": "String",
+        "Description": "Listening (inbound) IP",
+        "Computed": true
+      },
+      "listener_port": {
+        "Type": "Int",
+        "Description": "Listening (inbound) port number; valid range is 1 to 65535.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the Application Load Balancer forwarding rule."
+      },
+      "partial_match": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether partial matching is allowed or not when using name argument.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "protocol": {
+        "Type": "String",
+        "Description": "Balancing protocol",
+        "Computed": true
+      },
+      "server_certificates": {
+        "Type": "Set",
+        "Description": "Array of items in the collection.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "ionoscloud_backup_unit": {
       "__timeouts__": [
         "create",
@@ -2066,7 +2637,7 @@
         "Computed": true
       },
       "features": {
-        "Type": "List",
+        "Type": "Set",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -2170,12 +2741,27 @@
         "Type": "Bool",
         "Computed": true
       },
+      "access_and_manage_certificates": {
+        "Type": "Bool",
+        "Description": "Privilege for a group to access and manage certificates.",
+        "Computed": true
+      },
+      "access_and_manage_monitoring": {
+        "Type": "Bool",
+        "Description": "Privilege for a group to access and manage monitoring related functionality (access metrics, CRUD on alarms, alarm-actions etc) using Monotoring-as-a-Service (MaaS).",
+        "Computed": true
+      },
       "create_backup_unit": {
         "Type": "Bool",
         "Computed": true
       },
       "create_datacenter": {
         "Type": "Bool",
+        "Computed": true
+      },
+      "create_flow_log": {
+        "Type": "Bool",
+        "Description": "Create Flow Logs privilege.",
         "Computed": true
       },
       "create_internet_access": {
@@ -2198,6 +2784,11 @@
         "Type": "String",
         "Optional": true
       },
+      "manage_dbaas": {
+        "Type": "Bool",
+        "Description": "Privilege for a group to manage DBaaS related functionality",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true
@@ -2208,10 +2799,6 @@
       },
       "s3_privilege": {
         "Type": "Bool",
-        "Computed": true
-      },
-      "user_id": {
-        "Type": "String",
         "Computed": true
       },
       "users": {
@@ -2236,6 +2823,10 @@
             },
             "force_sec_auth": {
               "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
               "Computed": true
             },
             "last_name": {
@@ -2622,11 +3213,6 @@
           "ElementsType": "String"
         }
       },
-      "public": {
-        "Type": "Bool",
-        "Description": "The indicator if the cluster is public or private. Be aware that setting it to false is currently in beta phase.",
-        "Computed": true
-      },
       "s3_buckets": {
         "Type": "List",
         "Description": "List of S3 bucket configured for K8s usage. For now it contains only an S3 bucket used to store K8s API audit logs.",
@@ -2738,11 +3324,6 @@
       "datacenter_id": {
         "Type": "String",
         "Description": "The UUID of the VDC",
-        "Computed": true
-      },
-      "gateway_ip": {
-        "Type": "String",
-        "Description": "Public IP address for the gateway performing source NAT for the node pool's nodes belonging to a private cluster. Required only if the node pool belongs to a private cluster.",
         "Computed": true
       },
       "id": {
@@ -2871,6 +3452,60 @@
         "Type": "String",
         "Description": "Storage type to use",
         "Computed": true
+      }
+    },
+    "ionoscloud_k8s_node_pool_nodes": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "k8s_cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The UUID of an existing kubernetes cluster"
+      },
+      "node_pool_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The UUID of an existing nodepool"
+      },
+      "nodes": {
+        "Type": "List",
+        "Description": "list of nodes in the nodepool",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "k8s_version": {
+              "Type": "String",
+              "Description": "The kubernetes version",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The kubernetes node name"
+            },
+            "private_ip": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A valid private IP"
+            },
+            "public_ip": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A valid public IP"
+            }
+          }
+        }
       }
     },
     "ionoscloud_lan": {
@@ -3409,6 +4044,11 @@
         "delete",
         "default"
       ],
+      "backup_location": {
+        "Type": "String",
+        "Description": "The S3 location where the backups will be stored.",
+        "Computed": true
+      },
       "connections": {
         "Type": "List",
         "Description": "Details about the network connection for your cluster.",
@@ -4071,6 +4711,411 @@
         }
       }
     },
+    "ionoscloud_servers": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "datacenter_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "filter": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "servers": {
+        "Type": "List",
+        "Description": "list of servers",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "availability_zone": {
+              "Type": "String",
+              "Computed": true
+            },
+            "boot_cdrom": {
+              "Type": "String",
+              "Computed": true
+            },
+            "boot_image": {
+              "Type": "String",
+              "Computed": true
+            },
+            "boot_volume": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cdroms": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cloud_init": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "cpu_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "cpu_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "disc_scsi_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "disc_scsi_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "disc_virtio_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "disc_virtio_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "image_aliases": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "image_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "licence_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "location": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "nic_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "nic_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "public": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "ram_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "ram_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "size": {
+                    "Type": "Float",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "cores": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "cpu_family": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The unique ID of the server.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "nics": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "device_number": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "dhcp": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "firewall_active": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "firewall_rules": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "icmp_code": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "icmp_type": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "port_range_end": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "port_range_start": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "protocol": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "source_ip": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "source_mac": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "target_ip": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "firewall_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "ips": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "lan": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "mac": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "pci_slot": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "ram": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "template_uuid": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "vm_state": {
+              "Type": "String",
+              "Computed": true
+            },
+            "volumes": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "availability_zone": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "backup_unit_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "boot_server": {
+                    "Type": "String",
+                    "Description": "The UUID of the attached server.",
+                    "Computed": true
+                  },
+                  "bus": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "cpu_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "device_number": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "disc_virtio_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "disc_virtio_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "disk_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "image_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "image_password": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "licence_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "nic_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "nic_hot_unplug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "pci_slot": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "ram_hot_plug": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "size": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "ssh_keys": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "user_data": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "ionoscloud_share": {
       "__timeouts__": [
         "create",
@@ -4147,12 +5192,14 @@
       "location": {
         "Type": "String",
         "Optional": true,
-        "Description": "Location of that image/snapshot"
+        "Description": "Location of that image/snapshot",
+        "Computed": true
       },
       "name": {
         "Type": "String",
         "Optional": true,
-        "Description": "A name of that resource"
+        "Description": "A name of that resource",
+        "Computed": true
       },
       "nic_hot_plug": {
         "Type": "Bool",
@@ -4178,7 +5225,147 @@
       "size": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The size of the image in GB"
+        "Description": "The size of the image in GB",
+        "Computed": true
+      }
+    },
+    "ionoscloud_target_group": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "algorithm": {
+        "Type": "String",
+        "Description": "Balancing algorithm.",
+        "Computed": true
+      },
+      "health_check": {
+        "Type": "List",
+        "Description": "Health check attributes for Application Load Balancer forwarding rule",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "check_interval": {
+              "Type": "Int",
+              "Description": "The interval in milliseconds between consecutive health checks; default is 2000.",
+              "Computed": true
+            },
+            "check_timeout": {
+              "Type": "Int",
+              "Description": "The maximum time in milliseconds to wait for a target to respond to a check. For target VMs with 'Check Interval' set, the lesser of the two  values is used once the TCP connection is established.",
+              "Computed": true
+            },
+            "retries": {
+              "Type": "Int",
+              "Description": "The maximum number of attempts to reconnect to a target after a connection failure. Valid range is 0 to 65535, and default is three reconnection.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "http_health_check": {
+        "Type": "List",
+        "Description": "Http health check attributes for Target Group",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "method": {
+              "Type": "String",
+              "Description": "The method for the HTTP health check.",
+              "Computed": true
+            },
+            "negate": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "path": {
+              "Type": "String",
+              "Description": "The path (destination URL) for the HTTP health check request; the default is /.",
+              "Computed": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "response": {
+              "Type": "String",
+              "Description": "The response returned by the request, depending on the match type.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the target group."
+      },
+      "partial_match": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether partial matching is allowed or not when using name argument.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "protocol": {
+        "Type": "String",
+        "Description": "Balancing protocol.",
+        "Computed": true
+      },
+      "targets": {
+        "Type": "List",
+        "Description": "Array of items in the collection",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "health_check_enabled": {
+              "Type": "Bool",
+              "Description": "Makes the target available only if it accepts periodic health check TCP connection attempts; when turned off, the target is considered always available. The health check only consists of a connection attempt to the address and port of the target. Default is True.",
+              "Computed": true
+            },
+            "ip": {
+              "Type": "String",
+              "Description": "The IP of the balanced target VM.",
+              "Computed": true
+            },
+            "maintenance_enabled": {
+              "Type": "Bool",
+              "Description": "Maintenance mode prevents the target from receiving balanced traffic.",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "The port of the balanced target service; valid range is 1 to 65535.",
+              "Computed": true
+            },
+            "weight": {
+              "Type": "Int",
+              "Description": "Traffic is distributed in proportion to target weight, relative to the combined weight of all targets. A target with higher weight receives a greater share of traffic. Valid range is 0 to 256 and default is 1; targets with weight of 0 do not participate in load balancing but still accept persistent connections. It is best use values in the middle of the range to leave room for later adjustments.",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "ionoscloud_template": {
@@ -4239,6 +5426,25 @@
       "force_sec_auth": {
         "Type": "Bool",
         "Computed": true
+      },
+      "groups": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "id": {
         "Type": "String",

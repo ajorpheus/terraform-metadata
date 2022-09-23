@@ -1,0 +1,623 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "seeweb",
+  "type": "provider",
+  "version": "v0.1.0",
+  "provider": {
+    "api_url_override": {
+      "Type": "String",
+      "Optional": true,
+      "Default": {
+        "Type": "string"
+      }
+    },
+    "token": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(SEEWEB_TOKEN)"
+    }
+  },
+  "resources": {
+    "seeweb_group": {
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notes": {
+        "Type": "String",
+        "Required": true
+      },
+      "password": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "seeweb_server": {
+      "active_flag": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "api_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "creation_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "deletion_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "group": {
+        "Type": "String",
+        "Optional": true
+      },
+      "image": {
+        "Type": "String",
+        "Required": true
+      },
+      "ipv4": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ipv6": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notes": {
+        "Type": "String",
+        "Required": true
+      },
+      "plan": {
+        "Type": "String",
+        "Required": true
+      },
+      "plan_size": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "core": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ram": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "so": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ssh_key": {
+        "Type": "String",
+        "Optional": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user": {
+        "Type": "String",
+        "Computed": true
+      }
+    }
+  },
+  "data-sources": {
+    "seeweb_action": {
+      "completed_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "progress": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "resource": {
+        "Type": "String",
+        "Computed": true
+      },
+      "resource_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "started_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "seeweb_actions": {
+      "actions": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "completed_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "created_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "progress": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "resource": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "started_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "seeweb_group": {
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notes": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "seeweb_groups": {
+      "groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "notes": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "seeweb_plans": {
+      "plans": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "available": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "available_regions": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "location": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "cpu": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk": {
+              "Type": "String",
+              "Computed": true
+            },
+            "hourly_price": {
+              "Type": "Float",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "montly_price": {
+              "Type": "Float",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ram": {
+              "Type": "String",
+              "Computed": true
+            },
+            "windows": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "seeweb_regions": {
+      "regions": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "location": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "seeweb_server": {
+      "active_flag": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "api_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "creation_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "deletion_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "group": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ipv4": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ipv6": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "notes": {
+        "Type": "String",
+        "Computed": true
+      },
+      "plan": {
+        "Type": "String",
+        "Computed": true
+      },
+      "plan_size": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "core": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ram": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "so": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ssh_key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "seeweb_servers": {
+      "servers": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "active_flag": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "api_version": {
+              "Type": "String",
+              "Computed": true
+            },
+            "creation_date": {
+              "Type": "String",
+              "Computed": true
+            },
+            "deletion_date": {
+              "Type": "String",
+              "Computed": true
+            },
+            "group": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ipv4": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ipv6": {
+              "Type": "String",
+              "Computed": true
+            },
+            "location": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "notes": {
+              "Type": "String",
+              "Computed": true
+            },
+            "plan": {
+              "Type": "String",
+              "Computed": true
+            },
+            "plan_size": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "core": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "disk": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "ram": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "so": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ssh_key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "seeweb_template": {
+      "active_flag": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "creation_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notes": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "seeweb_templates": {
+      "templates": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "active_flag": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "creation_date": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "notes": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "uuid": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

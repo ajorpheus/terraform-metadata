@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "buildkite",
   "type": "provider",
-  "version": "v0.5.0",
+  "version": "v0.11.0",
   "provider": {
     "api_token": {
       "Type": "String",
@@ -11,11 +11,23 @@
       "Description": "API token with GraphQL access and `write_pipelines, read_pipelines` scopes",
       "DefaultFunc": "ENV(BUILDKITE_API_TOKEN)"
     },
+    "graphql_url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Base URL for the GraphQL API to use",
+      "DefaultFunc": "ENV(BUILDKITE_GRAPHQL_URL)"
+    },
     "organization": {
       "Type": "String",
       "Required": true,
       "Description": "The Buildkite organization ID",
       "DefaultFunc": "ENV(BUILDKITE_ORGANIZATION)"
+    },
+    "rest_url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Base URL for the REST API to use",
+      "DefaultFunc": "ENV(BUILDKITE_REST_URL)"
     }
   },
   "resources": {
@@ -34,6 +46,11 @@
       }
     },
     "buildkite_pipeline": {
+      "allow_rebuilds": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "badge_url": {
         "Type": "String",
         "Computed": true
@@ -49,6 +66,11 @@
         "Computed": true
       },
       "cancel_intermediate_builds_branch_filter": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "cluster_id": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -83,6 +105,11 @@
               "Computed": true
             },
             "build_pull_request_forks": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "build_pull_request_labels_changed": {
               "Type": "Bool",
               "Optional": true,
               "Computed": true
@@ -186,6 +213,15 @@
       "steps": {
         "Type": "String",
         "Required": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "team": {
         "Type": "Set",
@@ -295,6 +331,24 @@
         "Type": "String",
         "Computed": true
       }
+    },
+    "buildkite_team_member": {
+      "role": {
+        "Type": "String",
+        "Required": true
+      },
+      "team_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Computed": true
+      }
     }
   },
   "data-sources": {
@@ -331,6 +385,44 @@
         "Required": true
       },
       "webhook_url": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "buildkite_team": {
+      "default_member_role": {
+        "Type": "String",
+        "Computed": true
+      },
+      "default_team": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "members_can_create_pipelines": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "privacy": {
+        "Type": "String",
+        "Computed": true
+      },
+      "slug": {
+        "Type": "String",
+        "Required": true
+      },
+      "uuid": {
         "Type": "String",
         "Computed": true
       }

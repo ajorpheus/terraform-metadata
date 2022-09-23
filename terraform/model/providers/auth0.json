@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "auth0",
   "type": "provider",
-  "version": "v0.26.1",
+  "version": "v0.26.2",
   "provider": {
     "client_id": {
       "Type": "String",
@@ -408,6 +408,10 @@
                       "Type": "string",
                       "Value": "rsa-sha1"
                     }
+                  },
+                  "signing_cert": {
+                    "Type": "String",
+                    "Optional": true
                   },
                   "typed_attributes": {
                     "Type": "Bool",
@@ -979,9 +983,57 @@
                 "ElementsType": "String"
               }
             },
+            "forward_request_info": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specifies whether or not request info should be forwarded to sms gateway"
+            },
             "from": {
               "Type": "String",
               "Optional": true
+            },
+            "gateway_authentication": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Defines the parameters used to generate the auth token for the custom gateway",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "audience": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Audience claim for the HS256 token sent to gateway_url"
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Authentication method (default is bearer token)"
+                  },
+                  "secret": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Secret used to sign the HS256 token sent to gateway_url"
+                  },
+                  "secret_base64_encoded": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Specifies whether or not the secret is base64 encoded"
+                  },
+                  "subject": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Subject claim for the HS256 token sent to gateway_url"
+                  }
+                }
+              }
+            },
+            "gateway_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Defines a custom sms gateway to use instead of twilio"
             },
             "icon_url": {
               "Type": "String",
@@ -1176,6 +1228,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "The SAML Response Binding: how the SAML token is received by Auth0 from IdP"
+            },
+            "provider": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Defines the custom sms_gateway provider"
             },
             "request_template": {
               "Type": "String",
@@ -1764,6 +1821,10 @@
                       "Value": "rsa-sha1"
                     }
                   },
+                  "signing_cert": {
+                    "Type": "String",
+                    "Optional": true
+                  },
                   "typed_attributes": {
                     "Type": "Bool",
                     "Optional": true,
@@ -2181,6 +2242,14 @@
       }
     },
     "auth0_guardian": {
+      "email": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "phone": {
         "Type": "List",
         "Optional": true,
@@ -2350,7 +2419,7 @@
             "http_content_format": {
               "Type": "String",
               "Optional": true,
-              "Description": "HTTP Content Format can be JSONLINES or JSONARRAY"
+              "Description": "HTTP Content Format can be JSONLINES, JSONARRAY or JSONOBJECT"
             },
             "http_content_type": {
               "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "signalfx",
   "type": "provider",
-  "version": "v6.7.10",
+  "version": "v6.17.0",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -20,7 +20,7 @@
     "custom_app_url": {
       "Type": "String",
       "Optional": true,
-      "Description": "Application URL for your SignalFx org, often customzied for organizations using SSO",
+      "Description": "Application URL for your SignalFx org, often customized for organizations using SSO",
       "DefaultFunc": "ENV(SFX_CUSTOM_APP_URL)"
     },
     "timeout_seconds": {
@@ -56,7 +56,7 @@
       },
       "filter": {
         "Type": "Set",
-        "Required": true,
+        "Optional": true,
         "Description": "list of alert muting filters for this rule",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -186,6 +186,12 @@
           "Value": "false"
         }
       },
+      "enable_logs_sync": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enables AWS logs synchronization.",
+        "Computed": true
+      },
       "enabled": {
         "Type": "Bool",
         "Required": true,
@@ -218,6 +224,38 @@
           "role_arn",
           "external_id"
         ]
+      },
+      "metric_stats_to_sync": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Each element in the array is an object that contains an AWS namespace name, AWS metric name and a list of statistics that SignalFx collects for this metric. If you specify this property, SignalFx retrieves only specified AWS statistics. If you don't specify this property, SignalFx retrieves the AWS standard set of statistics.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metric": {
+              "Type": "String",
+              "Required": true,
+              "Description": "AWS metric that you want to pick statistics for"
+            },
+            "namespace": {
+              "Type": "String",
+              "Required": true,
+              "Description": "An AWS namespace having AWS metric that you want to pick statistics for"
+            },
+            "stats": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "AWS statistics you want to collect",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       },
       "name": {
         "Type": "String",
@@ -268,7 +306,11 @@
       "poll_rate": {
         "Type": "Int",
         "Optional": true,
-        "Description": "AWS poll rate (in seconds). Between `60` and `600`."
+        "Description": "AWS poll rate (in seconds). Between `60` and `600`.",
+        "Default": {
+          "Type": "int",
+          "Value": "300"
+        }
       },
       "regions": {
         "Type": "Set",
@@ -299,6 +341,15 @@
           "ElementsType": "String"
         }
       },
+      "sync_custom_namespaces_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates that SignalFx should sync metrics and metadata from custom AWS namespaces only (see the `custom_namespace_sync_rule` field for details). Defaults to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "token": {
         "Type": "String",
         "Optional": true,
@@ -316,6 +367,12 @@
           "Type": "bool",
           "Value": "false"
         }
+      },
+      "use_metric_streams_sync": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enables the use of Cloudwatch Metric Streams for metrics synchronization.",
+        "Computed": true
       }
     },
     "signalfx_aws_token_integration": {
@@ -336,6 +393,16 @@
       }
     },
     "signalfx_azure_integration": {
+      "additional_services": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Additional Azure resource types that you want to sync with Observability Cloud.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "app_id": {
         "Type": "String",
         "Required": true,
@@ -382,6 +449,15 @@
           "Value": "azure"
         }
       },
+      "import_azure_monitor": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If enabled, SignalFx will sync also Azure Monitor data. If disabled, SignalFx will import only metadata. Defaults to true.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -395,7 +471,31 @@
       "poll_rate": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Azure poll rate (in seconds). One of `60` or `300`."
+        "Description": "Azure poll rate (in seconds). Between `60` and `600`.",
+        "Default": {
+          "Type": "int",
+          "Value": "300"
+        }
+      },
+      "resource_filter_rules": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of rules for filtering Azure resources by their tags. The source of each filter rule must be in the form filter('key', 'value'). You can join multiple filter statements using the and and or operators. Referenced keys are limited to tags and must start with the azure_tag_ prefix..",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "filter": {
+              "Type": "Map",
+              "Required": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       },
       "secret_key": {
         "Type": "String",
@@ -443,6 +543,7 @@
         "Type": "Set",
         "Optional": true,
         "Description": "Team IDs that have write access to this dashboard",
+        "Deprecated": "Please use permissions_* fields now",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -453,6 +554,7 @@
         "Type": "Set",
         "Optional": true,
         "Description": "User IDs that have write access to this dashboard",
+        "Deprecated": "Please use permissions fields now",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -775,6 +877,56 @@
         "Required": true,
         "Description": "Name of the dashboard"
       },
+      "permissions": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "acl": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "The custom access control list for this dashboard",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "actions": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "Actions level, possible values: READ, WRITE",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "principal_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "ID of the principal with access"
+                  },
+                  "principal_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Type of principal, possible values: ORG, TEAM, USER"
+                  }
+                }
+              }
+            },
+            "parent": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The ID of the dashboard group that this dashboard inherits permissions from"
+            }
+          }
+        }
+      },
       "selected_event_overlay": {
         "Type": "List",
         "Optional": true,
@@ -843,6 +995,16 @@
         "ConflictsWith": [
           "time_range"
         ]
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Tags of the dashboard",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "time_range": {
         "Type": "String",
@@ -947,6 +1109,7 @@
         "Type": "Set",
         "Optional": true,
         "Description": "Team IDs that have write access to this dashboard",
+        "Deprecated": "Please use permissions field now",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -957,6 +1120,7 @@
         "Type": "Set",
         "Optional": true,
         "Description": "User IDs that have write access to this dashboard",
+        "Deprecated": "Please use permissions field now",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1123,6 +1287,39 @@
         "Type": "String",
         "Required": true,
         "Description": "Name of the dashboard group"
+      },
+      "permissions": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The custom access control list for this dashboard",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "actions": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Actions level, possible values: READ, WRITE",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "principal_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "ID of the principal with access"
+            },
+            "principal_type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Type of principal, possible values: ORG, TEAM, USER"
+            }
+          }
+        }
       },
       "teams": {
         "Type": "Set",
@@ -1304,6 +1501,16 @@
           "time_range"
         ]
       },
+      "label_resolutions": {
+        "Type": "Map",
+        "Description": "Resolutions of the detector alerts in milliseconds that indicate how often data is analyzed to determine if an alert should be triggered",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
       "max_delay": {
         "Type": "Int",
         "Optional": true,
@@ -1431,7 +1638,7 @@
         }
       },
       "teams": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Description": "Team IDs to associate the detector to",
         "ConfigImplicitMode": "Attr",
@@ -1576,7 +1783,11 @@
       "poll_rate": {
         "Type": "Int",
         "Optional": true,
-        "Description": "GCP poll rate"
+        "Description": "GCP poll rate (in seconds). Between `60` and `600`.",
+        "Default": {
+          "Type": "int",
+          "Value": "300"
+        }
       },
       "project_service_keys": {
         "Type": "Set",
@@ -1606,6 +1817,15 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "use_metric_source_project_for_quota": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "When this value is set to true Observability Cloud will force usage of a quota from the project where metrics are stored. For this to work the service account provided for the project needs to be provided with serviceusage.services.use permission or Service Usage Consumer role in this project. When set to false default quota settings are used.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "whitelist": {
@@ -2139,6 +2359,97 @@
         }
       }
     },
+    "signalfx_log_view": {
+      "columns": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Column configuration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the column"
+            }
+          }
+        }
+      },
+      "default_connection": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "default connection that the dashboard uses"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the chart (Optional)"
+      },
+      "end_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Seconds since epoch to end the visualization",
+        "ConflictsWith": [
+          "time_range"
+        ]
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the chart"
+      },
+      "program_text": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Signalflow program text for the chart. More info at \"https://developers.signalfx.com/docs/signalflow-overview\""
+      },
+      "sort_options": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Sorting options configuration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "descending": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Name of the column"
+            },
+            "field": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the column"
+            }
+          }
+        }
+      },
+      "start_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Seconds since epoch to start the visualization",
+        "ConflictsWith": [
+          "time_range"
+        ]
+      },
+      "time_range": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Seconds to display in the visualization. This is a rolling range from the current time. Example: 3600 = `-1h`",
+        "ConflictsWith": [
+          "start_time",
+          "end_time"
+        ]
+      },
+      "url": {
+        "Type": "String",
+        "Description": "URL of the chart",
+        "Computed": true
+      }
+    },
     "signalfx_opsgenie_integration": {
       "api_key": {
         "Type": "String",
@@ -2162,6 +2473,17 @@
       }
     },
     "signalfx_org_token": {
+      "auth_scopes": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Authentication scope, ex: INGEST, API, RUM ... (Optional)",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -2327,6 +2649,48 @@
         "Type": "String",
         "Required": true,
         "Description": "Name of the integration"
+      }
+    },
+    "signalfx_service_now_integration": {
+      "alert_resolved_payload_template": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A template that Observability Cloud uses to create the ServiceNow PUT JSON payloads when an alert is cleared in ServiceNow. Use this optional field to send the values of Observability Cloud alert properties to specific fields in ServiceNow. See API reference for details."
+      },
+      "alert_triggered_payload_template": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A template that Observability Cloud uses to create the ServiceNow POST JSON payloads when an alert sends a notification to ServiceNow. Use this optional field to send the values of Observability Cloud alert properties to specific fields in ServiceNow. See API reference for details."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Required": true,
+        "Description": "Whether the integration is enabled"
+      },
+      "instance_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the ServiceNow instance, for example `myInstances.service-now.com`."
+      },
+      "issue_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The type of issue in standard ITIL terminology. The allowed values are `Incident` and `Problem`."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the integration"
+      },
+      "password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Password used to authenticate the ServiceNow integration."
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User name used to authenticate the ServiceNow integration."
       }
     },
     "signalfx_single_value_chart": {
@@ -2530,6 +2894,89 @@
         "Type": "String",
         "Required": true,
         "Description": "Slack Webhook URL for integration"
+      }
+    },
+    "signalfx_table_chart": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the chart (Optional)"
+      },
+      "disable_sampling": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "(false by default) If false, samples a subset of the output MTS, which improves UI performance",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "group_by": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Properties to group by in the Table (in nesting order)",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "hide_timestamp": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "(false by default) Whether to show the timestamp in the chart",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "max_delay": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "How long (in seconds) to wait for late datapoints"
+      },
+      "minimum_resolution": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The minimum resolution (in seconds) to use for computing the underlying program"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the chart"
+      },
+      "program_text": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Signalflow program text for the chart. More info at \"https://developers.signalfx.com/docs/signalflow-overview\""
+      },
+      "refresh_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "How often (in seconds) to refresh the values of the Table"
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The property value is a string that denotes the geographic region associated with the time zone, (e.g. Australia/Sydney)",
+        "Default": {
+          "Type": "string",
+          "Value": "UTC"
+        }
+      },
+      "unit_prefix": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "(Metric by default) Must be \"Metric\" or \"Binary\"",
+        "Default": {
+          "Type": "string",
+          "Value": "Metric"
+        }
+      },
+      "url": {
+        "Type": "String",
+        "Description": "URL of the chart",
+        "Computed": true
       }
     },
     "signalfx_team": {

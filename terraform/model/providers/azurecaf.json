@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "azurecaf",
   "type": "provider",
-  "version": "v1.2.11",
+  "version": "v2.0.0-preview-3",
   "provider": {},
   "resources": {
     "azurecaf_name": {
@@ -51,13 +51,20 @@
         "Type": "Int",
         "Optional": true
       },
+      "random_string": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "resource_type": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The resource type to generate a name for"
       },
       "resource_types": {
         "Type": "List",
         "Optional": true,
+        "Description": "The list of resource types to generate a name for",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -102,31 +109,32 @@
           "Value": "true"
         }
       }
-    },
-    "azurecaf_naming_convention": {
-      "convention": {
-        "Type": "String",
+    }
+  },
+  "data-sources": {
+    "azurecaf_name": {
+      "clean_input": {
+        "Type": "Bool",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "cafrandom"
+          "Type": "bool",
+          "Value": "true"
         }
-      },
-      "max_length": {
-        "Type": "Int",
-        "Optional": true
       },
       "name": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
       },
-      "postfix": {
-        "Type": "String",
-        "Optional": true
-      },
-      "prefix": {
-        "Type": "String",
-        "Optional": true
+      "passthrough": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "prefixes": {
         "Type": "List",
@@ -137,13 +145,58 @@
           "ElementsType": "String"
         }
       },
+      "random_length": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "random_seed": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "random_string": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "resource_type": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The resource type to generate a name for"
+      },
+      "resource_types": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The list of resource types to generate a name for",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "result": {
         "Type": "String",
         "Computed": true
+      },
+      "results": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "separator": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "-"
+        }
       },
       "suffixes": {
         "Type": "List",
@@ -153,8 +206,15 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "use_slug": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       }
     }
-  },
-  "data-sources": {}
+  }
 }

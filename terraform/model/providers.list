@@ -92,7 +92,10 @@ influxdb
 infoblox
 intersight
 ionoscloud
+ionosdeveloper
 jdcloud
+kaleido
+kion
 ksyun
 kubernetes
 kubernetes-alpha
@@ -113,6 +116,9 @@ mso
 mysql
 ncloud
 netlify
+netooze
+netris
+netskope
 newrelic
 ngrok
 nks
@@ -153,6 +159,7 @@ rancher2
 random
 rightscale
 rke
+rockset
 rollbar
 rubrik
 rundeck
@@ -199,3 +206,5 @@ vultr
 waapm
 wavefront
 yandex
+zia
+zpa

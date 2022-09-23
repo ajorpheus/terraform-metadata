@@ -3,7 +3,7 @@
   ".sdk_type": "terraform",
   "name": "vra7",
   "type": "provider",
-  "version": "v3.0.4",
+  "version": "v3.0.6",
   "provider": {
     "host": {
       "Type": "String",

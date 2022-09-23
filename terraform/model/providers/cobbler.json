@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "cobbler",
   "type": "provider",
-  "version": "v2.0.3",
+  "version": "v3.0.0",
   "provider": {
     "cacert_file": {
       "Type": "String",
@@ -45,16 +45,26 @@
         "Computed": true
       },
       "boot_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Files copied into tftpboot beyond the kernel/initrd.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
-      "boot_loader": {
-        "Type": "String",
+      "boot_loaders": {
+        "Type": "List",
         "Optional": true,
-        "Description": " Must be either `grub` or `pxelinux`.",
-        "Computed": true
+        "Description": "Must be either 'grub', 'pxe', or 'ipxe'.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "breed": {
         "Type": "String",
@@ -68,10 +78,15 @@
         "Computed": true
       },
       "fetchable_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Templates for tftp or wget.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "initrd": {
         "Type": "String",
@@ -84,16 +99,26 @@
         "Description": "Absolute path to kernel on filesystem. This must already exist prior to creating the distro."
       },
       "kernel_options": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Kernel options to use with the kernel.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "kernel_options_post": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Post install Kernel options to use with the kernel after installation.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "mgmt_classes": {
         "Type": "List",
@@ -114,7 +139,7 @@
       "os_version": {
         "Type": "String",
         "Required": true,
-        "Description": "The version of the distro you are creating. This varies with the version of Cobbler you are using. An updated signature list may need to be obtained in order to support a newer version. Example: `bionic`."
+        "Description": "The version of the distro you are creating. This varies with the version of Cobbler you are using. An updated signature list may need to be obtained in order to support a newer version. Example: `focal`."
       },
       "owners": {
         "Type": "List",
@@ -127,17 +152,16 @@
           "ElementsType": "String"
         }
       },
-      "redhat_management_key": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Obsolete - removed in Cobbler 3.",
-        "Computed": true
-      },
       "template_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "File mappings for built-in config management.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "cobbler_profile": {
@@ -148,16 +172,26 @@
         "Computed": true
       },
       "autoinstall_meta": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Automatic installation template metadata, formerly Kickstart metadata.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "boot_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Files copied into tftpboot beyond the kernel/initrd.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "comment": {
         "Type": "String",
@@ -188,22 +222,37 @@
         "Computed": true
       },
       "fetchable_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Templates for tftp or wget.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "kernel_options": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Kernel options for the profile.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "kernel_options_post": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Post install kernel options.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "mgmt_classes": {
         "Type": "List",
@@ -249,10 +298,16 @@
           "ElementsType": "String"
         }
       },
-      "next_server": {
+      "next_server_v4": {
         "Type": "String",
         "Optional": true,
-        "Description": "The next_server option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are downloaded. Usually, this will be the same IP as the server setting.",
+        "Description": "The next_server_v4 option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are downloaded. Usually, this will be the same IP as the server setting.",
+        "Computed": true
+      },
+      "next_server_v6": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The next_server_v6 option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are downloaded. Usually, this will be the same IP as the server setting.",
         "Computed": true
       },
       "owners": {
@@ -278,12 +333,6 @@
         "Description": "Proxy URL.",
         "Computed": true
       },
-      "redhat_management_key": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Obsolete - removed in Cobbler 3.",
-        "Computed": true
-      },
       "repos": {
         "Type": "List",
         "Optional": true,
@@ -302,10 +351,15 @@
         "Computed": true
       },
       "template_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "File mappings for built-in config management.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "virt_auto_boot": {
         "Type": "String",
@@ -371,7 +425,7 @@
       "apt_dists": {
         "Type": "List",
         "Optional": true,
-        "Description": "List of Apt distribution names such as bionic, bionic-updates. Applicable to apt breeds only.",
+        "Description": "List of Apt distribution names such as focal, focal-updates. Applicable to apt breeds only.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -479,10 +533,15 @@
         "Computed": true
       },
       "autoinstall_meta": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Automatic installation template metadata, formerly Kickstart metadata.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "boot_files": {
         "Type": "String",
@@ -490,11 +549,16 @@
         "Description": "Files copied into tftpboot beyond the kernel/initrd.",
         "Computed": true
       },
-      "boot_loader": {
-        "Type": "String",
+      "boot_loaders": {
+        "Type": "List",
         "Optional": true,
-        "Description": "Must be either `grub` or `pxelinux`.",
-        "Computed": true
+        "Description": "Must be either `grub`, `pxe`, or `ipxe`.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "comment": {
         "Type": "String",
@@ -509,10 +573,15 @@
         "Computed": true
       },
       "fetchable_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Templates for tftp or wget.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "gateway": {
         "Type": "String",
@@ -592,8 +661,11 @@
             "interface_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "The type of interface: na, master, slave, bond, bond_slave, bridge, bridge_slave, bonded_bridge_slave.",
-              "Computed": true
+              "Description": "The type of interface: na, master, slave, bond, bond_slave, bridge, bridge_slave, bonded_bridge_slave, infiniband, bmc",
+              "Default": {
+                "Type": "string",
+                "Value": "na"
+              }
             },
             "ip_address": {
               "Type": "String",
@@ -697,16 +769,26 @@
         "Computed": true
       },
       "kernel_options": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Kernel options. ex: `selinux=permissive`.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "kernel_options_post": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "Kernel options (post install).",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "mgmt_classes": {
         "Type": "List",
@@ -758,10 +840,16 @@
         "Description": "(Re)install this machine at next boot.",
         "Computed": true
       },
-      "next_server": {
+      "next_server_v4": {
         "Type": "String",
         "Optional": true,
-        "Description": "The next_server option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are downloaded. Usually, this will be the same IP as the server setting.",
+        "Description": "The next_server_v4 option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are downloaded. Usually, this will be the same IP as the server setting.",
+        "Computed": true
+      },
+      "next_server_v6": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The next_server_v6 option is used for DHCP/PXE as the IP of the TFTP server from which network boot files are downloaded. Usually, this will be the same IP as the server setting.",
         "Computed": true
       },
       "owners": {
@@ -816,12 +904,6 @@
         "Description": "Proxy URL.",
         "Computed": true
       },
-      "redhat_management_key": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Obsolete - removed in Cobbler 3.",
-        "Computed": true
-      },
       "status": {
         "Type": "String",
         "Optional": true,
@@ -829,10 +911,15 @@
         "Computed": true
       },
       "template_files": {
-        "Type": "String",
+        "Type": "List",
         "Optional": true,
         "Description": "File mappings for built-in config management.",
-        "Computed": true
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "virt_auto_boot": {
         "Type": "String",

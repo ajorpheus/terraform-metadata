@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "brightbox",
   "type": "provider",
-  "version": "v2.0.6",
+  "version": "v3.0.4",
   "provider": {
     "account": {
       "Type": "String",
@@ -100,6 +100,11 @@
         "Computed": true,
         "Deprecated": "No lock on Cloud IPs"
       },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Type of Cloud IP required (nat/route)"
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -135,7 +140,8 @@
       "public_ip": {
         "Type": "String",
         "Description": "Old alias of the IPv4 address",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Use `public_ipv4` instead"
       },
       "public_ipv4": {
         "Type": "String",
@@ -265,14 +271,15 @@
         "Optional": true,
         "Description": "Identifier for an SQL snapshot to use as the basis of the new instance. Creates and restores the database from the snapshot"
       },
+      "snapshots_retention": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Keep this number of scheduled snapshots. Keep all if unset"
+      },
       "snapshots_schedule": {
         "Type": "String",
         "Optional": true,
-        "Description": "Crontab pattern for scheduled snapshots. Must be at least hourly",
-        "Default": {
-          "Type": "string",
-          "Value": "0 7 * * *"
-        }
+        "Description": "Crontab pattern for scheduled snapshots. Must be at least hourly"
       },
       "snapshots_schedule_next_at": {
         "Type": "String",
@@ -372,7 +379,8 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Buffer size in bytes",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "No longer supported. Buffer size is automatically calculated"
       },
       "certificate_pem": {
         "Type": "String",
@@ -646,10 +654,26 @@
         "create",
         "delete"
       ],
+      "data_volumes": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of volumes to attach to server",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "disk_encrypted": {
         "Type": "Bool",
         "Optional": true,
         "Description": "Is true if the server has been built with an encrypted disk",
+        "Computed": true
+      },
+      "disk_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Disk size in megabytes for server types with variable block storage",
         "Computed": true
       },
       "fqdn": {
@@ -664,8 +688,9 @@
       },
       "image": {
         "Type": "String",
-        "Required": true,
-        "Description": "Image used to create the server"
+        "Optional": true,
+        "Description": "Image used to create the server",
+        "Computed": true
       },
       "interface": {
         "Type": "String",
@@ -714,13 +739,30 @@
       "server_groups": {
         "Type": "Set",
         "Required": true,
-        "Description": "Array of server groups to add server to",
+        "Description": "List of server groups to add server to",
         "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "snapshots_retention": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Keep this number of scheduled snapshots. Keep all if unset",
+        "Computed": true
+      },
+      "snapshots_schedule": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Crontab pattern for scheduled snapshots. Must be at least hourly",
+        "Computed": true
+      },
+      "snapshots_schedule_next_at": {
+        "Type": "String",
+        "Description": "time in UTC when next approximate scheduled snapshot will be run",
+        "Computed": true
       },
       "status": {
         "Type": "String",
@@ -752,6 +794,12 @@
       "username": {
         "Type": "String",
         "Description": "Username to use when logging into a server",
+        "Computed": true
+      },
+      "volume": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Volume used to boot the server",
         "Computed": true
       },
       "zone": {
@@ -786,10 +834,162 @@
         "Optional": true,
         "Description": "User editable label"
       }
+    },
+    "brightbox_volume": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Verbose Description of this volume"
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is true if the volume is encrypted",
+        "Computed": true
+      },
+      "filesystem_label": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Label given to the filesystem on the volume"
+      },
+      "filesystem_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Format of the filesystem on the volume",
+        "ConflictsWith": [
+          "image",
+          "source"
+        ]
+      },
+      "image": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Image used to create the volume",
+        "Computed": true,
+        "ConflictsWith": [
+          "filesystem_type",
+          "source"
+        ]
+      },
+      "locked": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is true if the image is set as locked and cannot be deleted",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Human Readable Name"
+      },
+      "serial": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Volume Serial Number",
+        "Computed": true
+      },
+      "size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Disk size in megabytes",
+        "Computed": true
+      },
+      "source": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of the source volume for this image",
+        "Computed": true,
+        "ConflictsWith": [
+          "filesystem_type",
+          "image"
+        ]
+      },
+      "source_type": {
+        "Type": "String",
+        "Description": "Source type for this image (image, volume or raw)",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current state of volume",
+        "Computed": true
+      },
+      "storage_type": {
+        "Type": "String",
+        "Description": "Storage type for this volume (local or network)",
+        "Computed": true
+      }
     }
   },
   "data-sources": {
+    "brightbox_database_snapshot": {
+      "created_at": {
+        "Type": "String",
+        "Description": "Time of resource creation (UTC)",
+        "Computed": true
+      },
+      "database_engine": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The engine of the database used to create this snapshot",
+        "Computed": true
+      },
+      "database_version": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The version of the database engine used to create this snapshot",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Editable user label",
+        "Computed": true
+      },
+      "locked": {
+        "Type": "Bool",
+        "Description": "True if snapshot is locked and cannot be deleted",
+        "Computed": true
+      },
+      "most_recent": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Snapshot with the latest 'created_at' time",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Editable user label",
+        "Computed": true
+      },
+      "size": {
+        "Type": "Int",
+        "Description": "Size of database partition in megabytes",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Snapshot state",
+        "Computed": true
+      }
+    },
     "brightbox_database_type": {
+      "default": {
+        "Type": "Bool",
+        "Description": "Is this the default database type",
+        "Computed": true
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -859,6 +1059,12 @@
         "Description": "Is true if the image is set as locked and cannot be deleted",
         "Computed": true
       },
+      "min_ram": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The actual size of the data within this image in Megabytes",
+        "Computed": true
+      },
       "most_recent": {
         "Type": "Bool",
         "Optional": true,
@@ -890,6 +1096,18 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "Is this image available to other customers?",
+        "Computed": true
+      },
+      "source": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of theSource for this image",
+        "Computed": true
+      },
+      "source_trigger": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Source trigger for this image (manual or schedule)",
         "Computed": true
       },
       "source_type": {
@@ -937,6 +1155,45 @@
         "Type": "String",
         "Optional": true,
         "Description": "User Label",
+        "Computed": true
+      }
+    },
+    "brightbox_server_type": {
+      "cores": {
+        "Type": "Int",
+        "Description": "Number of CPU Cores",
+        "Computed": true
+      },
+      "disk_size": {
+        "Type": "Int",
+        "Description": "Disk size in megabytes",
+        "Computed": true
+      },
+      "handle": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique handle for this server type",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of this server type",
+        "Computed": true
+      },
+      "ram": {
+        "Type": "Int",
+        "Description": "RAM size in megabytes",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The state of this server type",
+        "Computed": true
+      },
+      "storage_type": {
+        "Type": "String",
+        "Description": "If the server type uses local or network storage",
         "Computed": true
       }
     }

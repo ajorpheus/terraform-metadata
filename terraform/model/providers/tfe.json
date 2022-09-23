@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "tfe",
   "type": "provider",
-  "version": "v0.27.1",
+  "version": "v0.36.1",
   "provider": {
     "hostname": {
       "Type": "String",
@@ -581,6 +581,22 @@
               }
             },
             "manage_policy_overrides": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "manage_providers": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "manage_run_tasks": {
               "Type": "Bool",
               "Optional": true,
               "Default": {
@@ -1577,7 +1593,7 @@
       },
       "workspace_id": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       }
     },
     "tfe_workspace": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vsphere",
   "type": "provider",
-  "version": "v2.0.2",
+  "version": "v2.2.0",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
@@ -179,6 +179,15 @@
           "Value": "3"
         }
       },
+      "drs_scale_descendants_shares": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enable scalable shares for all descendants of this cluster.",
+        "Default": {
+          "Type": "string",
+          "Value": "disabled"
+        }
+      },
       "folder": {
         "Type": "String",
         "Optional": true,
@@ -307,10 +316,10 @@
       "ha_datastore_apd_response_delay": {
         "Type": "Int",
         "Optional": true,
-        "Description": "When ha_vm_component_protection is enabled, controls the delay in minutes to wait after an APD timeout event to execute the response action defined in ha_datastore_apd_response.",
+        "Description": "When ha_vm_component_protection is enabled, controls the delay in seconds to wait after an APD timeout event to execute the response action defined in ha_datastore_apd_response.",
         "Default": {
           "Type": "int",
-          "Value": "3"
+          "Value": "180"
         }
       },
       "ha_datastore_pdl_response": {
@@ -601,7 +610,7 @@
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "The unique name of the virtual machine group in the cluster."
+        "Description": "The unique name of the host group in the cluster."
       }
     },
     "vsphere_compute_cluster_vm_affinity_rule": {
@@ -1758,9 +1767,8 @@
           "Info": {
             "devices": {
               "Type": "List",
-              "Required": true,
+              "Optional": true,
               "Description": "Name of the physical NIC to be added to the proxy switch.",
-              "MinItems": 1,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -2112,7 +2120,7 @@
       "version": {
         "Type": "String",
         "Optional": true,
-        "Description": "The version of this virtual switch. Allowed versions are 7.0.0, 6.5.0, 6.0.0, 5.5.0, 5.1.0, and 5.0.0.",
+        "Description": "The version of this virtual switch. Allowed versions are 7.0.3, 7.0.0, 6.6.0, 6.5.0, 6.0.0, 5.5.0, 5.1.0, and 5.0.0.",
         "Computed": true
       },
       "virtualmachine_maximum_mbit": {
@@ -2424,7 +2432,7 @@
       "ha_datastore_apd_response_delay": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Controls the delay in minutes to wait after an APD timeout event to execute the response action defined in ha_datastore_apd_response. Specify -1 to use the cluster setting.",
+        "Description": "Controls the delay in seconds to wait after an APD timeout event to execute the response action defined in ha_datastore_apd_response. Specify -1 to use the cluster setting.",
         "Default": {
           "Type": "int",
           "Value": "-1"
@@ -2552,6 +2560,16 @@
           "Value": "true"
         }
       },
+      "custom_attributes": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "A list of custom attributes to set on this resource.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "datacenter": {
         "Type": "String",
         "Optional": true,
@@ -2560,7 +2578,7 @@
       "force": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Force add the host to vsphere, even if it's already managed by a different vSphere instance.",
+        "Description": "Force add the host to the vSphere inventory even if it's already managed by a different vCenter Server instance.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -2598,6 +2616,16 @@
         "Type": "String",
         "Required": true,
         "Description": "Password of the administration account of the host."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of tag IDs to apply to this object.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "thumbprint": {
         "Type": "String",
@@ -3201,6 +3229,15 @@
         "Required": true,
         "Description": "The ID of the root resource pool of the compute resource the resource pool is in."
       },
+      "scale_descendants_shares": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Determines if the shares of all descendants of the resource pool are scaled up or down when the shares of the resource pool are scaled up or down.",
+        "Default": {
+          "Type": "string",
+          "Value": "disabled"
+        }
+      },
       "tags": {
         "Type": "Set",
         "Optional": true,
@@ -3282,7 +3319,7 @@
       "associable_types": {
         "Type": "Set",
         "Required": true,
-        "Description": "Object types to which this category's tags can be attached.",
+        "Description": "Object types to which this category's tags can be attached. Valid types include: Folder, ClusterComputeResource, Datacenter, Datastore, StoragePod, DistributedVirtualPortgroup, DistributedVirtualSwitch, VmwareDistributedVirtualSwitch, HostSystem, com.vmware.content.Library, com.vmware.content.library.Item, HostNetwork, Network, OpaqueNetwork, ResourcePool, VirtualApp, VirtualMachine.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -3555,12 +3592,13 @@
       "alternate_guest_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The guest name for the operating system when guest_id is other or other-64."
+        "Description": "The guest name for the operating system when guest_id is otherGuest or otherGuest64."
       },
       "annotation": {
         "Type": "String",
         "Optional": true,
-        "Description": "User-provided description of the virtual machine."
+        "Description": "User-provided description of the virtual machine.",
+        "Computed": true
       },
       "boot_delay": {
         "Type": "Int",
@@ -3691,12 +3729,12 @@
                         "domain": {
                           "Type": "String",
                           "Required": true,
-                          "Description": "The FQDN for this virtual machine."
+                          "Description": "The domain name for this virtual machine."
                         },
                         "host_name": {
                           "Type": "String",
                           "Required": true,
-                          "Description": "The host name for this virtual machine."
+                          "Description": "The hostname for this virtual machine."
                         },
                         "hw_clock_utc": {
                           "Type": "Bool",
@@ -3706,6 +3744,11 @@
                             "Type": "bool",
                             "Value": "true"
                           }
+                        },
+                        "script_text": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The customization script to run before and or after guest customization"
                         },
                         "time_zone": {
                           "Type": "String",
@@ -4241,7 +4284,7 @@
       "firmware": {
         "Type": "String",
         "Optional": true,
-        "Description": "The firmware interface to use on the virtual machine. Can be one of bios or EFI.",
+        "Description": "The firmware interface to use on the virtual machine. Can be one of bios or efi.",
         "Default": {
           "Type": "string",
           "Value": "bios"
@@ -4385,7 +4428,7 @@
       },
       "moid": {
         "Type": "String",
-        "Description": "The machine object ID from VMWare",
+        "Description": "The machine object ID from VMware vSphere.",
         "Computed": true
       },
       "name": {
@@ -4580,6 +4623,11 @@
           "ElementsType": "String"
         }
       },
+      "power_state": {
+        "Type": "String",
+        "Description": "The power state of the virtual machine.",
+        "Computed": true
+      },
       "poweron_timeout": {
         "Type": "Int",
         "Optional": true,
@@ -4607,7 +4655,7 @@
       "run_tools_scripts_after_power_on": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of post-power-on scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts after virtual machine power-on when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -4616,7 +4664,7 @@
       "run_tools_scripts_after_resume": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of post-resume scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts after virtual machine resume when when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -4625,12 +4673,12 @@
       "run_tools_scripts_before_guest_reboot": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of pre-reboot scripts when VMware tools is installed."
+        "Description": "Enable the run of scripts before guest operating system reboot when VMware Tools is installed."
       },
       "run_tools_scripts_before_guest_shutdown": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of pre-shutdown scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts before guest operating system shutdown when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -4639,7 +4687,7 @@
       "run_tools_scripts_before_guest_standby": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of pre-standby scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts before guest operating system standby when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -4708,12 +4756,12 @@
       "sync_time_with_host": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable guest clock synchronization with the host. On vSphere 7 U1 and above, with only this setting the clock is synchronized on startup and resume so consider also setting `sync_time_with_host_periodically`. Requires VMware tools to be installed."
+        "Description": "Enable guest clock synchronization with the host. On vSphere 7.0 U1 and above, with only this setting the clock is synchronized on startup and resume. Requires VMware Tools to be installed."
       },
       "sync_time_with_host_periodically": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable periodic clock synchronization with the host. Supported only on vSphere 7 U1 and above. On older versions setting `sync_time_with_host` is enough for periodic synchronization. Requires VMware tools to be installed."
+        "Description": "Enable periodic clock synchronization with the host. Supported only on vSphere 7.0 U1 and above. On prior versions setting `sync_time_with_host` is enough for periodic synchronization. Requires VMware Tools to be installed."
       },
       "tags": {
         "Type": "Set",
@@ -4723,6 +4771,15 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "tools_upgrade_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Set the upgrade policy for VMware Tools. Can be one of `manual` or `upgradeAtPowerCycle`.",
+        "Default": {
+          "Type": "string",
+          "Value": "manual"
         }
       },
       "uuid": {
@@ -4770,7 +4827,7 @@
       },
       "vmware_tools_status": {
         "Type": "String",
-        "Description": "The state of VMware tools in the guest. This will determine the proper course of action for some device operations.",
+        "Description": "The state of VMware Tools in the guest. This will determine the proper course of action for some device operations.",
         "Computed": true
       },
       "vmx_path": {
@@ -5115,6 +5172,28 @@
         "Computed": true
       }
     },
+    "vsphere_compute_cluster_host_group": {
+      "compute_cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The managed object ID of the cluster."
+      },
+      "host_system_ids": {
+        "Type": "Set",
+        "Description": "The managed object IDs of the hosts.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The unique name of the host group in the cluster."
+      }
+    },
     "vsphere_content_library": {
       "name": {
         "Type": "String",
@@ -5298,6 +5377,41 @@
         }
       }
     },
+    "vsphere_license": {
+      "edition_key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "license_key": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "total": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "used": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
     "vsphere_network": {
       "datacenter_id": {
         "Type": "String",
@@ -5329,7 +5443,7 @@
       },
       "alternate_guest_name": {
         "Type": "String",
-        "Description": "The guest name for the operating system when guest_id is other or other-64.",
+        "Description": "The guest name for the operating system when guest_id is otherGuest or otherGuest64.",
         "Computed": true
       },
       "annotation": {
@@ -5378,7 +5492,7 @@
       },
       "firmware": {
         "Type": "String",
-        "Description": "The firmware interface to use on the virtual machine. Can be one of bios or EFI.",
+        "Description": "The firmware interface to use on the virtual machine. Can be one of bios or efi.",
         "Computed": true
       },
       "folder": {
@@ -5593,12 +5707,13 @@
       "alternate_guest_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The guest name for the operating system when guest_id is other or other-64."
+        "Description": "The guest name for the operating system when guest_id is otherGuest or otherGuest64."
       },
       "annotation": {
         "Type": "String",
         "Optional": true,
-        "Description": "User-provided description of the virtual machine."
+        "Description": "User-provided description of the virtual machine.",
+        "Computed": true
       },
       "boot_delay": {
         "Type": "Int",
@@ -5673,6 +5788,11 @@
         "Optional": true,
         "Description": "The managed object ID of the datacenter the virtual machine is in. This is not required when using ESXi directly, or if there is only one datacenter in your infrastructure."
       },
+      "default_ip_address": {
+        "Type": "String",
+        "Description": "The default IP address.",
+        "Computed": true
+      },
       "disks": {
         "Type": "List",
         "Description": "Select configuration attributes from the disks on this virtual machine, sorted by bus and unit number.",
@@ -5742,7 +5862,7 @@
       "firmware": {
         "Type": "String",
         "Optional": true,
-        "Description": "The firmware interface to use on the virtual machine. Can be one of bios or EFI.",
+        "Description": "The firmware interface to use on the virtual machine. Can be one of bios or efi.",
         "Default": {
           "Type": "string",
           "Value": "bios"
@@ -5842,7 +5962,7 @@
       },
       "name": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "The name of this virtual machine."
       },
       "nested_hv_enabled": {
@@ -5943,7 +6063,7 @@
       "run_tools_scripts_after_power_on": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of post-power-on scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts after virtual machine power-on when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -5952,7 +6072,7 @@
       "run_tools_scripts_after_resume": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of post-resume scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts after virtual machine resume when when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -5961,12 +6081,12 @@
       "run_tools_scripts_before_guest_reboot": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of pre-reboot scripts when VMware tools is installed."
+        "Description": "Enable the run of scripts before guest operating system reboot when VMware Tools is installed."
       },
       "run_tools_scripts_before_guest_shutdown": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of pre-shutdown scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts before guest operating system shutdown when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -5975,7 +6095,7 @@
       "run_tools_scripts_before_guest_standby": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable the execution of pre-standby scripts when VMware tools is installed.",
+        "Description": "Enable the run of scripts before guest operating system standby when VMware Tools is installed.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -6027,15 +6147,25 @@
       "sync_time_with_host": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable guest clock synchronization with the host. On vSphere 7 U1 and above, with only this setting the clock is synchronized on startup and resume so consider also setting `sync_time_with_host_periodically`. Requires VMware tools to be installed."
+        "Description": "Enable guest clock synchronization with the host. On vSphere 7.0 U1 and above, with only this setting the clock is synchronized on startup and resume. Requires VMware Tools to be installed."
       },
       "sync_time_with_host_periodically": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enable periodic clock synchronization with the host. Supported only on vSphere 7 U1 and above. On older versions setting `sync_time_with_host` is enough for periodic synchronization. Requires VMware tools to be installed."
+        "Description": "Enable periodic clock synchronization with the host. Supported only on vSphere 7.0 U1 and above. On prior versions setting `sync_time_with_host` is enough for periodic synchronization. Requires VMware Tools to be installed."
+      },
+      "tools_upgrade_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Set the upgrade policy for VMware Tools. Can be one of `manual` or `upgradeAtPowerCycle`.",
+        "Default": {
+          "Type": "string",
+          "Value": "manual"
+        }
       },
       "uuid": {
         "Type": "String",
+        "Optional": true,
         "Description": "The UUID of the virtual machine. Also exposed as the ID of the resource.",
         "Computed": true
       },

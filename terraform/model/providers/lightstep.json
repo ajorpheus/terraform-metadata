@@ -3,8 +3,13 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "lightstep",
   "type": "provider",
-  "version": "v1.51.2",
+  "version": "v1.62.0",
   "provider": {
+    "api_key": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The API Key for a Lightstep organization."
+    },
     "api_key_env_var": {
       "Type": "String",
       "Optional": true,
@@ -18,10 +23,7 @@
       "Type": "String",
       "Optional": true,
       "Description": "The name of the Lightstep environment, must be one of: staging, meta, public.",
-      "Default": {
-        "Type": "string",
-        "Value": "public"
-      }
+      "DefaultFunc": "ENV(LIGHTSTEP_ENV)"
     },
     "organization": {
       "Type": "String",
@@ -67,6 +69,17 @@
                 "ElementsType": "Map"
               }
             },
+            "filters": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Non-equality filters (operand: contains, regexp, etc)",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Map"
+              }
+            },
             "id": {
               "Type": "String",
               "Required": true
@@ -101,14 +114,6 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "evaluation_criteria": {
-              "Type": "String",
-              "Required": true
-            },
-            "evaluation_window": {
-              "Type": "String",
-              "Required": true
-            },
             "is_multi": {
               "Type": "Bool",
               "Optional": true,
@@ -124,10 +129,6 @@
                 "Type": "bool",
                 "Value": "false"
               }
-            },
-            "num_sec_per_point": {
-              "Type": "Int",
-              "Optional": true
             },
             "operand": {
               "Type": "String",
@@ -178,10 +179,45 @@
             "exclude_filters": {
               "Type": "List",
               "Optional": true,
+              "Description": "Not-equals filters (operand: neq)",
+              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "Map"
+              }
+            },
+            "filters": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Non-equality filters (operand: contains, regexp)",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Map"
+              }
+            },
+            "final_window_operation": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "input_window_ms": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "Unit specified in milliseconds, but must be at least 30,000 and a round number of seconds (i.e. evenly divisible by 1,000)"
+                  },
+                  "operator": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
               }
             },
             "group_by": {
@@ -216,6 +252,8 @@
             "include_filters": {
               "Type": "List",
               "Optional": true,
+              "Description": "Equality filters (operand: eq)",
+              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -224,19 +262,70 @@
             },
             "metric": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "query_name": {
               "Type": "String",
               "Required": true
             },
+            "spans": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "group_by_keys": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "latency_percentiles": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Float"
+                    }
+                  },
+                  "operator": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "operator_input_window_ms": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "query": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
             "timeseries_operator": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
+            },
+            "timeseries_operator_input_window_ms": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Unit specified in milliseconds, but must be at least 30,000 and a round number of seconds (i.e. evenly divisible by 1,000)"
             },
             "tql": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             }
           }
         }
@@ -256,7 +345,7 @@
     },
     "lightstep_metric_dashboard": {
       "chart": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -286,10 +375,45 @@
                   "exclude_filters": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Not-equals filters (operand: neq)",
+                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
                       "ElementsType": "Map"
+                    }
+                  },
+                  "filters": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Non-equality filters (operand: contains, regexp)",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Map"
+                    }
+                  },
+                  "final_window_operation": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "input_window_ms": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "Unit specified in milliseconds, but must be at least 30,000 and a round number of seconds (i.e. evenly divisible by 1,000)"
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
                     }
                   },
                   "group_by": {
@@ -324,6 +448,8 @@
                   "include_filters": {
                     "Type": "List",
                     "Optional": true,
+                    "Description": "Equality filters (operand: eq)",
+                    "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -332,19 +458,70 @@
                   },
                   "metric": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "query_name": {
                     "Type": "String",
                     "Required": true
                   },
+                  "spans": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_by_keys": {
+                          "Type": "List",
+                          "Optional": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "latency_percentiles": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "Float"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "operator_input_window_ms": {
+                          "Type": "Int",
+                          "Optional": true
+                        },
+                        "query": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "timeseries_operator": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "timeseries_operator_input_window_ms": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "Unit specified in milliseconds, but must be at least 30,000 and a round number of seconds (i.e. evenly divisible by 1,000)"
                   },
                   "tql": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -361,6 +538,7 @@
               "Type": "List",
               "Optional": true,
               "MaxItems": 1,
+              "Deprecated": "The y_axis field is no longer used",
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -492,19 +670,27 @@
     "lightstep_webhook_destination": {
       "custom_headers": {
         "Type": "Map",
-        "Optional": true
+        "Optional": true,
+        "Description": "Custom HTTP headers for the webhook request"
       },
       "destination_name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "Name of the webhook destination"
       },
       "project_name": {
         "Type": "String",
         "Required": true
       },
+      "template": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Webhook payload body text template. Used for customing webhook messages"
+      },
       "url": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "Webhook URL"
       }
     }
   },

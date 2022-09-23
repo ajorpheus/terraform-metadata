@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "illumio-core",
   "type": "provider",
-  "version": "v0.1.1",
+  "version": "v1.0.1",
   "provider": {
     "api_secret": {
       "Type": "String",
@@ -50,11 +50,8 @@
     "org_id": {
       "Type": "Int",
       "Optional": true,
-      "Description": "ID of the Organization. Default value: 1",
-      "Default": {
-        "Type": "int",
-        "Value": "1"
-      }
+      "Description": "ID of the Organization. Can also be set by environment variable `ILLUMIO_PCE_ORG_ID`. Default value: 1",
+      "DefaultFunc": "UNKNOWN"
     },
     "pce_host": {
       "Type": "String",
@@ -222,12 +219,12 @@
       },
       "created_at": {
         "Type": "String",
-        "Description": "Timestamp when this label group was first created",
+        "Description": "Timestamp when this container workload profile was first created",
         "Computed": true
       },
       "created_by": {
         "Type": "Map",
-        "Description": "User who created this label group",
+        "Description": "User who created this container workload profile",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -343,12 +340,12 @@
       },
       "updated_at": {
         "Type": "String",
-        "Description": "Timestamp when this label group was last updated",
+        "Description": "Timestamp when this container workload profile was last updated",
         "Computed": true
       },
       "updated_by": {
         "Type": "Map",
-        "Description": "User who last updated this label group",
+        "Description": "User who last updated this container workload profile",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -1207,6 +1204,595 @@
         }
       }
     },
+    "illumio-core_managed_workload": {
+      "agent_to_pce_certificate_authentication_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PKI Certificate identifier to be used by the PCE for authenticating the VEN. The ID should be between 1 to 255 characters"
+      },
+      "blocked_connection_action": {
+        "Type": "String",
+        "Description": "Blocked Connection Action for Workload",
+        "Computed": true
+      },
+      "caps": {
+        "Type": "List",
+        "Description": "CAPS for Workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "container_cluster": {
+        "Type": "List",
+        "Description": "Container Cluster for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Description": "URI of container cluster",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of container cluster",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "containers_inherit_host_policy": {
+        "Type": "Bool",
+        "Description": "This workload will apply the policy it receives both to itself and the containers hosted by it",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Timestamp when this workload was first created",
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "Map",
+        "Description": "User who created this workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "data_center": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Data center for Workload. The data_center should be up to 255 characters"
+      },
+      "data_center_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Data center Zone for Workload. The data_center_zone should be up to 255 characters"
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Description": "This indicates that the workload has been deleted",
+        "Computed": true
+      },
+      "deleted_at": {
+        "Type": "String",
+        "Description": "Timestamp when this workload was last deleted",
+        "Computed": true
+      },
+      "deleted_by": {
+        "Type": "Map",
+        "Description": "User who deleted this workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The long description of the workload"
+      },
+      "detected_vulnerabilities": {
+        "Type": "List",
+        "Description": "Detected Vulnerabilities for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ip_address": {
+              "Type": "String",
+              "Description": "The IP address of the host where the vulnerability is found",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "The port that is associated with the vulnerability",
+              "Computed": true
+            },
+            "port_exposure": {
+              "Type": "Int",
+              "Description": "The exposure of the port based on the current policy",
+              "Computed": true
+            },
+            "port_wide_exposure": {
+              "Type": "List",
+              "Description": "High end of an IP range",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "any": {
+                    "Type": "Bool",
+                    "Description": "The boolean value representing if at least one port is exposed to internet (any rule) on the workload",
+                    "Computed": true
+                  },
+                  "ip_list": {
+                    "Type": "Bool",
+                    "Description": "The boolean value representing if at least one port is exposed to ip_list(s) on the workload",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "proto": {
+              "Type": "Int",
+              "Description": "The protocol that is associated with the vulnerability",
+              "Computed": true
+            },
+            "vulnerability": {
+              "Type": "Set",
+              "Description": "Vulnerability for Workload",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The URI of the vulnerability class to which this vulnerability belongs to"
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The title/name of the vulnerability"
+                  },
+                  "score": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "The normalized score of the vulnerability within the range of 0 to 100"
+                  }
+                }
+              }
+            },
+            "vulnerability_report": {
+              "Type": "Set",
+              "Description": "Vulnerability Report for Workload",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Description": "The URI of the report to which this vulnerability belongs to",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "workload": {
+              "Type": "List",
+              "Description": "URI of Workload",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The URI of the workload to which this vulnerability belongs to"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "distinguished_name": {
+        "Type": "String",
+        "Description": "X.509 Subject distinguished name. The name should be up to 255 characters",
+        "Computed": true
+      },
+      "enforcement_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enforcement mode of workload(s) to return. Allowed values for enforcement modes are \"idle\",\"visibility_only\",\"full\", and \"selective\". Default value: \"visibility_only\" ",
+        "Default": {
+          "Type": "string",
+          "Value": "visibility_only"
+        }
+      },
+      "external_data_reference": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A unique identifier within the external data source"
+      },
+      "external_data_set": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The data source from which a resource originates"
+      },
+      "firewall_coexistence": {
+        "Type": "List",
+        "Description": "Firewall coexistence mode for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "illumio_primary": {
+              "Type": "Bool",
+              "Description": "Illumio is the primary firewall if set to true",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "hostname": {
+        "Type": "String",
+        "Description": "The hostname of this workload. Set by the VEN.",
+        "Computed": true
+      },
+      "href": {
+        "Type": "String",
+        "Description": "URI of the Workload",
+        "Computed": true
+      },
+      "ignored_interface_names": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Workload interface names to ignore (e.g. `eth0`). Ignored interfaces will not be included in policy configuration provided by the PCE.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ike_authentication_certificate": {
+        "Type": "Map",
+        "Description": "IKE authentication certificate for certificate-based Secure Connect and Machine Auth",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "interfaces": {
+        "Type": "Set",
+        "Description": "Workload network interfaces",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "address": {
+              "Type": "String",
+              "Description": "Interface IP address",
+              "Computed": true
+            },
+            "cidr_block": {
+              "Type": "Int",
+              "Description": "Interface CIDR block bits",
+              "Computed": true
+            },
+            "default_gateway_address": {
+              "Type": "String",
+              "Description": "Interface Default Gateway IP address",
+              "Computed": true
+            },
+            "friendly_name": {
+              "Type": "String",
+              "Description": "User-friendly interface name",
+              "Computed": true
+            },
+            "link_state": {
+              "Type": "String",
+              "Description": "Interface link state. Can be \"up\", \"down\", or \"unknown\" ",
+              "Computed": true
+            },
+            "loopback": {
+              "Type": "Bool",
+              "Description": "Whether or not the interface represents a loopback address on the workload",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Interface name",
+              "Computed": true
+            },
+            "network": {
+              "Type": "Map",
+              "Description": "Interface Network HREFs",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "network_detection_mode": {
+              "Type": "String",
+              "Description": "Interface Network Detection Mode",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "labels": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Assigned labels for workload",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Required": true,
+              "Description": "URI of label"
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the Workload. The name should be up to 255 characters"
+      },
+      "online": {
+        "Type": "Bool",
+        "Description": "Determines if this workload is online. Set by the VEN.",
+        "Computed": true
+      },
+      "os_detail": {
+        "Type": "String",
+        "Description": "Additional OS details - just displayed to end-user. Set by the VEN.",
+        "Computed": true
+      },
+      "os_id": {
+        "Type": "String",
+        "Description": "OS identifier for Workload. Set by the VEN.",
+        "Computed": true
+      },
+      "public_ip": {
+        "Type": "String",
+        "Description": "The public IP address of the server. Set by the VEN.",
+        "Computed": true
+      },
+      "selectively_enforced_services": {
+        "Type": "List",
+        "Description": "Selectively Enforced Services for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Description": "URI of service",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "Port number used with protocol. Also, the starting port when specifying a range",
+              "Computed": true
+            },
+            "proto": {
+              "Type": "Int",
+              "Description": "Protocol number",
+              "Computed": true
+            },
+            "to_port": {
+              "Type": "Int",
+              "Description": "Upper end of port range",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "service_principal_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Kerberos Service Principal Name (SPN). The SPN should be between 1 to 255 characters"
+      },
+      "service_provider": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Service provider for Workload. The service_provider should be up to 255 characters"
+      },
+      "services": {
+        "Type": "List",
+        "Description": "Service report for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_at": {
+              "Type": "String",
+              "Description": "Timestamp when this service was first created",
+              "Computed": true
+            },
+            "open_service_ports": {
+              "Type": "List",
+              "Description": "A list of open ports",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "address": {
+                    "Type": "String",
+                    "Description": "The local address this service is bound to",
+                    "Computed": true
+                  },
+                  "package": {
+                    "Type": "String",
+                    "Description": "The RPM/DEB package that the program is part of",
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "Int",
+                    "Description": "The local port this service is bound to",
+                    "Computed": true
+                  },
+                  "process_name": {
+                    "Type": "String",
+                    "Description": "The process name (including the full path)",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "Int",
+                    "Description": "Transport protocol for open service ports",
+                    "Computed": true
+                  },
+                  "user": {
+                    "Type": "String",
+                    "Description": "The user account that the process is running under",
+                    "Computed": true
+                  },
+                  "win_service_name": {
+                    "Type": "String",
+                    "Description": "Name of the Windows service",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "uptime_seconds": {
+              "Type": "Int",
+              "Description": "How long since the last reboot of this box - used as a timestamp for this",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "updated_at": {
+        "Type": "String",
+        "Description": "Timestamp when this workload was last updated",
+        "Computed": true
+      },
+      "updated_by": {
+        "Type": "Map",
+        "Description": "User who last updated this workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ven": {
+        "Type": "Map",
+        "Description": "VEN for Workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "visibility_level": {
+        "Type": "String",
+        "Description": "Visibility Level of workload(s) to return",
+        "Computed": true
+      },
+      "vulnerabilities_summary": {
+        "Type": "List",
+        "Description": "Vulnerabilities summary associated with the workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "max_vulnerability_score": {
+              "Type": "Int",
+              "Description": "The maximum of all the vulnerability scores associated with the detected_vulnerabilities on the workload",
+              "Computed": true
+            },
+            "num_vulnerabilities": {
+              "Type": "Int",
+              "Description": "Number of vulnerabilities associated with the workload",
+              "Computed": true
+            },
+            "vulnerability_exposure_score": {
+              "Type": "Int",
+              "Description": "The aggregated vulnerability exposure score of the workload across all the vulnerable ports",
+              "Computed": true
+            },
+            "vulnerability_score": {
+              "Type": "Int",
+              "Description": "HThe aggregated vulnerability score of the workload across all the vulnerable ports",
+              "Computed": true
+            },
+            "vulnerable_port_exposure": {
+              "Type": "Int",
+              "Description": "The aggregated vulnerability port exposure score of the workload across all the vulnerable ports",
+              "Computed": true
+            },
+            "vulnerable_port_wide_exposure": {
+              "Type": "List",
+              "Description": "High end of an IP range",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "any": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "The boolean value representing if at least one port is exposed to internet (any rule) on the workload"
+                  },
+                  "ip_list": {
+                    "Type": "Bool",
+                    "Description": "The boolean value representing if at least one port is exposed to ip_list(s) on the workload",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "illumio-core_organization_settings": {
       "audit_event_min_severity": {
         "Type": "String",
@@ -2000,7 +2586,7 @@
       "machine_auth": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Determines whether machine authentication is enabled. Defaule Value: false",
+        "Description": "Determines whether machine authentication is enabled. Default value: false",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -2174,7 +2760,7 @@
       "sec_connect": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Determines whether a secure connection is established. Defaule Value: false",
+        "Description": "Determines whether a secure connection is established. Default value: false",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -2183,7 +2769,7 @@
       "stateless": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Determines whether packet filtering is stateless for the rule. Defaule Value: false",
+        "Description": "Determines whether packet filtering is stateless for the rule. Default value: false",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -2192,7 +2778,7 @@
       "unscoped_consumers": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Set the scope for rule consumers to All. Defaule Value: false",
+        "Description": "If false (the default), the created Rule will be an intra-scope rule. If true, it will be extra-scope. Default value: false",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -2312,7 +2898,7 @@
             "proto": {
               "Type": "String",
               "Required": true,
-              "Description": "Transport protocol. Allowed values are -1, 1, 2, 4, 6, 17, 47, 58 and 94"
+              "Description": "Transport protocol. IANA protocol numbers between 0-255 are permitted, and -1 represents all services."
             },
             "to_port": {
               "Type": "String",
@@ -2377,7 +2963,7 @@
             "proto": {
               "Type": "String",
               "Optional": true,
-              "Description": "Transport protocol. Allowed values are -1, 1, 2, 4, 6, 17, 47, 58 and 94"
+              "Description": "Transport protocol. IANA protocol numbers between 0-255 are permitted, and -1 represents all services."
             },
             "service_name": {
               "Type": "String",
@@ -2718,6 +3304,600 @@
         "Type": "String",
         "Required": true,
         "Description": "transmission type. Allowed values are \"broadcast\" and \"multicast\""
+      }
+    },
+    "illumio-core_unmanaged_workload": {
+      "agent_to_pce_certificate_authentication_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PKI Certificate identifier to be used by the PCE for authenticating the VEN. The ID should be between 1 to 255 characters"
+      },
+      "blocked_connection_action": {
+        "Type": "String",
+        "Description": "Blocked Connection Action for Workload",
+        "Computed": true
+      },
+      "caps": {
+        "Type": "List",
+        "Description": "CAPS for Workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "container_cluster": {
+        "Type": "List",
+        "Description": "Container Cluster for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Description": "URI of container cluster",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of container cluster",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "containers_inherit_host_policy": {
+        "Type": "Bool",
+        "Description": "This workload will apply the policy it receives both to itself and the containers hosted by it",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Timestamp when this workload was first created",
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "Map",
+        "Description": "User who created this workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "data_center": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Data center for Workload. The data_center should be up to 255 characters"
+      },
+      "data_center_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Data center Zone for Workload. The data_center_zone should be up to 255 characters"
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Description": "This indicates that the workload has been deleted",
+        "Computed": true
+      },
+      "deleted_at": {
+        "Type": "String",
+        "Description": "Timestamp when this workload was last deleted",
+        "Computed": true
+      },
+      "deleted_by": {
+        "Type": "Map",
+        "Description": "User who deleted this workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The long description of the workload"
+      },
+      "detected_vulnerabilities": {
+        "Type": "List",
+        "Description": "Detected Vulnerabilities for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ip_address": {
+              "Type": "String",
+              "Description": "The IP address of the host where the vulnerability is found",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "The port that is associated with the vulnerability",
+              "Computed": true
+            },
+            "port_exposure": {
+              "Type": "Int",
+              "Description": "The exposure of the port based on the current policy",
+              "Computed": true
+            },
+            "port_wide_exposure": {
+              "Type": "List",
+              "Description": "High end of an IP range",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "any": {
+                    "Type": "Bool",
+                    "Description": "The boolean value representing if at least one port is exposed to internet (any rule) on the workload",
+                    "Computed": true
+                  },
+                  "ip_list": {
+                    "Type": "Bool",
+                    "Description": "The boolean value representing if at least one port is exposed to ip_list(s) on the workload",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "proto": {
+              "Type": "Int",
+              "Description": "The protocol that is associated with the vulnerability",
+              "Computed": true
+            },
+            "vulnerability": {
+              "Type": "Set",
+              "Description": "Vulnerability for Workload",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The URI of the vulnerability class to which this vulnerability belongs to"
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The title/name of the vulnerability"
+                  },
+                  "score": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "The normalized score of the vulnerability within the range of 0 to 100"
+                  }
+                }
+              }
+            },
+            "vulnerability_report": {
+              "Type": "Set",
+              "Description": "Vulnerability Report for Workload",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Description": "The URI of the report to which this vulnerability belongs to",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "workload": {
+              "Type": "List",
+              "Description": "URI of Workload",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The URI of the workload to which this vulnerability belongs to"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "distinguished_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "X.509 Subject distinguished name. The name should be up to 255 characters"
+      },
+      "enforcement_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enforcement mode of workload(s) to return. Allowed values for enforcement modes are \"idle\",\"visibility_only\",\"full\", and \"selective\". Default value: \"visibility_only\" ",
+        "Default": {
+          "Type": "string",
+          "Value": "visibility_only"
+        }
+      },
+      "external_data_reference": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A unique identifier within the external data source"
+      },
+      "external_data_set": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The data source from which a resource originates"
+      },
+      "firewall_coexistence": {
+        "Type": "List",
+        "Description": "Firewall coexistence mode for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "illumio_primary": {
+              "Type": "Bool",
+              "Description": "Illumio is the primary firewall if set to true",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "hostname": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The hostname of this workload. The hostname should be up to 255 characters"
+      },
+      "href": {
+        "Type": "String",
+        "Description": "URI of the Workload",
+        "Computed": true
+      },
+      "ignored_interface_names": {
+        "Type": "List",
+        "Description": "Ignored Interface Names for Workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ike_authentication_certificate": {
+        "Type": "Map",
+        "Description": "IKE authentication certificate for certificate-based Secure Connect and Machine Auth",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "interfaces": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Workload network interfaces",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "address": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Interface IP address. Must be in IPv4 or IPv6 format"
+            },
+            "cidr_block": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Interface CIDR block bits"
+            },
+            "default_gateway_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Interface Default Gateway IP address. Must be in IPv4 or IPv6 format"
+            },
+            "friendly_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "User-friendly interface name. Can be up to 255 characters"
+            },
+            "link_state": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Interface link state. Allowed values are \"up\", \"down\", and \"unknown\""
+            },
+            "loopback": {
+              "Type": "Bool",
+              "Description": "Whether or not the interface represents a loopback address on the workload",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Interface name. Can be up to 255 characters"
+            },
+            "network": {
+              "Type": "Map",
+              "Description": "Interface Network HREFs",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "network_detection_mode": {
+              "Type": "String",
+              "Description": "Interface Network Detection Mode",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "labels": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Assigned labels for workload",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Required": true,
+              "Description": "URI of label"
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the Workload. The name should be up to 255 characters"
+      },
+      "online": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines if this workload is online. Default value: true",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "os_detail": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional OS details - just displayed to end-user. The os_details should be up to 255 characters"
+      },
+      "os_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "OS identifier for Workload. The os_id should be up to 255 characters"
+      },
+      "public_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The public IP address of the server. The public IP should in the IPv4 or IPv6 format",
+        "Computed": true
+      },
+      "selectively_enforced_services": {
+        "Type": "List",
+        "Description": "Selectively Enforced Services for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Description": "URI of service",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "Port number used with protocol. Also, the starting port when specifying a range",
+              "Computed": true
+            },
+            "proto": {
+              "Type": "Int",
+              "Description": "Protocol number",
+              "Computed": true
+            },
+            "to_port": {
+              "Type": "Int",
+              "Description": "Upper end of port range",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "service_principal_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Kerberos Service Principal Name (SPN). The SPN should be between 1 to 255 characters"
+      },
+      "service_provider": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Service provider for Workload. The service_provider should be up to 255 characters"
+      },
+      "services": {
+        "Type": "List",
+        "Description": "Service report for Workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_at": {
+              "Type": "String",
+              "Description": "Timestamp when this service was first created",
+              "Computed": true
+            },
+            "open_service_ports": {
+              "Type": "List",
+              "Description": "A list of open ports",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "address": {
+                    "Type": "String",
+                    "Description": "The local address this service is bound to",
+                    "Computed": true
+                  },
+                  "package": {
+                    "Type": "String",
+                    "Description": "The RPM/DEB package that the program is part of",
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "Int",
+                    "Description": "The local port this service is bound to",
+                    "Computed": true
+                  },
+                  "process_name": {
+                    "Type": "String",
+                    "Description": "The process name (including the full path)",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "Int",
+                    "Description": "Transport protocol for open service ports",
+                    "Computed": true
+                  },
+                  "user": {
+                    "Type": "String",
+                    "Description": "The user account that the process is running under",
+                    "Computed": true
+                  },
+                  "win_service_name": {
+                    "Type": "String",
+                    "Description": "Name of the Windows service",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "uptime_seconds": {
+              "Type": "Int",
+              "Description": "How long since the last reboot of this box - used as a timestamp for this",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "updated_at": {
+        "Type": "String",
+        "Description": "Timestamp when this workload was last updated",
+        "Computed": true
+      },
+      "updated_by": {
+        "Type": "Map",
+        "Description": "User who last updated this workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ven": {
+        "Type": "Map",
+        "Description": "VENS for Workload",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "visibility_level": {
+        "Type": "String",
+        "Description": "Visibility Level of workload(s) to return",
+        "Computed": true
+      },
+      "vulnerabilities_summary": {
+        "Type": "List",
+        "Description": "Vulnerabilities summary associated with the workload",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "max_vulnerability_score": {
+              "Type": "Int",
+              "Description": "The maximum of all the vulnerability scores associated with the detected_vulnerabilities on the workload",
+              "Computed": true
+            },
+            "num_vulnerabilities": {
+              "Type": "Int",
+              "Description": "Number of vulnerabilities associated with the workload",
+              "Computed": true
+            },
+            "vulnerability_exposure_score": {
+              "Type": "Int",
+              "Description": "The aggregated vulnerability exposure score of the workload across all the vulnerable ports",
+              "Computed": true
+            },
+            "vulnerability_score": {
+              "Type": "Int",
+              "Description": "HThe aggregated vulnerability score of the workload across all the vulnerable ports",
+              "Computed": true
+            },
+            "vulnerable_port_exposure": {
+              "Type": "Int",
+              "Description": "The aggregated vulnerability port exposure score of the workload across all the vulnerable ports",
+              "Computed": true
+            },
+            "vulnerable_port_wide_exposure": {
+              "Type": "List",
+              "Description": "High end of an IP range",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "any": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "The boolean value representing if at least one port is exposed to internet (any rule) on the workload"
+                  },
+                  "ip_list": {
+                    "Type": "Bool",
+                    "Description": "The boolean value representing if at least one port is exposed to ip_list(s) on the workload",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "illumio-core_ven": {
@@ -3203,60 +4383,6 @@
         }
       }
     },
-    "illumio-core_vens_unpair": {
-      "firewall_restore": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The strategy to use to restore the firewall state after the VEN is uninstalled. Allowed values are \"saved\", \"default\" and \"disable\". Default value: \"default\"",
-        "Default": {
-          "Type": "string",
-          "Value": "default"
-        }
-      },
-      "vens": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "List of VENs to unpair. Max Items allowed: 1000",
-        "MinItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "href": {
-              "Type": "String",
-              "Required": true,
-              "Description": "URI of VEN"
-            }
-          }
-        }
-      }
-    },
-    "illumio-core_vens_upgrade": {
-      "release": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The software release to upgrade to"
-      },
-      "vens": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "List of VENs to unpair. Max Items allowed: 25000",
-        "MinItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "href": {
-              "Type": "String",
-              "Required": true,
-              "Description": "URI of VEN"
-            }
-          }
-        }
-      }
-    },
     "illumio-core_virtual_service": {
       "apply_to": {
         "Type": "String",
@@ -3661,600 +4787,6 @@
         }
       }
     },
-    "illumio-core_workload": {
-      "agent_to_pce_certificate_authentication_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "PKI Certificate identifier to be used by the PCE for authenticating the VEN. The ID should be between 1 to 255 characters"
-      },
-      "blocked_connection_action": {
-        "Type": "String",
-        "Description": "Blocked Connection Action for Workload",
-        "Computed": true
-      },
-      "caps": {
-        "Type": "List",
-        "Description": "CAPS for Workload",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "container_cluster": {
-        "Type": "List",
-        "Description": "Container Cluster for Workload",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "href": {
-              "Type": "String",
-              "Description": "URI of container cluster",
-              "Computed": true
-            },
-            "name": {
-              "Type": "String",
-              "Description": "Name of container cluster",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "containers_inherit_host_policy": {
-        "Type": "Bool",
-        "Description": "This workload will apply the policy it receives both to itself and the containers hosted by it",
-        "Computed": true
-      },
-      "created_at": {
-        "Type": "String",
-        "Description": "Timestamp when this label group was first created",
-        "Computed": true
-      },
-      "created_by": {
-        "Type": "Map",
-        "Description": "User who created this label group",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "data_center": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Data center for Workload. The data_center should be up to 255 characters"
-      },
-      "data_center_zone": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Data center Zone for Workload. The data_center_zone should be up to 255 characters"
-      },
-      "deleted": {
-        "Type": "Bool",
-        "Description": "This indicates that the workload has been deleted",
-        "Computed": true
-      },
-      "deleted_at": {
-        "Type": "String",
-        "Description": "Timestamp when this label group was last deleted",
-        "Computed": true
-      },
-      "deleted_by": {
-        "Type": "Map",
-        "Description": "User who deleted this label group",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "description": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The long description of the workload"
-      },
-      "detected_vulnerabilities": {
-        "Type": "List",
-        "Description": "Detected Vulnerabilities for Workload",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "ip_address": {
-              "Type": "String",
-              "Description": "The IP address of the host where the vulnerability is found",
-              "Computed": true
-            },
-            "port": {
-              "Type": "Int",
-              "Description": "The port that is associated with the vulnerability",
-              "Computed": true
-            },
-            "port_exposure": {
-              "Type": "Int",
-              "Description": "The exposure of the port based on the current policy",
-              "Computed": true
-            },
-            "port_wide_exposure": {
-              "Type": "List",
-              "Description": "High end of an IP range",
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "any": {
-                    "Type": "Bool",
-                    "Description": "The boolean value representing if at least one port is exposed to internet (any rule) on the workload",
-                    "Computed": true
-                  },
-                  "ip_list": {
-                    "Type": "Bool",
-                    "Description": "The boolean value representing if at least one port is exposed to ip_list(s) on the workload",
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "proto": {
-              "Type": "Int",
-              "Description": "The protocol that is associated with the vulnerability",
-              "Computed": true
-            },
-            "vulnerability": {
-              "Type": "Set",
-              "Description": "Vulnerability for Workload",
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "href": {
-                    "Type": "String",
-                    "Required": true,
-                    "Description": "The URI of the vulnerability class to which this vulnerability belongs to"
-                  },
-                  "name": {
-                    "Type": "String",
-                    "Required": true,
-                    "Description": "The title/name of the vulnerability"
-                  },
-                  "score": {
-                    "Type": "Int",
-                    "Required": true,
-                    "Description": "The normalized score of the vulnerability within the range of 0 to 100"
-                  }
-                }
-              }
-            },
-            "vulnerability_report": {
-              "Type": "Set",
-              "Description": "Vulnerability Report for Workload",
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "href": {
-                    "Type": "String",
-                    "Description": "The URI of the report to which this vulnerability belongs to",
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "workload": {
-              "Type": "List",
-              "Description": "URI of Workload",
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "href": {
-                    "Type": "String",
-                    "Required": true,
-                    "Description": "The URI of the workload to which this vulnerability belongs to"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "distinguished_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "X.509 Subject distinguished name. The name should be up to 255 characters"
-      },
-      "enforcement_mode": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Enforcement mode of workload(s) to return. Allowed values for enforcement modes are \"idle\",\"visibility_only\",\"full\", and \"selective\". Default value: \"visibility_only\" ",
-        "Default": {
-          "Type": "string",
-          "Value": "visibility_only"
-        }
-      },
-      "external_data_reference": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A unique identifier within the external data source"
-      },
-      "external_data_set": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The data source from which a resource originates"
-      },
-      "firewall_coexistence": {
-        "Type": "List",
-        "Description": "Firewall coexistence mode for Workload",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "illumio_primary": {
-              "Type": "Bool",
-              "Description": "Illumio is the primary firewall if set to true",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "hostname": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The hostname of this workload. The hostname should be up to 255 characters"
-      },
-      "href": {
-        "Type": "String",
-        "Description": "URI of the Workload",
-        "Computed": true
-      },
-      "ignored_interface_names": {
-        "Type": "List",
-        "Description": "Ignored Interface Names for Workload",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "ike_authentication_certificate": {
-        "Type": "Map",
-        "Description": "IKE authentication certificate for certificate-based Secure Connect and Machine Auth",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "labels": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Assigned labels for workload",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "href": {
-              "Type": "String",
-              "Required": true,
-              "Description": "URI of label"
-            }
-          }
-        }
-      },
-      "name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Name of the Workload. The name should be up to 255 characters"
-      },
-      "online": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Determines if this workload is online. Default value: false",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "os_detail": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Additional OS details - just displayed to end-user. The os_details should be up to 255 characters"
-      },
-      "os_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "OS identifier for Workload. The os_id should be up to 255 characters"
-      },
-      "public_ip": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The public IP address of the server. The public IP should in the IPv4 or IPv6 format",
-        "Computed": true
-      },
-      "selectively_enforced_services": {
-        "Type": "List",
-        "Description": "Selectively Enforced Services for Workload",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "href": {
-              "Type": "String",
-              "Description": "URI of service",
-              "Computed": true
-            },
-            "port": {
-              "Type": "Int",
-              "Description": "Port number used with protocol. Also, the starting port when specifying a range",
-              "Computed": true
-            },
-            "proto": {
-              "Type": "Int",
-              "Description": "Protocol number",
-              "Computed": true
-            },
-            "to_port": {
-              "Type": "Int",
-              "Description": "Upper end of port range",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "service_principal_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The Kerberos Service Principal Name (SPN). The SPN should be between 1 to 255 characters"
-      },
-      "service_provider": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Service provider for Workload. The service_provider should be up to 255 characters"
-      },
-      "services": {
-        "Type": "List",
-        "Description": "Service report for Workload",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "created_at": {
-              "Type": "String",
-              "Description": "Timestamp when this service was first created",
-              "Computed": true
-            },
-            "open_service_ports": {
-              "Type": "List",
-              "Description": "A list of open ports",
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "address": {
-                    "Type": "String",
-                    "Description": "The local address this service is bound to",
-                    "Computed": true
-                  },
-                  "package": {
-                    "Type": "String",
-                    "Description": "The RPM/DEB package that the program is part of",
-                    "Computed": true
-                  },
-                  "port": {
-                    "Type": "Int",
-                    "Description": "The local port this service is bound to",
-                    "Computed": true
-                  },
-                  "process_name": {
-                    "Type": "String",
-                    "Description": "The process name (including the full path)",
-                    "Computed": true
-                  },
-                  "protocol": {
-                    "Type": "Int",
-                    "Description": "Transport protocol for open service ports",
-                    "Computed": true
-                  },
-                  "user": {
-                    "Type": "String",
-                    "Description": "The user account that the process is running under",
-                    "Computed": true
-                  },
-                  "win_service_name": {
-                    "Type": "String",
-                    "Description": "Name of the Windows service",
-                    "Computed": true
-                  }
-                }
-              }
-            },
-            "uptime_seconds": {
-              "Type": "Int",
-              "Description": "How long since the last reboot of this box - used as a timestamp for this",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "updated_at": {
-        "Type": "String",
-        "Description": "Timestamp when this label group was last updated",
-        "Computed": true
-      },
-      "updated_by": {
-        "Type": "Map",
-        "Description": "User who last updated this label group",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "ven": {
-        "Type": "Map",
-        "Description": "VENS for Workload",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "visibility_level": {
-        "Type": "String",
-        "Description": "Visibility Level of workload(s) to return",
-        "Computed": true
-      },
-      "vulnerabilities_summary": {
-        "Type": "List",
-        "Description": "Vulnerabilities summary associated with the workload",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "max_vulnerability_score": {
-              "Type": "Int",
-              "Description": "The maximum of all the vulnerability scores associated with the detected_vulnerabilities on the workload",
-              "Computed": true
-            },
-            "num_vulnerabilities": {
-              "Type": "Int",
-              "Description": "Number of vulnerabilities associated with the workload",
-              "Computed": true
-            },
-            "vulnerability_exposure_score": {
-              "Type": "Int",
-              "Description": "The aggregated vulnerability exposure score of the workload across all the vulnerable ports",
-              "Computed": true
-            },
-            "vulnerability_score": {
-              "Type": "Int",
-              "Description": "HThe aggregated vulnerability score of the workload across all the vulnerable ports",
-              "Computed": true
-            },
-            "vulnerable_port_exposure": {
-              "Type": "Int",
-              "Description": "The aggregated vulnerability port exposure score of the workload across all the vulnerable ports",
-              "Computed": true
-            },
-            "vulnerable_port_wide_exposure": {
-              "Type": "List",
-              "Description": "High end of an IP range",
-              "Computed": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "ComputedBlock",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "any": {
-                    "Type": "Bool",
-                    "Required": true,
-                    "Description": "The boolean value representing if at least one port is exposed to internet (any rule) on the workload"
-                  },
-                  "ip_list": {
-                    "Type": "Bool",
-                    "Description": "The boolean value representing if at least one port is exposed to ip_list(s) on the workload",
-                    "Computed": true
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "illumio-core_workload_interface": {
-      "address": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The IP Address to assign to this interface. The address should in the IPv4 or IPv6 format"
-      },
-      "cidr_block": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "CIDR BLOCK of the Workload Interface"
-      },
-      "default_gateway_address": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The IP Address of the default gateway. The Default Gateway Address should in the IPv4 or IPv6 format"
-      },
-      "friendly_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "User-friendly name for Workload Interface"
-      },
-      "href": {
-        "Type": "String",
-        "Description": "URI of the Workload Interface",
-        "Computed": true
-      },
-      "link_state": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Link State for Workload Interface. Allowed values are \"up\", \"down\", and \"unknown\" "
-      },
-      "loopback": {
-        "Type": "Bool",
-        "Description": "Loopback for Workload Interface",
-        "Computed": true
-      },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Name of the Workload Interface. The name should be between 1 to 255 characters"
-      },
-      "network": {
-        "Type": "Map",
-        "Description": "Href of Network for the Workload Interface",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "network_detection_mode": {
-        "Type": "String",
-        "Description": "Network Detection Mode for Workload Interface",
-        "Computed": true
-      },
-      "workload_href": {
-        "Type": "String",
-        "Required": true,
-        "Description": "URI of Workload"
-      }
-    },
     "illumio-core_workload_settings": {
       "href": {
         "Type": "String",
@@ -4325,35 +4857,6 @@
               "Type": "Int",
               "Optional": true,
               "Description": "Property value associated with the scope. Allowed range is 300 - 2147483647 or -1"
-            }
-          }
-        }
-      }
-    },
-    "illumio-core_workloads_unpair": {
-      "ip_table_restore": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The desired state of IP tables after the agent is uninstalled. Allowed values are \"saved\", \"default\" and \"disable\". Default value: \"default\"",
-        "Default": {
-          "Type": "string",
-          "Value": "default"
-        }
-      },
-      "workloads": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "List of Workloads to unpair. Max Items allowed: 1000",
-        "MinItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "href": {
-              "Type": "String",
-              "Required": true,
-              "Description": "URI of Workload"
             }
           }
         }
@@ -9367,7 +9870,7 @@
       "proto": {
         "Type": "String",
         "Optional": true,
-        "Description": "Protocol to filter on. Allowed values are -1, 1, 2, 4, 6, 17, 47, 58 and 94"
+        "Description": "Protocol to filter on. IANA protocol numbers between 0-255 are permitted, and -1 represents all services."
       },
       "pversion": {
         "Type": "String",
@@ -12262,63 +12765,6 @@
             }
           }
         }
-      }
-    },
-    "illumio-core_workload_interface": {
-      "address": {
-        "Type": "String",
-        "Description": "The IP Address to assign to this interface\t\t\t\t",
-        "Computed": true
-      },
-      "cidr_block": {
-        "Type": "Int",
-        "Description": "The number of bits in the subnet /24 is 255.255.255.0",
-        "Computed": true
-      },
-      "default_gateway_address": {
-        "Type": "String",
-        "Description": "The IP Address of the default gateway",
-        "Computed": true
-      },
-      "friendly_name": {
-        "Type": "String",
-        "Description": "User-friendly name for Workload Interface",
-        "Computed": true
-      },
-      "href": {
-        "Type": "String",
-        "Required": true,
-        "Description": "URI of the Workload Interface"
-      },
-      "link_state": {
-        "Type": "String",
-        "Description": "Link State for Workload Interface",
-        "Computed": true
-      },
-      "loopback": {
-        "Type": "Bool",
-        "Description": "Loopback for Workload Interface",
-        "Computed": true
-      },
-      "name": {
-        "Type": "String",
-        "Description": "Name of the Workload Interface",
-        "Computed": true
-      },
-      "network": {
-        "Type": "Map",
-        "Description": "Network for the Workload Interface. ",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "network_detection_mode": {
-        "Type": "String",
-        "Description": "Network Detection Mode for Workload Interface",
-        "Computed": true
       }
     },
     "illumio-core_workload_interfaces": {

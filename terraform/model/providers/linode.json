@@ -3,13 +3,26 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "linode",
   "type": "provider",
-  "version": "v1.25.1",
+  "version": "v1.29.2",
   "provider": {
     "api_version": {
       "Type": "String",
       "Optional": true,
       "Description": "An HTTP User-Agent Prefix to prepend in API requests.",
       "DefaultFunc": "ENV(LINODE_API_VERSION)"
+    },
+    "config_path": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "UNKNOWN"
+    },
+    "config_profile": {
+      "Type": "String",
+      "Optional": true,
+      "Default": {
+        "Type": "string",
+        "Value": "default"
+      }
     },
     "event_poll_ms": {
       "Type": "Int",
@@ -23,7 +36,7 @@
       "Description": "The rate in milliseconds to poll for LKE events.",
       "Default": {
         "Type": "int",
-        "Value": "300"
+        "Value": "3000"
       }
     },
     "lke_node_ready_poll_ms": {
@@ -32,7 +45,7 @@
       "Description": "The rate in milliseconds to poll for an LKE node to be ready.",
       "Default": {
         "Type": "int",
-        "Value": "500"
+        "Value": "3000"
       }
     },
     "max_retry_delay_ms": {
@@ -65,7 +78,7 @@
     },
     "token": {
       "Type": "String",
-      "Required": true,
+      "Optional": true,
       "Description": "The token that allows you access to your Linode account",
       "DefaultFunc": "ENV(LINODE_TOKEN)"
     },
@@ -83,6 +96,560 @@
     }
   },
   "resources": {
+    "linode_database_access_controls": {
+      "allow_list": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "database_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the database to manage the allow list for."
+      },
+      "database_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The type of the  database to manage the allow list for."
+      }
+    },
+    "linode_database_mongodb": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "allow_list": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ca_cert": {
+        "Type": "String",
+        "Description": "The base64-encoded SSL CA certificate for the Managed Database instance.",
+        "Computed": true
+      },
+      "cluster_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of Linode Instance nodes deployed to the Managed Database. Defaults to 1.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "compression_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of data compression for this Database.",
+        "Default": {
+          "Type": "string",
+          "Value": "none"
+        }
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this Managed Database was created.",
+        "Computed": true
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the Managed Databases is encrypted.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Description": "The Managed Database engine.",
+        "Computed": true
+      },
+      "engine_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Managed Database engine in engine/version format. (e.g. mongodb/4.4.10)"
+      },
+      "host_primary": {
+        "Type": "String",
+        "Description": "The primary host for the Managed Database.",
+        "Computed": true
+      },
+      "host_secondary": {
+        "Type": "String",
+        "Description": "The secondary host for the Managed Database.",
+        "Computed": true
+      },
+      "label": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique, user-defined string referring to the Managed Database."
+      },
+      "peers": {
+        "Type": "Set",
+        "Description": "A set of peer addresses for this Database.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "port": {
+        "Type": "Int",
+        "Description": "The access port for this Managed Database.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The region to use for the Managed Database."
+      },
+      "replica_set": {
+        "Type": "String",
+        "Description": "Label for configuring a MongoDB replica set. Choose the same label on multiple Databases to include them in the same replica set.",
+        "Computed": true
+      },
+      "root_password": {
+        "Type": "String",
+        "Description": "The randomly-generated root password for the Managed Database instance.",
+        "Computed": true
+      },
+      "root_username": {
+        "Type": "String",
+        "Description": "The root username for the Managed Database instance.",
+        "Computed": true
+      },
+      "ssl_connection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The operating status of the Managed Database.",
+        "Computed": true
+      },
+      "storage_engine": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of storage engine for this Database.",
+        "Default": {
+          "Type": "string",
+          "Value": "wiredtiger"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Linode Instance type used by the Managed Database for its nodes."
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this Managed Database was last updated.",
+        "Computed": true
+      },
+      "updates": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configuration settings for automated patch update maintenance for the Managed Database.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_week": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The day to perform maintenance."
+            },
+            "duration": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The maximum maintenance window time in hours."
+            },
+            "frequency": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether maintenance occurs on a weekly or monthly basis."
+            },
+            "hour_of_day": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The hour to begin maintenance based in UTC time."
+            },
+            "week_of_month": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The week of the month to perform monthly frequency updates. Required for monthly frequency updates."
+            }
+          }
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The Managed Database engine version.",
+        "Computed": true
+      }
+    },
+    "linode_database_mysql": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "allow_list": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ca_cert": {
+        "Type": "String",
+        "Description": "The base64-encoded SSL CA certificate for the Managed Database instance.",
+        "Computed": true
+      },
+      "cluster_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of Linode Instance nodes deployed to the Managed Database. Defaults to 1.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this Managed Database was created.",
+        "Computed": true
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the Managed Databases is encrypted.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Description": "The Managed Database engine.",
+        "Computed": true
+      },
+      "engine_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Managed Database engine in engine/version format. (e.g. mysql/8.0.26)"
+      },
+      "host_primary": {
+        "Type": "String",
+        "Description": "The primary host for the Managed Database.",
+        "Computed": true
+      },
+      "host_secondary": {
+        "Type": "String",
+        "Description": "The secondary host for the Managed Database.",
+        "Computed": true
+      },
+      "label": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique, user-defined string referring to the Managed Database."
+      },
+      "region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The region to use for the Managed Database."
+      },
+      "replication_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The replication method used for the Managed Database.",
+        "Default": {
+          "Type": "string",
+          "Value": "none"
+        }
+      },
+      "root_password": {
+        "Type": "String",
+        "Description": "The randomly-generated root password for the Managed Database instance.",
+        "Computed": true
+      },
+      "root_username": {
+        "Type": "String",
+        "Description": "The root username for the Managed Database instance.",
+        "Computed": true
+      },
+      "ssl_connection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The operating status of the Managed Database.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Linode Instance type used by the Managed Database for its nodes."
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this Managed Database was last updated.",
+        "Computed": true
+      },
+      "updates": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configuration settings for automated patch update maintenance for the Managed Database.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_week": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The day to perform maintenance."
+            },
+            "duration": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The maximum maintenance window time in hours."
+            },
+            "frequency": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether maintenance occurs on a weekly or monthly basis."
+            },
+            "hour_of_day": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The hour to begin maintenance based in UTC time."
+            },
+            "week_of_month": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The week of the month to perform monthly frequency updates. Required for monthly frequency updates."
+            }
+          }
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The Managed Database engine version.",
+        "Computed": true
+      }
+    },
+    "linode_database_postgresql": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "allow_list": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ca_cert": {
+        "Type": "String",
+        "Description": "The base64-encoded SSL CA certificate for the Managed Database instance.",
+        "Computed": true
+      },
+      "cluster_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of Linode Instance nodes deployed to the Managed Database. Defaults to 1.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this Managed Database was created.",
+        "Computed": true
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the Managed Databases is encrypted.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Description": "The Managed Database engine.",
+        "Computed": true
+      },
+      "engine_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Managed Database engine in engine/version format. (e.g. mongodb/4.4.10)"
+      },
+      "host_primary": {
+        "Type": "String",
+        "Description": "The primary host for the Managed Database.",
+        "Computed": true
+      },
+      "host_secondary": {
+        "Type": "String",
+        "Description": "The secondary host for the Managed Database.",
+        "Computed": true
+      },
+      "label": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique, user-defined string referring to the Managed Database."
+      },
+      "port": {
+        "Type": "Int",
+        "Description": "The access port for this Managed Database.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The region to use for the Managed Database."
+      },
+      "replication_commit_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The synchronization level of the replicating server.Must be `local` or `off` for the `asynch` replication type. Must be `on`, `remote_write`, or `remote_apply` for the `semi_synch` replication type.",
+        "Default": {
+          "Type": "string",
+          "Value": "off"
+        }
+      },
+      "replication_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The replication method used for the Managed Database. Must be `none` for a single node cluster. Must be `asynch` or `semi_synch` for a high availability cluster.",
+        "Default": {
+          "Type": "string",
+          "Value": "none"
+        }
+      },
+      "root_password": {
+        "Type": "String",
+        "Description": "The randomly-generated root password for the Managed Database instance.",
+        "Computed": true
+      },
+      "root_username": {
+        "Type": "String",
+        "Description": "The root username for the Managed Database instance.",
+        "Computed": true
+      },
+      "ssl_connection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The operating status of the Managed Database.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Linode Instance type used by the Managed Database for its nodes."
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this Managed Database was last updated.",
+        "Computed": true
+      },
+      "updates": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configuration settings for automated patch update maintenance for the Managed Database.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_week": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The day to perform maintenance."
+            },
+            "duration": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The maximum maintenance window time in hours."
+            },
+            "frequency": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether maintenance occurs on a weekly or monthly basis."
+            },
+            "hour_of_day": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The hour to begin maintenance based in UTC time."
+            },
+            "week_of_month": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The week of the month to perform monthly frequency updates. Required for monthly frequency updates."
+            }
+          }
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The Managed Database engine version.",
+        "Computed": true
+      }
+    },
     "linode_domain": {
       "axfr_ips": {
         "Type": "Set",
@@ -684,10 +1251,16 @@
         "Description": "The Label of the Instance Config that should be used to boot the Linode instance.",
         "Computed": true
       },
+      "booted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "config": {
         "Type": "List",
         "Optional": true,
         "Description": "Configuration profiles define the VM settings and boot behavior of the Linode Instance.",
+        "Computed": true,
         "ConflictsWith": [
           "image",
           "root_pass",
@@ -1093,6 +1666,7 @@
       "disk": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "ConflictsWith": [
           "image",
           "root_pass",
@@ -1269,6 +1843,15 @@
         "Description": "This is the location where the Linode was deployed. This cannot be changed without opening a support ticket.",
         "InputDefault": "us-east"
       },
+      "resize_disk": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, changes in Linode type will attempt to upsize or downsize implicitly created disks. This must be false if explicit disks are defined. This is an irreversible action as Linode disks cannot be automatically downsized.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "root_pass": {
         "Type": "String",
         "Optional": true,
@@ -1277,6 +1860,17 @@
           "disk",
           "config"
         ]
+      },
+      "shared_ipv4": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A set of IPv4 addresses to share with this Linode.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "specs": {
         "Type": "List",
@@ -1372,6 +1966,432 @@
         }
       }
     },
+    "linode_instance_config": {
+      "booted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, the Linode will be booted to running state. If false, the Linode will be shutdown. If undefined, no action will be taken.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optional field for arbitrary User comments on this Config."
+      },
+      "devices": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A dictionary of device disks to use as a device map in a Linode’s configuration profile.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "sda": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sdb": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sdc": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sdd": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sde": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sdf": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sdg": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            },
+            "sdh": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Device can be either a Disk or Volume identified by disk_id or volume_id. Only one type per slot allowed.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disk_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Disk ID to map to this disk slot"
+                  },
+                  "volume_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The Block Storage volume ID to map to this disk slot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "helpers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Helpers enabled when booting to this Linode Config.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "devtmpfs_automount": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Populates the /dev directory early during boot without udev.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "distro": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Helps maintain correct inittab/upstart console device.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "modules_dep": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Creates a modules dependency file for the Kernel you run.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "network": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Automatically configures static networking.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "updatedb_disabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Disables updatedb cron job to avoid disk thrashing.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            }
+          }
+        }
+      },
+      "interface": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "An array of Network Interfaces to add to this Linode’s Configuration Profile.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ipam_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "This Network Interface’s private IP address in Classless Inter-Domain Routing (CIDR) notation."
+            },
+            "label": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of this interface."
+            },
+            "purpose": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of interface."
+            }
+          }
+        }
+      },
+      "kernel": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A Kernel ID to boot a Linode with. Defaults to “linode/latest-64bit”.",
+        "Default": {
+          "Type": "string",
+          "Value": "linode/latest-64bit"
+        }
+      },
+      "label": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Config’s label for display purposes only."
+      },
+      "linode_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the Linode to create this configuration profile under."
+      },
+      "memory_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The memory limit of the Linode.",
+        "Computed": true
+      },
+      "root_device": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The root device to boot. If no value or an invalid value is provided, root device will default to /dev/sda. If the device specified at the root device location is not mounted, the Linode will not boot until a device is mounted.",
+        "Default": {
+          "Type": "string",
+          "Value": "/dev/sda"
+        }
+      },
+      "run_level": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Defines the state of your Linode after booting.",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "virt_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controls the virtualization mode.",
+        "Default": {
+          "Type": "string",
+          "Value": "paravirt"
+        }
+      }
+    },
+    "linode_instance_disk": {
+      "authorized_keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of public SSH keys that will be automatically appended to the root user’s ~/.ssh/authorized_keys file when deploying from an Image.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "authorized_users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of usernames. If the usernames have associated SSH keys, the keys will be appended to the root users ~/.ssh/authorized_keys file automatically when deploying from an Image.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this disk was created.",
+        "Computed": true
+      },
+      "filesystem": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The filesystem of this disk.",
+        "Computed": true
+      },
+      "image": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "An Image ID to deploy the Linode Disk from."
+      },
+      "label": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Disk’s label is for display purposes only."
+      },
+      "linode_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the Linode to assign this disk to."
+      },
+      "root_pass": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "This sets the root user’s password on a newly-created Linode Disk when deploying from an Image."
+      },
+      "size": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The size of the Disk in MB."
+      },
+      "stackscript_data": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "An object containing responses to any User Defined Fields present in the StackScript being deployed to this Disk. Only accepted if 'stackscript_id' is given. The required values depend on the StackScript being deployed."
+      },
+      "stackscript_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "A StackScript ID that will cause the referenced StackScript to be run during deployment of this Linode."
+      },
+      "status": {
+        "Type": "String",
+        "Description": "A brief description of this Disk's current state.",
+        "Computed": true
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this disk was last updated.",
+        "Computed": true
+      }
+    },
     "linode_instance_ip": {
       "address": {
         "Type": "String",
@@ -1429,6 +2449,71 @@
         "Computed": true
       }
     },
+    "linode_instance_shared_ips": {
+      "addresses": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "A set of IP addresses to share to the Linode",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "linode_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the Linode to share these IP addresses with."
+      }
+    },
+    "linode_ipv6_range": {
+      "is_bgp": {
+        "Type": "Bool",
+        "Description": "Whether this IPv6 range is shared.",
+        "Computed": true
+      },
+      "linode_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the Linode to assign this range to.",
+        "ConflictsWith": [
+          "route_target"
+        ]
+      },
+      "linodes": {
+        "Type": "Set",
+        "Description": "A list of Linodes targeted by this IPv6 range. Includes Linodes with IP sharing.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "prefix_length": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The prefix length of the IPv6 range."
+      },
+      "range": {
+        "Type": "String",
+        "Description": "The IPv6 range of addresses in this pool.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Description": "The region for this range of IPv6 addresses.",
+        "Computed": true
+      },
+      "route_target": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The IPv6 SLAAC address to assign this range to.",
+        "ConflictsWith": [
+          "linode_id"
+        ]
+      }
+    },
     "linode_lke_cluster": {
       "__timeouts__": [
         "create",
@@ -1464,6 +2549,11 @@
             }
           }
         }
+      },
+      "dashboard_url": {
+        "Type": "String",
+        "Description": "The dashboard URL of the cluster.",
+        "Computed": true
       },
       "k8s_version": {
         "Type": "String",
@@ -1889,6 +2979,11 @@
           "Type": "bool",
           "Value": "true"
         }
+      },
+      "hostname": {
+        "Type": "String",
+        "Description": "The hostname where this bucket can be accessed. This hostname can be accessed through a browser if the bucket is made public.",
+        "Computed": true
       },
       "label": {
         "Type": "String",
@@ -2682,15 +3777,21 @@
       },
       "region": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "The region where this volume will be deployed.",
-        "InputDefault": "us-east"
+        "InputDefault": "us-east",
+        "Computed": true
       },
       "size": {
         "Type": "Int",
         "Optional": true,
         "Description": "Size of the Volume in GB",
         "Computed": true
+      },
+      "source_volume_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of a volume to clone."
       },
       "status": {
         "Type": "String",
@@ -2770,6 +3871,921 @@
         "Type": "String",
         "Description": "The zip code of this Account's billing address.",
         "Computed": true
+      }
+    },
+    "linode_database_backups": {
+      "backups": {
+        "Type": "List",
+        "Description": "The returned list of backups.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created": {
+              "Type": "String",
+              "Description": "A time value given in a combined date and time format that represents when the database backup was created.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the database backup object.",
+              "Computed": true
+            },
+            "label": {
+              "Type": "String",
+              "Description": "The database backup’s label, for display purposes only.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "The type of database backup, determined by how the backup was created.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "database_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the Managed Database."
+      },
+      "database_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The type of the Managed Database"
+      },
+      "filter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_by": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of comparison to use for this filter.",
+              "Default": {
+                "Type": "string",
+                "Value": "exact"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the attribute to filter on."
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The value(s) to be used in the filter.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "latest": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, only the latest backup will be returned.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "order": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The order in which results should be returned.",
+        "Default": {
+          "Type": "string",
+          "Value": "asc"
+        }
+      },
+      "order_by": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The attribute to order the results by."
+      }
+    },
+    "linode_database_engines": {
+      "engines": {
+        "Type": "List",
+        "Description": "The returned list of engines.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "engine": {
+              "Type": "String",
+              "Description": "The Managed Database engine type.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The Managed Database engine ID in engine/version format.",
+              "Computed": true
+            },
+            "version": {
+              "Type": "String",
+              "Description": "The Managed Database engine version.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_by": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of comparison to use for this filter.",
+              "Default": {
+                "Type": "string",
+                "Value": "exact"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the attribute to filter on."
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The value(s) to be used in the filter.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "latest": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, only the latest engine version will be returned.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "order": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The order in which results should be returned.",
+        "Default": {
+          "Type": "string",
+          "Value": "asc"
+        }
+      },
+      "order_by": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The attribute to order the results by."
+      }
+    },
+    "linode_database_mongodb": {
+      "allow_list": {
+        "Type": "Set",
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ca_cert": {
+        "Type": "String",
+        "Description": "The base64-encoded SSL CA certificate for the Managed Database instance.",
+        "Computed": true
+      },
+      "cluster_size": {
+        "Type": "Int",
+        "Description": "The number of Linode Instance nodes deployed to the Managed Database. Defaults to 1.",
+        "Computed": true
+      },
+      "compression_type": {
+        "Type": "String",
+        "Description": "The type of data compression for this Database.",
+        "Computed": true
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this Managed Database was created.",
+        "Computed": true
+      },
+      "database_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the MongoDB database."
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Description": "Whether the Managed Databases is encrypted.",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Description": "The Managed Database engine.",
+        "Computed": true
+      },
+      "engine_id": {
+        "Type": "String",
+        "Description": "The Managed Database engine in engine/version format. (e.g. mongodb/4.4.10)",
+        "Computed": true
+      },
+      "host_primary": {
+        "Type": "String",
+        "Description": "The primary host for the Managed Database.",
+        "Computed": true
+      },
+      "host_secondary": {
+        "Type": "String",
+        "Description": "The secondary host for the Managed Database.",
+        "Computed": true
+      },
+      "label": {
+        "Type": "String",
+        "Description": "A unique, user-defined string referring to the Managed Database.",
+        "Computed": true
+      },
+      "peers": {
+        "Type": "Set",
+        "Description": "A set of peer addresses for this Database.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "port": {
+        "Type": "Int",
+        "Description": "The access port for this Managed Database.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Description": "The region to use for the Managed Database.",
+        "Computed": true
+      },
+      "replica_set": {
+        "Type": "String",
+        "Description": "Label for configuring a MongoDB replica set. Choose the same label on multiple Databases to include them in the same replica set.",
+        "Computed": true
+      },
+      "root_password": {
+        "Type": "String",
+        "Description": "The randomly-generated root password for the Managed Database instance.",
+        "Computed": true
+      },
+      "root_username": {
+        "Type": "String",
+        "Description": "The root username for the Managed Database instance.",
+        "Computed": true
+      },
+      "ssl_connection": {
+        "Type": "Bool",
+        "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The operating status of the Managed Database.",
+        "Computed": true
+      },
+      "storage_engine": {
+        "Type": "String",
+        "Description": "The type of storage engine for this Database.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "The Linode Instance type used by the Managed Database for its nodes.",
+        "Computed": true
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this Managed Database was last updated.",
+        "Computed": true
+      },
+      "updates": {
+        "Type": "List",
+        "Description": "Configuration settings for automated patch update maintenance for the Managed Database.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_week": {
+              "Type": "String",
+              "Description": "The day to perform maintenance.",
+              "Computed": true
+            },
+            "duration": {
+              "Type": "Int",
+              "Description": "The maximum maintenance window time in hours.",
+              "Computed": true
+            },
+            "frequency": {
+              "Type": "String",
+              "Description": "Whether maintenance occurs on a weekly or monthly basis.",
+              "Computed": true
+            },
+            "hour_of_day": {
+              "Type": "Int",
+              "Description": "The hour to begin maintenance based in UTC time.",
+              "Computed": true
+            },
+            "week_of_month": {
+              "Type": "Int",
+              "Description": "The week of the month to perform monthly frequency updates. Required for monthly frequency updates.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The Managed Database engine version.",
+        "Computed": true
+      }
+    },
+    "linode_database_mysql": {
+      "allow_list": {
+        "Type": "Set",
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ca_cert": {
+        "Type": "String",
+        "Description": "The base64-encoded SSL CA certificate for the Managed Database instance.",
+        "Computed": true
+      },
+      "cluster_size": {
+        "Type": "Int",
+        "Description": "The number of Linode Instance nodes deployed to the Managed Database. Defaults to 1.",
+        "Computed": true
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this Managed Database was created.",
+        "Computed": true
+      },
+      "database_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the MySQL database."
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Description": "Whether the Managed Databases is encrypted.",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Description": "The Managed Database engine.",
+        "Computed": true
+      },
+      "engine_id": {
+        "Type": "String",
+        "Description": "The Managed Database engine in engine/version format. (e.g. mysql/8.0.26)",
+        "Computed": true
+      },
+      "host_primary": {
+        "Type": "String",
+        "Description": "The primary host for the Managed Database.",
+        "Computed": true
+      },
+      "host_secondary": {
+        "Type": "String",
+        "Description": "The secondary host for the Managed Database.",
+        "Computed": true
+      },
+      "label": {
+        "Type": "String",
+        "Description": "A unique, user-defined string referring to the Managed Database.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Description": "The region to use for the Managed Database.",
+        "Computed": true
+      },
+      "replication_type": {
+        "Type": "String",
+        "Description": "The replication method used for the Managed Database.",
+        "Computed": true
+      },
+      "root_password": {
+        "Type": "String",
+        "Description": "The randomly-generated root password for the Managed Database instance.",
+        "Computed": true
+      },
+      "root_username": {
+        "Type": "String",
+        "Description": "The root username for the Managed Database instance.",
+        "Computed": true
+      },
+      "ssl_connection": {
+        "Type": "Bool",
+        "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The operating status of the Managed Database.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "The Linode Instance type used by the Managed Database for its nodes.",
+        "Computed": true
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this Managed Database was last updated.",
+        "Computed": true
+      },
+      "updates": {
+        "Type": "List",
+        "Description": "Configuration settings for automated patch update maintenance for the Managed Database.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_week": {
+              "Type": "String",
+              "Description": "The day to perform maintenance.",
+              "Computed": true
+            },
+            "duration": {
+              "Type": "Int",
+              "Description": "The maximum maintenance window time in hours.",
+              "Computed": true
+            },
+            "frequency": {
+              "Type": "String",
+              "Description": "Whether maintenance occurs on a weekly or monthly basis.",
+              "Computed": true
+            },
+            "hour_of_day": {
+              "Type": "Int",
+              "Description": "The hour to begin maintenance based in UTC time.",
+              "Computed": true
+            },
+            "week_of_month": {
+              "Type": "Int",
+              "Description": "The week of the month to perform monthly frequency updates. Required for monthly frequency updates.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The Managed Database engine version.",
+        "Computed": true
+      }
+    },
+    "linode_database_mysql_backups": {
+      "backups": {
+        "Type": "List",
+        "Description": "The returned list of backups.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created": {
+              "Type": "String",
+              "Description": "A time value given in a combined date and time format that represents when the database backup was created.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the database backup object.",
+              "Computed": true
+            },
+            "label": {
+              "Type": "String",
+              "Description": "The database backup’s label, for display purposes only.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "The type of database backup, determined by how the backup was created.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "database_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the Managed MySQL Database."
+      },
+      "filter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_by": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of comparison to use for this filter.",
+              "Default": {
+                "Type": "string",
+                "Value": "exact"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the attribute to filter on."
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The value(s) to be used in the filter.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "latest": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, only the latest backup will be returned.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "order": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The order in which results should be returned.",
+        "Default": {
+          "Type": "string",
+          "Value": "asc"
+        }
+      },
+      "order_by": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The attribute to order the results by."
+      }
+    },
+    "linode_database_postgresql": {
+      "allow_list": {
+        "Type": "Set",
+        "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ca_cert": {
+        "Type": "String",
+        "Description": "The base64-encoded SSL CA certificate for the Managed Database instance.",
+        "Computed": true
+      },
+      "cluster_size": {
+        "Type": "Int",
+        "Description": "The number of Linode Instance nodes deployed to the Managed Database. Defaults to 1.",
+        "Computed": true
+      },
+      "created": {
+        "Type": "String",
+        "Description": "When this Managed Database was created.",
+        "Computed": true
+      },
+      "database_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the MongoDB database."
+      },
+      "encrypted": {
+        "Type": "Bool",
+        "Description": "Whether the Managed Databases is encrypted.",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Description": "The Managed Database engine.",
+        "Computed": true
+      },
+      "engine_id": {
+        "Type": "String",
+        "Description": "The Managed Database engine in engine/version format. (e.g. postgresql/12.6)",
+        "Computed": true
+      },
+      "host_primary": {
+        "Type": "String",
+        "Description": "The primary host for the Managed Database.",
+        "Computed": true
+      },
+      "host_secondary": {
+        "Type": "String",
+        "Description": "The secondary host for the Managed Database.",
+        "Computed": true
+      },
+      "label": {
+        "Type": "String",
+        "Description": "A unique, user-defined string referring to the Managed Database.",
+        "Computed": true
+      },
+      "port": {
+        "Type": "Int",
+        "Description": "The access port for this Managed Database.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Description": "The region to use for the Managed Database.",
+        "Computed": true
+      },
+      "replication_commit_type": {
+        "Type": "String",
+        "Description": "The synchronization level of the replicating server.",
+        "Computed": true
+      },
+      "replication_type": {
+        "Type": "String",
+        "Description": "The replication method used for the Managed Database.",
+        "Computed": true
+      },
+      "root_password": {
+        "Type": "String",
+        "Description": "The randomly-generated root password for the Managed Database instance.",
+        "Computed": true
+      },
+      "root_username": {
+        "Type": "String",
+        "Description": "The root username for the Managed Database instance.",
+        "Computed": true
+      },
+      "ssl_connection": {
+        "Type": "Bool",
+        "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The operating status of the Managed Database.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "The Linode Instance type used by the Managed Database for its nodes.",
+        "Computed": true
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When this Managed Database was last updated.",
+        "Computed": true
+      },
+      "updates": {
+        "Type": "List",
+        "Description": "Configuration settings for automated patch update maintenance for the Managed Database.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_week": {
+              "Type": "String",
+              "Description": "The day to perform maintenance.",
+              "Computed": true
+            },
+            "duration": {
+              "Type": "Int",
+              "Description": "The maximum maintenance window time in hours.",
+              "Computed": true
+            },
+            "frequency": {
+              "Type": "String",
+              "Description": "Whether maintenance occurs on a weekly or monthly basis.",
+              "Computed": true
+            },
+            "hour_of_day": {
+              "Type": "Int",
+              "Description": "The hour to begin maintenance based in UTC time.",
+              "Computed": true
+            },
+            "week_of_month": {
+              "Type": "Int",
+              "Description": "The week of the month to perform monthly frequency updates. Required for monthly frequency updates.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The Managed Database engine version.",
+        "Computed": true
+      }
+    },
+    "linode_databases": {
+      "databases": {
+        "Type": "List",
+        "Description": "The returned list of databases.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_list": {
+              "Type": "List",
+              "Description": "A list of IP addresses that can access the Managed Database. Each item can be a single IP address or a range in CIDR format.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "cluster_size": {
+              "Type": "Int",
+              "Description": "The number of Linode Instance nodes deployed to the Managed Database.",
+              "Computed": true
+            },
+            "created": {
+              "Type": "String",
+              "Description": "When this Managed Database was created.",
+              "Computed": true
+            },
+            "encrypted": {
+              "Type": "Bool",
+              "Description": "Whether the Managed Databases is encrypted.",
+              "Computed": true
+            },
+            "engine": {
+              "Type": "String",
+              "Description": "The Managed Database engine type.",
+              "Computed": true
+            },
+            "host_primary": {
+              "Type": "String",
+              "Description": "The primary host for the Managed Database.",
+              "Computed": true
+            },
+            "host_secondary": {
+              "Type": "String",
+              "Description": "The secondary/private network host for the Managed Database.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "A unique ID that can be used to identify and reference the Managed Database.",
+              "Computed": true
+            },
+            "instance_uri": {
+              "Type": "String",
+              "Description": "The API route for the database instance.",
+              "Computed": true
+            },
+            "label": {
+              "Type": "String",
+              "Description": "A unique, user-defined string referring to the Managed Database.",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Description": "The Region ID for the Managed Database.",
+              "Computed": true
+            },
+            "replication_type": {
+              "Type": "String",
+              "Description": "The replication method used for the Managed Database.",
+              "Computed": true
+            },
+            "ssl_connection": {
+              "Type": "Bool",
+              "Description": "Whether to require SSL credentials to establish a connection to the Managed Database.",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "The operating status of the Managed Database.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "The Linode Instance type used by the Managed Database for its nodes.",
+              "Computed": true
+            },
+            "updated": {
+              "Type": "String",
+              "Description": "When this Managed Database was last updated.",
+              "Computed": true
+            },
+            "version": {
+              "Type": "String",
+              "Description": "The Managed Database engine version.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "match_by": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of comparison to use for this filter.",
+              "Default": {
+                "Type": "string",
+                "Value": "exact"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the attribute to filter on."
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The value(s) to be used in the filter.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "latest": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, only the latest created database will be returned.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "order": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The order in which results should be returned.",
+        "Default": {
+          "Type": "string",
+          "Value": "asc"
+        }
+      },
+      "order_by": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The attribute to order the results by."
       }
     },
     "linode_domain": {
@@ -2919,6 +4935,23 @@
         "Type": "Int",
         "Description": "The relative weight of this Record. Higher values are preferred.",
         "Computed": true
+      }
+    },
+    "linode_domain_zonefile": {
+      "domain_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The domain's ID."
+      },
+      "zone_file": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Lines of the zone file for the last rendered zone for this domain.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "linode_firewall": {
@@ -4481,6 +6514,38 @@
         "Description": "The attribute to order the results by."
       }
     },
+    "linode_ipv6_range": {
+      "is_bgp": {
+        "Type": "Bool",
+        "Description": "Whether this IPv6 range is shared.",
+        "Computed": true
+      },
+      "linodes": {
+        "Type": "Set",
+        "Description": "A list of Linodes targeted by this IPv6 range. Includes Linodes with IP sharing.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "prefix": {
+        "Type": "Int",
+        "Description": "The prefix length of the address, denoting how many addresses can be assigned from this range.",
+        "Computed": true
+      },
+      "range": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The IPv6 range to retrieve information about."
+      },
+      "region": {
+        "Type": "String",
+        "Description": "The region for this range of IPv6 addresses.",
+        "Computed": true
+      }
+    },
     "linode_kernel": {
       "architecture": {
         "Type": "String",
@@ -4550,6 +6615,11 @@
             }
           }
         }
+      },
+      "dashboard_url": {
+        "Type": "String",
+        "Description": "The dashboard URL of the cluster.",
+        "Computed": true
       },
       "id": {
         "Type": "Int",

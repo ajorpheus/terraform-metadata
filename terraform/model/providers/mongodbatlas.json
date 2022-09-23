@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "mongodbatlas",
   "type": "provider",
-  "version": "v1.2.0-pre.1",
+  "version": "v1.4.6-pre.1",
   "provider": {
     "base_url": {
       "Type": "String",
@@ -32,6 +32,64 @@
   },
   "resources": {
     "mongodbatlas_advanced_cluster": {
+      "advanced_configuration": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_read_concern": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "default_write_concern": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fail_index_key_too_long": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "javascript_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "minimum_enabled_tls_protocol": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "no_table_scan": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "oplog_size_mb": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "sample_refresh_interval_bi_connector": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "sample_size_bi_connector": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "backup_enabled": {
         "Type": "Bool",
         "Optional": true,
@@ -225,6 +283,15 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "container_id": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "id": {
               "Type": "String",
               "Computed": true
@@ -687,6 +754,11 @@
       }
     },
     "mongodbatlas_cloud_backup_schedule": {
+      "auto_export_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "cluster_id": {
         "Type": "String",
         "Computed": true
@@ -694,6 +766,29 @@
       "cluster_name": {
         "Type": "String",
         "Required": true
+      },
+      "export": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "export_bucket_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "frequency_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "id_policy": {
         "Type": "String",
@@ -770,7 +865,6 @@
       "policy_item_monthly": {
         "Type": "List",
         "Optional": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -802,7 +896,6 @@
       "policy_item_weekly": {
         "Type": "List",
         "Optional": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -851,6 +944,11 @@
         "Computed": true
       },
       "update_snapshots": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "use_org_and_group_names_in_export_prefix": {
         "Type": "Bool",
         "Optional": true,
         "Computed": true
@@ -946,6 +1044,124 @@
         "Computed": true
       },
       "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "mongodbatlas_cloud_backup_snapshot_export_bucket": {
+      "bucket_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "cloud_provider": {
+        "Type": "String",
+        "Required": true
+      },
+      "export_bucket_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "iam_role_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "mongodbatlas_cloud_backup_snapshot_export_job": {
+      "cluster_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "components": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "export_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "replica_set_name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "custom_data": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "err_msg": {
+        "Type": "String",
+        "Computed": true
+      },
+      "export_bucket_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "export_job_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "export_status_exported_collections": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "export_status_total_collections": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "finished_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "prefix": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "snapshot_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "state": {
         "Type": "String",
         "Computed": true
       }
@@ -2730,6 +2946,140 @@
       "type": {
         "Type": "String",
         "Required": true
+      },
+      "unordered": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "mongodbatlas_federated_settings_identity_provider": {
+      "associated_domains": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "issuer_uri": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "okta_idp_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "request_binding": {
+        "Type": "String",
+        "Required": true
+      },
+      "response_signature_algorithm": {
+        "Type": "String",
+        "Required": true
+      },
+      "sso_debug_enabled": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "sso_url": {
+        "Type": "String",
+        "Required": true
+      },
+      "status": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "mongodbatlas_federated_settings_org_config": {
+      "domain_allow_list": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "domain_restriction_enabled": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "identity_provider_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "post_auth_role_grants": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "mongodbatlas_federated_settings_org_role_mapping": {
+      "external_group_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "role_assignments": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "org_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "roles": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       }
     },
     "mongodbatlas_global_cluster_config": {
@@ -3311,6 +3661,16 @@
         "Required": true
       }
     },
+    "mongodbatlas_private_endpoint_regional_mode": {
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "mongodbatlas_private_ip_mode": {
       "enabled": {
         "Type": "Bool",
@@ -3322,6 +3682,10 @@
       }
     },
     "mongodbatlas_privatelink_endpoint": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
       "endpoint_group_names": {
         "Type": "List",
         "Computed": true,
@@ -3556,6 +3920,31 @@
         "Type": "String",
         "Computed": true
       },
+      "is_collect_database_specifics_statistics_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_data_explorer_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_performance_advisor_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_realtime_performance_panel_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_schema_advisor_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -3752,6 +4141,75 @@
         }
       }
     },
+    "mongodbatlas_serverless_instance": {
+      "connection_strings_standard_srv": {
+        "Type": "String",
+        "Computed": true
+      },
+      "continuous_backup_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "create_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "links": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rel": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "mongo_db_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "provider_settings_backing_provider_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "provider_settings_provider_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "provider_settings_region_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "state_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "mongodbatlas_team": {
       "name": {
         "Type": "String",
@@ -3815,6 +4273,10 @@
         "Type": "String",
         "Optional": true
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "flow_name": {
         "Type": "String",
         "Optional": true
@@ -3823,7 +4285,15 @@
         "Type": "String",
         "Optional": true
       },
+      "microsoft_teams_webhook_url": {
+        "Type": "String",
+        "Optional": true
+      },
       "org_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "password": {
         "Type": "String",
         "Optional": true
       },
@@ -3843,7 +4313,15 @@
         "Type": "String",
         "Optional": true
       },
+      "scheme": {
+        "Type": "String",
+        "Optional": true
+      },
       "secret": {
+        "Type": "String",
+        "Optional": true
+      },
+      "service_discovery": {
         "Type": "String",
         "Optional": true
       },
@@ -3860,6 +4338,10 @@
         "Required": true
       },
       "url": {
+        "Type": "String",
+        "Optional": true
+      },
+      "user_name": {
         "Type": "String",
         "Optional": true
       },
@@ -3928,6 +4410,53 @@
   },
   "data-sources": {
     "mongodbatlas_advanced_cluster": {
+      "advanced_configuration": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_read_concern": {
+              "Type": "String",
+              "Computed": true
+            },
+            "default_write_concern": {
+              "Type": "String",
+              "Computed": true
+            },
+            "fail_index_key_too_long": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "javascript_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "minimum_enabled_tls_protocol": {
+              "Type": "String",
+              "Computed": true
+            },
+            "no_table_scan": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "oplog_size_mb": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "sample_refresh_interval_bi_connector": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "sample_size_bi_connector": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
       "backup_enabled": {
         "Type": "Bool",
         "Computed": true
@@ -4104,6 +4633,15 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "container_id": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "id": {
               "Type": "String",
               "Computed": true
@@ -4287,6 +4825,53 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "advanced_configuration": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "default_read_concern": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "default_write_concern": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "fail_index_key_too_long": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "javascript_enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "minimum_enabled_tls_protocol": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "no_table_scan": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "oplog_size_mb": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "sample_refresh_interval_bi_connector": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "sample_size_bi_connector": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "backup_enabled": {
               "Type": "Bool",
               "Computed": true
@@ -4459,6 +5044,15 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "container_id": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
                   "id": {
                     "Type": "String",
                     "Computed": true
@@ -4884,6 +5478,10 @@
       }
     },
     "mongodbatlas_cloud_backup_schedule": {
+      "auto_export_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "cluster_id": {
         "Type": "String",
         "Computed": true
@@ -4891,6 +5489,25 @@
       "cluster_name": {
         "Type": "String",
         "Required": true
+      },
+      "export": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "export_bucket_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "frequency_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       },
       "id_policy": {
         "Type": "String",
@@ -5039,6 +5656,10 @@
       "restore_window_days": {
         "Type": "Int",
         "Computed": true
+      },
+      "use_org_and_group_names_in_export_prefix": {
+        "Type": "Bool",
+        "Computed": true
       }
     },
     "mongodbatlas_cloud_backup_snapshot": {
@@ -5128,6 +5749,280 @@
       },
       "type": {
         "Type": "String",
+        "Computed": true
+      }
+    },
+    "mongodbatlas_cloud_backup_snapshot_export_bucket": {
+      "bucket_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cloud_provider": {
+        "Type": "String",
+        "Computed": true
+      },
+      "export_bucket_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "iam_role_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "mongodbatlas_cloud_backup_snapshot_export_buckets": {
+      "items_per_page": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "page_num": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cloud_provider": {
+              "Type": "String",
+              "Computed": true
+            },
+            "export_bucket_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "iam_role_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "total_count": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "mongodbatlas_cloud_backup_snapshot_export_job": {
+      "cluster_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "components": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "export_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "replica_set_name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "custom_data": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "err_msg": {
+        "Type": "String",
+        "Computed": true
+      },
+      "export_bucket_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "export_job_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "export_status_exported_collections": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "export_status_total_collections": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "finished_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "prefix": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "snapshot_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "mongodbatlas_cloud_backup_snapshot_export_jobs": {
+      "cluster_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "items_per_page": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "page_num": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "components": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "export_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "replica_set_name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "created_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "custom_data": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "err_msg": {
+              "Type": "String",
+              "Computed": true
+            },
+            "export_bucket_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "export_job_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "export_status_exported_collections": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "export_status_total_collections": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "finished_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "prefix": {
+              "Type": "String",
+              "Computed": true
+            },
+            "snapshot_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "state": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "total_count": {
+        "Type": "Int",
         "Computed": true
       }
     },
@@ -7708,6 +8603,10 @@
       "type": {
         "Type": "String",
         "Computed": true
+      },
+      "unordered": {
+        "Type": "Bool",
+        "Computed": true
       }
     },
     "mongodbatlas_event_triggers": {
@@ -7838,6 +8737,812 @@
             "type": {
               "Type": "String",
               "Computed": true
+            },
+            "unordered": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "mongodbatlas_federated_settings": {
+      "federated_domains": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "has_role_mappings": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "identity_provider_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "identity_provider_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "mongodbatlas_federated_settings_identity_provider": {
+      "acs_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "associated_domains": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "associated_orgs": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain_allow_list": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "domain_restriction_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "identity_provider_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "org_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "post_auth_role_grants": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "role_mappings": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "external_group_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "role_assignments": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "org_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "role": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "user_conflicts": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "email_address": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "federation_settings_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "first_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "last_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "user_id": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "audience_uri": {
+        "Type": "String",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "identity_provider_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "issuer_uri": {
+        "Type": "String",
+        "Computed": true
+      },
+      "okta_idp_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "pem_file_info": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "certificates": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "not_after": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "not_before": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "file_name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "request_binding": {
+        "Type": "String",
+        "Computed": true
+      },
+      "response_signature_algorithm": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sso_debug_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "sso_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "mongodbatlas_federated_settings_identity_providers": {
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "items_per_page": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "page_num": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "acs_url": {
+              "Type": "String",
+              "Computed": true
+            },
+            "associated_domains": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "associated_orgs": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "domain_allow_list": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "domain_restriction_enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "identity_provider_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "org_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "post_auth_role_grants": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "role_mappings": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "external_group_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "role_assignments": {
+                          "Type": "List",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "group_id": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "org_id": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "role": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "user_conflicts": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "email_address": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "federation_settings_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "first_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "last_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "user_id": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "audience_uri": {
+              "Type": "String",
+              "Computed": true
+            },
+            "display_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "issuer_uri": {
+              "Type": "String",
+              "Computed": true
+            },
+            "okta_idp_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "pem_file_info": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "certificates": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "not_after": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "not_before": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "file_name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "request_binding": {
+              "Type": "String",
+              "Computed": true
+            },
+            "response_signature_algorithm": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sso_debug_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "sso_url": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "mongodbatlas_federated_settings_org_config": {
+      "domain_allow_list": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "domain_restriction_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "identity_provider_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "post_auth_role_grants": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "role_mappings": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "external_group_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "role_assignments": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "group_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "org_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "role": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "user_conflicts": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "email_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "federation_settings_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "first_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "last_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "mongodbatlas_federated_settings_org_configs": {
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "items_per_page": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "page_num": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain_allow_list": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "domain_restriction_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "identity_provider_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "org_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "post_auth_role_grants": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "role_mappings": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "external_group_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "role_assignments": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "org_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "role": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "user_conflicts": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "email_address": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "federation_settings_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "first_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "last_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "user_id": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "mongodbatlas_federated_settings_org_role_mapping": {
+      "external_group_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "role_assignments": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "org_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "role": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "role_mapping_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "mongodbatlas_federated_settings_org_role_mappings": {
+      "federation_settings_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "items_per_page": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "page_num": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "external_group_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "role_assignments": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "group_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "org_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "role": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -8597,6 +10302,16 @@
         "Required": true
       }
     },
+    "mongodbatlas_private_endpoint_regional_mode": {
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "mongodbatlas_privatelink_endpoint": {
       "endpoint_group_names": {
         "Type": "List",
@@ -8863,6 +10578,26 @@
         "Type": "String",
         "Computed": true
       },
+      "is_collect_database_specifics_statistics_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_data_explorer_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_performance_advisor_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_realtime_performance_panel_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_schema_advisor_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -9029,6 +10764,26 @@
             },
             "id": {
               "Type": "String",
+              "Computed": true
+            },
+            "is_collect_database_specifics_statistics_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_data_explorer_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_performance_advisor_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_realtime_performance_panel_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "is_schema_advisor_enabled": {
+              "Type": "Bool",
               "Computed": true
             },
             "name": {
@@ -9258,6 +11013,157 @@
         "Computed": true
       }
     },
+    "mongodbatlas_serverless_instance": {
+      "connection_strings_standard_srv": {
+        "Type": "String",
+        "Computed": true
+      },
+      "continuous_backup_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "create_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "links": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rel": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "mongo_db_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "provider_settings_backing_provider_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "provider_settings_provider_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "provider_settings_region_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "state_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "mongodbatlas_serverless_instances": {
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_strings_standard_srv": {
+              "Type": "String",
+              "Computed": true
+            },
+            "continuous_backup_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "create_date": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "links": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "href": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "rel": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "mongo_db_version": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "provider_settings_backing_provider_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "provider_settings_provider_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "provider_settings_region_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "state_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "mongodbatlas_team": {
       "name": {
         "Type": "String",
@@ -9337,6 +11243,10 @@
         "Type": "String",
         "Computed": true
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "flow_name": {
         "Type": "String",
         "Computed": true
@@ -9344,6 +11254,10 @@
       "license_key": {
         "Type": "String",
         "Computed": true
+      },
+      "microsoft_teams_webhook_url": {
+        "Type": "String",
+        "Optional": true
       },
       "org_name": {
         "Type": "String",
@@ -9365,9 +11279,17 @@
         "Type": "String",
         "Computed": true
       },
+      "scheme": {
+        "Type": "String",
+        "Optional": true
+      },
       "secret": {
         "Type": "String",
         "Computed": true
+      },
+      "service_discovery": {
+        "Type": "String",
+        "Optional": true
       },
       "service_key": {
         "Type": "String",
@@ -9385,6 +11307,10 @@
       "url": {
         "Type": "String",
         "Computed": true
+      },
+      "user_name": {
+        "Type": "String",
+        "Optional": true
       },
       "write_token": {
         "Type": "String",
@@ -9420,6 +11346,10 @@
               "Type": "String",
               "Computed": true
             },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true
+            },
             "flow_name": {
               "Type": "String",
               "Computed": true
@@ -9427,6 +11357,10 @@
             "license_key": {
               "Type": "String",
               "Computed": true
+            },
+            "microsoft_teams_webhook_url": {
+              "Type": "String",
+              "Optional": true
             },
             "org_name": {
               "Type": "String",
@@ -9448,9 +11382,17 @@
               "Type": "String",
               "Computed": true
             },
+            "scheme": {
+              "Type": "String",
+              "Optional": true
+            },
             "secret": {
               "Type": "String",
               "Computed": true
+            },
+            "service_discovery": {
+              "Type": "String",
+              "Optional": true
             },
             "service_key": {
               "Type": "String",
@@ -9467,6 +11409,10 @@
             "url": {
               "Type": "String",
               "Computed": true
+            },
+            "user_name": {
+              "Type": "String",
+              "Optional": true
             },
             "write_token": {
               "Type": "String",

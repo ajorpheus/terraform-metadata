@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "exoscale",
   "type": "provider",
-  "version": "v0.31.2",
+  "version": "v0.40.2",
   "provider": {
     "compute_endpoint": {
       "Type": "String",
@@ -373,9 +373,30 @@
         "Type": "String",
         "Required": true
       },
-      "private_network_ids": {
+      "network_interface": {
         "Type": "Set",
         "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ip_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IP address"
+            },
+            "network_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "private_network_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "Deprecated": "Use the network_interface block instead.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -428,6 +449,10 @@
         "update",
         "delete"
       ],
+      "ca_certificate": {
+        "Type": "String",
+        "Computed": true
+      },
       "created_at": {
         "Type": "String",
         "Computed": true
@@ -578,6 +603,135 @@
         "Type": "Int",
         "Computed": true
       },
+      "opensearch": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dashboards": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  },
+                  "max_old_space_size": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "int",
+                      "Value": "128"
+                    }
+                  },
+                  "request_timeout": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "int",
+                      "Value": "30000"
+                    }
+                  }
+                }
+              }
+            },
+            "fork_from_service": {
+              "Type": "String",
+              "Optional": true
+            },
+            "index_pattern": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "max_index_count": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "pattern": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "sorting_algorithm": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "index_template": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mapping_nested_objects_limit": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "number_of_replicas": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "number_of_shards": {
+                    "Type": "Int",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "ip_filter": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "keep_index_refresh_interval": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "max_index_count": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "recovery_backup_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "settings": {
+              "Type": "String",
+              "Optional": true
+            },
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "pg": {
         "Type": "List",
         "Optional": true,
@@ -703,11 +857,13 @@
       ],
       "auto_renew": {
         "Type": "Bool",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Not used, will be removed in the future"
       },
       "expires_on": {
         "Type": "String",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Not used, will be removed in the future"
       },
       "name": {
         "Type": "String",
@@ -715,11 +871,13 @@
       },
       "state": {
         "Type": "String",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Not used, will be removed in the future"
       },
       "token": {
         "Type": "String",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Not used, will be removed in the future"
       }
     },
     "exoscale_domain_record": {
@@ -845,6 +1003,61 @@
         "Required": true
       }
     },
+    "exoscale_iam_access_key": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "delete"
+      ],
+      "key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "operations": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "resources": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "secret": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tags_operations": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "exoscale_instance_pool": {
       "__timeouts__": [
         "create",
@@ -898,6 +1111,34 @@
         "ConflictsWith": [
           "service_offering"
         ]
+      },
+      "instances": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "public_ip_address": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       },
       "ipv6": {
         "Type": "Bool",
@@ -972,6 +1213,7 @@
         "Type": "Set",
         "Optional": true,
         "Computed": true,
+        "Deprecated": "Use the instances exported attribute instead.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1660,6 +1902,10 @@
           "ElementsType": "String"
         }
       },
+      "aggregation_ca": {
+        "Type": "String",
+        "Computed": true
+      },
       "auto_upgrade": {
         "Type": "Bool",
         "Optional": true
@@ -1671,6 +1917,10 @@
           "Type": "string",
           "Value": "calico"
         }
+      },
+      "control_plane_ca": {
+        "Type": "String",
+        "Computed": true
       },
       "created_at": {
         "Type": "String",
@@ -1691,6 +1941,10 @@
           "Type": "bool",
           "Value": "true"
         }
+      },
+      "kubelet_ca": {
+        "Type": "String",
+        "Computed": true
       },
       "labels": {
         "Type": "Map",
@@ -1784,6 +2038,59 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "exoscale_sks_kubeconfig": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "early_renewal_seconds": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "groups": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "kubeconfig": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ready_for_renewal": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "ttl_seconds": {
+        "Type": "Float",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "2592000"
+        }
+      },
+      "user": {
+        "Type": "String",
+        "Required": true
       },
       "zone": {
         "Type": "String",
@@ -2148,6 +2455,10 @@
         "Type": "String",
         "Computed": true
       },
+      "manager_type": {
+        "Type": "String",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -2196,6 +2507,132 @@
       "user_data": {
         "Type": "String",
         "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "exoscale_compute_instance_list": {
+      "instances": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "anti_affinity_group_ids": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "created_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "deploy_target_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_size": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "elastic_ip_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "ipv6": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "labels": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "manager_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "manager_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_network_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "public_ip_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "security_group_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ssh_key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "state": {
+              "Type": "String",
+              "Computed": true
+            },
+            "template_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_data": {
+              "Type": "String",
+              "Computed": true
+            },
+            "zone": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "zone": {
         "Type": "String",
@@ -2323,7 +2760,7 @@
               ]
             },
             "id": {
-              "Type": "Int",
+              "Type": "String",
               "Optional": true,
               "ConflictsWith": [
                 "filter.0.name",
@@ -2369,7 +2806,7 @@
               "Description": "Domain of the Record"
             },
             "id": {
-              "Type": "Int",
+              "Type": "String",
               "Optional": true,
               "Description": "ID of the Record"
             },
@@ -2381,12 +2818,17 @@
             "prio": {
               "Type": "Int",
               "Optional": true,
-              "Description": "Prio of the Record"
+              "Description": "Priority of the Record"
             },
             "record_type": {
               "Type": "String",
               "Optional": true,
               "Description": "Type of the Record"
+            },
+            "ttl": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "TTL of the Record"
             }
           }
         }
@@ -2457,6 +2899,287 @@
         "ConflictsWith": [
           "id"
         ]
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "exoscale_instance_pool": {
+      "affinity_group_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "deploy_target_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "disk_size": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "elastic_ip_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "instance_prefix": {
+        "Type": "String",
+        "Computed": true
+      },
+      "instance_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "instances": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "public_ip_address": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ipv6": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "key_pair": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "network_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "security_group_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "size": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "template_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_data": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "exoscale_instance_pool_list": {
+      "pools": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "affinity_group_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deploy_target_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "disk_size": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "elastic_ip_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "instance_prefix": {
+              "Type": "String",
+              "Computed": true
+            },
+            "instance_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "instances": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "ipv6_address": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "public_ip_address": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "ipv6": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "key_pair": {
+              "Type": "String",
+              "Computed": true
+            },
+            "labels": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "network_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "security_group_ids": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "size": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "state": {
+              "Type": "String",
+              "Computed": true
+            },
+            "template_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_data": {
+              "Type": "String",
+              "Computed": true
+            },
+            "zone": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "zone": {
         "Type": "String",

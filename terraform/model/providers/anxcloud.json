@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "anxcloud",
   "type": "provider",
-  "version": "v0.3.3",
+  "version": "v0.4.1",
   "provider": {
     "token": {
       "Type": "String",
@@ -13,6 +13,156 @@
     }
   },
   "resources": {
+    "anxcloud_dns_record": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "identifier": {
+        "Type": "String",
+        "Description": "DNS Record identifier. Changes on revision change and therefore shouldn't be used as reference.",
+        "Computed": true
+      },
+      "immutable": {
+        "Type": "Bool",
+        "Description": "Specifies whether or not a record is immutable.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "DNS record name."
+      },
+      "rdata": {
+        "Type": "String",
+        "Required": true,
+        "Description": "DNS record data."
+      },
+      "region": {
+        "Type": "String",
+        "Description": "DNS record region (for GeoDNS aware records).",
+        "Computed": true
+      },
+      "ttl": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Region specific TTL. If not set the zone TTL will be used."
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "DNS record type."
+      },
+      "zone_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Zone of DNS record."
+      }
+    },
+    "anxcloud_dns_zone": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "admin_email": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Admin email address."
+      },
+      "deployment_level": {
+        "Type": "Int",
+        "Description": "Current deployment progress in percent.",
+        "Computed": true
+      },
+      "dns_sec_mode": {
+        "Type": "String",
+        "Required": true,
+        "Description": "DNSSec mode value for master zones. [`managed` or `unvalidated`]"
+      },
+      "dns_servers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configured DNS servers.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alias": {
+              "Type": "String",
+              "Required": true,
+              "Description": "DNS server alias."
+            },
+            "server": {
+              "Type": "String",
+              "Required": true,
+              "Description": "DNS server name."
+            }
+          }
+        }
+      },
+      "expire": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Expiration value."
+      },
+      "is_editable": {
+        "Type": "Bool",
+        "Description": "Indicator if zone is editable.",
+        "Computed": true
+      },
+      "is_master": {
+        "Type": "Bool",
+        "Required": true,
+        "Description": "Indicator if the zone is a master zone."
+      },
+      "master_nameserver": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Master nameserver.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Zone name."
+      },
+      "notify_allowed_ips": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP addresses allowed to initiate domain transfer.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "refresh": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Refresh value."
+      },
+      "retry": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Retry value."
+      },
+      "ttl": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "TTL value."
+      },
+      "validation_level": {
+        "Type": "Int",
+        "Description": "Current validation level in percent.",
+        "Computed": true
+      }
+    },
     "anxcloud_ip_address": {
       "__timeouts__": [
         "create",
@@ -23,7 +173,7 @@
       "address": {
         "Type": "String",
         "Required": true,
-        "Description": "IP address that should be created"
+        "Description": "IP address."
       },
       "description_customer": {
         "Type": "String",
@@ -33,6 +183,11 @@
       "description_internal": {
         "Type": "String",
         "Description": "Internal description.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Identifier of the API resource.",
         "Computed": true
       },
       "network_prefix_id": {
@@ -59,6 +214,17 @@
         "Description": "Status of the IP address",
         "Computed": true
       },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of tags attached to the resource.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "version": {
         "Type": "Int",
         "Description": "IP version.",
@@ -68,6 +234,35 @@
         "Type": "String",
         "Description": "The associated VLAN identifier.",
         "Computed": true
+      }
+    },
+    "anxcloud_lbaas_loadbalancer": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "ip_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Address of the Engine management API of the LoadBalancer."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "LoadBalancer name."
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of tags attached to the resource.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "anxcloud_network_prefix": {
@@ -85,7 +280,7 @@
       "create_empty": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "whether the prefix should be created with inactive IPs",
+        "Description": "Whether the prefix should be created with inactive IPs",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -109,7 +304,7 @@
       "location_id": {
         "Type": "String",
         "Required": true,
-        "Description": "Location Identifier."
+        "Description": "Identifier of the location to create the prefix at."
       },
       "locations": {
         "Type": "List",
@@ -127,8 +322,8 @@
             },
             "code": {
               "Type": "String",
-              "Description": "Location code.",
-              "Computed": true
+              "Optional": true,
+              "Description": "Location code."
             },
             "country": {
               "Type": "String",
@@ -137,7 +332,7 @@
             },
             "identifier": {
               "Type": "String",
-              "Description": "Identifier of the location.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "lat": {
@@ -152,7 +347,7 @@
             },
             "name": {
               "Type": "String",
-              "Description": "Name of the location.",
+              "Description": "Location name.",
               "Computed": true
             }
           }
@@ -187,6 +382,17 @@
         "Description": "Status of the created prefix.",
         "Computed": true
       },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of tags attached to the resource.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "type": {
         "Type": "Int",
         "Optional": true,
@@ -195,7 +401,7 @@
       "vlan_id": {
         "Type": "String",
         "Optional": true,
-        "Description": "The corresponding VLAN ID"
+        "Description": "The corresponding VLAN identifier"
       }
     },
     "anxcloud_tag": {
@@ -225,7 +431,7 @@
           "Info": {
             "customer": {
               "Type": "List",
-              "Description": "Customer related info.",
+              "Description": "Customer related information.",
               "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
@@ -234,7 +440,7 @@
                 "Info": {
                   "customer_id": {
                     "Type": "String",
-                    "Description": "Identifier of the customer.",
+                    "Description": "Customer identifier.",
                     "Computed": true
                   },
                   "demo": {
@@ -259,7 +465,7 @@
                   },
                   "reseller": {
                     "Type": "String",
-                    "Description": "Reseller.",
+                    "Description": "Reseller name.",
                     "Computed": true
                   }
                 }
@@ -267,7 +473,7 @@
             },
             "service": {
               "Type": "List",
-              "Description": "Service related info.",
+              "Description": "Service related information.",
               "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
@@ -276,12 +482,12 @@
                 "Info": {
                   "id": {
                     "Type": "String",
-                    "Description": "Identifier of the service.",
+                    "Description": "Service identifier.",
                     "Computed": true
                   },
                   "name": {
                     "Type": "String",
-                    "Description": "Name of the service.",
+                    "Description": "Service name.",
                     "Computed": true
                   }
                 }
@@ -311,7 +517,7 @@
       "cpu_performance_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "CPU type. Example: (\"best-effort\", \"standard\", \"enterprise\", \"performance\"), defaults to \"standard\".",
+        "Description": "CPU type. Example: (`best-effort`, `standard`, `enterprise`, `performance`), defaults to `standard`.",
         "Default": {
           "Type": "string",
           "Value": "standard"
@@ -348,17 +554,17 @@
             "disk_gb": {
               "Type": "Int",
               "Required": true,
-              "Description": "Requested disk capacity in GB."
+              "Description": "Disk capacity in GB."
             },
             "disk_id": {
               "Type": "Int",
-              "Description": "Device ID of the disk on.",
+              "Description": "Device identifier of the disk.",
               "Computed": true
             },
             "disk_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "Requested disk category (limits disk performance, e.g. IOPS). Default as defined by data center."
+              "Description": "Disk category (limits disk performance, e.g. IOPS). Default value depends on location."
             }
           }
         }
@@ -386,7 +592,7 @@
       "force_restart_if_needed": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Certain operations may only be performed in powered off stat.Such as: shrinking memory, shrinking/adding cpu, removing disk, scale a disk beyond 2 GB. Passing this value as true will always execute a power offand reboot request after completing all other operations. Without this flag set to true scaling operations requiring a reboot will fail.",
+        "Description": "Certain operations may only be performed in powered off state. Such as: shrinking memory, shrinking/adding CPU, removing disk and scaling a disk beyond 2 GB. Passing this value as true will always execute a power off and reboot request after completing all other operations. Without this flag set to true scaling operations requiring a reboot will fail.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -408,12 +614,12 @@
           "Info": {
             "cores": {
               "Type": "Int",
-              "Description": "Number of cpu cores.",
+              "Description": "Number of CPU cores.",
               "Computed": true
             },
             "cpu": {
               "Type": "Int",
-              "Description": "Number of cpus.",
+              "Description": "Number of CPUs.",
               "Computed": true
             },
             "custom_name": {
@@ -490,7 +696,7 @@
             },
             "identifier": {
               "Type": "String",
-              "Description": "Virtual server identifier.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "location_code": {
@@ -515,7 +721,7 @@
             },
             "network": {
               "Type": "List",
-              "Description": "Network interfaces",
+              "Description": "Network interfaces.",
               "Computed": true,
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
@@ -549,7 +755,7 @@
                   },
                   "mac_address": {
                     "Type": "String",
-                    "Description": "MAC address of the NIC",
+                    "Description": "MAC address of the NIC.",
                     "Computed": true
                   },
                   "nic": {
@@ -628,12 +834,12 @@
       "password": {
         "Type": "String",
         "Optional": true,
-        "Description": "Plaintext password. Example: ('!anx123mySuperStrongPassword123anx!', 'go3ju0la1ro3', …). USE IT AT YOUR OWN RISK! (or SSH key instead)."
+        "Description": "Plaintext password. Example: ('!anx123mySuperStrongPassword123anx!', 'go3ju0la1ro3', …). For systems that support it, we strongly recommend using a SSH key instead."
       },
       "script": {
         "Type": "String",
         "Optional": true,
-        "Description": "Script to be executed after provisioning. Should be base64 encoded. Consider the corresponding shebang at the beginning of your script. If you want to use PowerShell, the first line should be: #ps1_sysnative."
+        "Description": "Script to be executed after provisioning. Consider the corresponding shebang at the beginning of your script. If you want to use PowerShell, the first line should be: #ps1_sysnative."
       },
       "sockets": {
         "Type": "Int",
@@ -648,21 +854,33 @@
       "tags": {
         "Type": "List",
         "Optional": true,
-        "Description": "List of tags attached to the Virtual Server.",
+        "Description": "List of tags attached to the resource.",
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
       },
+      "template": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Named template. Can be used instead of the template_id to select a template. Example: (`Debian 11`, `Windows 2022`)."
+      },
+      "template_build": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Template build identifier optionally used with `template`. Will default to latest build. Example: `b42`"
+      },
       "template_id": {
         "Type": "String",
-        "Required": true,
-        "Description": "Template identifier."
+        "Optional": true,
+        "Description": "Template identifier.",
+        "Computed": true
       },
       "template_type": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "OS template type."
       }
     },
@@ -704,8 +922,8 @@
             },
             "code": {
               "Type": "String",
-              "Description": "Location code.",
-              "Computed": true
+              "Optional": true,
+              "Description": "Location code."
             },
             "country": {
               "Type": "String",
@@ -714,7 +932,7 @@
             },
             "identifier": {
               "Type": "String",
-              "Description": "Identifier of the location.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "lat": {
@@ -729,7 +947,7 @@
             },
             "name": {
               "Type": "String",
-              "Description": "Name of the location.",
+              "Description": "Location name.",
               "Computed": true
             }
           }
@@ -750,6 +968,17 @@
         "Description": "VLAN status.",
         "Computed": true
       },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of tags attached to the resource.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "vm_provisioning": {
         "Type": "Bool",
         "Optional": true,
@@ -762,16 +991,44 @@
     }
   },
   "data-sources": {
-    "anxcloud_core_locations": {
-      "limit": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The records limit of the list.",
-        "Default": {
-          "Type": "int",
-          "Value": "1000"
-        }
+    "anxcloud_core_location": {
+      "city_code": {
+        "Type": "String",
+        "Description": "Location city code.",
+        "Computed": true
       },
+      "code": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Location code."
+      },
+      "country": {
+        "Type": "String",
+        "Description": "Location country.",
+        "Computed": true
+      },
+      "identifier": {
+        "Type": "String",
+        "Description": "Identifier of the API resource.",
+        "Computed": true
+      },
+      "lat": {
+        "Type": "String",
+        "Description": "Location latitude.",
+        "Computed": true
+      },
+      "lon": {
+        "Type": "String",
+        "Description": "Location longitude.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Location name.",
+        "Computed": true
+      }
+    },
+    "anxcloud_core_locations": {
       "locations": {
         "Type": "List",
         "Description": "Anexia Cloud Locations.",
@@ -788,8 +1045,8 @@
             },
             "code": {
               "Type": "String",
-              "Description": "Location code.",
-              "Computed": true
+              "Optional": true,
+              "Description": "Location code."
             },
             "country": {
               "Type": "String",
@@ -798,7 +1055,7 @@
             },
             "identifier": {
               "Type": "String",
-              "Description": "Identifier of the location.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "lat": {
@@ -813,25 +1070,16 @@
             },
             "name": {
               "Type": "String",
-              "Description": "Name of the location.",
+              "Description": "Location name.",
               "Computed": true
             }
           }
         }
       },
-      "page": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The page of the list.",
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
-      },
       "search": {
         "Type": "String",
         "Optional": true,
-        "Description": "An optional string allowing to search trough entities."
+        "Description": "An optional string allowing to search through entities."
       }
     },
     "anxcloud_cpu_performance_types": {
@@ -846,22 +1094,22 @@
           "Info": {
             "id": {
               "Type": "String",
-              "Description": "Id of the CPU performance type",
+              "Description": "CPU performance type identifier.",
               "Computed": true
             },
             "limit": {
               "Type": "Float",
-              "Description": "The limit of the CPU performance type",
+              "Description": "CPU performance type limit.",
               "Computed": true
             },
             "prioritization": {
               "Type": "String",
-              "Description": "Prio of the CPU performance type",
+              "Description": "CPU performance type prioritization.",
               "Computed": true
             },
             "unit": {
               "Type": "String",
-              "Description": "The unit for the limit of the CPU performance type",
+              "Description": "CPU performance type limit unit.",
               "Computed": true
             }
           }
@@ -890,17 +1138,17 @@
             },
             "id": {
               "Type": "String",
-              "Description": "Identifier of the disk type.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "iops": {
               "Type": "Int",
-              "Description": "Disk input/output operations per second.",
+              "Description": "Input/output operations per second.",
               "Computed": true
             },
             "latency": {
               "Type": "Int",
-              "Description": "Disk latency.",
+              "Description": "Latency.",
               "Computed": true
             },
             "storage_type": {
@@ -910,6 +1158,225 @@
             }
           }
         }
+      }
+    },
+    "anxcloud_dns_records": {
+      "records": {
+        "Type": "List",
+        "Description": "List of known records on the zone",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "identifier": {
+              "Type": "String",
+              "Description": "DNS Record identifier. Changes on revision change and therefore shouldn't be used as reference.",
+              "Computed": true
+            },
+            "immutable": {
+              "Type": "Bool",
+              "Description": "Specifies whether or not a record is immutable.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "DNS record name."
+            },
+            "rdata": {
+              "Type": "String",
+              "Required": true,
+              "Description": "DNS record data."
+            },
+            "region": {
+              "Type": "String",
+              "Description": "DNS record region (for GeoDNS aware records).",
+              "Computed": true
+            },
+            "ttl": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Region specific TTL. If not set the zone TTL will be used."
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "DNS record type."
+            },
+            "zone_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Zone of DNS record."
+            }
+          }
+        }
+      },
+      "zone_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Parent zone"
+      }
+    },
+    "anxcloud_dns_zones": {
+      "zones": {
+        "Type": "List",
+        "Description": "List of DNS zones of the customer.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "admin_email": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Admin email address."
+            },
+            "deployment_level": {
+              "Type": "Int",
+              "Description": "Current deployment progress in percent.",
+              "Computed": true
+            },
+            "dns_sec_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "DNSSec mode value for master zones. [`managed` or `unvalidated`]"
+            },
+            "dns_servers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Configured DNS servers.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "alias": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "DNS server alias."
+                  },
+                  "server": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "DNS server name."
+                  }
+                }
+              }
+            },
+            "expire": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Expiration value."
+            },
+            "is_editable": {
+              "Type": "Bool",
+              "Description": "Indicator if zone is editable.",
+              "Computed": true
+            },
+            "is_master": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Indicator if the zone is a master zone."
+            },
+            "master_nameserver": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Master nameserver.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Zone name."
+            },
+            "notify_allowed_ips": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "IP addresses allowed to initiate domain transfer.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "refresh": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Refresh value."
+            },
+            "retry": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Retry value."
+            },
+            "ttl": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "TTL value."
+            },
+            "validation_level": {
+              "Type": "Int",
+              "Description": "Current validation level in percent.",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "anxcloud_ip_address": {
+      "address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP address."
+      },
+      "description_customer": {
+        "Type": "String",
+        "Description": "Additional customer description.",
+        "Computed": true
+      },
+      "description_internal": {
+        "Type": "String",
+        "Description": "Internal description.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of the API resource."
+      },
+      "network_prefix_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of the related network prefix."
+      },
+      "organization": {
+        "Type": "String",
+        "Description": "Customer of yours. Reseller only.",
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Description": "Role of the IP address",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the IP address",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
+        "Description": "IP version.",
+        "Computed": true
+      },
+      "vlan_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The associated VLAN identifier."
       }
     },
     "anxcloud_ip_addresses": {
@@ -934,39 +1401,21 @@
             },
             "identifier": {
               "Type": "String",
-              "Description": "Identifier of the address.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "role": {
               "Type": "String",
-              "Description": "Role of the IP address",
+              "Description": "Role of the IP address.",
               "Computed": true
             }
           }
         }
       },
-      "limit": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The records limit of the list.",
-        "Default": {
-          "Type": "int",
-          "Value": "1000"
-        }
-      },
-      "page": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The page of the list.",
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
-      },
       "search": {
         "Type": "String",
         "Optional": true,
-        "Description": "An optional string allowing to search trough entities."
+        "Description": "An optional string allowing to search through entities."
       }
     },
     "anxcloud_nic_types": {
@@ -982,48 +1431,30 @@
       }
     },
     "anxcloud_tags": {
-      "limit": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Number of tags per page",
-        "Default": {
-          "Type": "int",
-          "Value": "1000"
-        }
-      },
       "order": {
         "Type": "String",
         "Optional": true,
-        "Description": "The order of the tags"
+        "Description": "The order of the tags."
       },
       "organization_identifier": {
         "Type": "String",
         "Optional": true,
-        "Description": "The id of the organization"
-      },
-      "page": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Number of page",
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
+        "Description": "The identifier of the organization."
       },
       "query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Search term"
+        "Description": "An optional string allowing to search through entities."
       },
       "service_identifier": {
         "Type": "String",
         "Optional": true,
-        "Description": "The id of the service"
+        "Description": "The identifier of the service."
       },
       "sort_ascending": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Ascending or descending"
+        "Description": "Ascending or descending."
       },
       "tags": {
         "Type": "List",
@@ -1036,12 +1467,12 @@
           "Info": {
             "identifier": {
               "Type": "String",
-              "Description": "Identifier of the tag.",
+              "Description": "Tag identifier.",
               "Computed": true
             },
             "name": {
               "Type": "String",
-              "Description": "Name of the tag.",
+              "Description": "Tag name.",
               "Computed": true
             }
           }
@@ -1057,7 +1488,7 @@
       "template_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "Template type. Defaults to 'templates'.",
+        "Description": "Template type. Defaults to 'templates' and also supports 'from_scratch'.",
         "Default": {
           "Type": "string",
           "Value": "templates"
@@ -1065,7 +1496,7 @@
       },
       "templates": {
         "Type": "List",
-        "Description": "Available list of templates.",
+        "Description": "List of available templates.",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -1084,7 +1515,7 @@
             },
             "id": {
               "Type": "String",
-              "Description": "Template identifier.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "name": {
@@ -1140,7 +1571,7 @@
                   },
                   "cpus": {
                     "Type": "List",
-                    "Description": "Hostname parameter.",
+                    "Description": "CPUs parameter.",
                     "Computed": true,
                     "IsBlock": true,
                     "ConfigImplicitMode": "ComputedBlock",
@@ -1608,28 +2039,10 @@
       }
     },
     "anxcloud_vlans": {
-      "limit": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The records limit of the list.",
-        "Default": {
-          "Type": "int",
-          "Value": "1000"
-        }
-      },
-      "page": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The page of the list.",
-        "Default": {
-          "Type": "int",
-          "Value": "1"
-        }
-      },
       "search": {
         "Type": "String",
         "Optional": true,
-        "Description": "An optional string allowing to search trough entities."
+        "Description": "An optional string allowing to search through entities."
       },
       "vlans": {
         "Type": "List",
@@ -1647,7 +2060,7 @@
             },
             "identifier": {
               "Type": "String",
-              "Description": "Identifier of the VLAN.",
+              "Description": "Identifier of the API resource.",
               "Computed": true
             },
             "name": {
@@ -1656,83 +2069,6 @@
               "Computed": true
             }
           }
-        }
-      }
-    },
-    "anxcloud_vsphere_locations": {
-      "limit": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Amount of records per page",
-        "Default": {
-          "Type": "int",
-          "Value": "50"
-        }
-      },
-      "location_code": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Filters locations by country code"
-      },
-      "locations": {
-        "Type": "List",
-        "Description": "Anexia Cloud Locations.",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "code": {
-              "Type": "String",
-              "Description": "Location code.",
-              "Computed": true
-            },
-            "country": {
-              "Type": "String",
-              "Description": "Location country.",
-              "Computed": true
-            },
-            "country_name": {
-              "Type": "String",
-              "Description": "Location country name.",
-              "Computed": true
-            },
-            "identifier": {
-              "Type": "String",
-              "Description": "Identifier of the location.",
-              "Computed": true
-            },
-            "lat": {
-              "Type": "String",
-              "Description": "Location latitude.",
-              "Computed": true
-            },
-            "lon": {
-              "Type": "String",
-              "Description": "Location longitude.",
-              "Computed": true
-            },
-            "name": {
-              "Type": "String",
-              "Description": "Name of the location.",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "organization": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Customer identifier"
-      },
-      "page": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Results page",
-        "Default": {
-          "Type": "int",
-          "Value": "1"
         }
       }
     }

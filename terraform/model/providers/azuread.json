@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "azuread",
   "type": "provider",
-  "version": "v2.16.0",
+  "version": "v2.28.1",
   "provider": {
     "client_certificate": {
       "Type": "String",
@@ -53,6 +53,24 @@
       "Description": "The path to a custom endpoint for Managed Identity - in most circumstances this should be detected automatically",
       "DefaultFunc": "ENV(ARM_MSI_ENDPOINT)"
     },
+    "oidc_request_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The bearer token for the request to the OIDC provider. For use when authenticating as a Service Principal using OpenID Connect.",
+      "DefaultFunc": "MENV(ARM_OIDC_REQUEST_TOKEN,ACTIONS_ID_TOKEN_REQUEST_TOKEN)"
+    },
+    "oidc_request_url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The URL for the OIDC provider from which to request an ID token. For use when authenticating as a Service Principal using OpenID Connect.",
+      "DefaultFunc": "MENV(ARM_OIDC_REQUEST_URL,ACTIONS_ID_TOKEN_REQUEST_URL)"
+    },
+    "oidc_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The ID token for use when authenticating as a Service Principal using OpenID Connect.",
+      "DefaultFunc": "ENV(ARM_OIDC_TOKEN)"
+    },
     "partner_id": {
       "Type": "String",
       "Optional": true,
@@ -76,6 +94,12 @@
       "Optional": true,
       "Description": "Allow Managed Identity to be used for Authentication",
       "DefaultFunc": "ENV(ARM_USE_MSI)"
+    },
+    "use_oidc": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Allow OpenID Connect to be used for authentication",
+      "DefaultFunc": "ENV(ARM_USE_OIDC)"
     }
   },
   "resources": {
@@ -998,6 +1022,23 @@
         }
       }
     },
+    "azuread_claims_mapping_policy": {
+      "definition": {
+        "Type": "List",
+        "Required": true,
+        "Description": "A string collection containing a JSON string that defines the rules and settings for this policy",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this policy"
+      }
+    },
     "azuread_conditional_access_policy": {
       "__timeouts__": [
         "create",
@@ -1034,7 +1075,7 @@
                   },
                   "included_applications": {
                     "Type": "List",
-                    "Required": true,
+                    "Optional": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -1096,7 +1137,7 @@
             },
             "locations": {
               "Type": "List",
-              "Required": true,
+              "Optional": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -1126,7 +1167,7 @@
             },
             "platforms": {
               "Type": "List",
-              "Required": true,
+              "Optional": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -1325,6 +1366,67 @@
         "Required": true
       }
     },
+    "azuread_custom_directory_role": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the custom directory role"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The display name of the custom directory role"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Required": true,
+        "Description": "Indicates whether the role is enabled for assignment"
+      },
+      "object_id": {
+        "Type": "String",
+        "Description": "The object ID of the directory role",
+        "Computed": true
+      },
+      "permissions": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of permissions that are included in the custom directory role",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allowed_resource_actions": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "Set of tasks that can be performed on a resource",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "template_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Custom template identifier that is typically used if one needs an identifier to be the same across different directories.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The version of the role definition."
+      }
+    },
     "azuread_directory_role": {
       "__timeouts__": [
         "create",
@@ -1353,6 +1455,69 @@
         "Optional": true,
         "Description": "The object ID of the template associated with the directory role",
         "Computed": true
+      }
+    },
+    "azuread_directory_role_assignment": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "app_scope_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of the app-specific scope when the assignment scope is app-specific",
+        "Computed": true,
+        "ConflictsWith": [
+          "app_scope_object_id",
+          "directory_scope_id",
+          "directory_scope_object_id"
+        ]
+      },
+      "app_scope_object_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of the app-specific scope when the assignment scope is app-specific",
+        "Computed": true,
+        "ConflictsWith": [
+          "app_scope_id",
+          "directory_scope_id",
+          "directory_scope_object_id"
+        ],
+        "Deprecated": "`app_scope_object_id` has been renamed to `app_scope_id` and will be removed in version 3.0 or the AzureAD Provider"
+      },
+      "directory_scope_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of the directory object representing the scope of the assignment",
+        "Computed": true,
+        "ConflictsWith": [
+          "app_scope_id",
+          "app_scope_object_id",
+          "directory_scope_object_id"
+        ]
+      },
+      "directory_scope_object_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of the directory object representing the scope of the assignment",
+        "Computed": true,
+        "ConflictsWith": [
+          "app_scope_id",
+          "app_scope_object_id",
+          "directory_scope_id"
+        ]
+      },
+      "principal_object_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The object ID of the member principal"
+      },
+      "role_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The object ID of the directory role for this assignment"
       }
     },
     "azuread_directory_role_member": {
@@ -1388,7 +1553,8 @@
       "auto_subscribe_new_members": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether new members added to the group will be auto-subscribed to receive email notifications."
+        "Description": "Indicates whether new members added to the group will be auto-subscribed to receive email notifications.",
+        "Computed": true
       },
       "behaviors": {
         "Type": "Set",
@@ -1438,17 +1604,20 @@
       "external_senders_allowed": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether people external to the organization can send messages to the group."
+        "Description": "Indicates whether people external to the organization can send messages to the group.",
+        "Computed": true
       },
       "hide_from_address_lists": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether the group is displayed in certain parts of the Outlook user interface: in the Address Book, in address lists for selecting message recipients, and in the Browse Groups dialog for searching groups."
+        "Description": "Indicates whether the group is displayed in certain parts of the Outlook user interface: in the Address Book, in address lists for selecting message recipients, and in the Browse Groups dialog for searching groups.",
+        "Computed": true
       },
       "hide_from_outlook_clients": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether the group is displayed in Outlook clients, such as Outlook for Windows and Outlook on the web."
+        "Description": "Indicates whether the group is displayed in Outlook clients, such as Outlook for Windows and Outlook on the web.",
+        "Computed": true
       },
       "mail": {
         "Type": "String",
@@ -2176,6 +2345,18 @@
         "Type": "String",
         "Required": true,
         "Description": "The certificate data, which can be PEM encoded, base64 encoded DER or hexadecimal encoded DER"
+      }
+    },
+    "azuread_service_principal_claims_mapping_policy_assignment": {
+      "claims_mapping_policy_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the claims mapping policy to assign"
+      },
+      "service_principal_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object ID of the service principal for which to assign the policy"
       }
     },
     "azuread_service_principal_delegated_permission_grant": {
@@ -3273,6 +3454,21 @@
         "Computed": true
       }
     },
+    "azuread_directory_object": {
+      "__timeouts__": [
+        "read"
+      ],
+      "object_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The object ID of the principal"
+      },
+      "type": {
+        "Type": "String",
+        "Description": "The OData type of the principal",
+        "Computed": true
+      }
+    },
     "azuread_domains": {
       "__timeouts__": [
         "read"
@@ -3597,6 +3793,18 @@
           "ElementsType": "String"
         }
       },
+      "ignore_missing": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Ignore missing groups and return groups that were found. The data source will still fail if no groups are found",
+        "ConflictsWith": [
+          "return_all"
+        ],
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "mail_enabled": {
         "Type": "Bool",
         "Optional": true,
@@ -3620,7 +3828,10 @@
       "return_all": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Retrieve all groups with no filter"
+        "Description": "Retrieve all groups with no filter",
+        "ConflictsWith": [
+          "ignore_missing"
+        ]
       },
       "security_enabled": {
         "Type": "Bool",
@@ -4057,6 +4268,11 @@
             "display_name": {
               "Type": "String",
               "Description": "The display name of the application associated with this service principal",
+              "Computed": true
+            },
+            "object_id": {
+              "Type": "String",
+              "Description": "The object ID of the service principal",
               "Computed": true
             },
             "preferred_single_sign_on_mode": {

@@ -3,12 +3,12 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "honeycombio",
   "type": "provider",
-  "version": "v0.2.0",
+  "version": "v0.10.0",
   "provider": {
     "api_key": {
       "Type": "String",
       "Required": true,
-      "DefaultFunc": "ENV(HONEYCOMBIO_APIKEY)"
+      "DefaultFunc": "MENV(HONEYCOMB_API_KEY,HONEYCOMBIO_APIKEY)"
     },
     "api_url": {
       "Type": "String",
@@ -17,11 +17,17 @@
     "debug": {
       "Type": "Bool",
       "Optional": true,
+      "Description": "Enable the API client's debug logs. By default, a `TF_LOG` setting of debug or higher will enable this.",
       "DefaultFunc": "UNKNOWN"
     }
   },
   "resources": {
     "honeycombio_board": {
+      "column_layout": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "description": {
         "Type": "String",
         "Optional": true
@@ -44,7 +50,54 @@
             },
             "dataset": {
               "Type": "String",
-              "Required": true
+              "Optional": true,
+              "Computed": true,
+              "Deprecated": "Board Queries no longer require the dataset as they rely on the provided Query ID's dataset."
+            },
+            "graph_settings": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Manages the settings for this query's graph on the board.\nSee [Graph Settings](https://docs.honeycomb.io/working-with-your-data/graph-settings/) in the documentation for more information.",
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "hide_markers": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Disable the overlay of Markers on the graph.",
+                    "Computed": true
+                  },
+                  "log_scale": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Set the graph's Y axis to Log scale.",
+                    "Computed": true
+                  },
+                  "omit_missing_values": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Enable interpolatation between datapoints when the interveneing time buckets have no matching events.",
+                    "Computed": true
+                  },
+                  "stacked_graphs": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Enable the display of groups as stacked colored area under their line graphs.",
+                    "Computed": true
+                  },
+                  "utc_xaxis": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Set the graph's X axis to UTC.",
+                    "Computed": true
+                  }
+                }
+              }
             },
             "query_annotation_id": {
               "Type": "String",
@@ -71,7 +124,76 @@
         }
       }
     },
+    "honeycombio_burn_alert": {
+      "dataset": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The dataset this Burn Alert is associated with. This must be the same as the SLO's dataset."
+      },
+      "exhaustion_minutes": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The amount of time, in minutes, remaining before the SLO's error budget will be exhausted and the alert will fire."
+      },
+      "recipient": {
+        "Type": "List",
+        "Required": true,
+        "Description": "A Recipient to notify when an alert fires",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The ID of an already existing recipient. Should not be used in combination with `type` and `target`.",
+              "Computed": true
+            },
+            "notification_details": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "pagerduty_severity": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "target": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Target of the recipient, this has another meaning depending on the type of recipient. Should not be used in combination with `id`.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of recipient. Allowed types are `email`, `pagerduty`, `slack` and `webhook`. Should not be used in combination with `id`.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "slo_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the SLO that this Burn Alert is associated with."
+      }
+    },
     "honeycombio_column": {
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
       "dataset": {
         "Type": "String",
         "Required": true
@@ -88,12 +210,36 @@
         "Type": "String",
         "Required": true
       },
+      "last_written_at": {
+        "Type": "String",
+        "Computed": true
+      },
       "type": {
         "Type": "String",
         "Optional": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "honeycombio_dataset": {
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "expand_json_depth": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "last_written_at": {
+        "Type": "String",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -121,6 +267,13 @@
         "Required": true
       }
     },
+    "honeycombio_email_recipient": {
+      "address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The email address to send the notification to"
+      }
+    },
     "honeycombio_marker": {
       "dataset": {
         "Type": "String",
@@ -137,6 +290,18 @@
       "url": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "honeycombio_pagerduty_recipient": {
+      "integration_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The key of the PagerDuty Integration to send the notification to"
+      },
+      "integration_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the PagerDuty Integration to send the notification to"
       }
     },
     "honeycombio_query": {
@@ -167,7 +332,54 @@
         "Required": true
       }
     },
+    "honeycombio_slack_recipient": {
+      "channel": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Slack channel or username to send the notification to. Must begin with `#` or `@`."
+      }
+    },
+    "honeycombio_slo": {
+      "dataset": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The dataset this SLO is created in. Must be the same dataset as the SLI."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A description of the SLO's intent and context."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the SLO."
+      },
+      "sli": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The alias of the Derived Column that will be used as the SLI to indicate event success.\nThe derived column used as the SLI must be in the same dataset as the SLO. Additionally,\nthe column evaluation should consistently return nil, true, or false, as these are the only valid values for an SLI."
+      },
+      "target_percentage": {
+        "Type": "Float",
+        "Required": true,
+        "Description": "The percentage of qualified events that you expect to succeed during the `time_period`."
+      },
+      "time_period": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The time period, in days, over which your SLO will be evaluated."
+      }
+    },
     "honeycombio_trigger": {
+      "alert_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "on_change"
+        }
+      },
       "dataset": {
         "Type": "String",
         "Required": true
@@ -206,6 +418,24 @@
               "Optional": true,
               "Computed": true
             },
+            "notification_details": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "pagerduty_severity": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
             "target": {
               "Type": "String",
               "Optional": true,
@@ -240,6 +470,23 @@
           }
         }
       }
+    },
+    "honeycombio_webhook_recipient": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Webhook Integration to create"
+      },
+      "secret": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The secret to include when sending the notification to the webhook"
+      },
+      "url": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The URL of the endpoint to send the integration to"
+      }
     }
   },
   "data-sources": {
@@ -265,6 +512,37 @@
       "starts_with": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "honeycombio_query_result": {
+      "dataset": {
+        "Type": "String",
+        "Required": true
+      },
+      "graph_image_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "query_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "query_json": {
+        "Type": "String",
+        "Required": true
+      },
+      "query_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "results": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Map"
+        }
       }
     },
     "honeycombio_query_specification": {
@@ -319,39 +597,73 @@
             "value": {
               "Type": "String",
               "Optional": true,
-              "Description": "Deprecated: use the explicitly typed `value_string` instead. This variant will break queries when used with non-string columns. Mutually exclusive with the other `value_*` options.",
-              "Deprecated": "Use of attribute `value` is discouraged and will break queries when used with non-string columns. The explicitly typed `value_*` variants are preferred instead."
+              "Description": "The value used for the filter. Not needed if op is `exists`, `not-exists`, `in` or `not-in`. Mutually exclusive with the other `value_*` options."
             },
             "value_boolean": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "The value used for the filter when the column is a boolean. Mutually exclusive with `value` and the other `value_*` options"
+              "Description": "Deprecated: use 'value' instead. The value used for the filter when the column is a boolean. Mutually exclusive with `value` and the other `value_*` options",
+              "Deprecated": "Use of attribute `value_boolean` is discouraged and will fail to plan if using 'false'. Use of `value` is encouraged."
             },
             "value_float": {
               "Type": "Float",
               "Optional": true,
-              "Description": "The value used for the filter when the column is a float. Mutually exclusive with `value` and the other `value_*` options"
+              "Description": "Deprecated: use 'value' instead. The value used for the filter when the column is a float. Mutually exclusive with `value` and the other `value_*` options",
+              "Deprecated": "Use of attribute `value_float` is discouraged and will fail to plan if using '0'. Use of `value` is encouraged."
             },
             "value_integer": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The value used for the filter when the column is an integer. Mutually exclusive with `value` and the other `value_*` options"
+              "Description": "Deprecated: use 'value' instead. The value used for the filter when the column is an integer. Mutually exclusive with `value` and the other `value_*` options",
+              "Deprecated": "Use of attribute `value_integer` is discouraged and will fail to plan if using '0'. Use of `value` is encouraged."
             },
             "value_string": {
               "Type": "String",
               "Optional": true,
-              "Description": "The value used for the filter when the column is a string. Mutually exclusive with `value` and the other `value_*` options"
+              "Description": "Deprecated: use 'value' instead. The value used for the filter when the column is a string. Mutually exclusive with `value` and the other `value_*` options",
+              "Deprecated": "Use of attribute `value_string` is discouraged and will fail to plan if using the empty string. Use of `value` is encouraged."
             }
           }
         }
       },
       "filter_combination": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "AND"
+        }
       },
       "granularity": {
         "Type": "Int",
         "Optional": true
+      },
+      "having": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "calculate_op": {
+              "Type": "String",
+              "Required": true
+            },
+            "column": {
+              "Type": "String",
+              "Optional": true
+            },
+            "op": {
+              "Type": "String",
+              "Required": true
+            },
+            "value": {
+              "Type": "Float",
+              "Required": true
+            }
+          }
+        }
       },
       "json": {
         "Type": "String",
@@ -395,6 +707,152 @@
           "Type": "int",
           "Value": "7200"
         }
+      }
+    },
+    "honeycombio_recipient": {
+      "address": {
+        "Type": "String",
+        "Description": "The email recipient's address -- if of type `email`",
+        "Computed": true
+      },
+      "channel": {
+        "Type": "String",
+        "Description": "The Slack recipient's channel -- if of type `slack`",
+        "Computed": true
+      },
+      "dataset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Deprecated: recpients are now a Team-level construct. Any provided 'dataset' value will be ignored.",
+        "Deprecated": "Recpients are now a Team-level construct. The provided 'dataset' value is being ignored and should be removed."
+      },
+      "detail_filter": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Attributes to filter the recipients with.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "target"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the detail field to filter by"
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The value of the detail field to match on.",
+              "ConflictsWith": [
+                "detail_filter.0.value_regex"
+              ]
+            },
+            "value_regex": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A regular expression string to apply to the value of the detail field to match on.",
+              "ConflictsWith": [
+                "detail_filter.0.value"
+              ]
+            }
+          }
+        }
+      },
+      "integration_key": {
+        "Type": "String",
+        "Description": "The PagerDuty recipient's key -- if of type `pagerduty`",
+        "Computed": true
+      },
+      "integration_name": {
+        "Type": "String",
+        "Description": "The PagerDuty recipient's name -- if of type `pagerduty`",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The webhook recipient's name -- if of type `webhook`",
+        "Computed": true
+      },
+      "secret": {
+        "Type": "String",
+        "Description": "The webhook recipient's secret -- if of type `webhook`",
+        "Computed": true
+      },
+      "target": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Deprecated: use 'detail_filter' instead. Target of the trigger or burn alert, this has another meaning depending on the type of recipient.",
+        "ConflictsWith": [
+          "detail_filter"
+        ],
+        "Deprecated": "Use of 'target' has been replaced by 'detail_filter'."
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The type of recipient, allowed types are `email`, `pagerduty`, `slack` and `webhook`."
+      },
+      "url": {
+        "Type": "String",
+        "Description": "The webhook recipient's URL -- if of type `webhook`",
+        "Computed": true
+      }
+    },
+    "honeycombio_recipients": {
+      "detail_filter": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Attributes to filter the recipients with. `type` must be set when providing a filter.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the detail field to filter by"
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The value of the detail field to match on.",
+              "ConflictsWith": [
+                "detail_filter.0.value_regex"
+              ]
+            },
+            "value_regex": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A regular expression string to apply to the value of the detail field to match on.",
+              "ConflictsWith": [
+                "detail_filter.0.value"
+              ]
+            }
+          }
+        }
+      },
+      "ids": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of recipients."
       }
     },
     "honeycombio_trigger_recipient": {

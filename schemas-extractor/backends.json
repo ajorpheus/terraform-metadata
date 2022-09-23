@@ -15,11 +15,10 @@
   "etcdv3": {},
   "gcs": {},
   "http": {},
-  "inmem": {},
+  "kubernetes": {},
   "manta": {},
   "oss": {},
   "pg": {},
   "s3": {},
-  "swift": {},
-  "azure": {}
+  "swift": {}
 }

@@ -1,0 +1,513 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v1",
+  "name": "kaleido",
+  "type": "provider",
+  "version": "v0.2.15",
+  "provider": {
+    "api": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(KALEIDO_API)"
+    },
+    "api_key": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(KALEIDO_API_KEY)"
+    }
+  },
+  "resources": {
+    "kaleido_app_creds": {
+      "auth_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "password": {
+        "Type": "String",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "kaleido_configuration": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "details": {
+        "Type": "Map",
+        "Optional": true
+      },
+      "details_json": {
+        "Type": "String",
+        "Optional": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "last_updated": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "kaleido_consortium": {
+      "description": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "shared_deployment": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The decentralized nature of Kaleido means a consortium might be shared with other accounts. When true only create if name does not exist, and delete becomes a no-op.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
+    "kaleido_czone": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cloud": {
+        "Type": "String",
+        "Required": true
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "kaleido_destination": {
+      "auto_verify_membership": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "idregistry_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "kaleido_managed": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "kaleido_environment": {
+      "block_period": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "chain_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "consensus_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "env_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "multi_region": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "prefunded_accounts": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "release_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "shared_deployment": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The decentralized nature of Kaleido means an environment might be shared with other accounts. When true only create if name does not exist, and delete becomes a no-op.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "test_features_json": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "kaleido_ezone": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "bridge_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "cloud": {
+        "Type": "String",
+        "Required": true
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "kaleido"
+        }
+      }
+    },
+    "kaleido_invitation": {
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "email": {
+        "Type": "String",
+        "Required": true
+      },
+      "org_name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "kaleido_membership": {
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "org_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "pre_existing": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "In a decentalized consortium memberships are driven by invitation, and will be pre-existing at the point of deploying infrastructure.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
+    "kaleido_node": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "backup_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "baf_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "database_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "first_user_account": {
+        "Type": "String",
+        "Computed": true
+      },
+      "https_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "hybrid_port_allocation": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "kms_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "networking_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "node_config_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "opsmetric_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "remote": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "role": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "validator"
+        }
+      },
+      "size": {
+        "Type": "String",
+        "Optional": true
+      },
+      "update_trigger": {
+        "Type": "String",
+        "Optional": true
+      },
+      "urls": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "websocket_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone_id": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "kaleido_service": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "details": {
+        "Type": "Map",
+        "Optional": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "https_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "hybrid_port_allocation": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "shared_deployment": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The decentralized nature of Kaleido means a utility service might be shared with other accounts. When true only create if service_type does not exist, and delete becomes a no-op.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "size": {
+        "Type": "String",
+        "Optional": true
+      },
+      "update_trigger": {
+        "Type": "String",
+        "Optional": true
+      },
+      "urls": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "websocket_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "webui_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone_id": {
+        "Type": "String",
+        "Optional": true
+      }
+    }
+  },
+  "data-sources": {
+    "kaleido_privatestack_bridge": {
+      "appcred_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optionally provide an application credential to inject into the downloaded config, making it ready for use"
+      },
+      "appcred_secret": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optionally provide an application credential to inject into the downloaded config, making it ready for use"
+      },
+      "config_json": {
+        "Type": "String",
+        "Computed": true
+      },
+      "consortium_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_id": {
+        "Type": "String",
+        "Required": true
+      }
+    }
+  }
+}

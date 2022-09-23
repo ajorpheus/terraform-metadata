@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "codefresh",
   "type": "provider",
-  "version": "0.0.22",
+  "version": "0.0.24",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -492,6 +492,10 @@
                   }
                 }
               }
+            },
+            "pack_id": {
+              "Type": "String",
+              "Optional": true
             },
             "priority": {
               "Type": "Int",

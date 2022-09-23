@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "external",
   "type": "provider",
-  "version": "v2.2.0",
+  "version": "v2.2.2",
   "provider": {},
   "resources": {},
   "data-sources": {

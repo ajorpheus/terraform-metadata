@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "upcloud",
   "type": "provider",
-  "version": "v2.1.5",
+  "version": "v2.5.0",
   "provider": {
     "password": {
       "Type": "String",
@@ -50,6 +50,7 @@
       "firewall_rule": {
         "Type": "List",
         "Required": true,
+        "Description": "A single firewall rule.\n\t\t\t\tIf used, IP address and port ranges must have both start and end values specified. These can be the same value if only one IP address or port number is specified.\n\t\t\t\tSource and destination port numbers can only be set if the protocol is TCP or UDP.\n\t\t\t\tThe ICMP type may only be set if the protocol is ICMP.\n\t\t\t\tTypical firewall rule should have \"action\", \"direction\", \"protocol\", \"family\" and at least one destination/source-address/port range.\n\t\t\t\tThe default rule can be created by providing only \"action\" and \"direction\" attributes. Default rule should be defined last.",
         "MaxItems": 1000,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -93,7 +94,7 @@
             },
             "family": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "The address family of new firewall rule"
             },
             "icmp_type": {
@@ -169,6 +170,1037 @@
         "Optional": true,
         "Description": "Zone of address, required when assigning a detached floating IP address",
         "Computed": true
+      }
+    },
+    "upcloud_loadbalancer": {
+      "backends": {
+        "Type": "List",
+        "Description": "Backends are groups of customer servers whose traffic should be balanced.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "configured_status": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The service configured status indicates the service's current intended status. Managed by the customer.",
+        "Default": {
+          "Type": "string",
+          "Value": "started"
+        }
+      },
+      "dns_name": {
+        "Type": "String",
+        "Description": "DNS name of the load balancer",
+        "Computed": true
+      },
+      "frontends": {
+        "Type": "List",
+        "Description": "Frontends receive the traffic before dispatching it to the backends.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the service must be unique within customer account."
+      },
+      "network": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Private network UUID where traffic will be routed. Must reside in load balancer zone."
+      },
+      "operational_state": {
+        "Type": "String",
+        "Description": "The service operational state indicates the service's current operational, effective state. Managed by the system.",
+        "Computed": true
+      },
+      "plan": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Plan which the service will have"
+      },
+      "resolvers": {
+        "Type": "List",
+        "Description": "Domain Name Resolvers must be configured in case of customer uses dynamic type members",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Zone in which the service will be hosted, e.g. `fi-hel1`."
+      }
+    },
+    "upcloud_loadbalancer_backend": {
+      "loadbalancer": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer to which the backend is connected."
+      },
+      "members": {
+        "Type": "List",
+        "Description": "Backend members receive traffic dispatched from the frontends",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the backend must be unique within the load balancer service."
+      },
+      "properties": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Backend properties. Properties can set back to defaults by defining empty `properties {}` block.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "health_check_expected_status": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Expected HTTP status code returned by the customer application to mark server as healthy. Ignored for tcp type.",
+              "Default": {
+                "Type": "int",
+                "Value": "200"
+              }
+            },
+            "health_check_fall": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Sets how many failed health checks are allowed until the backend member is taken off from the rotation.",
+              "Default": {
+                "Type": "int",
+                "Value": "3"
+              }
+            },
+            "health_check_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Interval between health checks.",
+              "Default": {
+                "Type": "int",
+                "Value": "10"
+              }
+            },
+            "health_check_rise": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Sets how many passing checks there must be before returning the backend member to the rotation.",
+              "Default": {
+                "Type": "int",
+                "Value": "3"
+              }
+            },
+            "health_check_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Health check type.",
+              "Default": {
+                "Type": "string",
+                "Value": "tcp"
+              }
+            },
+            "health_check_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Target path for health check HTTP GET requests. Ignored for tcp type.",
+              "Default": {
+                "Type": "string",
+                "Value": "/"
+              }
+            },
+            "outbound_proxy_protocol": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Enable outbound proxy protocol by setting the desired version. Empty string disables proxy protocol."
+            },
+            "sticky_session_cookie_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Sets sticky session cookie name. Empty string disables sticky session."
+            },
+            "timeout_server": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Backend server timeout in seconds.",
+              "Default": {
+                "Type": "int",
+                "Value": "10"
+              }
+            },
+            "timeout_tunnel": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum inactivity time on the client and server side for tunnels in seconds.",
+              "Default": {
+                "Type": "int",
+                "Value": "3600"
+              }
+            }
+          }
+        }
+      },
+      "resolver_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Domain Name Resolver used with dynamic type members."
+      }
+    },
+    "upcloud_loadbalancer_dynamic_backend_member": {
+      "backend": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer backend to which the member is connected."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates if the member is enabled. Disabled members are excluded from load balancing.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optional fallback IP address in case of failure on DNS resolving."
+      },
+      "max_sessions": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Maximum number of sessions before queueing."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the member must be unique within the load balancer backend service."
+      },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Server port. Port is optional and can be specified in DNS SRV record.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "weight": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Used to adjust the server's weight relative to other servers. \n\t\t\t\tAll servers will receive a load proportional to their weight relative to the sum of all weights, so the higher the weight, the higher the load. \n\t\t\t\tA value of 0 means the server will not participate in load balancing but will still accept persistent connections."
+      }
+    },
+    "upcloud_loadbalancer_dynamic_certificate_bundle": {
+      "hostnames": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Certificate hostnames.",
+        "MaxItems": 100,
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "key_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Private key type (`rsa` / `ecdsa`)."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the bundle must be unique within customer account."
+      },
+      "not_after": {
+        "Type": "String",
+        "Description": "The time after which a certificate is no longer valid.",
+        "Computed": true
+      },
+      "not_before": {
+        "Type": "String",
+        "Description": "The time on which a certificate becomes valid.",
+        "Computed": true
+      },
+      "operational_state": {
+        "Type": "String",
+        "Description": "The service operational state indicates the service's current operational, effective state. Managed by the system.",
+        "Computed": true
+      }
+    },
+    "upcloud_loadbalancer_frontend": {
+      "default_backend_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the default backend where traffic will be routed. Note, default backend can be overwritten in frontend rules."
+      },
+      "loadbalancer": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer to which the frontend is connected."
+      },
+      "mode": {
+        "Type": "String",
+        "Required": true,
+        "Description": "When load balancer operating in `tcp` mode it acts as a layer 4 proxy. In `http` mode it acts as a layer 7 proxy."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the frontend must be unique within the load balancer service."
+      },
+      "port": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Port to listen incoming requests"
+      },
+      "properties": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Frontend properties. Properties can set back to defaults by defining empty `properties {}` block.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "inbound_proxy_protocol": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Enable or disable inbound proxy protocol support.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "timeout_client": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Client request timeout in seconds.",
+              "Default": {
+                "Type": "int",
+                "Value": "10"
+              }
+            }
+          }
+        }
+      },
+      "rules": {
+        "Type": "List",
+        "Description": "Set of frontend rule names",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tls_configs": {
+        "Type": "List",
+        "Description": "Set of TLS config names",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "upcloud_loadbalancer_frontend_rule": {
+      "actions": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Set of rule actions.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "http_redirect": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Redirects HTTP requests to specified location or URL schema.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "location": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Target location."
+                  }
+                }
+              }
+            },
+            "http_return": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Returns HTTP response with specified HTTP status.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "content_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Content type."
+                  },
+                  "payload": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The payload."
+                  },
+                  "status": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "HTTP status code."
+                  }
+                }
+              }
+            },
+            "set_forwarded_headers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Adds 'X-Forwarded-For / -Proto / -Port' headers in your forwarded requests",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "active": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            },
+            "tcp_reject": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Terminates a connection.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "active": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            },
+            "use_backend": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Routes traffic to specified `backend`.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "backend_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the backend where traffic will be routed."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "frontend": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer frontend to which the rule is connected."
+      },
+      "matchers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Set of rule matchers. if rule doesn't have matchers, then action applies to all incoming requests.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_size": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by HTTP request body size.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`equal`, `greater`, `greater_or_equal`, `less`, `less_or_equal`)."
+                  },
+                  "value": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  }
+                }
+              }
+            },
+            "body_size_range": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by range of HTTP request body sizes",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "range_end": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  },
+                  "range_start": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  }
+                }
+              }
+            },
+            "cookie": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by HTTP cookie value. Cookie name must be provided.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ignore_case": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Ignore case, default `false`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`exact`, `substring`, `regexp`, `starts`, `ends`, `domain`, `ip`, `exists`). Matcher with `exists` and `ip` methods must be used without `value` and `ignore_case` fields."
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the argument."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            },
+            "header": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by HTTP header value. Header name must be provided.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ignore_case": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Ignore case, default `false`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`exact`, `substring`, `regexp`, `starts`, `ends`, `domain`, `ip`, `exists`). Matcher with `exists` and `ip` methods must be used without `value` and `ignore_case` fields."
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the argument."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            },
+            "host": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by hostname. Header extracted from HTTP Headers or from TLS certificate in case of secured connection.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            },
+            "http_method": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by HTTP method.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "String value (`GET`, `HEAD`, `POST`, `PUT`, `PATCH`, `DELETE`, `CONNECT`, `OPTIONS`, `TRACE`)."
+                  }
+                }
+              }
+            },
+            "num_members_up": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by number of healthy backend members.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "backend_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the `backend` which members will be monitored."
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`equal`, `greater`, `greater_or_equal`, `less`, `less_or_equal`)."
+                  },
+                  "value": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  }
+                }
+              }
+            },
+            "path": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by URL path.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ignore_case": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Ignore case, default `false`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`exact`, `substring`, `regexp`, `starts`, `ends`, `domain`, `ip`, `exists`). Matcher with `exists` and `ip` methods must be used without `value` and `ignore_case` fields."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            },
+            "src_ip": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by source IP address.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "IP address. CIDR masks are supported, e.g. `192.168.0.0/24`."
+                  }
+                }
+              }
+            },
+            "src_port": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by source port number.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`equal`, `greater`, `greater_or_equal`, `less`, `less_or_equal`)."
+                  },
+                  "value": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  }
+                }
+              }
+            },
+            "src_port_range": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by range of source port numbers",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "range_end": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  },
+                  "range_start": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Integer value."
+                  }
+                }
+              }
+            },
+            "url": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by URL without schema, e.g. `example.com/dashboard`.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ignore_case": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Ignore case, default `false`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`exact`, `substring`, `regexp`, `starts`, `ends`, `domain`, `ip`, `exists`). Matcher with `exists` and `ip` methods must be used without `value` and `ignore_case` fields."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            },
+            "url_param": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by URL query parameter value. Query parameter name must be provided",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ignore_case": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Ignore case, default `false`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`exact`, `substring`, `regexp`, `starts`, `ends`, `domain`, `ip`, `exists`). Matcher with `exists` and `ip` methods must be used without `value` and `ignore_case` fields."
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the argument."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            },
+            "url_query": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Matches by URL query string.",
+              "MaxItems": 100,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ignore_case": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Ignore case, default `false`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "method": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Match method (`exact`, `substring`, `regexp`, `starts`, `ends`, `domain`, `ip`, `exists`). Matcher with `exists` and `ip` methods must be used without `value` and `ignore_case` fields."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "String value."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the frontend rule must be unique within the load balancer service."
+      },
+      "priority": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Rule with the higher priority goes first. Rules with the same priority processed in alphabetical order."
+      }
+    },
+    "upcloud_loadbalancer_frontend_tls_config": {
+      "certificate_bundle": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Reference to certificate bundle ID."
+      },
+      "frontend": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer frontend to which the TLS config is connected."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the TLS config must be unique within service frontend."
+      }
+    },
+    "upcloud_loadbalancer_manual_certificate_bundle": {
+      "certificate": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Certificate within base64 string must be in PEM format."
+      },
+      "intermediates": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Intermediate certificates within base64 string must be in PEM format."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the bundle must be unique within customer account."
+      },
+      "not_after": {
+        "Type": "String",
+        "Description": "The time after which a certificate is no longer valid.",
+        "Computed": true
+      },
+      "not_before": {
+        "Type": "String",
+        "Description": "The time on which a certificate becomes valid.",
+        "Computed": true
+      },
+      "operational_state": {
+        "Type": "String",
+        "Description": "The service operational state indicates the service's current operational, effective state. Managed by the system.",
+        "Computed": true
+      },
+      "private_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Private key within base64 string must be in PEM format."
+      }
+    },
+    "upcloud_loadbalancer_resolver": {
+      "cache_invalid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Time in seconds to cache invalid results."
+      },
+      "cache_valid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Time in seconds to cache valid results."
+      },
+      "loadbalancer": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer to which the resolver is connected."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the resolver must be unique within the service."
+      },
+      "nameservers": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of nameserver IP addresses. Nameserver can reside in public internet or in customer private network. \n\t\t\t\tPort is optional, if missing then default 53 will be used.",
+        "MaxItems": 10,
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "retries": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Number of retries on failure."
+      },
+      "timeout": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Timeout for the query in seconds."
+      },
+      "timeout_retry": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Timeout for the query retries in seconds."
+      }
+    },
+    "upcloud_loadbalancer_static_backend_member": {
+      "backend": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the load balancer backend to which the member is connected."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates if the member is enabled. Disabled members are excluded from load balancing.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Server IP address in the customer private network."
+      },
+      "max_sessions": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Maximum number of sessions before queueing."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the member must be unique within the load balancer backend service."
+      },
+      "port": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Server port."
+      },
+      "weight": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Used to adjust the server's weight relative to other servers. \n\t\t\t\tAll servers will receive a load proportional to their weight relative to the sum of all weights, so the higher the weight, the higher the load. \n\t\t\t\tA value of 0 means the server will not participate in load balancing but will still accept persistent connections."
       }
     },
     "upcloud_managed_database_logical_database": {
@@ -429,7 +1461,6 @@
               "Optional": true,
               "Description": "IP filter",
               "Computed": true,
-              "MaxItems": 1024,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -437,7 +1468,7 @@
               }
             },
             "long_query_time": {
-              "Type": "Float",
+              "Type": "Int",
               "Optional": true,
               "Description": "long_query_time",
               "Computed": true
@@ -759,7 +1790,7 @@
               }
             },
             "autovacuum_analyze_scale_factor": {
-              "Type": "Float",
+              "Type": "Int",
               "Optional": true,
               "Description": "autovacuum_analyze_scale_factor",
               "Computed": true
@@ -801,7 +1832,7 @@
               "Computed": true
             },
             "autovacuum_vacuum_scale_factor": {
-              "Type": "Float",
+              "Type": "Int",
               "Optional": true,
               "Description": "autovacuum_vacuum_scale_factor",
               "Computed": true
@@ -843,7 +1874,7 @@
               "Computed": true
             },
             "bgwriter_lru_multiplier": {
-              "Type": "Float",
+              "Type": "Int",
               "Optional": true,
               "Description": "bgwriter_lru_multiplier",
               "Computed": true
@@ -865,7 +1896,6 @@
               "Optional": true,
               "Description": "IP filter",
               "Computed": true,
-              "MaxItems": 1024,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -1109,7 +2139,6 @@
                     "Optional": true,
                     "Description": "List of parameters to ignore when given in startup packet",
                     "Computed": true,
-                    "MaxItems": 32,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -1176,7 +2205,7 @@
               }
             },
             "shared_buffers_percentage": {
-              "Type": "Float",
+              "Type": "Int",
               "Optional": true,
               "Description": "shared_buffers_percentage",
               "Computed": true
@@ -1428,7 +2457,7 @@
       "access_key": {
         "Type": "String",
         "Required": true,
-        "Description": "The access key used to identify user"
+        "Description": "The access key used to identify user.\n\t\t\t\tCan be set to an empty string, which will tell the provider to get the access key from environment variable.\n\t\t\t\tThe environment variable should be \"UPCLOUD_OBJECT_STORAGE_ACCESS_KEY_{name}\".\n\t\t\t\t{name} is the name given to object storage instance (so not the resource label), it should be all uppercased\n\t\t\t\tand all dashes (-) should be replaced with underscores (_). For example, object storage named \"my-files\" would\n\t\t\t\tuse environment variable named \"UPCLOUD_OBJECT_STORAGE_ACCESS_KEY_MY_FILES\"."
       },
       "bucket": {
         "Type": "Set",
@@ -1464,7 +2493,7 @@
       "secret_key": {
         "Type": "String",
         "Required": true,
-        "Description": "The secret key used to authenticate user"
+        "Description": "The secret key used to authenticate user.\n\t\t\t\tCan be set to an empty string, which will tell the provider to get the secret key from environment variable.\n\t\t\t\tThe environment variable should be \"UPCLOUD_OBJECT_STORAGE_SECRET_KEY_{name}\".\n\t\t\t\t{name} is the name given to object storage instance (so not the resource label), it should be all uppercased\n\t\t\t\tand all dashes (-) should be replaced with underscores (_). For example, object storage named \"my-files\" would\n\t\t\t\tuse environment variable named \"UPCLOUD_OBJECT_STORAGE_SECRET_KEY_MY_FILES\"."
       },
       "size": {
         "Type": "Int",
@@ -1778,6 +2807,24 @@
                 }
               }
             },
+            "delete_autoresize_backup": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If set to true, the backup taken before the partition and filesystem resize attempt will be deleted immediately after success.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "filesystem_autoresize": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If set to true, provider will attempt to resize partition and filesystem when the size of template storage changes.\n\t\t\t\t\t\t\tPlease note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used\n\t\t\t\t\t\t\tto restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).\n\t\t\t\t\t\t\tTaking and keeping backups incure costs.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
             "id": {
               "Type": "String",
               "Description": "The unique identifier for the storage",
@@ -1872,6 +2919,24 @@
               "Description": "The unique identifier of the storage/template to clone"
             }
           }
+        }
+      },
+      "delete_autoresize_backup": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to true, the backup taken before the partition and filesystem resize attempt will be deleted immediately after success.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "filesystem_autoresize": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to true, provider will attempt to resize partition and filesystem when the size of the storage changes.\n\t\t\t\tPlease note that before the resize attempt is made, backup of the storage will be taken. If the resize attempt fails, the backup will be used\n\t\t\t\tto restore the storage and then deleted. If the resize attempt succeeds, backup will be kept (unless delete_autoresize_backup option is set to true).\n\t\t\t\tTaking and keeping backups incure costs.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "import": {
@@ -2157,6 +3222,64 @@
         "Type": "String",
         "Optional": true,
         "Description": "If specified, this data source will return only networks from this zone"
+      }
+    },
+    "upcloud_storage": {
+      "access_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Storage access type (public, private)",
+        "Computed": true
+      },
+      "most_recent": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If more than one result is returned, use the most recent storage. This is only useful with private storages. Public storages might give unpredictable results.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Exact name of the storage (same as title)"
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Use regular expression to match storage name"
+      },
+      "size": {
+        "Type": "Int",
+        "Description": "Size of the storage in gigabytes",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "Current state of the storage",
+        "Computed": true
+      },
+      "tier": {
+        "Type": "String",
+        "Description": "Storage tier in use",
+        "Computed": true
+      },
+      "title": {
+        "Type": "String",
+        "Description": "Title of the storage",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Storage type (normal, backup, cdrom, template). Use 'favorite' as type to filter storages on the list of favorites."
+      },
+      "zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The zone in which the storage resides",
+        "Computed": true
       }
     },
     "upcloud_tags": {

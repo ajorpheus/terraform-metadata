@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "boundary",
   "type": "provider",
-  "version": "v1.0.6",
+  "version": "v1.0.12",
   "provider": {
     "addr": {
       "Type": "String",
@@ -61,8 +61,7 @@
       "login_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The login name for this account.",
-        "Deprecated": "Will be removed in favor of using attributes parameter"
+        "Description": "The login name for this account."
       },
       "name": {
         "Type": "String",
@@ -72,8 +71,7 @@
       "password": {
         "Type": "String",
         "Optional": true,
-        "Description": "The account password. Only set on create, changes will not be reflected when updating account.",
-        "Deprecated": "Will be removed in favor of using attributes parameter"
+        "Description": "The account password. Only set on create, changes will not be reflected when updating account."
       },
       "type": {
         "Type": "String",
@@ -132,8 +130,7 @@
       "login_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The login name for this account.",
-        "Deprecated": "Will be removed in favor of using attributes parameter"
+        "Description": "The login name for this account."
       },
       "name": {
         "Type": "String",
@@ -143,8 +140,7 @@
       "password": {
         "Type": "String",
         "Optional": true,
-        "Description": "The account password. Only set on create, changes will not be reflected when updating account.",
-        "Deprecated": "Will be removed in favor of using attributes parameter"
+        "Description": "The account password. Only set on create, changes will not be reflected when updating account."
       },
       "type": {
         "Type": "String",
@@ -376,6 +372,11 @@
         "Required": true,
         "Description": "The ID of the credential store that this library belongs to."
       },
+      "credential_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of credential the library generates."
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -405,6 +406,75 @@
         "Type": "String",
         "Required": true,
         "Description": "The path in Vault to request credentials from."
+      }
+    },
+    "boundary_credential_ssh_private_key": {
+      "credential_store_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the credential store this credential belongs to."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the credential."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of the credential.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the credential. Defaults to the resource name."
+      },
+      "private_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The private key associated with the credential."
+      },
+      "private_key_hmac": {
+        "Type": "String",
+        "Description": "The private key hmac.",
+        "Computed": true
+      },
+      "private_key_passphrase": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The passphrase of the private key associated with the credential."
+      },
+      "private_key_passphrase_hmac": {
+        "Type": "String",
+        "Description": "The private key passphrase hmac.",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The username associated with the credential."
+      }
+    },
+    "boundary_credential_store_static": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The static credential store description."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of the static credential store.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The static credential store name. Defaults to the resource name."
+      },
+      "scope_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The scope for this credential store."
       }
     },
     "boundary_credential_store_vault": {
@@ -477,6 +547,43 @@
         "Type": "String",
         "Description": "The Vault token hmac.",
         "Computed": true
+      }
+    },
+    "boundary_credential_username_password": {
+      "credential_store_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The credential store in which to save this username/password credential."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of this username/password credential."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of this username/password credential.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of this username/password credential. Defaults to the resource name."
+      },
+      "password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The password of this username/password credential."
+      },
+      "password_hmac": {
+        "Type": "String",
+        "Description": "The password hmac.",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The username of this username/password credential."
       }
     },
     "boundary_group": {
@@ -950,6 +1057,23 @@
         "Type": "Set",
         "Optional": true,
         "Description": "A list of application credential source ID's.",
+        "ConflictsWith": [
+          "brokered_credential_source_ids"
+        ],
+        "Deprecated": "Please use 'brokered_credential_source_ids' instead",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "brokered_credential_source_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of brokered credential source ID's.",
+        "ConflictsWith": [
+          "application_credential_source_ids"
+        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -980,6 +1104,16 @@
         "Type": "String",
         "Description": "The ID of the target.",
         "Computed": true
+      },
+      "injected_application_credential_source_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of injected application credential source ID's.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "name": {
         "Type": "String",

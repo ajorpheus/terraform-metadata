@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "panos",
   "type": "provider",
-  "version": "v1.9.2",
+  "version": "v1.10.3",
   "provider": {
     "additional_headers": {
       "Type": "Map",
@@ -161,6 +161,75 @@
       "value": {
         "Type": "String",
         "Required": true
+      },
+      "vsys": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The vsys this object belongs in.",
+        "Default": {
+          "Type": "string",
+          "Value": "vsys1"
+        }
+      }
+    },
+    "panos_address_objects": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "device_group": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The device group.",
+        "Default": {
+          "Type": "string",
+          "Value": "shared"
+        }
+      },
+      "object": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "An address object spec.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The administrative tags.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "ip-netmask"
+              }
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "vsys": {
         "Type": "String",

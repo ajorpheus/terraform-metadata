@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "alkira",
   "type": "provider",
-  "version": "v0.8.0",
+  "version": "v0.9.6",
   "provider": {
     "password": {
       "Type": "String",
@@ -37,6 +37,47 @@
         "Description": "Billing Tag Name."
       }
     },
+    "alkira_byoip_prefix": {
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "CXP region."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for the list."
+      },
+      "do_not_advertise": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Do not advertise.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "message": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Message from AWS BYOIP."
+      },
+      "prefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Prefix for BYOIP."
+      },
+      "public_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Public Key from AWS BYOIP."
+      },
+      "signature": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Signautre from AWS BYOIP."
+      }
+    },
     "alkira_cloudvisor_account": {
       "auto_sync": {
         "Type": "String",
@@ -62,6 +103,300 @@
         "Type": "String",
         "Optional": true,
         "Description": "The native cloud provider account Id."
+      }
+    },
+    "alkira_connector_akamai_prolexic": {
+      "akamai_bgp_asn": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The Akamai BGP ASN."
+      },
+      "akamai_bgp_authentication_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Akamai BGP Authentication Key."
+      },
+      "billing_tag_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A list of Billing Tag by ID associated with the connector.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "byoip_options": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "BYOIP options.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "byoip_prefix_id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "BYOIP prefix ID."
+            },
+            "enable_route_advertisement": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Whether enabling route advertisement."
+            }
+          }
+        }
+      },
+      "credential_id": {
+        "Type": "String",
+        "Description": "The credential ID for storing Akamai BGP authentication key.",
+        "Computed": true
+      },
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The CXP where the connector should be provisioned."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "group": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the connector."
+      },
+      "segment_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of segments associated with the connector. Currently, only `1` segment is allowed."
+      },
+      "size": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE`, `20LARGE`."
+      },
+      "tunnel_configuration": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Tunnel Configurations.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alkira_public_ip": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Alkira public IP."
+            },
+            "tunnel_ips": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "Tunnel IPs.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "akamai_overlay_tunnel_ip": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The overlay IP of the GRE tunnel on the Alkira side."
+                  },
+                  "alkira_overlay_tunnel_ip": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The overlay IP of the GRE tunnel on the Alkira side."
+                  },
+                  "ran_tunnel_ip": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The underlay tunnel IP on the Akamai side to be used to configure tunnels between the Alkira CXP and the Akamai Prolexic service. A RAN (Routed Access Network) is the unit of availability for the Route GRE 3.0 service."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "alkira_connector_aruba_edge": {
+      "aruba_edge_vrf_mapping": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The connector will accept multiple segments as a part of VRF mappings.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "advertise_on_prem_routes": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow routes from the branch/premises to be advertised to the cloud. The default value is False.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "aruba_edge_connect_segment_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The segment ID of the Aruba Edge connector."
+            },
+            "disable_internet_exit": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Enables or disables access to the internet when traffic arrives via this connector. The default value is False.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "gateway_gbp_asn": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The gateway BGP ASN."
+            },
+            "segment_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The segment ID associated with the Aruba Edge connector."
+            }
+          }
+        }
+      },
+      "billing_tag_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Tags for billing.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "boost_mode": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If enabled the Aruba Edge Connect image supporting the boost mode for given size(or bandwidth) would be deployed in Alkira CXP. The default value is false.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The CXP where the connector should be provisioned."
+      },
+      "gateway_gbp_asn": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The gateway BGP ASN."
+      },
+      "group": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
+      },
+      "instances": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The Aruba Edge connector instances.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "account_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The account key generated in Silver Peak orchestrator account."
+            },
+            "account_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The account name given in Silver Peak orchestrator registration."
+            },
+            "host_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The host name given to the Aruba SD-WAN appliance that appears in Silver Peak orchestrator."
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the endpoint.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The instance name associated with aruba edge connect instance."
+            },
+            "site_tag": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The site tag that appears on the SD-WAN appliance on Silver Peak orchestrator"
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the connector."
+      },
+      "segment_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The IDs of the segments associated with the Aruba Edge connector.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "size": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM` or `LARGE`."
+      },
+      "tunnel_protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The tunnel protocol to be used. IPSEC and GRE are the only valid options. IPSEC can only be used with azure. GRE can only be used with AWS. IPSEC is the default selection. ",
+        "Default": {
+          "Type": "string",
+          "Value": "IPSEC"
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The version of the Aruba Edge connector."
       }
     },
     "alkira_connector_aws_vpc": {
@@ -95,10 +430,33 @@
         "Required": true,
         "Description": "The CXP where the connector should be provisioned."
       },
+      "direct_inter_vpc_communication": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable direct inter-vpc communication. Default is set to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "group": {
         "Type": "String",
         "Optional": true,
         "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -113,7 +471,29 @@
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`."
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE`, `20LARGE`."
+      },
+      "tgw_attachment": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "TGW attachment.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "az": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The availability zone of the subnet."
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Id of the subnet."
+            }
+          }
+        }
       },
       "vpc_cidr": {
         "Type": "List",
@@ -192,16 +572,6 @@
       }
     },
     "alkira_connector_azure_vnet": {
-      "azure_region": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Azure Region where VNET resides."
-      },
-      "azure_subscription_id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The Azure subscription ID of the VNET. If the`subscirption_id` was provided in the credential, the onein the credential will be always used."
-      },
       "azure_vnet_id": {
         "Type": "String",
         "Required": true,
@@ -227,10 +597,24 @@
         "Required": true,
         "Description": "The CXP where the connector should be provisioned."
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "group": {
         "Type": "String",
         "Optional": true,
         "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -240,7 +624,7 @@
       "routing_options": {
         "Type": "String",
         "Optional": true,
-        "Description": "Routing options, either `ADVERTISE_DEFAULT_ROUTE` or `ADVERTISE_CUSTOM_PREFIX`.",
+        "Description": " Routing options for the entire VNET, either `ADVERTISE_DEFAULT_ROUTE` or `ADVERTISE_CUSTOM_PREFIX`. Default is `AVERTISE_DEFAULT_ROUTE`.",
         "Default": {
           "Type": "string",
           "Value": "ADVERTISE_DEFAULT_ROUTE"
@@ -261,10 +645,109 @@
         "Required": true,
         "Description": "The ID of the segment assoicated with the connector."
       },
+      "service_tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "list of service tags from Azure. Providing a service tag here, would result in service tag route configuration on VNET route table, so that the traffic toward the service would directly steer towards those services, and would not go via Alkira network.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the connector, one of `SMALL`, `MEDIUM` or `LARGE`."
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE`, `20LARGE`."
+      },
+      "vnet_cidr": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Configure routing options on specified VNET CIDR.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cidr": {
+              "Type": "String",
+              "Required": true,
+              "Description": "VNET CIDR."
+            },
+            "prefix_list_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Prefix List IDs.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "routing_options": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Routing options for the CIDR, either `ADVERTISE_DEFAULT_ROUTE` or `ADVERTISE_CUSTOM_PREFIX`."
+            },
+            "service_tags": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of service tags provided by Azure.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "vnet_subnet": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Configure routing options on the specified VNET subnet.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "prefix_list_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Prefix List IDs.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "routing_options": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Routing options for the subnet, either `ADVERTISE_DEFAULT_ROUTE` or `ADVERTISE_CUSTOM_PREFIX`."
+            },
+            "service_tags": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of service tags provided by Azure.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subnet_cidr": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "VNET subnet CIDR."
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "VNET subnet ID."
+            }
+          }
+        }
       }
     },
     "alkira_connector_cisco_sdwan": {
@@ -283,10 +766,24 @@
         "Required": true,
         "Description": "The CXP where the connector should be provisioned."
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "group": {
         "Type": "String",
         "Optional": true,
         "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -296,7 +793,7 @@
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the connector. one of `SMALL`, `MEDIUM` and `LARGE`."
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM` and `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE` and `20LARGE`."
       },
       "type": {
         "Type": "String",
@@ -308,7 +805,7 @@
         }
       },
       "vedge": {
-        "Type": "Set",
+        "Type": "List",
         "Required": true,
         "Description": "Cisco vEdge",
         "IsBlock": true,
@@ -330,6 +827,11 @@
               "Type": "String",
               "Required": true,
               "Description": "The hostname of the vEdge."
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the vEdge instance.",
+              "Computed": true
             }
           }
         }
@@ -366,6 +868,11 @@
                 "Value": "true"
               }
             },
+            "customer_asn": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "BGP ASN on the customer premise side."
+            },
             "segment_id": {
               "Type": "Int",
               "Required": true,
@@ -401,10 +908,51 @@
         "Required": true,
         "Description": "The CXP where the connector should be provisioned."
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "gcp_project_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "GCP Project ID."
+      },
       "gcp_region": {
         "Type": "String",
         "Required": true,
         "Description": "GCP region where VPC resides."
+      },
+      "gcp_routing": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "GCP Routing describes the routes that are to be imported to the VPC from the CXP. This essentially controls how traffic is routed between the CXP and the VPC. gcpRouting provides a customized routing specification. When gcpRouting is not provided i.e when gcpRouting is null/empty then all traffic exiting the VPC will be sent to the CXP (i.e a default route to CXP will be added to all route tables on that VPC)",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "custom_prefix": {
+              "Type": "String",
+              "Required": true,
+              "Description": "custom_prefix is an instruction which specifies the source of the routes that need to be imported. Only `ADVERTISE_DEFAULT_ROUTE` and `ADVERTISE_CUSTOM_PREFIX` are valid inputs."
+            },
+            "prefix_list_ids": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Ids of prefix lists defined on the network.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
       },
       "gcp_vpc_id": {
         "Type": "String",
@@ -421,6 +969,11 @@
         "Optional": true,
         "Description": "The group of the connector."
       },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -434,7 +987,7 @@
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the connector, one of `SMALL`, `MEDIUM` or `LARGE`."
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM` or `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE`, `20LARGE`."
       }
     },
     "alkira_connector_internet_exit": {
@@ -458,15 +1011,38 @@
         "Optional": true,
         "Description": "The description of the connector."
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "group": {
         "Type": "String",
         "Optional": true,
         "Description": "The group of the connector."
       },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true,
         "Description": "The name of the connector."
+      },
+      "public_ip_number": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of the public IPs to the connector. Default is `2`.",
+        "Default": {
+          "Type": "int",
+          "Value": "2"
+        }
       },
       "segment_id": {
         "Type": "String",
@@ -477,26 +1053,43 @@
         "Type": "String",
         "Required": true,
         "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, or `LARGE`."
+      },
+      "traffic_distribution_algorithm": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of the algorithm to be used for traffic distribution.Currently, only `HASHING` is supported.",
+        "Default": {
+          "Type": "string",
+          "Value": "HASHING"
+        }
+      },
+      "traffic_distribution_algorithm_attribute": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The attributes depends on the algorithm. For now, it's either `DEFAULT` or `SRC_IP`.",
+        "Default": {
+          "Type": "string",
+          "Value": "DEFAULT"
+        }
       }
     },
     "alkira_connector_ipsec": {
-      "billing_tag_ids": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "A list of Billing Tag by Id associated with the connector.",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "Int"
-        }
-      },
       "cxp": {
         "Type": "String",
         "Required": true,
         "Description": "The CXP where the connector should be provisioned."
       },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "endpoint": {
-        "Type": "Set",
+        "Type": "List",
         "Optional": true,
         "Description": "The endpoint.",
         "IsBlock": true,
@@ -504,35 +1097,54 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "advanced": {
-              "Type": "Set",
+            "advanced_options": {
+              "Type": "List",
               "Optional": true,
+              "Description": "Advanced options for IPSec endpoint.",
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
                   "dpd_delay": {
-                    "Type": "String",
+                    "Type": "Int",
                     "Required": true,
                     "Description": "Interval to check the liveness of a peer."
                   },
                   "dpd_timeout": {
-                    "Type": "String",
+                    "Type": "Int",
                     "Required": true,
                     "Description": "Timeouts to check the liveness of a peer. IKEv1 only."
                   },
                   "esp_dh_group_numbers": {
-                    "Type": "String",
-                    "Required": true
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "Diffie Hellman groups to use for IPsec SA. Value could `MODP1024`, `MODP2048`, `MODP3072`, `MODP4096`, `MODP6144`, `MODP8192`, `ECP256`, `ECP384`, `ECP521` and `CURVE25519`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "esp_encryption_algorithms": {
-                    "Type": "String",
-                    "Required": true
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "Encryption algorithms to use for IPsec SA. Value could be `AES256CBC`, `AES192CBC`, `AES128CBC`, `AES256GCM16` `3DESCBC`, or `NULL`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "esp_integrity_algorithms": {
-                    "Type": "String",
-                    "Required": true
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "Integrity algorithms to use for IPsec SA. Value could `SHA1`, `SHA256`, `SHA384`, `SHA512` or `MD5`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "esp_life_time": {
                     "Type": "Int",
@@ -540,27 +1152,44 @@
                     "Description": "Maximum IPsec ESP lifetime if the IPsec ESP does not rekey."
                   },
                   "esp_random_time": {
-                    "Type": "String",
-                    "Required": true
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Time range from which to choose a random value to subtract from rekey times in seconds."
                   },
                   "esp_rekey_time": {
-                    "Type": "String",
-                    "Required": true
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "IPsec SA rekey time in seconds."
                   },
                   "ike_dh_group_numbers": {
-                    "Type": "String",
+                    "Type": "List",
                     "Required": true,
-                    "Description": "Diffie Hellman groups to use for IKE SA, one of `MODP1024`, `MODP2048`, `MODP3072`, `MODP4096`, `MODP6144`, `MODP8192`, `ECP256`, `ECP384`, `ECP521`, `CURVE25519`"
+                    "Description": "Diffie Hellman groups to use for IKE SA, one of `MODP1024`, `MODP2048`, `MODP3072`, `MODP4096`, `MODP6144`, `MODP8192`, `ECP256`, `ECP384`, `ECP521`, `CURVE25519`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "ike_encryption_algorithms": {
-                    "Type": "String",
+                    "Type": "List",
                     "Required": true,
-                    "Description": "Encryption algorithms to use for IKE SA, one of `AES256CBC`, `AES192CBC`, `AES128CBC`."
+                    "Description": "Encryption algorithms to use for IKE SA, one of `AES256CBC`, `AES192CBC`, `AES128CBC` and `3DESCBC`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "ike_integrity_algorithms": {
-                    "Type": "String",
+                    "Type": "List",
                     "Required": true,
-                    "Description": "Integrity algorithms to use for IKE SA, one of `SHA1`, `SHA256`, `SHA384`, `SHA512`."
+                    "Description": "Integrity algorithms to use for IKE SA, one of `SHA1`, `SHA256`, `SHA384`, `SHA512`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "ike_over_time": {
                     "Type": "Int",
@@ -583,8 +1212,9 @@
                     "Description": "IKE version, either `IKEv1` or `IKEv2`"
                   },
                   "initiator": {
-                    "Type": "String",
-                    "Required": true
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "When true CXP will initiate the IKE connection and if false then the customer gateway should initiate IKE. When `gateway_ip_type` is `DYNAMIC`, initiator must be `true`."
                   },
                   "local_auth_type": {
                     "Type": "String",
@@ -632,7 +1262,17 @@
             "enable_tunnel_redundancy": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "indicates to Alkira that health for the site should be reported as good as long as any one of the tunnels is up."
+              "Description": "Disable this if all tunnels will not be configured or enabled on the on-premise device. If disabled, connector health will be shown as `UP` if at least one of the tunnels is `UP`. If enabled, all tunnels need to be `UP` for the connector health to be shown as `UP`."
+            },
+            "ha_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The value could be `ACTIVE` or `STANDBY`. A endpoint in `STANDBY` mode will not be used for traffic unless all other endpoints for the connector are down. There can only be one endpoint in `STANDBY` mode per connector and there must be at least one endpoint that isn't in `STANDBY` mode per connector."
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the endpoint.",
+              "Computed": true
             },
             "name": {
               "Type": "String",
@@ -641,8 +1281,8 @@
             },
             "preshared_keys": {
               "Type": "List",
-              "Optional": true,
-              "Description": "An array of presharedKeys, one per tunnel.",
+              "Required": true,
+              "Description": "An array of preshared keys, one per tunnel. The value needs to be provided explictly unlike portal.",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -656,6 +1296,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -706,7 +1351,11 @@
             "availability": {
               "Type": "String",
               "Optional": true,
-              "Description": "The method to determine the availability of static route. The value could be `IKE_STATUS` or `IPSEC_INTERFACE_PING`."
+              "Description": "The method to determine the availability of static route. The value could be `IKE_STATUS` or `IPSEC_INTERFACE_PING`. Default value is `IPSEC_INTERFACE_PING`.",
+              "Default": {
+                "Type": "string",
+                "Value": "IPSEC_INTERFACE_PING"
+              }
             },
             "bgp_auth_key": {
               "Type": "String",
@@ -721,7 +1370,7 @@
             "prefix_list_id": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The id of prefix list to use for static route propagation."
+              "Description": "The ID of prefix list to use for static route propagation."
             },
             "type": {
               "Type": "String",
@@ -734,7 +1383,7 @@
       "segment_id": {
         "Type": "Int",
         "Required": true,
-        "Description": "The Id of the segment associated with the connector."
+        "Description": "The ID of the segment associated with the connector."
       },
       "segment_options": {
         "Type": "Set",
@@ -745,15 +1394,23 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "disable_advertise_on_prem_routes": {
+            "advertise_on_prem_routes": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Additional options for each segment associated with the connector."
+              "Description": "Additional options for each segment associated with the connector. Default is `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
             },
-            "disable_internet_exit": {
+            "allow_nat_exit": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Enable or disable access to the internet when traffic arrives via this connector."
+              "Description": "Enable or disable access to the internet when traffic arrives via this connector. Default is `true`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
             },
             "name": {
               "Type": "String",
@@ -766,7 +1423,7 @@
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the connector. one of `SMALL`, `MEDIUM` and `LARGE`."
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE` and `20LARGE`."
       },
       "vpn_mode": {
         "Type": "String",
@@ -797,13 +1454,22 @@
       },
       "enabled": {
         "Type": "Bool",
-        "Required": true,
-        "Description": "Whether the connector is enabled or not."
+        "Optional": true,
+        "Description": "Is the connector enabled. Default is `true`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       },
       "group": {
         "Type": "String",
         "Optional": true,
         "Description": "The group of the connector."
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of implicit group automaticaly created with the connector.",
+        "Computed": true
       },
       "name": {
         "Type": "String",
@@ -828,7 +1494,7 @@
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`."
+        "Description": "The size of the connector, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE`, `20LARGE`."
       },
       "vcn_cidr": {
         "Type": "List",
@@ -910,63 +1576,89 @@
       "aws_access_key": {
         "Type": "String",
         "Optional": true,
-        "Description": "AWS access key",
-        "DefaultFunc": "ENV(AWS_ACCESS_KEY_ID)"
+        "Description": "AWS access key.",
+        "DefaultFunc": "ENV(AK_AWS_ACCESS_KEY_ID)"
       },
       "aws_external_id": {
         "Type": "String",
         "Optional": true,
-        "Description": "The AWS Role External ID",
-        "DefaultFunc": "ENV(AWS_ROLE_EXTERNAL_ID)"
+        "Description": "AWS Role External ID.",
+        "DefaultFunc": "ENV(AK_AWS_ROLE_EXTERNAL_ID)"
       },
       "aws_role_arn": {
         "Type": "String",
         "Optional": true,
-        "Description": "The AWS Role Arn",
-        "DefaultFunc": "ENV(AWS_ROLE_ARN)"
+        "Description": "AWS Role ARN.",
+        "DefaultFunc": "ENV(AK_AWS_ROLE_ARN)"
       },
       "aws_secret_key": {
         "Type": "String",
         "Optional": true,
-        "Description": "AWS secret key",
-        "DefaultFunc": "ENV(AWS_SECRET_ACCESS_KEY)"
+        "Description": "AWS secret key.",
+        "DefaultFunc": "ENV(AK_AWS_SECRET_ACCESS_KEY)"
       },
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "The name of the credential"
+        "Description": "Name of the credential."
       },
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "The Type of AWS-VPC credential"
+        "Description": "Type of AWS-VPC credential."
       }
     },
     "alkira_credential_azure_vnet": {
       "application_id": {
         "Type": "String",
         "Required": true,
-        "Description": "The Application ID"
+        "Description": "Azure Application ID.",
+        "DefaultFunc": "ENV(AK_AZURE_APPLICATION_ID)"
       },
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "The name of the credential"
+        "Description": "The name of the credential."
       },
       "secret_key": {
         "Type": "String",
         "Required": true,
-        "Description": "The Secret Key"
+        "Description": "Azure Secret Key.",
+        "DefaultFunc": "ENV(AK_AZURE_SECRET_KEY)"
       },
       "subscription_id": {
         "Type": "String",
         "Optional": true,
-        "Description": "The subscription ID"
+        "Description": "Azure subscription ID.",
+        "DefaultFunc": "ENV(AK_AZURE_SUBSCRIPTION_ID)"
       },
       "tenant_id": {
         "Type": "String",
         "Required": true,
-        "Description": "The Tenant ID"
+        "Description": "Azure Tenant ID.",
+        "DefaultFunc": "ENV(AK_AZURE_TENANT_ID)"
+      }
+    },
+    "alkira_credential_checkpoint": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the credential."
+      },
+      "password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The checkpoint credential password."
+      },
+      "sic_keys": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The checkpoint instance sic keys.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "alkira_credential_cisco_sdwan": {
@@ -979,40 +1671,82 @@
         "Type": "String",
         "Optional": true,
         "Description": "Cisco SD-WAN password.",
-        "DefaultFunc": "ENV(CISCO_SDWAN_PASSWORD)"
+        "DefaultFunc": "ENV(AK_CISCO_SDWAN_PASSWORD)"
       },
       "username": {
         "Type": "String",
         "Optional": true,
         "Description": "Cisco SD-WAN username.",
-        "DefaultFunc": "ENV(CISCO_SDWAN_USERNAME)"
+        "DefaultFunc": "ENV(AK_CISCO_SDWAN_USERNAME)"
+      }
+    },
+    "alkira_credential_fortinet": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the credential."
+      },
+      "password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Fortinet password."
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Fortinet username."
+      }
+    },
+    "alkira_credential_fortinet_instance": {
+      "license_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Fortinet license key."
+      },
+      "license_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Fortinet instance license type, either `BRING_YOUR_OWN` or `PAY_AS_YOU_GO`."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the credential."
       }
     },
     "alkira_credential_gcp_vpc": {
       "auth_provider": {
         "Type": "String",
-        "Required": true,
-        "Description": "Authentication Provider"
+        "Optional": true,
+        "Description": "GCP Authentication Provider",
+        "Default": {
+          "Type": "string",
+          "Value": "https://www.googleapis.com/oauth2/v1/certs"
+        }
       },
       "auth_uri": {
         "Type": "String",
-        "Required": true,
-        "Description": "Authentication URI"
+        "Optional": true,
+        "Description": "GCP Authentication URI",
+        "Default": {
+          "Type": "string",
+          "Value": "https://accounts.google.com/o/oauth2/auth"
+        }
       },
       "client_email": {
         "Type": "String",
         "Required": true,
-        "Description": "Client email"
+        "Description": "GCP Client email"
       },
       "client_id": {
         "Type": "String",
         "Required": true,
-        "Description": "Client ID"
+        "Description": "GCP Client ID"
       },
       "client_x509_cert_url": {
         "Type": "String",
         "Required": true,
-        "Description": "Client X509 Cert URL"
+        "Description": "GCP Client X509 Cert URL"
       },
       "name": {
         "Type": "String",
@@ -1022,60 +1756,72 @@
       "private_key": {
         "Type": "String",
         "Required": true,
-        "Description": "Private Key"
+        "Description": "GCP Private Key"
       },
       "private_key_id": {
         "Type": "String",
         "Required": true,
-        "Description": "Private Key ID"
+        "Description": "GCP Private Key ID"
       },
       "project_id": {
         "Type": "String",
         "Required": true,
-        "Description": "Project ID"
+        "Description": "GCP Project ID"
       },
       "token_uri": {
         "Type": "String",
-        "Required": true,
-        "Description": "Token URI"
+        "Optional": true,
+        "Description": "Token URI",
+        "Default": {
+          "Type": "string",
+          "Value": "https://oauth2.googleapis.com/token"
+        }
       },
       "type": {
         "Type": "String",
-        "Required": true,
-        "Description": "Type"
+        "Optional": true,
+        "Description": "GCP Auth Type, default value is `service_account`.",
+        "Default": {
+          "Type": "string",
+          "Value": "service_account"
+        }
       }
     },
     "alkira_credential_oci_vcn": {
       "fingerprint": {
         "Type": "String",
         "Required": true,
-        "Description": "Fingerprint of the API key of the user."
+        "Description": "Fingerprint of the API key of the user.",
+        "DefaultFunc": "ENV(AK_OCI_FINGERPRINT)"
       },
       "key": {
         "Type": "String",
         "Required": true,
-        "Description": "API key of the user."
+        "Description": "API key of the user.",
+        "DefaultFunc": "ENV(AK_OCI_KEY)"
       },
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "The name of the credential."
+        "Description": "Name of the credential."
       },
       "tenant_ocid": {
         "Type": "String",
         "Required": true,
-        "Description": "OCID of the tenant."
+        "Description": "OCID of the tenant.",
+        "DefaultFunc": "ENV(AK_OCI_TENANT_OCID)"
       },
       "user_ocid": {
         "Type": "String",
         "Required": true,
-        "Description": "OCID of the user."
+        "Description": "OCID of the user.",
+        "DefaultFunc": "ENV(AK_OCI_USER_OCID)"
       }
     },
     "alkira_credential_pan": {
       "license_key": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "PAN license key."
       },
       "name": {
@@ -1097,17 +1843,17 @@
     "alkira_credential_pan_instance": {
       "auth_code": {
         "Type": "String",
-        "Required": true,
-        "Description": "PAN instance auth code."
+        "Optional": true,
+        "Description": "PAN instance auth code. Only required when `license_type` is `BRING_YOUR_OWN`."
       },
       "auth_key": {
         "Type": "String",
-        "Required": true,
-        "Description": "PAN instance auth key."
+        "Optional": true,
+        "Description": "PAN instance auth key. This is only required when `panorama_enabled` is set to `true`."
       },
       "license_key": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "PAN license key."
       },
       "name": {
@@ -1118,12 +1864,14 @@
       "password": {
         "Type": "String",
         "Required": true,
-        "Description": "PAN password."
+        "Description": "PAN password.",
+        "Deprecated": "Not supported anymore"
       },
       "username": {
         "Type": "String",
         "Required": true,
-        "Description": "PAN username."
+        "Description": "PAN username.",
+        "Deprecated": "Not supported anymore"
       }
     },
     "alkira_group": {
@@ -1138,6 +1886,30 @@
         "Description": "The name of the group."
       }
     },
+    "alkira_group_connector": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the connector group."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the connector group."
+      }
+    },
+    "alkira_group_user": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the user group."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the user group."
+      }
+    },
     "alkira_internet_application": {
       "billing_tag_ids": {
         "Type": "List",
@@ -1149,8 +1921,13 @@
           "ElementsType": "Int"
         }
       },
+      "byoip_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "BYOIP ID."
+      },
       "connector_id": {
-        "Type": "String",
+        "Type": "Int",
         "Required": true,
         "Description": "Connector ID."
       },
@@ -1169,20 +1946,39 @@
         "Description": "ID of the auto generated system group.",
         "Computed": true
       },
+      "inbound_connector_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Inbound connector ID. When `inbound_connector_type` is `DEFAULT`, it could be left empty."
+      },
+      "inbound_connector_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The inbound connector type specifies how the internet application is to be opened up to the external world. By `DEFAULT` the native cloud internet connector is used. In this scenario, Alkira takes care of creating this inbound internet connector implicitly. If instead inbound access is via the `AKAMAI_PROLEXIC` connector, then you need to create and configure that connector and use it with the internet application.",
+        "Default": {
+          "Type": "string",
+          "Value": "DEFAULT"
+        }
+      },
+      "internet_protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Internet Protocol to be associated with the internet application. The value could be: `IPV4`, `IPV6` or `BOTH`. In order to use the option IPV6 or BOTH, `enable_ipv6_to_ipv4_translation` should be enabled on the associated segment and a valid IP pool range should be provided. `IPV6` and `BOTH` options are only available to Internet Applications on AWS CXPs."
+      },
       "name": {
         "Type": "String",
         "Required": true,
         "Description": "The name of the internet application."
       },
-      "private_ip": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The private IP associated with the internet application."
-      },
-      "private_port": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The private port associated with the internet application."
+      "public_ips": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "This option pertains to the `AKAMAI_PROLEXIC` inbound_connector_type. The public IPs are to be used to access the internet application. These public IPs must belong to one of the BYOIP ranges configured for the Akamai Prolexic Connector.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "segment_id": {
         "Type": "Int",
@@ -1193,6 +1989,37 @@
         "Type": "String",
         "Required": true,
         "Description": "The size of the internet application, one of `SMALL`, `MEDIUM` and `LARGE`."
+      },
+      "target": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "port_ranges": {
+              "Type": "List",
+              "Required": true,
+              "Description": "list of ports or port ranges. Values can be mixed i.e. `['20', '100-200']`. An array with only the value '-1' means any port.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of the target, one of `IP` or `ILB_NAME`."
+            },
+            "value": {
+              "Type": "String",
+              "Required": true,
+              "Description": "IFA ILB name or private IP."
+            }
+          }
+        }
       }
     },
     "alkira_list_as_path": {
@@ -1389,7 +2216,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "The type of NAT policy, currently only `INTER_SEGMENT`is supported."
+        "Description": "The type of NAT policy, currently only `INTRA_SEGMENT`is supported."
       }
     },
     "alkira_policy_nat_rule": {
@@ -1422,7 +2249,7 @@
                 "ElementsType": "String"
               }
             },
-            "dst_addr_translation_prefiex_list_ids": {
+            "dst_addr_translation_prefix_list_ids": {
               "Type": "List",
               "Optional": true,
               "Description": "The list of prefix list IDs.",
@@ -1445,7 +2272,7 @@
             "dst_addr_translation_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "The translation type are: `STATIC_IP`, `DYNAMIC`, `DYNAMIC_IP_AND_PORT` and `NONE`."
+              "Description": "The translation type are: `STATIC_IP`, `DYNAMIC_IP_AND_PORT` and `NONE`."
             },
             "src_addr_translation_bidirectional": {
               "Type": "Bool",
@@ -1457,7 +2284,7 @@
               "Optional": true,
               "Description": "Whether the translation match and invalidate."
             },
-            "src_addr_translation_prefiex_list_ids": {
+            "src_addr_translation_prefix_list_ids": {
               "Type": "List",
               "Optional": true,
               "Description": "The list of prefix list IDs.",
@@ -1480,7 +2307,7 @@
             "src_addr_translation_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "The translation type are: `STATIC_IP`, `DYNAMIC`, `DYNAMIC_IP_AND_PORT` and `NONE`."
+              "Description": "The translation type are: `STATIC_IP`, `DYNAMIC_IP_AND_PORT` and `NONE`."
             }
           }
         }
@@ -1537,7 +2364,7 @@
             "protocol": {
               "Type": "String",
               "Required": true,
-              "Description": "The following protocols are supported, `ICMP`, `TCP`, `UDP` or `ANY`."
+              "Description": "The following protocols are supported, `icmp`, `tcp`, `udp` or `any`."
             },
             "src_ports": {
               "Type": "List",
@@ -1598,6 +2425,205 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "alkira_policy_routing": {
+      "advertise_custom_routes_prefix_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Prefix list ID to send aggregates out towards on-prem connectors."
+      },
+      "advertise_internet_exit": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Advertise Alkira’s Internet Connector to selected scope. Default value is `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "advertise_on_prem_routes": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Advertise routes from other on premise connectors to selected scope. Default value is `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the routing policy."
+      },
+      "direction": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The direction of the route, `INBOUND` or `OUTBOUND`."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the routing policy is enabled. By default, it is set to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "excluded_group_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Excludes given associated connector from `included_groups`. Implicit group ID of a branch/on-premise connector for which a user defined group is used in `included_groups` can be used here.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "included_group_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Defines the scope for the policy. Connector associated with group IDs metioned here is where this policy would be applied. Group IDs that associated with branch/on-premise connectors can be used here. These group should not contain any cloud connector.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the routing policy."
+      },
+      "rule": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Action to be set on matched routes. Value could be `ALLOW`, `DENY` and `ALLOW_W_SET`."
+            },
+            "match_all": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "This acts as match all if enabledand should be used as exlusive match option."
+            },
+            "match_as_path_list_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "IDs of a AS Path Lists.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "match_community_list_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "IDs of Community Lists.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "match_cxps": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of CXPs.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "match_extended_community_list_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "IDs of Extended Community Lists.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "match_group_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "IDs of groups.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "match_prefix_list_ids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "IDs of Prefix Lists.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the rule."
+            },
+            "routes_distribution_as_secondary": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "This allows to redistribute routes with lower preference to the restrictedCxps. Hence, this option can only be used with `RESTRICTED_CXPS` distribution_type. Also only 1 CXP is allowed in restricted_cxps, when this is set to `true`."
+            },
+            "routes_distribution_restricted_cxps": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of cxps to which routes distribution is restricted. Should be used only with distributionType `RESTRICTED_CXPS`.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "routes_distribution_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Redistribute routes that match with this rule match codition to. The value could be `ALL`, `LOCAL_ONLY` and `RESTRICTED_CXPS`.",
+              "Default": {
+                "Type": "string",
+                "Value": "ALL"
+              }
+            },
+            "set_as_path_prepend": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allows to prepend one or more AS numbers to the current AS PATH. Each AS number can be a value from 0 through 65535. Example - 100 100 100."
+            },
+            "set_community": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allows to add one or more community attributes to the existing communities on the route. Community attribute is specified in this format: `as-number:community-value`. as-number and community-value can be a value from `0` through `65535`. Example: `65512:20 65512:21`."
+            },
+            "set_extended_community": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allows to add one or more extended community attributes to the existing extended communities on the route. Extended community attribute is specified in this format: `type:administrator:assigned-number`. Currently only type origin(soo) is supported."
+            }
+          }
+        }
+      },
+      "segment_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "IDs of segments that will define the policy scope."
       }
     },
     "alkira_policy_rule": {
@@ -1668,7 +2694,7 @@
       "protocol": {
         "Type": "String",
         "Required": true,
-        "Description": "The following protocols are supported, `ICMP`, `TCP`, `UDP` or `ANY`."
+        "Description": "The following protocols are supported, `icmp`, `tcp`, `udp` or `any`."
       },
       "rule_action": {
         "Type": "String",
@@ -1757,19 +2783,726 @@
     },
     "alkira_segment": {
       "asn": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The BGP ASN for the segment."
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The BGP ASN for the segment. Default value is `65514`.",
+        "Default": {
+          "Type": "string",
+          "Value": "65514"
+        }
       },
-      "cidr": {
-        "Type": "String",
+      "cidrs": {
+        "Type": "List",
         "Required": true,
-        "Description": "The CIDR block."
+        "Description": "The list of CIDR blocks.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "enable_ipv6_to_ipv4_translation": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable IPv6 to IPv4 translation in the segment for internet application traffic.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "name": {
         "Type": "String",
         "Required": true,
         "Description": "The name of the segment."
+      },
+      "reserve_public_ips": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Default value is `false`. When this is set to `true`. Alkira reserves public IPs which can be used to create underlay tunnels between an external service and Alkira. For example the reserved public IPs may be used to create tunnels to the Akamai Prolexic.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "src_ipv4_pool_end_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The end IP address of IPv4 pool."
+      },
+      "src_ipv4_pool_start_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The start IP address of IPv4 pool."
+      }
+    },
+    "alkira_segment_resource": {
+      "group_prefix": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The connector group ID associated with segment resource."
+            },
+            "prefix_list_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The Prefix List ID associated with segment resource."
+            }
+          }
+        }
+      },
+      "implicit_group_id": {
+        "Type": "Int",
+        "Description": "The ID of automatically created implicit group.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the segment resource."
+      },
+      "segment_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The segment ID."
+      }
+    },
+    "alkira_segment_resource_share": {
+      "designated_segment_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The designated segment ID."
+      },
+      "end_a_route_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The End-A route limit. The default value is `100`.",
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "end_a_segment_resource_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The End-A segment resource IDs. All segment resources must be on the same segment.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "end_b_route_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The End-B route limit. The default value is `100`.",
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "end_b_segment_resource_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The End-B segment resource IDs. All segment resources must be on the same segment.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the segment resource share."
+      },
+      "service_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The list of service IDs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "traffic_direction": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specify the direction in which traffic is orignated at both Resource End-A and Resource End-B. The default value is `BIDIRECTIONAL`.",
+        "Default": {
+          "Type": "string",
+          "Value": "BIDIRECTIONAL"
+        }
+      }
+    },
+    "alkira_service_checkpoint": {
+      "auto_scale": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Indicate if `auto_scale` should be enabled for your checkpointfirewall. `ON` and `OFF` are accepted values. `OFF` is the default if field is omitted",
+        "Default": {
+          "Type": "string",
+          "Value": "OFF"
+        }
+      },
+      "billing_tag_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Billing tag IDs to associate with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "credential_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of Checkpoint Firewall credential managed by credential resource."
+      },
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "CXP region."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the checkpoint service."
+      },
+      "instances": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "An array containing properties for each Checkpoint Firewall instance that needs to be deployed. The number of instances should be equal to `max_instance_count`.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Checkpoint Firewall instance."
+            }
+          }
+        }
+      },
+      "license_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Checkpoint license type, either `BRING_YOUR_OWN` or `PAY_AS_YOU_GO`."
+      },
+      "management_server": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "configuration_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The configuration_mode specifies whether the firewall is to be automatically configured by Alkira or not. To automatically configure the firewall Alkira needs access to the CheckPoint management server. If you choose to use manual configuration Alkira will provide the customer information about the Checkpoint instances so that you can manually configure the firewall."
+            },
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Management server domain."
+            },
+            "global_cidr_list_id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The ID of the global cidr list to be associated with the management server."
+            },
+            "ips": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Management server IPs.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "reachability": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "This option specifies whether the management server is publicly reachable or not. If the reachability is private then you need to provide the segment to be used to access the management server. Default value is `PUBLIC`.",
+              "Default": {
+                "Type": "string",
+                "Value": "PUBLIC"
+              }
+            },
+            "segment_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The ID of the segment to be used to access the management server."
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of the management server."
+            },
+            "user_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The user_name of the management server."
+            }
+          }
+        }
+      },
+      "max_instance_count": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The maximum number of Checkpoint Firewall instances that should be deployed when auto-scale is enabled. Note that auto-scale is not supported with Checkpoint at this time. `max_instance_count` must be greater than or equal to `min_instance_count`."
+      },
+      "min_instance_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The minimum number of Checkpoint Firewall instances that should be deployed at any point in time.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the Checkpoint Firewall service."
+      },
+      "pdp_ips": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The IPs of the PDP Brokers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "segment_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The IDs of the segments associated with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "segment_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The segment options as used by your Checkpoint firewall. No more than one segment option will be accepted for Checkpoint.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "groups": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The list of Groups associated with the zone.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "segment_id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The ID of the segment."
+            },
+            "zone_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the associated zone. `zone_name` for Checkpoint should be `DEFAULT`."
+            }
+          }
+        }
+      },
+      "size": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The size of the service, one of `SMALL`, `MEDIUM`, `LARGE`."
+      },
+      "tunnel_protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Tunnel Protocol, default to `IPSEC`, could be either `IPSEC` or `GRE`.",
+        "Default": {
+          "Type": "string",
+          "Value": "IPSEC"
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The version of the Checkpoint Firewall."
+      }
+    },
+    "alkira_service_fortinet": {
+      "auto_scale": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Indicate if auto_scale should be enabled for your Fortinet firewall. `ON` and `OFF` are accepted values. `OFF` is the default if field is omitted"
+      },
+      "billing_tag_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Billing tag IDs to associate with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "credential_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of Fortinet Firewall credential managed by credential resource."
+      },
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The CXP where the service should be provisioned."
+      },
+      "instances": {
+        "Type": "List",
+        "Required": true,
+        "Description": "An array containing properties for each Fortinet Firewall instance that needs to be deployed. The number of instances should be equal to `max_instance_count`.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "credential_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The ID of the Fortinet Firewall instance credentials. Required only when licenseType is BRING_YOUR_OWN."
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the Fortinet Firewall instance.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Fortinet Firewall instance."
+            },
+            "serial_number": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The serial_number of the Fortinet Firewall instance. Required only when licenseType is BRING_YOUR_OWN."
+            }
+          }
+        }
+      },
+      "license_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Fortinet license type, either `BRING_YOUR_OWN` or `PAY_AS_YOU_GO`."
+      },
+      "management_server_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The IP addresses used to access the management server."
+      },
+      "management_server_segment": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The segment used to access the management server. This segment must be present in the list of segments assigned to this Fortinet Firewall service."
+      },
+      "max_instance_count": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The maximum number of Fortinet Firewall instances that should be deployed when auto-scale is enabled. Note that auto-scale is not supported with Fortinet at this time. max_instance_count must be greater than or equal to min_instance_count."
+      },
+      "min_instance_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The minimum number of Fortinet Firewall instances that should be  deployed at any point in time.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the Fortinet Firewall service."
+      },
+      "segment_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "IDs of segments associated with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "segment_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The segment options as used by your Fortinet firewall.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "groups": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The list of Groups associated with the zone.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "segment_id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The ID of the segment."
+            },
+            "zone_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the associated zone."
+            }
+          }
+        }
+      },
+      "size": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The size of the service, one of `SMALL`, `MEDIUM`, `LARGE`."
+      },
+      "tunnel_protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Tunnel Protocol, default to `IPSEC`, could be either `IPSEC` or `GRE`.",
+        "Default": {
+          "Type": "string",
+          "Value": "IPSEC"
+        }
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The version of the Fortinet Firewall."
+      }
+    },
+    "alkira_service_infoblox": {
+      "anycast": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Defines the AnyCast policy to be used with the Infoblox Service. Based on this AnyCast policy some implicit route policies and prefix lists get generated. These route policies and prefix lists will have the prefix ALK-SYSTEM-GENERATED-INFOBLOX. These route policies and prefix lists cannot be deleted or modified directly their lifecycle is bound by the Infoblox services that are configured on the network. AnyCast may be enabled/disabled at the instance level as well. For AnyCast to be enabled for an instance it MUST be enabled both at the service and the instance level. If AnyCast is NOT enabled at the service level it will stay disabled for all instances.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backup_cxps": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The `backup_cxps` to be used when the current Infoblox service is not available. The backup_cxps also need to have a configured Infoblox service inorder to take advantage of this feature. It is NOT required that the backup_cxps should have a configured Infoblox service before it can be designated as a backup.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Defines if AnyCast should be enabled. Default is `false`",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "ips": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The IPs to be used when AnyCast is enabled. When AnyCast is enabled this list cannot be empty. The IPs used for AnyCast MUST NOT overlap the CIDR used for the segment IP block associated with the service",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "billing_tag_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Billing tag IDs to associate with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The CXP where the service should be provisioned."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the Infoblox service."
+      },
+      "global_cidr_list_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the global cidr list to be associated with the Infoblox service."
+      },
+      "grid_master": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Defines the properties of the Infoblox grid master. The Infoblox grid master needs to exist before other instances of a the grid can be added. The grid master can either be provisioned by Alkira or could already be provisioned externally. Some of these properties only need to be provided when the grid master is external. If the grid master needs to be provisioned internally by Alkira then an instance needs to be added to Infoblox service configuration with type = MASTER",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "credential_id": {
+              "Type": "String",
+              "Description": "The credential ID of the Grid Master.",
+              "Computed": true
+            },
+            "external": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "External indicates if a new grid master should be created or if an existing grid master should be used.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "ip": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The ip address of the grid master.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the grid master."
+            },
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Grid Master password."
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Grid Master user name."
+            }
+          }
+        }
+      },
+      "instance": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The properties pertaining to each individual instance of the Infoblox service.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "anycast_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": " This knob controls whether AnyCast is to be enabled for this instance or not. AnyCast can only be enabled on an instance if it is also enabled on the service.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "credential_id": {
+              "Type": "String",
+              "Description": "The credential ID of the Infoblox instance.",
+              "Computed": true
+            },
+            "hostname": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The host name of the instance. The host name MUST always have a suffix `.localdomain`."
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the Infoblox instance.",
+              "Computed": true
+            },
+            "model": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The model of the Infoblox instance."
+            },
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The password associated with the infoblox instance."
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of the Infoblox instance that is to be provisioned. There can only be one MASTER ever provisioned. When the grid master is provisioned by Alkira, provisioning needs to happen in two steps. First the Infoblox service must be provisioned with only 1 instance of type MASTER. Subsequently other instances of the grid may be added to the instances list and provisioned. When the grid master is external (i.e not provisioned by Alkira) then no instances of type MASTER should be configured."
+            },
+            "version": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The version of the Infoblox instance to be used."
+            }
+          }
+        }
+      },
+      "license_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Infoblox license type, either `BRING_YOUR_OWN` or `PAY_AS_YOU_GO`."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the Infoblox service."
+      },
+      "segment_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "IDs of segments associated with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_group_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the service group to be associated with the service. A service group represents the service in traffic policies, route policies and when configuring segment resource shares."
+      },
+      "shared_secret": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Shared Secret of the InfoBlox grid. This cannot be empty."
       }
     },
     "alkira_service_pan": {
@@ -1790,34 +3523,130 @@
       },
       "credential_id": {
         "Type": "String",
-        "Required": true,
-        "Description": "ID of PAN credential managed by credential resource."
+        "Description": "ID of PAN credential.",
+        "Computed": true
       },
       "cxp": {
         "Type": "String",
         "Required": true,
         "Description": "The CXP where the service should be provisioned."
       },
-      "instance": {
+      "global_protect_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable global protect option or not. Default is `false`",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "global_protect_segment_options": {
         "Type": "Set",
+        "Optional": true,
+        "Description": "A mapping of segment_id -\u003e segment_options. The only segment names allowed are the segments that are already associated with the service.options should apply. If global_protect_enabled is set to false, global_protect_segment_options shound not be included in your request.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "portal_fqdn_prefix": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Prefix for the global protect portal FQDN, this would be prepended to customer specific alkira domain For Example: if prefix is abc and tenant name is example then the FQDN would be abc.example.gpportal.alkira.com"
+            },
+            "remote_user_zone_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Firewall security zone is created using the zone name for remote user sessions."
+            },
+            "segment_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the segment to which the global protect options should apply"
+            },
+            "service_group_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the service group. A group with the same name will be created."
+            }
+          }
+        }
+      },
+      "instance": {
+        "Type": "List",
         "Required": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "auth_code": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "PAN instance auth code. Only required when `license_type` is `BRING_YOUR_OWN`."
+            },
+            "auth_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "PAN instance auth key. This is only required when `panorama_enabled` is set to `true`."
+            },
             "credential_id": {
               "Type": "String",
-              "Required": true,
-              "Description": "ID of PAN instance credential managed by credential resource."
+              "Description": "ID of PAN instance credential.",
+              "Computed": true
+            },
+            "global_protect_segment_options": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "These options should be set only when global protect is enabled on service. These are set per segment. It is expected that on a segment where global protect is enabled at least 1 instance should be set with portal_enabled and at least one with gateway_enabled. It can be on the same instance or a different instance under the segment.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "gateway_enabled": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "indicates if the Global Protect Gateway is enabled on this PAN instance"
+                  },
+                  "portal_enabled": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "indicates if the Global Protect Portal is enabled on this PAN instance"
+                  },
+                  "prefix_list_id": {
+                    "Type": "Int",
+                    "Required": true,
+                    "Description": "Prefix List with Client IP Pool."
+                  },
+                  "segment_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The segment ID for Global Protect options."
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "The ID of the PAN instance.",
+              "Computed": true
             },
             "name": {
               "Type": "String",
-              "Required": true,
-              "Description": "The name of the PAN instance."
+              "Optional": true,
+              "Description": "The name of the PAN instance.",
+              "Default": {
+                "Type": "string"
+              }
             }
           }
         }
+      },
+      "license_sub_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PAN sub license type, either `CREDIT_BASED` or `MODEL_BASED`. (BETA)"
       },
       "license_type": {
         "Type": "String",
@@ -1828,6 +3657,25 @@
         "Type": "Int",
         "Required": true,
         "Description": "Management Segment ID."
+      },
+      "master_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Master Key for PAN instances."
+      },
+      "master_key_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable Master Key for PAN instances or not. It's default to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "master_key_expiry": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PAN Master Key Expiry. The date should be in format of `YYYY-MM-DD`, e.g. `2000-01-01`."
       },
       "max_instance_count": {
         "Type": "Int",
@@ -1848,6 +3696,16 @@
         "Required": true,
         "Description": "Name of the PAN service."
       },
+      "pan_password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PAN password. This is required when `panorama_enabled` is set to `true`."
+      },
+      "pan_username": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PAN username. This is required when `panorama_enabled` is set to `true`."
+      },
       "panorama_device_group": {
         "Type": "String",
         "Optional": true,
@@ -1858,15 +3716,35 @@
         "Optional": true,
         "Description": "Enable Panorama or not. Default value is `false`."
       },
-      "panorama_ip_address": {
-        "Type": "String",
+      "panorama_ip_addresses": {
+        "Type": "List",
         "Optional": true,
-        "Description": "Panorama IP address."
+        "Description": "Panorama IP addresses.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "panorama_template": {
         "Type": "String",
         "Optional": true,
         "Description": "Panorama Template."
+      },
+      "registration_pin_expiry": {
+        "Type": "String",
+        "Required": true,
+        "Description": "PAN Registration PIN Expiry. The date should be in format of `YYYY-MM-DD`, e.g. `2000-01-01`."
+      },
+      "registration_pin_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "PAN Registration PIN ID."
+      },
+      "registration_pin_value": {
+        "Type": "String",
+        "Required": true,
+        "Description": "PAN Registration PIN Value."
       },
       "segment_ids": {
         "Type": "List",
@@ -1878,10 +3756,42 @@
           "ElementsType": "Int"
         }
       },
+      "segment_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The segment options as used by your PAN firewall.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "groups": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The list of groups associated with the zone.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "segment_id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The ID of the segment."
+            },
+            "zone_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the associated firewall zone."
+            }
+          }
+        }
+      },
       "size": {
         "Type": "String",
         "Required": true,
-        "Description": "The size of the service, one of `SMALL`, `MEDIUM`, `LARGE`."
+        "Description": "The size of the service, one of `SMALL`, `MEDIUM`, `LARGE`, `2LARGE`, `4LARGE`, `5LARGE`, `10LARGE`, `20LARGE`."
       },
       "tunnel_protocol": {
         "Type": "String",
@@ -1894,43 +3804,169 @@
       },
       "type": {
         "Type": "String",
-        "Required": true,
-        "Description": "The type of the PAN firewall."
+        "Optional": true,
+        "Description": "The type of the PAN firewall. Either 'VM-300', 'VM-500' or 'VM-700'"
       },
       "version": {
         "Type": "String",
         "Required": true,
         "Description": "The version of the PAN firewall."
-      },
-      "zones_to_groups": {
-        "Type": "Set",
+      }
+    },
+    "alkira_service_zscaler": {
+      "billing_tag_ids": {
+        "Type": "List",
         "Optional": true,
+        "Description": "Billing tag IDs to associate with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "connector_internet_exit_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the alkira connector internet exit for the zscaler service."
+      },
+      "cxp": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The CXP where the service should be provisioned."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the Zscaler service."
+      },
+      "ipsec_configuration": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "The IPSEC tunnel configuration. This field should only be set when tunnelType is IPSEC.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "groups": {
-              "Type": "List",
+            "esp_dh_group_number": {
+              "Type": "String",
               "Optional": true,
-              "Description": "The name of the group.",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
+              "Description": "The IPSEC phase 2 DH Group to be used. Input value must be either `MODP1024` or `MODP2048`. The default value is `MODP1024`",
+              "Default": {
+                "Type": "string",
+                "Value": "MODP1024"
               }
             },
-            "segment_name": {
+            "esp_encryption_algorithm": {
               "Type": "String",
-              "Required": true,
-              "Description": "The name of the segment."
+              "Optional": true,
+              "Description": "The IPSEC phase 2 Encryption Algorithm to be used. Input value must be either `NULL` or `AES256CBC`. The default value is `NULL`",
+              "Default": {
+                "Type": "string",
+                "Value": "NULL"
+              }
             },
-            "zone_name": {
+            "esp_integrity_algorithm": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The IPSEC phase 2 Integrity Algorithm to be used. Input value must be either `MD5` or `SHA256`. The default value is `MD5`.",
+              "Default": {
+                "Type": "string",
+                "Value": "MD5"
+              }
+            },
+            "health_check_type": {
               "Type": "String",
               "Required": true,
-              "Description": "The name of the zone."
+              "Description": "The type of health check. Input values must be either `IKE_STATUS` `PING_PROBE` `HTTP_PROBE`"
+            },
+            "http_probe_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The url to check connection to health, should be provided when health check type is 'HTTP_PROBE'"
+            },
+            "ike_dh_group_number": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The IPSEC phase 1 DH Group to be used. Input value must either be `MODP1024` or `MODP2048`. The default is `MODP1024`",
+              "Default": {
+                "Type": "string",
+                "Value": "MODP1024"
+              }
+            },
+            "ike_encryption_algorithm": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The IPSEC phase 1 Encryption Algorithm to be used. Only `AES256CBC` is allowed. The default value is `AES256CBC`.",
+              "Default": {
+                "Type": "string",
+                "Value": "AES256CBC"
+              }
+            },
+            "ike_integrity_algorithm": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The IPSEC phase 1 Integrity Algorithm to be used. Only `SHA256` is allowed. The default value is `SHA256`.",
+              "Default": {
+                "Type": "string",
+                "Value": "SHA256"
+              }
+            },
+            "local_fpdn_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The local FQDN Id."
+            },
+            "ping_probe_ip": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The ping destination to check connection health, should be provided when health_check_type is `PING_PROBE`"
+            },
+            "pre_shared_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The preshared key."
             }
           }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the zscaler firewall."
+      },
+      "primary_public_edge_ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The IP for closest Zscaler PoP to `cxp` region."
+      },
+      "secondary_public_edge_ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ip for standby Zscaler PoP to `cxp` region."
+      },
+      "segment_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Names of segments associated with the service.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "size": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The size of the service one of `SMALL`, `MEDIUM`, `LARGE`."
+      },
+      "tunnel_protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of tunnel protocol to be used to connect to Zscaler PoP.",
+        "Default": {
+          "Type": "string",
+          "Value": "IPSEC"
         }
       }
     },
@@ -1972,6 +4008,20 @@
         "Description": "The name of the billing tag."
       }
     },
+    "alkira_connector_ipsec": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the ipsec connector."
+      }
+    },
+    "alkira_connector_oci_vcn": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the OCI VCN connector."
+      }
+    },
     "alkira_credential": {
       "credential_id": {
         "Type": "String",
@@ -1998,6 +4048,86 @@
         "Description": "The name of the group."
       }
     },
+    "alkira_group_connector": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the group."
+      }
+    },
+    "alkira_group_user": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the group."
+      }
+    },
+    "alkira_list_as_path": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the list."
+      },
+      "values": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The value of the list.",
+        "Computed": true
+      }
+    },
+    "alkira_list_community": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the policy prefix list."
+      },
+      "values": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The value of the list.",
+        "Computed": true
+      }
+    },
+    "alkira_list_extended_community": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the extended community list."
+      },
+      "values": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The values of the list.",
+        "Computed": true
+      }
+    },
+    "alkira_list_global_cidr": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Global CIDR List."
+      },
+      "values": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The values of the list.",
+        "Computed": true
+      }
+    },
+    "alkira_policy": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the policy."
+      }
+    },
+    "alkira_policy_nat_rule": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the NAT policy rule."
+      }
+    },
     "alkira_policy_prefix_list": {
       "name": {
         "Type": "String",
@@ -2009,6 +4139,20 @@
         "Optional": true,
         "Description": "Prefixes in the prefix list.",
         "Computed": true
+      }
+    },
+    "alkira_policy_rule": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the policy rule."
+      }
+    },
+    "alkira_policy_rule_list": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the policy rule list."
       }
     },
     "alkira_segment": {

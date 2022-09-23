@@ -1,0 +1,420 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "netskope",
+  "type": "provider",
+  "version": "v0.2.1",
+  "provider": {
+    "apitoken": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(NS_ApiToken)"
+    },
+    "baseurl": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(NS_BaseURL)"
+    }
+  },
+  "resources": {
+    "netskope_ipsec_tunnels": {
+      "bandwidth": {
+        "Type": "Int",
+        "Required": true
+      },
+      "enable": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "encryption": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notes": {
+        "Type": "String",
+        "Optional": true
+      },
+      "pops": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "psk": {
+        "Type": "String",
+        "Required": true
+      },
+      "site": {
+        "Type": "String",
+        "Required": true
+      },
+      "sourcetype": {
+        "Type": "String",
+        "Optional": true
+      },
+      "srcidentity": {
+        "Type": "String",
+        "Required": true
+      },
+      "srcipidentity": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "netskope_privateapps": {
+      "app_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "clientless_access": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "host": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "protocols": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "port": {
+              "Type": "String",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "publisher": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "publisher_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "publisher_name": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "trust_self_signed_certs": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "use_publisher_dns": {
+        "Type": "Bool",
+        "Optional": true
+      }
+    },
+    "netskope_publishers": {
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "token": {
+        "Type": "String",
+        "Computed": true
+      }
+    }
+  },
+  "data-sources": {
+    "netskope_ipsec_pops": {
+      "ipsec_pops": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "closestpop": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "gateway": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "location": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "probeip": {
+              "Type": "String",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "netskope_ipsec_tunnels": {
+      "ipsec_tunnels": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "encryption": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "notes": {
+              "Type": "String",
+              "Computed": true
+            },
+            "pops": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "gateway": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "primary": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "probeip": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "site": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sourcetype": {
+              "Type": "String",
+              "Computed": true
+            },
+            "srcidentity": {
+              "Type": "String",
+              "Computed": true
+            },
+            "srcipidentity": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "template": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "netskope_privateapps": {
+      "filter": {
+        "Type": "String",
+        "Optional": true
+      },
+      "private_apps": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "app_id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "app_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "clientless_access": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "host": {
+              "Type": "String",
+              "Computed": true
+            },
+            "private_app_protocol": {
+              "Type": "String",
+              "Computed": true
+            },
+            "protocols": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "created_at": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "service_id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "transport": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "updated_at": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "trust_self_signed_certs": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "use_publisher_dns": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "netskope_publishers": {
+      "filter": {
+        "Type": "String",
+        "Optional": true
+      },
+      "publishers": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "assessment": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "common_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "publisher_id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "publisher_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "publisher_upgrade_profiles_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "registered": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "stitcher_id": {
+              "Type": "Float",
+              "Computed": true
+            },
+            "upgrade_failed_reason": {
+              "Type": "String",
+              "Computed": true
+            },
+            "upgrade_request": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "constellix",
   "type": "provider",
-  "version": "v0.3.11",
+  "version": "v0.4.5",
   "provider": {
     "apikey": {
       "Type": "String",
@@ -587,6 +587,11 @@
           }
         }
       },
+      "skip_lookup": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "source_type": {
         "Type": "String",
         "Required": true
@@ -997,6 +1002,11 @@
           "ElementsType": "Int"
         }
       },
+      "notification_report_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "resolver": {
         "Type": "String",
         "Required": true
@@ -1230,7 +1240,7 @@
     },
     "constellix_http_check": {
       "check_sites": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -1272,7 +1282,7 @@
         "Computed": true
       },
       "notification_groups": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Computed": true,
         "ConfigImplicitMode": "Attr",
@@ -1280,6 +1290,11 @@
           "Type": "SchemaElements",
           "ElementsType": "Int"
         }
+      },
+      "notification_report_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
       },
       "path": {
         "Type": "String",
@@ -1915,6 +1930,11 @@
           "ElementsType": "Int"
         }
       },
+      "notification_report_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "port": {
         "Type": "Int",
         "Required": true
@@ -1996,7 +2016,7 @@
         "Computed": true
       },
       "roundrobin": {
-        "Type": "Set",
+        "Type": "List",
         "Required": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2609,6 +2629,11 @@
           }
         }
       },
+      "skip_lookup": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "source_type": {
         "Type": "String",
         "Required": true
@@ -3033,6 +3058,11 @@
           "ElementsType": "Int"
         }
       },
+      "notification_report_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "resolver": {
         "Type": "String",
         "Optional": true,
@@ -3322,6 +3352,11 @@
           "Type": "SchemaElements",
           "ElementsType": "Int"
         }
+      },
+      "notification_report_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
       },
       "path": {
         "Type": "String",
@@ -4006,6 +4041,11 @@
           "Type": "SchemaElements",
           "ElementsType": "Int"
         }
+      },
+      "notification_report_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
       },
       "port": {
         "Type": "Int",

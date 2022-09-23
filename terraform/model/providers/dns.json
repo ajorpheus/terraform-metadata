@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "dns",
   "type": "provider",
-  "version": "v3.2.1",
+  "version": "v3.2.3",
   "provider": {
     "update": {
       "Type": "List",

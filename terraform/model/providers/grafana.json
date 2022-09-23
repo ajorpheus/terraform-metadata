@@ -3,12 +3,12 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "grafana",
   "type": "provider",
-  "version": "v1.18.0",
+  "version": "v1.28.2",
   "provider": {
     "auth": {
       "Type": "String",
-      "Required": true,
-      "Description": "API token or basic auth username:password. May alternatively be set via the `GRAFANA_AUTH` environment variable.",
+      "Optional": true,
+      "Description": "API token or basic auth `username:password`. May alternatively be set via the `GRAFANA_AUTH` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_AUTH)"
     },
     "ca_cert": {
@@ -17,11 +17,45 @@
       "Description": "Certificate CA bundle to use to verify the Grafana server's certificate. May alternatively be set via the `GRAFANA_CA_CERT` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_CA_CERT)"
     },
+    "cloud_api_key": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "API key for Grafana Cloud. May alternatively be set via the `GRAFANA_CLOUD_API_KEY` environment variable.",
+      "DefaultFunc": "ENV(GRAFANA_CLOUD_API_KEY)"
+    },
+    "cloud_api_url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Grafana Cloud's API URL. May alternatively be set via the `GRAFANA_CLOUD_API_URL` environment variable.",
+      "DefaultFunc": "ENV(GRAFANA_CLOUD_API_URL)"
+    },
+    "http_headers": {
+      "Type": "Map",
+      "Optional": true,
+      "Description": "Optional. HTTP headers mapping keys to values used for accessing the Grafana API. May alternatively be set via the `GRAFANA_HTTP_HEADERS` environment variable in JSON format.",
+      "ConfigImplicitMode": "Attr",
+      "Elem": {
+        "Type": "SchemaElements",
+        "ElementsType": "String"
+      }
+    },
     "insecure_skip_verify": {
       "Type": "Bool",
       "Optional": true,
       "Description": "Skip TLS certificate verification. May alternatively be set via the `GRAFANA_INSECURE_SKIP_VERIFY` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_INSECURE_SKIP_VERIFY)"
+    },
+    "oncall_access_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "A Grafana OnCall access token. May alternatively be set via the `GRAFANA_ONCALL_ACCESS_TOKEN` environment variable.",
+      "DefaultFunc": "ENV(GRAFANA_ONCALL_ACCESS_TOKEN)"
+    },
+    "oncall_url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "An Grafana OnCall backend address. May alternatively be set via the `GRAFANA_ONCALL_URL` environment variable.",
+      "DefaultFunc": "ENV(GRAFANA_ONCALL_URL)"
     },
     "org_id": {
       "Type": "Int",
@@ -44,8 +78,14 @@
     "sm_url": {
       "Type": "String",
       "Optional": true,
-      "Description": "Synthetic monitoring backend address. May alternatively be set via the `GRAFANA_SM_URL` environment variable.",
+      "Description": "Synthetic monitoring backend address. May alternatively be set via the `GRAFANA_SM_URL` environment variable. The correct value for each service region is cited in the [Synthetic Monitoring documentation](https://grafana.com/docs/grafana-cloud/synthetic-monitoring/private-probes/#probe-api-server-url). Note the `sm_url` value is optional, but it must correspond with the value specified as the `region_slug` in the `grafana_cloud_stack` resource. Also note that when a Terraform configuration contains multiple provider instances managing SM resources associated with the same Grafana stack, specifying an explicit `sm_url` set to the same value for each provider ensures all providers interact with the same SM API.",
       "DefaultFunc": "ENV(GRAFANA_SM_URL)"
+    },
+    "store_dashboard_sha256": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Set to true if you want to save only the sha256sum instead of complete dashboard model JSON in the tfstate.",
+      "DefaultFunc": "ENV(GRAFANA_STORE_DASHBOARD_SHA256)"
     },
     "tls_cert": {
       "Type": "String",
@@ -61,7 +101,7 @@
     },
     "url": {
       "Type": "String",
-      "Required": true,
+      "Optional": true,
       "Description": "The root URL of a Grafana server. May alternatively be set via the `GRAFANA_URL` environment variable.",
       "DefaultFunc": "ENV(GRAFANA_URL)"
     }
@@ -130,7 +170,51 @@
         "Computed": true
       }
     },
+    "grafana_annotation": {
+      "dashboard_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the dashboard on which to create the annotation."
+      },
+      "panel_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the dashboard panel on which to create the annotation."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The tags to associate with the annotation.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "text": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The text to associate with the annotation."
+      },
+      "time": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The RFC 3339-formatted time string indicating the annotation's time.",
+        "Computed": true
+      },
+      "time_end": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The RFC 3339-formatted time string indicating the annotation's end time.",
+        "Computed": true
+      }
+    },
     "grafana_api_key": {
+      "cloud_stack_slug": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "If set, the API key will be created for the given Cloud stack. This can be used to bootstrap a management API key for a new stack. **Note**: This requires a cloud token to be configured."
+      },
       "expiration": {
         "Type": "String",
         "Computed": true
@@ -189,6 +273,1336 @@
         }
       }
     },
+    "grafana_cloud_api_key": {
+      "cloud_org_slug": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The slug of the organization to create the API key in. This is the same slug as the organization name in the URL."
+      },
+      "key": {
+        "Type": "String",
+        "Description": "The generated API key.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the API key."
+      },
+      "role": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Role of the API key. Should be one of [Viewer Editor Admin MetricsPublisher PluginPublisher]. See https://grafana.com/docs/grafana-cloud/api/#create-api-key for details."
+      }
+    },
+    "grafana_cloud_plugin_installation": {
+      "slug": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Slug of the plugin to be installed."
+      },
+      "stack_slug": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The stack id to which the plugin should be installed."
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Version of the plugin to be installed."
+      }
+    },
+    "grafana_cloud_stack": {
+      "alertmanager_name": {
+        "Type": "String",
+        "Description": "Name of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "alertmanager_status": {
+        "Type": "String",
+        "Description": "Status of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "alertmanager_url": {
+        "Type": "String",
+        "Description": "Base URL of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "alertmanager_user_id": {
+        "Type": "Int",
+        "Description": "User ID of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of stack."
+      },
+      "graphite_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "graphite_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "graphite_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "graphite_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The stack id assigned to this stack by Grafana.",
+        "Computed": true
+      },
+      "logs_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "logs_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "logs_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "logs_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of stack. Conventionally matches the url of the instance (e.g. “\u003cstack_slug\u003e.grafana.net”)."
+      },
+      "org_id": {
+        "Type": "Int",
+        "Description": "Organization id to assign to this stack.",
+        "Computed": true
+      },
+      "org_name": {
+        "Type": "String",
+        "Description": "Organization name to assign to this stack.",
+        "Computed": true
+      },
+      "org_slug": {
+        "Type": "String",
+        "Description": "Organization slug to assign to this stack.",
+        "Computed": true
+      },
+      "prometheus_name": {
+        "Type": "String",
+        "Description": "Prometheus name for this instance.",
+        "Computed": true
+      },
+      "prometheus_remote_endpoint": {
+        "Type": "String",
+        "Description": "Use this URL to query hosted metrics data e.g. Prometheus data source in Grafana",
+        "Computed": true
+      },
+      "prometheus_remote_write_endpoint": {
+        "Type": "String",
+        "Description": "Use this URL to send prometheus metrics to Grafana cloud",
+        "Computed": true
+      },
+      "prometheus_status": {
+        "Type": "String",
+        "Description": "Prometheus status for this instance.",
+        "Computed": true
+      },
+      "prometheus_url": {
+        "Type": "String",
+        "Description": "Prometheus url for this instance.",
+        "Computed": true
+      },
+      "prometheus_user_id": {
+        "Type": "Int",
+        "Description": "Prometheus user ID. Used for e.g. remote_write.",
+        "Computed": true
+      },
+      "region_slug": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Region slug to assign to this stack.\nChanging region will destroy the existing stack and create a new one in the desired region"
+      },
+      "slug": {
+        "Type": "String",
+        "Required": true,
+        "Description": "\nSubdomain that the Grafana instance will be available at (i.e. setting slug to “\u003cstack_slug\u003e” will make the instance\navailable at “https://\u003cstack_slug\u003e.grafana.net\"."
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the stack.",
+        "Computed": true
+      },
+      "traces_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "traces_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "traces_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "traces_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Custom URL for the Grafana instance. Must have a CNAME setup to point to `.grafana.net` before creating the stack",
+        "Computed": true
+      },
+      "wait_for_readiness": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to wait for readiness of the stack after creating it. The check is a HEAD request to the stack URL (Grafana instance).",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_readiness_timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "How long to wait for readiness (if enabled).",
+        "Default": {
+          "Type": "string",
+          "Value": "5m0s"
+        }
+      }
+    },
+    "grafana_contact_point": {
+      "alertmanager": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to other Alertmanager instances.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "basic_auth_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The password component of the basic auth credentials to use."
+            },
+            "basic_auth_user": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The username component of the basic auth credentials to use."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The URL of the Alertmanager instance."
+            }
+          }
+        }
+      },
+      "dingding": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to DingDing.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the message."
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The format of message to send - either 'link' or 'actionCard'"
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The DingDing webhook URL."
+            }
+          }
+        }
+      },
+      "discord": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications as Discord messages",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "avatar_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The URL of a custom avatar image to use.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the message.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The discord webhook URL."
+            },
+            "use_discord_username": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use the bot account's plain username instead of \"Grafana.\"",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "email": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to an email address.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "addresses": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The addresses to send emails to.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the email.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "single_email": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to send a single email CC'ing all addresses, rather than a separate email to each address.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "subject": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated subject line of the email.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "googlechat": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to Google Chat.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the message."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Google Chat webhook URL."
+            }
+          }
+        }
+      },
+      "kafka": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that publishes notifications to Apache Kafka topics.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "rest_proxy_url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The URL of the Kafka REST proxy to send requests to."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "topic": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Kafka topic to publish to."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the contact point."
+      },
+      "opsgenie": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to OpsGenie.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The OpsGenie API key to use."
+            },
+            "auto_close": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to auto-close alerts in OpsGenie when they resolve in the Alertmanager."
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A templated high-level description to use for the alert."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the message."
+            },
+            "override_priority": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to allow the alert priority to be configured via the value of the `og_priority` annotation on the alert."
+            },
+            "send_tags_as": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether to send annotations to OpsGenie as Tags, Details, or both. Supported values are `tags`, `details`, `both`, or empty to use the default behavior of Tags."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allows customization of the OpsGenie API URL."
+            }
+          }
+        }
+      },
+      "pagerduty": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to PagerDuty.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "class": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The class or type of event, for example `ping failure`."
+            },
+            "component": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The component being affected by the event."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "group": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The group to which the provided component belongs to."
+            },
+            "integration_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The PagerDuty API key."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "severity": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The PagerDuty event severity level. Default is `critical`."
+            },
+            "summary": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated summary message of the event."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "pushover": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to Pushover.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Pushover API token."
+            },
+            "device": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Comma-separated list of devices to which the event is associated."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "expire": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How many seconds for which the notification will continue to be retried by Pushover."
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated notification message content."
+            },
+            "ok_priority": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The priority level of the resolved event."
+            },
+            "ok_sound": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The sound associated with the resolved notification."
+            },
+            "priority": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The priority level of the event."
+            },
+            "retry": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How often, in seconds, the Pushover servers will send the same notification to the user."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "sound": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The sound associated with the notification."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "user_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Pushover user key."
+            }
+          }
+        }
+      },
+      "sensugo": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to SensuGo.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The SensuGo API key."
+            },
+            "check": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The SensuGo check to which the event should be routed."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "entity": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The entity being monitored."
+            },
+            "handler": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A custom handler to execute in addition to the check."
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Templated message content describing the alert."
+            },
+            "namespace": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The namespace in which the check resides."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The SensuGo URL to send requests to."
+            }
+          }
+        }
+      },
+      "slack": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to Slack.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "endpoint_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Use this to override the Slack API endpoint URL to send requests to."
+            },
+            "icon_emoji": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of a Slack workspace emoji to use as the bot icon."
+            },
+            "icon_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A URL of an image to use as the bot icon."
+            },
+            "mention_channel": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Describes how to ping the slack channel that messages are being sent to. Options are `here` for an @here ping, `channel` for @channel, or empty for no ping."
+            },
+            "mention_groups": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Comma-separated list of groups to mention in the message."
+            },
+            "mention_users": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Comma-separated list of users to mention in the message."
+            },
+            "recipient": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Channel, private group, or IM channel (can be an encoded ID or a name) to send messages to."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "text": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Templated content of the message."
+            },
+            "title": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Templated title of the message."
+            },
+            "token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A Slack API token,for sending messages directly without the webhook method."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A Slack webhook URL,for sending messages via the webhook method."
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Username for the bot to use."
+            }
+          }
+        }
+      },
+      "teams": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to Microsoft Teams.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated message content to send."
+            },
+            "section_title": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated subtitle for each message section."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "title": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated title of the message."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A Teams webhook URL."
+            }
+          }
+        }
+      },
+      "telegram": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to Telegram.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "chat_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The chat ID to send messages to."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the message."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Telegram bot token."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "threema": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to Threema.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_secret": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Threema API key."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "gateway_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Threema gateway ID."
+            },
+            "recipient_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The ID of the recipient of the message."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "victorops": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to VictorOps (now known as Splunk OnCall).",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The VictorOps alert state - typically either `CRITICAL` or `RECOVERY`."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The VictorOps webhook URL."
+            }
+          }
+        }
+      },
+      "webhook": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to an arbitrary webhook, using the Prometheus webhook format defined here: https://prometheus.io/docs/alerting/latest/configuration/#webhook_config",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "authorization_credentials": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allows a custom authorization scheme - attaches an auth header with this value. Do not use in conjunction with basic auth parameters."
+            },
+            "authorization_scheme": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allows a custom authorization scheme - attaches an auth header with this name. Do not use in conjunction with basic auth parameters."
+            },
+            "basic_auth_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The username to use in basic auth headers attached to the request. If omitted, basic auth will not be used."
+            },
+            "basic_auth_user": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The username to use in basic auth headers attached to the request. If omitted, basic auth will not be used."
+            },
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "http_method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The HTTP method to use in the request. Defaults to `POST`."
+            },
+            "max_alerts": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum number of alerts to send in a single request. This can be helpful in limiting the size of the request body. The default is 0, which indicates no limit."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The URL to send webhook requests to."
+            }
+          }
+        }
+      },
+      "wecom": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A contact point that sends notifications to WeCom.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disable_resolve_message": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to disable sending resolve messages.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated content of the message to send."
+            },
+            "settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional custom properties to attach to the notifier.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "title": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The templated title of the message to send."
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The UID of the contact point.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The WeCom webhook URL."
+            }
+          }
+        }
+      }
+    },
     "grafana_dashboard": {
       "config_json": {
         "Type": "String",
@@ -201,9 +1615,9 @@
         "Computed": true
       },
       "folder": {
-        "Type": "Int",
+        "Type": "String",
         "Optional": true,
-        "Description": "The id of the folder to save the dashboard in."
+        "Description": "The id of the folder to save the dashboard in. This attribute is a string to reflect the type of the folder's id."
       },
       "message": {
         "Type": "String",
@@ -223,7 +1637,12 @@
       },
       "uid": {
         "Type": "String",
-        "Description": "The unique identifier of a dashboard. This is used to construct its URL. It’s automatically generated if not provided when creating a dashboard. The uid allows having consistent URLs for accessing dashboards and when syncing dashboards between multiple Grafana installs. ",
+        "Description": "The unique identifier of a dashboard. This is used to construct its URL. It's automatically generated if not provided when creating a dashboard. The uid allows having consistent URLs for accessing dashboards and when syncing dashboards between multiple Grafana installs. ",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Description": "The full URL of the dashboard.",
         "Computed": true
       },
       "version": {
@@ -301,7 +1720,8 @@
       "basic_auth_password": {
         "Type": "String",
         "Optional": true,
-        "Description": "Basic auth password.",
+        "Description": "Basic auth password. Deprecated:Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes. This attribute is removed in Grafana 9.0+.",
+        "Deprecated": "Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes. This attribute is removed in Grafana 9.0+.",
         "Default": {
           "Type": "string"
         }
@@ -344,7 +1764,8 @@
       "json_data": {
         "Type": "List",
         "Optional": true,
-        "Description": "(Required by some data source types)",
+        "Description": "(Required by some data source types). Deprecated: Use json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes.",
+        "Deprecated": "Use json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -353,22 +1774,37 @@
             "assume_role_arn": {
               "Type": "String",
               "Optional": true,
-              "Description": "(CloudWatch) The ARN of the role to be assumed by Grafana when using the CloudWatch data source."
+              "Description": "(CloudWatch, Athena) The ARN of the role to be assumed by Grafana when using the CloudWatch or Athena data source."
             },
             "auth_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "(CloudWatch) The authentication type used to access the data source."
+              "Description": "(CloudWatch, Athena) The authentication type used to access the data source."
             },
             "authentication_type": {
               "Type": "String",
               "Optional": true,
               "Description": "(Stackdriver) The authentication type: `jwt` or `gce`."
             },
+            "catalog": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Athena) Athena catalog."
+            },
             "client_email": {
               "Type": "String",
               "Optional": true,
               "Description": "(Stackdriver) Service account email address."
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Azure Monitor) The service account client id."
+            },
+            "cloud_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Azure Monitor) The cloud name."
             },
             "conn_max_lifetime": {
               "Type": "Int",
@@ -380,6 +1816,16 @@
               "Optional": true,
               "Description": "(CloudWatch) A comma-separated list of custom namespaces to be queried by the CloudWatch data source."
             },
+            "database": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Athena) Name of the database within the catalog."
+            },
+            "default_bucket": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(InfluxDB) The default bucket for the data source."
+            },
             "default_project": {
               "Type": "String",
               "Optional": true,
@@ -388,7 +1834,35 @@
             "default_region": {
               "Type": "String",
               "Optional": true,
-              "Description": "(CloudWatch) The default region for the data source."
+              "Description": "(CloudWatch, Athena) The default region for the data source."
+            },
+            "derived_field": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "(Loki) See https://grafana.com/docs/grafana/latest/datasources/loki/#derived-fields",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "datasource_uid": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "matcher_regex": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "url": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
             },
             "encrypt": {
               "Type": "String",
@@ -400,6 +1874,16 @@
               "Optional": true,
               "Description": "(Elasticsearch) Elasticsearch semantic version (Grafana v8.0+)."
             },
+            "external_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(CloudWatch, Athena) If you are assuming a role in another account, that has been created with an external ID, specify the external ID here."
+            },
+            "github_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Github) Github URL"
+            },
             "graphite_version": {
               "Type": "String",
               "Optional": true,
@@ -409,6 +1893,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "(Prometheus) HTTP method to use for making requests."
+            },
+            "implementation": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Alertmanager) Implementation of Alertmanager. Either 'cortex' or 'prometheus'"
             },
             "interval": {
               "Type": "String",
@@ -425,6 +1914,11 @@
               "Optional": true,
               "Description": "(Elasticsearch) Which field should be used as the log message."
             },
+            "manage_alerts": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "(Prometheus) Manage alerts."
+            },
             "max_concurrent_shard_requests": {
               "Type": "Int",
               "Optional": true,
@@ -435,10 +1929,30 @@
               "Optional": true,
               "Description": "(MySQL, PostgreSQL and MSSQL) Maximum number of connections in the idle connection pool (Grafana v5.4+)."
             },
+            "max_lines": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "(Loki) Upper limit for the number of log lines returned by Loki "
+            },
             "max_open_conns": {
               "Type": "Int",
               "Optional": true,
               "Description": "(MySQL, PostgreSQL and MSSQL) Maximum number of open connections to the database (Grafana v5.4+)."
+            },
+            "org_slug": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Sentry) Organization slug."
+            },
+            "organization": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(InfluxDB) An organization is a workspace for a group of users. All dashboards, tasks, buckets, members, etc., belong to an organization."
+            },
+            "output_location": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Athena) AWS S3 bucket to store execution outputs. If not specified, the default query result location from the Workgroup configuration will be used."
             },
             "postgres_version": {
               "Type": "Int",
@@ -448,7 +1962,7 @@
             "profile": {
               "Type": "String",
               "Optional": true,
-              "Description": "(CloudWatch) The credentials profile name to use when authentication type is set as 'Credentials file'."
+              "Description": "(CloudWatch, Athena) The credentials profile name to use when authentication type is set as 'Credentials file'."
             },
             "query_timeout": {
               "Type": "String",
@@ -490,6 +2004,16 @@
               "Optional": true,
               "Description": "(PostgreSQL) SSLmode. 'disable', 'require', 'verify-ca' or 'verify-full'."
             },
+            "subscription_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Azure Monitor) The subscription id"
+            },
+            "tenant_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Azure Monitor) Service account tenant ID."
+            },
             "time_field": {
               "Type": "String",
               "Optional": true,
@@ -498,7 +2022,7 @@
             "time_interval": {
               "Type": "String",
               "Optional": true,
-              "Description": "(Prometheus, Elasticsearch, InfluxDB, MySQL, PostgreSQL, and MSSQL) Lowest interval/step value that should be used for this data source."
+              "Description": "(Prometheus, Elasticsearch, InfluxDB, MySQL, PostgreSQL, and MSSQL) Lowest interval/step value that should be used for this data source. Sometimes called \"Scrape Interval\" in the Grafana UI."
             },
             "timescaledb": {
               "Type": "Bool",
@@ -515,6 +2039,11 @@
               "Optional": true,
               "Description": "(All) Enable TLS authentication using CA cert."
             },
+            "tls_configuration_method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(All) SSL Certificate configuration, either by ‘file-path’ or ‘file-content’."
+            },
             "tls_skip_verify": {
               "Type": "Bool",
               "Optional": true,
@@ -525,18 +2054,47 @@
               "Optional": true,
               "Description": "(Stackdriver) The token URI used, provided in the service account key."
             },
-            "tsdb_resolution": {
+            "tracing_datasource_uid": {
               "Type": "String",
+              "Optional": true,
+              "Description": "(Cloudwatch) The X-Ray datasource uid to associate to this Cloudwatch datasource."
+            },
+            "tsdb_resolution": {
+              "Type": "Int",
               "Optional": true,
               "Description": "(OpenTSDB) Resolution."
             },
             "tsdb_version": {
-              "Type": "String",
+              "Type": "Int",
               "Optional": true,
               "Description": "(OpenTSDB) Version."
+            },
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(InfluxDB) InfluxQL or Flux."
+            },
+            "workgroup": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Athena) Workgroup to use."
+            },
+            "xpack_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "(Elasticsearch) Enable X-Pack support."
             }
           }
         }
+      },
+      "json_data_encoded": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Serialized JSON string containing the json data. Replaces the json_data attribute, this attribute can be used to pass configuration options to the data source. To figure out what options a datasource has available, see its docs or inspect the network data when saving it from the Grafana UI.",
+        "ConflictsWith": [
+          "json_data",
+          "secure_json_data"
+        ]
       },
       "name": {
         "Type": "String",
@@ -546,7 +2104,8 @@
       "password": {
         "Type": "String",
         "Optional": true,
-        "Description": "(Required by some data source types) The password to use to authenticate to the data source.",
+        "Description": "(Required by some data source types) The password to use to authenticate to the data source. Deprecated: Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes. This attribute is removed in Grafana 9.0+.",
+        "Deprecated": "Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes. This attribute is removed in Grafana 9.0+.",
         "Default": {
           "Type": "string"
         }
@@ -554,6 +2113,8 @@
       "secure_json_data": {
         "Type": "List",
         "Optional": true,
+        "Description": "Deprecated: Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes.",
+        "Deprecated": "Use secure_json_data_encoded instead. It supports arbitrary JSON data, and therefore all attributes.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -562,12 +2123,27 @@
             "access_key": {
               "Type": "String",
               "Optional": true,
-              "Description": "(CloudWatch) The access key to use to access the data source."
+              "Description": "(CloudWatch, Athena) The access key used to access the data source."
+            },
+            "access_token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Github) The access token used to access the data source."
+            },
+            "auth_token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Sentry) Authorization token."
             },
             "basic_auth_password": {
               "Type": "String",
               "Optional": true,
               "Description": "(All) Password to use for basic authentication."
+            },
+            "client_secret": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Azure Monitor) Client secret for authentication."
             },
             "password": {
               "Type": "String",
@@ -582,7 +2158,7 @@
             "secret_key": {
               "Type": "String",
               "Optional": true,
-              "Description": "(CloudWatch) The secret key to use to access the data source."
+              "Description": "(CloudWatch, Athena) The secret key to use to access the data source."
             },
             "sigv4_access_key": {
               "Type": "String",
@@ -611,6 +2187,15 @@
             }
           }
         }
+      },
+      "secure_json_data_encoded": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Serialized JSON string containing the secure json data. Replaces the secure_json_data attribute, this attribute can be used to pass secure configuration options to the data source. To figure out what options a datasource has available, see its docs or inspect the network data when saving it from the Grafana UI.",
+        "ConflictsWith": [
+          "json_data",
+          "secure_json_data"
+        ]
       },
       "type": {
         "Type": "String",
@@ -692,7 +2277,13 @@
       },
       "uid": {
         "Type": "String",
+        "Optional": true,
         "Description": "Unique identifier.",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Description": "The full URL of the folder.",
         "Computed": true
       }
     },
@@ -741,6 +2332,84 @@
             }
           }
         }
+      }
+    },
+    "grafana_library_panel": {
+      "created": {
+        "Type": "String",
+        "Description": "Timestamp when the library panel was created.",
+        "Computed": true
+      },
+      "dashboard_ids": {
+        "Type": "List",
+        "Description": "Numerical IDs of Grafana dashboards containing the library panel.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Description": "Description of the library panel.",
+        "Computed": true
+      },
+      "folder_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the folder where the library panel is stored."
+      },
+      "folder_name": {
+        "Type": "String",
+        "Description": "Name of the folder containing the library panel.",
+        "Computed": true
+      },
+      "folder_uid": {
+        "Type": "String",
+        "Description": "Unique ID (UID) of the folder containing the library panel.",
+        "Computed": true
+      },
+      "model_json": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The JSON model for the library panel."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the library panel."
+      },
+      "org_id": {
+        "Type": "Int",
+        "Description": "The numeric ID of the library panel computed by Grafana.",
+        "Computed": true
+      },
+      "panel_id": {
+        "Type": "Int",
+        "Description": "The numeric ID of the library panel computed by Grafana.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Type of the library panel (eg. text).",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The unique identifier (UID) of a library panel uniquely identifies library panels between multiple Grafana installs. It’s automatically generated unless you specify it during library panel creation.The UID provides consistent URLs for accessing library panels and when syncing library panels between multiple Grafana installs.",
+        "Computed": true
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "Timestamp when the library panel was last modified.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
+        "Description": "Version of the library panel.",
+        "Computed": true
       }
     },
     "grafana_machine_learning_job": {
@@ -805,6 +2474,1112 @@
           "Type": "int",
           "Value": "7776000"
         }
+      }
+    },
+    "grafana_message_template": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the message template."
+      },
+      "template": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The content of the message template."
+      }
+    },
+    "grafana_mute_timing": {
+      "intervals": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The time intervals at which to mute notifications.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "days_of_month": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "An inclusive range of days, 1-31, within a month, e.g. \"1\" or \"14:16\". Negative values can be used to represent days counting from the end of a month, e.g. \"-1\".",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "months": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "An inclusive range of months, either numerical or full calendar month, e.g. \"1:3\", \"december\", or \"may:august\".",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "times": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The time ranges, represented in minutes, during which to mute in a given day.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "end": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The time, in hh:mm format, of when the interval should end exclusively."
+                  },
+                  "start": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The time, in hh:mm format, of when the interval should begin inclusively."
+                  }
+                }
+              }
+            },
+            "weekdays": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "An inclusive range of weekdays, e.g. \"monday\" or \"tuesday:thursday\".",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "years": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A positive inclusive range of years, e.g. \"2030\" or \"2025:2026\".",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the mute timing."
+      }
+    },
+    "grafana_notification_policy": {
+      "contact_point": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The default contact point to route all unmatched notifications to."
+      },
+      "group_by": {
+        "Type": "List",
+        "Required": true,
+        "Description": "A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "group_interval": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Minimum time interval between two notifications for the same group. Default is 5 minutes."
+      },
+      "group_wait": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds."
+      },
+      "policy": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Routing rules for specific label sets.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "contact_point": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The contact point to route notifications that match this rule to."
+            },
+            "continue": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to continue matching subsequent rules if an alert matches the current rule. Otherwise, the rule will be 'consumed' by the first policy to match it."
+            },
+            "group_by": {
+              "Type": "List",
+              "Required": true,
+              "Description": "A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "group_interval": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Minimum time interval between two notifications for the same group. Default is 5 minutes."
+            },
+            "group_wait": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds."
+            },
+            "matcher": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Describes which labels this rule should match. When multiple matchers are supplied, an alert must match ALL matchers to be accepted by this policy. When no matchers are supplied, the rule will match all alert instances.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "label": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the label to match against."
+                  },
+                  "match": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The operator to apply when matching values of the given label. Allowed operators are `=` for equality, `!=` for negated equality, `=~` for regex equality, and `!~` for negated regex equality."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The label value to match against."
+                  }
+                }
+              }
+            },
+            "mute_timings": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A list of mute timing names to apply to alerts that match this policy.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "policy": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Routing rules for specific label sets.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "contact_point": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The contact point to route notifications that match this rule to."
+                  },
+                  "continue": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Whether to continue matching subsequent rules if an alert matches the current rule. Otherwise, the rule will be 'consumed' by the first policy to match it."
+                  },
+                  "group_by": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "group_interval": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Minimum time interval between two notifications for the same group. Default is 5 minutes."
+                  },
+                  "group_wait": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds."
+                  },
+                  "matcher": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Describes which labels this rule should match. When multiple matchers are supplied, an alert must match ALL matchers to be accepted by this policy. When no matchers are supplied, the rule will match all alert instances.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "label": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The name of the label to match against."
+                        },
+                        "match": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The operator to apply when matching values of the given label. Allowed operators are `=` for equality, `!=` for negated equality, `=~` for regex equality, and `!~` for negated regex equality."
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The label value to match against."
+                        }
+                      }
+                    }
+                  },
+                  "mute_timings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "A list of mute timing names to apply to alerts that match this policy.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "policy": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Routing rules for specific label sets.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "contact_point": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The contact point to route notifications that match this rule to."
+                        },
+                        "continue": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to continue matching subsequent rules if an alert matches the current rule. Otherwise, the rule will be 'consumed' by the first policy to match it."
+                        },
+                        "group_by": {
+                          "Type": "List",
+                          "Required": true,
+                          "Description": "A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "group_interval": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Minimum time interval between two notifications for the same group. Default is 5 minutes."
+                        },
+                        "group_wait": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds."
+                        },
+                        "matcher": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Describes which labels this rule should match. When multiple matchers are supplied, an alert must match ALL matchers to be accepted by this policy. When no matchers are supplied, the rule will match all alert instances.",
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "label": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The name of the label to match against."
+                              },
+                              "match": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The operator to apply when matching values of the given label. Allowed operators are `=` for equality, `!=` for negated equality, `=~` for regex equality, and `!~` for negated regex equality."
+                              },
+                              "value": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The label value to match against."
+                              }
+                            }
+                          }
+                        },
+                        "mute_timings": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "A list of mute timing names to apply to alerts that match this policy.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "policy": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Routing rules for specific label sets.",
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "contact_point": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The contact point to route notifications that match this rule to."
+                              },
+                              "continue": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to continue matching subsequent rules if an alert matches the current rule. Otherwise, the rule will be 'consumed' by the first policy to match it."
+                              },
+                              "group_by": {
+                                "Type": "List",
+                                "Required": true,
+                                "Description": "A list of alert labels to group alerts into notifications by. Use the special label `...` to group alerts by all labels, effectively disabling grouping.",
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "group_interval": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Minimum time interval between two notifications for the same group. Default is 5 minutes."
+                              },
+                              "group_wait": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Time to wait to buffer alerts of the same group before sending a notification. Default is 30 seconds."
+                              },
+                              "matcher": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "Describes which labels this rule should match. When multiple matchers are supplied, an alert must match ALL matchers to be accepted by this policy. When no matchers are supplied, the rule will match all alert instances.",
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "label": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The name of the label to match against."
+                                    },
+                                    "match": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The operator to apply when matching values of the given label. Allowed operators are `=` for equality, `!=` for negated equality, `=~` for regex equality, and `!~` for negated regex equality."
+                                    },
+                                    "value": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The label value to match against."
+                                    }
+                                  }
+                                }
+                              },
+                              "mute_timings": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A list of mute timing names to apply to alerts that match this policy.",
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "repeat_interval": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours."
+                              }
+                            }
+                          }
+                        },
+                        "repeat_interval": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours."
+                        }
+                      }
+                    }
+                  },
+                  "repeat_interval": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours."
+                  }
+                }
+              }
+            },
+            "repeat_interval": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours."
+            }
+          }
+        }
+      },
+      "repeat_interval": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Minimum time interval for re-sending a notification if an alert is still firing. Default is 4 hours."
+      }
+    },
+    "grafana_oncall_escalation": {
+      "action_to_trigger": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of an Action for trigger_action type step.",
+        "ConflictsWith": [
+          "duration",
+          "notify_on_call_from_schedule",
+          "persons_to_notify",
+          "persons_to_notify_next_each_time",
+          "group_to_notify",
+          "notify_if_time_from",
+          "notify_if_time_to"
+        ]
+      },
+      "duration": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The duration of delay for wait type step.",
+        "ConflictsWith": [
+          "notify_on_call_from_schedule",
+          "persons_to_notify",
+          "persons_to_notify_next_each_time",
+          "action_to_trigger",
+          "group_to_notify",
+          "notify_if_time_from",
+          "notify_if_time_to"
+        ]
+      },
+      "escalation_chain_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the escalation chain."
+      },
+      "group_to_notify": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of a User Group for notify_user_group type step.",
+        "ConflictsWith": [
+          "duration",
+          "notify_on_call_from_schedule",
+          "persons_to_notify",
+          "persons_to_notify_next_each_time",
+          "action_to_trigger",
+          "notify_if_time_from",
+          "notify_if_time_to"
+        ]
+      },
+      "important": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Will activate \"important\" personal notification rules. Actual for steps: notify_persons, notify_on_call_from_schedule and notify_user_group"
+      },
+      "notify_if_time_from": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The beginning of the time interval for notify_if_time_from_to type step in UTC (for example 08:00:00Z).",
+        "ConflictsWith": [
+          "duration",
+          "notify_on_call_from_schedule",
+          "persons_to_notify",
+          "persons_to_notify_next_each_time",
+          "action_to_trigger"
+        ]
+      },
+      "notify_if_time_to": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The end of the time interval for notify_if_time_from_to type step in UTC (for example 18:00:00Z).",
+        "ConflictsWith": [
+          "duration",
+          "notify_on_call_from_schedule",
+          "persons_to_notify",
+          "persons_to_notify_next_each_time",
+          "action_to_trigger"
+        ]
+      },
+      "notify_on_call_from_schedule": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of a Schedule for notify_on_call_from_schedule type step.",
+        "ConflictsWith": [
+          "duration",
+          "persons_to_notify",
+          "persons_to_notify_next_each_time",
+          "action_to_trigger",
+          "group_to_notify",
+          "notify_if_time_from",
+          "notify_if_time_to"
+        ]
+      },
+      "persons_to_notify": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of ID's of users for notify_persons type step.",
+        "ConflictsWith": [
+          "duration",
+          "notify_on_call_from_schedule",
+          "persons_to_notify_next_each_time",
+          "action_to_trigger",
+          "group_to_notify",
+          "notify_if_time_from",
+          "notify_if_time_to"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "persons_to_notify_next_each_time": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of ID's of users for notify_person_next_each_time type step.",
+        "ConflictsWith": [
+          "duration",
+          "notify_on_call_from_schedule",
+          "persons_to_notify",
+          "action_to_trigger",
+          "group_to_notify",
+          "notify_if_time_from",
+          "notify_if_time_to"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "position": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The position of the escalation step (starts from 0)."
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of escalation policy. Can be wait, notify_persons, notify_person_next_each_time, notify_on_call_from_schedule, trigger_action, notify_user_group, resolve, notify_whole_channel, notify_if_time_from_to, repeat_escalation"
+      }
+    },
+    "grafana_oncall_escalation_chain": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the escalation chain."
+      },
+      "team_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the OnCall team. To get one, create a team in Grafana, and navigate to the OnCall plugin (to sync the team with OnCall). You can then get the ID using the `grafana_oncall_team` datasource."
+      }
+    },
+    "grafana_oncall_integration": {
+      "default_route": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The Default route for all alerts from the given integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "escalation_chain_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The ID of the escalation chain."
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "msteams": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "MS teams-specific settings for a route.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Enable notification in MS teams.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "MS teams channel id. Alerts will be directed to this channel in Microsoft teams."
+                  }
+                }
+              }
+            },
+            "slack": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Slack-specific settings for a route.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "channel_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Slack channel id. Alerts will be directed to this channel in Slack."
+                  },
+                  "enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Enable notification in Slack.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  }
+                }
+              }
+            },
+            "telegram": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Telegram-specific settings for a route.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Enable notification in Telegram.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Telegram channel id. Alerts will be directed to this channel in Telegram."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "link": {
+        "Type": "String",
+        "Description": "The link for using in an integrated tool.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the service integration."
+      },
+      "team_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the OnCall team. To get one, create a team in Grafana, and navigate to the OnCall plugin (to sync the team with OnCall). You can then get the ID using the `grafana_oncall_team` datasource."
+      },
+      "templates": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Jinja2 templates for Alert payload.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "grouping_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Template for the key by which alerts are grouped."
+            },
+            "resolve_signal": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Template for sending a signal to resolve the Incident."
+            },
+            "slack": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Templates for Slack.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "image_url": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Template for Alert image url."
+                  },
+                  "message": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Template for Alert message."
+                  },
+                  "title": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Template for Alert title."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The type of integration. Can be grafana, grafana_alerting, webhook, alertmanager, kapacitor, fabric, newrelic, datadog, pagerduty, pingdom, elastalert, amazon_sns, curler, sentry, formatted_webhook, heartbeat, demo, manual, stackdriver, uptimerobot, sentry_platform, zabbix, prtg, slack_channel, inbound_email."
+      }
+    },
+    "grafana_oncall_on_call_shift": {
+      "by_day": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "This parameter takes a list of days in iCal format. Can be MO, TU, WE, TH, FR, SA, SU",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "by_month": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "This parameter takes a list of months. Valid values are 1 to 12",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "by_monthday": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "This parameter takes a list of days of the month.  Valid values are 1 to 31 or -31 to -1",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "duration": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The duration of the event."
+      },
+      "frequency": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The frequency of the event. Can be daily, weekly, monthly"
+      },
+      "interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The positive integer representing at which intervals the recurrence rule repeats."
+      },
+      "level": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The priority level. The higher the value, the higher the priority."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The shift's name."
+      },
+      "rolling_users": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The list of lists with on-call users (for rolling_users event type)",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Set"
+        }
+      },
+      "start": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The start time of the on-call shift. This parameter takes a date format as yyyy-MM-dd'T'HH:mm:ss (for example \"2020-09-05T08:00:00\")"
+      },
+      "start_rotation_from_user_index": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The index of the list of users in rolling_users, from which on-call rotation starts."
+      },
+      "team_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the OnCall team. To get one, create a team in Grafana, and navigate to the OnCall plugin (to sync the team with OnCall). You can then get the ID using the `grafana_oncall_team` datasource."
+      },
+      "time_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The shift's timezone.  Overrides schedule's timezone."
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The shift's type. Can be rolling_users, recurrent_event, single_event"
+      },
+      "users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of on-call users (for single_event and recurrent_event event type).\t",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "week_start": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Start day of the week in iCal format. Can be MO, TU, WE, TH, FR, SA, SU"
+      }
+    },
+    "grafana_oncall_outgoing_webhook": {
+      "authorization_header": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The auth data of the webhook. Used in Authorization header instead of user/password auth."
+      },
+      "data": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The data of the webhook."
+      },
+      "forward_whole_payload": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Forwards whole payload of the alert to the webhook's url as POST data."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the outgoing webhook."
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The auth data of the webhook. Used for Basic authentication"
+      },
+      "team_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the OnCall team. To get one, create a team in Grafana, and navigate to the OnCall plugin (to sync the team with OnCall). You can then get the ID using the `grafana_oncall_team` datasource."
+      },
+      "url": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The webhook URL."
+      },
+      "user": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The auth data of the webhook. Used for Basic authentication."
+      }
+    },
+    "grafana_oncall_route": {
+      "escalation_chain_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the escalation chain."
+      },
+      "integration_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the integration."
+      },
+      "msteams": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "MS teams-specific settings for a route.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Enable notification in MS teams.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "MS teams channel id. Alerts will be directed to this channel in Microsoft teams."
+            }
+          }
+        }
+      },
+      "position": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The position of the route (starts from 0)."
+      },
+      "routing_regex": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Python Regex query. Route is chosen for an alert if there is a match inside the alert payload."
+      },
+      "slack": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Slack-specific settings for a route.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "channel_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Slack channel id. Alerts will be directed to this channel in Slack."
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Enable notification in Slack.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            }
+          }
+        }
+      },
+      "telegram": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Telegram-specific settings for a route.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Enable notification in Telegram.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Telegram channel id. Alerts will be directed to this channel in Telegram."
+            }
+          }
+        }
+      }
+    },
+    "grafana_oncall_schedule": {
+      "ical_url_overrides": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The URL of external iCal calendar which override primary events."
+      },
+      "ical_url_primary": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The URL of the external calendar iCal file."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The schedule's name."
+      },
+      "shifts": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of ID's of on-call shifts.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "slack": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Slack-specific settings for a schedule.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "channel_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Slack channel id. Reminder about schedule shifts will be directed to this channel in Slack."
+            },
+            "user_group_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": " Slack user group id. Members of user group will be updated when on-call users change."
+            }
+          }
+        }
+      },
+      "team_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the OnCall team. To get one, create a team in Grafana, and navigate to the OnCall plugin (to sync the team with OnCall). You can then get the ID using the `grafana_oncall_team` datasource."
+      },
+      "time_zone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The schedule's time zone."
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The schedule's type."
       }
     },
     "grafana_organization": {
@@ -913,16 +3688,175 @@
         "Computed": true
       }
     },
+    "grafana_report": {
+      "dashboard_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Dashboard to be sent in the report."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Generated identifier of the report.",
+        "Computed": true
+      },
+      "include_dashboard_link": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to include a link to the dashboard in the report.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "include_table_csv": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to include a CSV file of table panel data.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "layout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Layout of the report. `simple` or `grid`",
+        "Default": {
+          "Type": "string",
+          "Value": "grid"
+        }
+      },
+      "message": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Message to be sent in the report."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the report."
+      },
+      "orientation": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Orientation of the report. `landscape` or `portrait`",
+        "Default": {
+          "Type": "string",
+          "Value": "landscape"
+        }
+      },
+      "recipients": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of recipients of the report.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "reply_to": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Reply-to email address of the report."
+      },
+      "schedule": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Schedule of the report.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "custom_interval": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Custom interval of the report.\n**Note:** This field is only available when frequency is set to `custom`."
+            },
+            "end_time": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "End time of the report. If empty, the report will be sent indefinitely (according to frequency). Note that times will be saved as UTC in Grafana."
+            },
+            "frequency": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Frequency of the report. One of `never`, `once`, `hourly`, `daily`, `weekly`, `monthly` or `custom`."
+            },
+            "start_time": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Start time of the report. If empty, the start date will be set to the creation time. Note that times will be saved as UTC in Grafana."
+            },
+            "workdays_only": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to send the report only on work days.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "time_range": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Time range of the report.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "from": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Start of the time range."
+            },
+            "to": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "End of the time range."
+            }
+          }
+        }
+      }
+    },
     "grafana_role": {
       "description": {
         "Type": "String",
         "Optional": true,
         "Description": "Description of the role."
       },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display name of the role. Available with Grafana 8.5+."
+      },
       "global": {
         "Type": "Bool",
         "Optional": true,
         "Description": "Boolean to state whether the role is available across all organizations or not.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "group": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Group of the role. Available with Grafana 8.5+."
+      },
+      "hidden": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Boolean to state whether the role should be visible in the Grafana UI or not. Available with Grafana 8.5+.",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -965,6 +3899,217 @@
         "Type": "Int",
         "Required": true,
         "Description": "Version of the role. A role is updated only on version increase."
+      }
+    },
+    "grafana_rule_group": {
+      "folder_uid": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The UID of the folder that the group belongs to."
+      },
+      "interval_seconds": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The interval, in seconds, at which all rules in the group are evaluated. If a group contains many rules, the rules are evaluated sequentially."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the rule group."
+      },
+      "org_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the org to which the group belongs."
+      },
+      "rule": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The rules within the group.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "annotations": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Key-value pairs of metadata to attach to the alert rule that may add user-defined context, but cannot be used for matching, grouping, or routing.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "condition": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The `ref_id` of the query node in the `data` field to use as the alert condition."
+            },
+            "data": {
+              "Type": "List",
+              "Required": true,
+              "Description": "A sequence of stages that describe the contents of the rule.",
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "datasource_uid": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The UID of the datasource being queried, or \"-100\" if this stage is an expression stage."
+                  },
+                  "model": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Custom JSON data to send to the specified datasource when querying."
+                  },
+                  "query_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An optional identifier for the type of query being executed.",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "ref_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A unique string to identify this query stage within a rule."
+                  },
+                  "relative_time_range": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "The time range, relative to when the query is executed, across which to query.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "from": {
+                          "Type": "Int",
+                          "Required": true,
+                          "Description": "The number of seconds in the past, relative to when the rule is evaluated, at which the time range begins."
+                        },
+                        "to": {
+                          "Type": "Int",
+                          "Required": true,
+                          "Description": "The number of seconds in the past, relative to when the rule is evaluated, at which the time range ends."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "exec_err_state": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Describes what state to enter when the rule's query is invalid and the rule cannot be executed. Options are OK, Error, and Alerting.",
+              "Default": {
+                "Type": "string",
+                "Value": "Alerting"
+              }
+            },
+            "for": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The amount of time for which the rule must be breached for the rule to be considered to be Firing. Before this time has elapsed, the rule is only considered to be Pending.",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "labels": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Key-value pairs to attach to the alert rule that can be used in matching, grouping, and routing.",
+              "ConfigImplicitMode": "Attr",
+              "Default": {
+                "Type": "map[string]interface {}",
+                "Value": "map[]"
+              },
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the alert rule."
+            },
+            "no_data_state": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Describes what state to enter when the rule's query returns No Data. Options are OK, NoData, and Alerting.",
+              "Default": {
+                "Type": "string",
+                "Value": "NoData"
+              }
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The unique identifier of the alert rule.",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "grafana_service_account": {
+      "is_disabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The disabled status for the service account.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the service account."
+      },
+      "role": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The basic role of the service account in the organization."
+      }
+    },
+    "grafana_service_account_token": {
+      "expiration": {
+        "Type": "String",
+        "Computed": true
+      },
+      "has_expired": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "seconds_to_live": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "service_account_id": {
+        "Type": "Int",
+        "Required": true
       }
     },
     "grafana_synthetic_monitoring_check": {
@@ -1687,6 +4832,33 @@
         }
       }
     },
+    "grafana_synthetic_monitoring_installation": {
+      "logs_instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the logs instance to install SM on (stack's `logs_user_id` attribute)."
+      },
+      "metrics_instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the metrics instance to install SM on (stack's `prometheus_user_id` attribute)."
+      },
+      "metrics_publisher_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Cloud API Key with the `MetricsPublisher` role used to publish metrics to the SM API"
+      },
+      "sm_access_token": {
+        "Type": "String",
+        "Description": "Generated token to access the SM API.",
+        "Computed": true
+      },
+      "stack_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the stack to install SM on."
+      }
+    },
     "grafana_synthetic_monitoring_probe": {
       "auth_token": {
         "Type": "String",
@@ -1750,9 +4922,9 @@
         "Description": "An email address for the team."
       },
       "members": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
-        "Description": "\nA list of email addresses corresponding to users who should be given membership\nto the team. Note: users specified here must already exist in Grafana.\n",
+        "Description": "\nA set of email addresses corresponding to users who should be given membership\nto the team. Note: users specified here must already exist in Grafana.\n",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1847,6 +5019,316 @@
     }
   },
   "data-sources": {
+    "grafana_cloud_ips": {
+      "hosted_alerts": {
+        "Type": "Set",
+        "Description": "Set of IP addresses that are used for hosted alerts.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "hosted_grafana": {
+        "Type": "Set",
+        "Description": "Set of IP addresses that are used for hosted Grafana.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "hosted_logs": {
+        "Type": "Set",
+        "Description": "Set of IP addresses that are used for hosted logs.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "hosted_metrics": {
+        "Type": "Set",
+        "Description": "Set of IP addresses that are used for hosted metrics.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "hosted_traces": {
+        "Type": "Set",
+        "Description": "Set of IP addresses that are used for hosted traces.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "grafana_cloud_stack": {
+      "alertmanager_name": {
+        "Type": "String",
+        "Description": "Name of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "alertmanager_status": {
+        "Type": "String",
+        "Description": "Status of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "alertmanager_url": {
+        "Type": "String",
+        "Description": "Base URL of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "alertmanager_user_id": {
+        "Type": "Int",
+        "Description": "User ID of the Alertmanager instance configured for this stack.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "Description of stack.",
+        "Computed": true
+      },
+      "graphite_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "graphite_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "graphite_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "graphite_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The stack id assigned to this stack by Grafana.",
+        "Computed": true
+      },
+      "logs_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "logs_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "logs_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "logs_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Name of stack. Conventionally matches the url of the instance (e.g. “\u003cstack_slug\u003e.grafana.net”).",
+        "Computed": true
+      },
+      "org_id": {
+        "Type": "Int",
+        "Description": "Organization id to assign to this stack.",
+        "Computed": true
+      },
+      "org_name": {
+        "Type": "String",
+        "Description": "Organization name to assign to this stack.",
+        "Computed": true
+      },
+      "org_slug": {
+        "Type": "String",
+        "Description": "Organization slug to assign to this stack.",
+        "Computed": true
+      },
+      "prometheus_name": {
+        "Type": "String",
+        "Description": "Prometheus name for this instance.",
+        "Computed": true
+      },
+      "prometheus_remote_endpoint": {
+        "Type": "String",
+        "Description": "Use this URL to query hosted metrics data e.g. Prometheus data source in Grafana",
+        "Computed": true
+      },
+      "prometheus_remote_write_endpoint": {
+        "Type": "String",
+        "Description": "Use this URL to send prometheus metrics to Grafana cloud",
+        "Computed": true
+      },
+      "prometheus_status": {
+        "Type": "String",
+        "Description": "Prometheus status for this instance.",
+        "Computed": true
+      },
+      "prometheus_url": {
+        "Type": "String",
+        "Description": "Prometheus url for this instance.",
+        "Computed": true
+      },
+      "prometheus_user_id": {
+        "Type": "Int",
+        "Description": "Prometheus user ID. Used for e.g. remote_write.",
+        "Computed": true
+      },
+      "region_slug": {
+        "Type": "String",
+        "Description": "The region this stack is deployed to.",
+        "Computed": true
+      },
+      "slug": {
+        "Type": "String",
+        "Required": true,
+        "Description": "\nSubdomain that the Grafana instance will be available at (i.e. setting slug to “\u003cstack_slug\u003e” will make the instance\navailable at “https://\u003cstack_slug\u003e.grafana.net\"."
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the stack.",
+        "Computed": true
+      },
+      "traces_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "traces_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "traces_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "traces_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Description": "Custom URL for the Grafana instance. Must have a CNAME setup to point to `.grafana.net` before creating the stack",
+        "Computed": true
+      }
+    },
+    "grafana_dashboard": {
+      "config_json": {
+        "Type": "String",
+        "Description": "The complete dashboard model JSON.",
+        "Computed": true
+      },
+      "dashboard_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The numerical ID of the Grafana dashboard. Specify either this or `uid`.",
+        "Default": {
+          "Type": "int",
+          "Value": "-1"
+        }
+      },
+      "folder": {
+        "Type": "Int",
+        "Description": "The numerical ID of the folder where the Grafana dashboard is found.",
+        "Computed": true
+      },
+      "is_starred": {
+        "Type": "Bool",
+        "Description": "Whether or not the Grafana dashboard is starred. Starred Dashboards will show up on your own Home Dashboard by default, and are a convenient way to mark Dashboards that you’re interested in.",
+        "Computed": true
+      },
+      "slug": {
+        "Type": "String",
+        "Description": "URL slug of the dashboard (deprecated).",
+        "Computed": true
+      },
+      "title": {
+        "Type": "String",
+        "Description": "The title of the Grafana dashboard.",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The uid of the Grafana dashboard. Specify either this or `dashboard_id`.",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "url": {
+        "Type": "String",
+        "Description": "The full URL of the dashboard.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
+        "Description": "The numerical version of the Grafana dashboard.",
+        "Computed": true
+      }
+    },
+    "grafana_dashboards": {
+      "dashboards": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "folder_title": {
+              "Type": "String",
+              "Computed": true
+            },
+            "title": {
+              "Type": "String",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "folder_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Numerical IDs of Grafana folders containing dashboards. Specify to filter for dashboards by folder (eg. `[0]` for General folder), or leave blank to get all dashboards in all folders.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum number of dashboard search results to return.",
+        "Default": {
+          "Type": "int",
+          "Value": "5000"
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of string Grafana dashboard tags to search for, eg. `[\"prod\"]`. Used only as search input, i.e., attribute value will remain unchanged.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "grafana_folder": {
       "id": {
         "Type": "Int",
@@ -1862,6 +5344,246 @@
         "Type": "String",
         "Description": "The uid of the Grafana folder.",
         "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Description": "The full URL of the folder.",
+        "Computed": true
+      }
+    },
+    "grafana_folders": {
+      "folders": {
+        "Type": "Set",
+        "Description": "The Grafana instance's folders.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Description": "The folder ID.",
+              "Computed": true
+            },
+            "title": {
+              "Type": "String",
+              "Description": "The folder title.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "The folder's unique identifier.",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Description": "The folder's URL",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "grafana_library_panel": {
+      "created": {
+        "Type": "String",
+        "Description": "Timestamp when the library panel was created.",
+        "Computed": true
+      },
+      "dashboard_ids": {
+        "Type": "List",
+        "Description": "Numerical IDs of Grafana dashboards containing the library panel.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Description": "Description of the library panel.",
+        "Computed": true
+      },
+      "folder_id": {
+        "Type": "Int",
+        "Description": "ID of the folder where the library panel is stored.",
+        "Computed": true
+      },
+      "folder_name": {
+        "Type": "String",
+        "Description": "Name of the folder containing the library panel.",
+        "Computed": true
+      },
+      "folder_uid": {
+        "Type": "String",
+        "Description": "Unique ID (UID) of the folder containing the library panel.",
+        "Computed": true
+      },
+      "model_json": {
+        "Type": "String",
+        "Description": "The JSON model for the library panel.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the library panel."
+      },
+      "org_id": {
+        "Type": "Int",
+        "Description": "The numeric ID of the library panel computed by Grafana.",
+        "Computed": true
+      },
+      "panel_id": {
+        "Type": "Int",
+        "Description": "The numeric ID of the library panel computed by Grafana.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Type of the library panel (eg. text).",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The unique identifier (UID) of the library panel."
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "Timestamp when the library panel was last modified.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
+        "Description": "Version of the library panel.",
+        "Computed": true
+      }
+    },
+    "grafana_oncall_action": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The action name."
+      }
+    },
+    "grafana_oncall_escalation_chain": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The escalation chain name."
+      }
+    },
+    "grafana_oncall_outgoing_webhook": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The outgoing webhook name."
+      }
+    },
+    "grafana_oncall_schedule": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The schedule name."
+      },
+      "type": {
+        "Type": "String",
+        "Description": "The schedule type.",
+        "Computed": true
+      }
+    },
+    "grafana_oncall_slack_channel": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Slack channel name."
+      },
+      "slack_id": {
+        "Type": "String",
+        "Description": "The Slack ID of the channel.",
+        "Computed": true
+      }
+    },
+    "grafana_oncall_team": {
+      "avatar_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "email": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The team name."
+      }
+    },
+    "grafana_oncall_user": {
+      "email": {
+        "Type": "String",
+        "Description": "The email of the user.",
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Description": "The role of the user.",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The username of the user."
+      }
+    },
+    "grafana_oncall_user_group": {
+      "slack_handle": {
+        "Type": "String",
+        "Required": true
+      },
+      "slack_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "grafana_organization": {
+      "admins": {
+        "Type": "Set",
+        "Description": "A list of email addresses corresponding to users given admin access to the organization.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "editors": {
+        "Type": "Set",
+        "Description": "A list of email addresses corresponding to users given editor access to the organization.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Organization."
+      },
+      "viewers": {
+        "Type": "Set",
+        "Description": "A list of email addresses corresponding to users given viewer access to the organization.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "grafana_synthetic_monitoring_probe": {
@@ -1930,6 +5652,13 @@
           "Type": "SchemaElements",
           "ElementsType": "Int"
         }
+      }
+    },
+    "grafana_team": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Grafana team."
       }
     },
     "grafana_user": {

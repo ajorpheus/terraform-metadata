@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "nomad",
   "type": "provider",
-  "version": "v1.4.16",
+  "version": "v1.4.18",
   "provider": {
     "address": {
       "Type": "String",
@@ -79,6 +79,16 @@
       "Description": "HTTP basic auth configuration.",
       "DefaultFunc": "ENV(NOMAD_HTTP_AUTH)"
     },
+    "ignore_env_vars": {
+      "Type": "Map",
+      "Optional": true,
+      "Description": "A set of environment variables that are ignored by the provider when configuring the Nomad API client.",
+      "ConfigImplicitMode": "Attr",
+      "Elem": {
+        "Type": "SchemaElements",
+        "ElementsType": "Bool"
+      }
+    },
     "key_file": {
       "Type": "String",
       "Optional": true,
@@ -99,8 +109,7 @@
     "region": {
       "Type": "String",
       "Optional": true,
-      "Description": "Region of the target Nomad agent.",
-      "DefaultFunc": "ENV(NOMAD_REGION)"
+      "Description": "Region of the target Nomad agent."
     },
     "secret_id": {
       "Type": "String",

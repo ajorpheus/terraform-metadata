@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "selectel",
   "type": "provider",
-  "version": "v3.8.0",
+  "version": "v3.8.4",
   "provider": {
     "endpoint": {
       "Type": "String",

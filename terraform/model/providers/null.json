@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "null",
   "type": "provider",
-  "version": "v3.1.0",
+  "version": "v3.1.1",
   "provider": {},
   "resources": {
     "null_resource": {

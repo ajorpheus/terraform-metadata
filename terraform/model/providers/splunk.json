@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "splunk",
   "type": "provider",
-  "version": "v1.4.9",
+  "version": "v1.4.17",
   "provider": {
     "auth_token": {
       "Type": "String",
@@ -278,7 +278,7 @@
     },
     "splunk_authorization_roles": {
       "capabilities": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Description": "List of capabilities assigned to role.",
         "Computed": true,
@@ -2755,6 +2755,51 @@
           }
         }
       },
+      "action_create_xsoar_incident": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enabled XSOAR Alert Sending."
+      },
+      "action_create_xsoar_incident_param_custom_fields": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the XSOAR incident custom_fields."
+      },
+      "action_create_xsoar_incident_param_details": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the XSOAR incident details."
+      },
+      "action_create_xsoar_incident_param_incident_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the XSOAR incident name."
+      },
+      "action_create_xsoar_incident_param_occurred": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Eneter the XSOAR incident occurred datetime."
+      },
+      "action_create_xsoar_incident_param_send_all_servers": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enabled XSOAR alert sending to all servers."
+      },
+      "action_create_xsoar_incident_param_server_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the XSOAR server URL."
+      },
+      "action_create_xsoar_incident_param_severity": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the XSOAR incident serverity."
+      },
+      "action_create_xsoar_incident_param_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the XSOAR incident type."
+      },
       "action_email": {
         "Type": "Bool",
         "Description": "The state of the email action. Read-only attribute. Value ignored on POST. Use actions to specify a list of enabled actions. Defaults to 0.",
@@ -2981,6 +3026,36 @@
         "Optional": true,
         "Description": "Indicates whether columns should be sorted from least wide to most wide, left to right.Only valid if format=text.",
         "Computed": true
+      },
+      "action_jira_service_desk_param_account": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "This is where you would put the account name you set in the Jira Service Desk"
+      },
+      "action_jira_service_desk_param_jira_description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enter the description of issue created"
+      },
+      "action_jira_service_desk_param_jira_issue_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Jira Issue Type you would like to create"
+      },
+      "action_jira_service_desk_param_jira_priority": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Priority of issue created"
+      },
+      "action_jira_service_desk_param_jira_project": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Jira Project where the issue will be created"
+      },
+      "action_jira_service_desk_param_jira_summary": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Jira Issue Summary or title"
       },
       "action_populate_lookup": {
         "Type": "Bool",

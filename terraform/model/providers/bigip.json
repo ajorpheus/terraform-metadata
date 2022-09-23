@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "bigip",
   "type": "provider",
-  "version": "v1.12.2",
+  "version": "v1.15.1",
   "provider": {
     "address": {
       "Type": "String",
@@ -72,7 +72,7 @@
       },
       "as3_json": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "AS3 json"
       },
       "ignore_metadata": {
@@ -498,6 +498,556 @@
         "Computed": true
       }
     },
+    "bigip_fast_http_app": {
+      "application": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of FAST HTTP application."
+      },
+      "exist_pool_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP Pool",
+        "ConflictsWith": [
+          "fast_create_pool_members"
+        ]
+      },
+      "existing_monitor": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP HTTPS pool monitor. Monitors are used to determine the health of the application on each server",
+        "ConflictsWith": [
+          "exist_pool_name",
+          "fast_create_monitor"
+        ]
+      },
+      "existing_snat_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "name of an existing BIG-IP SNAT pool",
+        "ConflictsWith": [
+          "fast_create_snat_pool_address"
+        ]
+      },
+      "fast_create_monitor": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "foo",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "existing_monitor",
+          "exist_pool_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Set the time between health checks, in seconds."
+            },
+            "monitor_auth": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "foo",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "response": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "send_string": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            }
+          }
+        }
+      },
+      "fast_create_pool_members": {
+        "Type": "Set",
+        "Optional": true,
+        "ConflictsWith": [
+          "exist_pool_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "addresses": {
+              "Type": "List",
+              "Required": true,
+              "Description": "foo",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "connection_limit": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "foo",
+              "Default": {
+                "Type": "int",
+                "Value": "80"
+              }
+            },
+            "priority_group": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "share_nodes": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "foo"
+            }
+          }
+        }
+      },
+      "fast_create_snat_pool_address": {
+        "Type": "List",
+        "Optional": true,
+        "ConflictsWith": [
+          "existing_snat_pool"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "load_balancing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "none"
+      },
+      "slow_ramp_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "none"
+      },
+      "tenant": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of FAST HTTP application tenant."
+      },
+      "virtual_server": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ip": {
+              "Type": "String",
+              "Required": true,
+              "Description": "foo"
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "foo"
+            }
+          }
+        }
+      }
+    },
+    "bigip_fast_https_app": {
+      "application": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of FAST HTTPS application."
+      },
+      "create_tls_server_profile": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "tls_server_profile_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "tls_cert_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Select an existing BIG-IP SSL certificate"
+            },
+            "tls_key_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Select an existing BIG-IP SSL key"
+            }
+          }
+        }
+      },
+      "exist_pool_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP Pool",
+        "ConflictsWith": [
+          "fast_create_pool_members",
+          "existing_monitor",
+          "fast_create_monitor"
+        ]
+      },
+      "existing_monitor": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP HTTPS pool monitor. Monitors are used to determine the health of the application on each server",
+        "ConflictsWith": [
+          "exist_pool_name",
+          "fast_create_monitor"
+        ]
+      },
+      "existing_snat_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "name of an existing BIG-IP SNAT pool",
+        "ConflictsWith": [
+          "fast_create_snat_pool_address"
+        ]
+      },
+      "fast_create_monitor": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "foo",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "existing_monitor",
+          "exist_pool_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Set the time between health checks, in seconds."
+            },
+            "monitor_auth": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "foo",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "response": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "send_string": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "foo"
+            }
+          }
+        }
+      },
+      "fast_create_pool_members": {
+        "Type": "Set",
+        "Optional": true,
+        "ConflictsWith": [
+          "exist_pool_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "addresses": {
+              "Type": "List",
+              "Required": true,
+              "Description": "foo",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "connection_limit": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "foo",
+              "Default": {
+                "Type": "int",
+                "Value": "80"
+              }
+            },
+            "priority_group": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "foo"
+            },
+            "share_nodes": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "foo"
+            }
+          }
+        }
+      },
+      "fast_create_snat_pool_address": {
+        "Type": "List",
+        "Optional": true,
+        "ConflictsWith": [
+          "existing_snat_pool"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "load_balancing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "none",
+        "Default": {
+          "Type": "string",
+          "Value": "least-connections-member"
+        }
+      },
+      "slow_ramp_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "none"
+      },
+      "tenant": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of FAST HTTPS application tenant."
+      },
+      "tls_server_profile_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing TLS server profile",
+        "ConflictsWith": [
+          "create_tls_server_profile"
+        ]
+      },
+      "virtual_server": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ip": {
+              "Type": "String",
+              "Required": true,
+              "Description": "foo"
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "foo"
+            }
+          }
+        }
+      }
+    },
+    "bigip_fast_tcp_app": {
+      "application": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the TCP FAST application"
+      },
+      "exist_pool_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP Pool.",
+        "ConflictsWith": [
+          "fast_create_pool_members"
+        ]
+      },
+      "existing_monitor": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP HTTPS pool monitor. Monitors are used to determine the health of the application on each server",
+        "ConflictsWith": [
+          "exist_pool_name",
+          "fast_create_monitor"
+        ]
+      },
+      "existing_snat_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of an existing BIG-IP SNAT pool.",
+        "ConflictsWith": [
+          "fast_create_snat_pool_address"
+        ]
+      },
+      "fast_create_monitor": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Use a FAST generated pool monitor.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "existing_monitor",
+          "exist_pool_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Set the time between health checks, in seconds."
+            }
+          }
+        }
+      },
+      "fast_create_pool_members": {
+        "Type": "Set",
+        "Optional": true,
+        "ConflictsWith": [
+          "exist_pool_name"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "addresses": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "connection_limit": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "80"
+              }
+            },
+            "priority_group": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "share_nodes": {
+              "Type": "Bool",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "fast_create_snat_pool_address": {
+        "Type": "List",
+        "Optional": true,
+        "ConflictsWith": [
+          "existing_snat_pool"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "fast_tcp_json": {
+        "Type": "String",
+        "Description": "Json payload for FAST TCP application.",
+        "Computed": true
+      },
+      "load_balancing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "none"
+      },
+      "slow_ramp_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Slow ramp temporarily throttles the number of connections to a new pool member."
+      },
+      "tenant": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the TCP FAST application tenant"
+      },
+      "virtual_server": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ip": {
+              "Type": "String",
+              "Required": true,
+              "Description": "This IP address, combined with the port you specify below, becomes the BIG-IP virtual server address and port, which clients use to access the application."
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Port for the virtual server."
+            }
+          }
+        }
+      }
+    },
     "bigip_fast_template": {
       "md5_hash": {
         "Type": "String",
@@ -617,6 +1167,15 @@
       }
     },
     "bigip_ltm_datagroup": {
+      "internal": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Set flase if you want to create External Datagroup",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -625,6 +1184,9 @@
       "record": {
         "Type": "Set",
         "Optional": true,
+        "ConflictsWith": [
+          "records_src"
+        ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -640,6 +1202,13 @@
             }
           }
         }
+      },
+      "records_src": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "record"
+        ]
       },
       "type": {
         "Type": "String",
@@ -757,6 +1326,11 @@
         "Optional": true,
         "Description": "Specifies the text string that the monitor sends to the target object.",
         "Computed": true
+      },
+      "ssl_profile": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "the ssl profile"
       },
       "time_until_up": {
         "Type": "Int",
@@ -886,7 +1460,8 @@
       "state": {
         "Type": "String",
         "Optional": true,
-        "Description": "Marks the node up or down. The default value is user-up."
+        "Description": "Marks the node up or down. The default value is user-up.",
+        "Computed": true
       }
     },
     "bigip_ltm_persistence_profile_cookie": {
@@ -1289,7 +1864,10 @@
                   "connection": {
                     "Type": "Bool",
                     "Optional": true,
-                    "Computed": true
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
                   },
                   "content": {
                     "Type": "String",
@@ -1645,8 +2223,7 @@
                   },
                   "shutdown": {
                     "Type": "Bool",
-                    "Optional": true,
-                    "Computed": true
+                    "Optional": true
                   },
                   "snat": {
                     "Type": "String",
@@ -1870,6 +2447,11 @@
                     "Computed": true
                   },
                   "equals": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "exists": {
                     "Type": "Bool",
                     "Optional": true,
                     "Computed": true
@@ -4105,7 +4687,7 @@
       "ca_cert_file": {
         "Type": "String",
         "Optional": true,
-        "Description": "the trusted root and intermediate certificate authorities",
+        "Description": "The trusted root and intermediate certificate authorities",
         "Computed": true
       },
       "crl_file": {
@@ -5026,6 +5608,237 @@
         "Optional": true,
         "Description": "Specifies the IP port used by the application. The default value is All Ports",
         "Computed": true
+      }
+    },
+    "bigip_waf_policy": {
+      "application_language": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The character encoding for the web application. The character encoding determines how the policy processes the character sets. The default is Auto detect",
+        "Default": {
+          "Type": "string",
+          "Value": "utf-8"
+        }
+      },
+      "case_insensitive": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Specifies whether the security policy treats microservice URLs, file types, URLs, and parameters as case sensitive or not. When this setting is enabled, the system stores these security policy elements in lowercase in the security policy configuration",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies the description of the policy."
+      },
+      "enable_passivemode": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Passive Mode allows the policy to be associated with a Performance L4 Virtual Server (using a FastL4 profile). With FastL4, traffic is analyzed but is not modified in any way.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "enforcement_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "How the system processes a request that triggers a security policy violation"
+      },
+      "file_types": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "file_types settings for policy",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "graphql_profiles": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "graphql_profile settings for policy",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "modifications": {
+        "Type": "List",
+        "Optional": true,
+        "Description": " the modifications section includes actions that modify the declarative policy as it is defined in the adjustments section. The modifications section is updated manually, with the changes generally driven by the learning suggestions provided by the BIG-IP.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The unique user-given name of the policy. Policy names cannot contain spaces or special characters. Allowed characters are a-z, A-Z, 0-9, dot, dash (-), colon (:) and underscore (_)"
+      },
+      "open_api_files": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "This section defines the Link for open api files on the policy.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "parameters": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "This section defines parameters that the security policy permits in requests.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "partition": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Partition of WAF policy",
+        "Default": {
+          "Type": "string",
+          "Value": "Common"
+        }
+      },
+      "policy_builder": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "policy-builder settings for policy",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "learning_mode": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "policy_export_json": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The payload of the WAF Policy to be EXPORTED from BIGIP to OUTPUT",
+        "Computed": true
+      },
+      "policy_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "policy_import_json": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The payload of the WAF Policy to be used for IMPORT on to BIGIP"
+      },
+      "protocol_independent": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "When creating a security policy, you can determine whether a security policy differentiates between HTTP and HTTPS URLs. If enabled, the security policy differentiates between HTTP and HTTPS URLs. If disabled, the security policy configures URLs without specifying a specific protocol. This is useful for applications that behave the same for HTTP and HTTPS, and it keeps the security policy from including the same URL twice."
+      },
+      "server_technologies": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The server technology is a server-side application, framework, web server or operating system type that is configured in the policy in order to adapt the policy to the checks needed for the respective technology.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "signature_sets": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Defines behavior when signatures found within a signature-set are detected in a request. Settings are culmulative, so if a signature is found in any set with block enabled, that signature will have block enabled.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "signatures": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "This section defines the properties of a signature on the policy.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "signatures_settings": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "bulk signature setting",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "placesignatures_in_staging": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "signature_staging": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "setting true will enforce all signature from staging"
+            }
+          }
+        }
+      },
+      "template_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Specifies the name of the template used for the policy creation."
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of policy you want to create. The default policy type is Security.",
+        "Default": {
+          "Type": "string",
+          "Value": "security"
+        }
+      },
+      "urls": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "In a security policy, you can manually specify the HTTP URLs that are allowed (or disallowed) in traffic to the web application being protected. If you are using automatic policy building (and the policy includes learning URLs), the system can determine which URLs to add, based on legitimate traffic.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     }
   },
@@ -6412,6 +7225,309 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "bigip_waf_entity_parameter": {
+      "allow_empty_type": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether an empty value is allowed for a parameter."
+      },
+      "allow_repeated_parameter_name": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether multiple parameter instances with the same name are allowed in one request."
+      },
+      "attack_signatures_check": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether attack signatures and threat campaigns must be detected in a parameter's value."
+      },
+      "check_max_value_length": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter has a restricted maximum length for value."
+      },
+      "check_min_value_length": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter has a restricted minimum length for value."
+      },
+      "data_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies data type of parameter's value."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the entity parameter."
+      },
+      "enable_regular_expression": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether the parameter value includes the pattern defined in regularExpression."
+      },
+      "is_base64": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter’s value contains a Base64 encoded string."
+      },
+      "is_cookie": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter is located in the value of Cookie header."
+      },
+      "is_header": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter is located in headers as one of the headers."
+      },
+      "json": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The JSON for WAF Entity Parameter.",
+        "Computed": true
+      },
+      "level": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies whether the parameter is associated with a URL, a flow, or neither."
+      },
+      "mandatory": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter must exist in the request."
+      },
+      "metachars_on_parameter_value_check": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether disallowed metacharacters must be detected in a parameter’s value."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the Entity Parameter."
+      },
+      "parameter_location": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies location of parameter in request."
+      },
+      "perform_staging": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines the staging state of a parameter."
+      },
+      "sensitive_parameter": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether a parameter is sensitive and must be not visible in logs nor in the user interface."
+      },
+      "signature_overrides_disable": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of Attack Signature Ids which are disabled for this particular parameter.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies whether the parameter is an explicit or a wildcard attribute."
+      },
+      "value_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specify the valid type for the value of the attribute."
+      }
+    },
+    "bigip_waf_entity_url": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A description of the URL."
+      },
+      "json": {
+        "Type": "String",
+        "Description": "The created JSON for WAF URL entity.",
+        "Computed": true
+      },
+      "method": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select a method for the URL to create an API endpoint.",
+        "Default": {
+          "Type": "string",
+          "Value": "*"
+        }
+      },
+      "method_overrides": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "A list of methods that are allowed or disallowed for a specific URL.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Specifies that the system allows or disallows a method for this URL."
+            },
+            "method": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Specifies an HTTP method."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the URL."
+      },
+      "perform_staging": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true then any violation associated to the respective URL will not be enforced, and the request will not be considered illegal."
+      },
+      "protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies whether the protocol for the URL is 'http' or 'https'.",
+        "Default": {
+          "Type": "string",
+          "Value": "http"
+        }
+      },
+      "signature_overrides_disable": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of Attack Signature Ids which are disabled for this particular URL.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies whether the parameter is an 'explicit' or a 'wildcard' attribute.",
+        "Default": {
+          "Type": "string",
+          "Value": "wildcard"
+        }
+      }
+    },
+    "bigip_waf_pb_suggestions": {
+      "json": {
+        "Type": "String",
+        "Description": "The return payload of the queried PB suggestions",
+        "Computed": true
+      },
+      "minimum_learning_score": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The minimum learning for suggestions"
+      },
+      "partition": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Partition where the WAF policy is deployed"
+      },
+      "policy_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "System generated id of the WAF policy",
+        "Computed": true
+      },
+      "policy_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the WAF policy"
+      }
+    },
+    "bigip_waf_policy": {
+      "policy_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the policy"
+      },
+      "policy_json": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Exported JSON policy",
+        "Computed": true
+      }
+    },
+    "bigip_waf_signatures": {
+      "accuracy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The relative detection accuracy of the signature",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the signature"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Specifies, if true, that the signature is enabled on the security policy. When false, the signature is disable on the security policy."
+      },
+      "json": {
+        "Type": "String",
+        "Description": "The created JSON for WAF Signature block",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the signature",
+        "Computed": true
+      },
+      "perform_staging": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The relative detection accuracy of the signature"
+      },
+      "risk": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The relative risk level of the attack that matches this signature",
+        "Computed": true
+      },
+      "signature_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of the signature in the database"
+      },
+      "system_signature_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "System generated ID of the signature",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The signature tag which, along with the signature name, identifies the signature.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Type of the signature",
+        "Computed": true
       }
     }
   }

@@ -1,9 +1,9 @@
 {
   ".schema_version": "2",
-  ".sdk_type": "terraform",
+  ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "baiducloud",
   "type": "provider",
-  "version": "v1.12.0",
+  "version": "v1.15.8",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -60,10 +60,26 @@
               "Type": "string"
             }
           },
+          "bbc": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Use this to override the default endpoint URL constructed from the `region`. It's typically used to connect to custom BBC endpoints.",
+            "Default": {
+              "Type": "string"
+            }
+          },
           "bcc": {
             "Type": "String",
             "Optional": true,
             "Description": "Use this to override the default endpoint URL constructed from the `region`. It's typically used to connect to custom BCC endpoints.",
+            "Default": {
+              "Type": "string"
+            }
+          },
+          "blb": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Use this to override the default endpoint URL constructed from the `region`. It's typically used to connect to custom BLB endpoints.",
             "Default": {
               "Type": "string"
             }
@@ -88,6 +104,14 @@
             "Type": "String",
             "Optional": true,
             "Description": "Use this to override the default endpoint URL constructed from the `region`. It's typically used to connect to custom CCEv2 endpoints.",
+            "Default": {
+              "Type": "string"
+            }
+          },
+          "cdn": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Use this to override the default endpoint URL constructed from the `region`. It's typically used to connect to custom CDN endpoints.",
             "Default": {
               "Type": "string"
             }
@@ -782,6 +806,583 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "baiducloud_bbc_image": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Description": "The creation time of the image, in a date format that conforms to the BCE specification",
+        "Computed": true
+      },
+      "desc": {
+        "Type": "String",
+        "Description": "Image description",
+        "Computed": true
+      },
+      "image_id": {
+        "Type": "String",
+        "Description": "Image id.Computed after apply",
+        "Computed": true
+      },
+      "image_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Image name."
+      },
+      "instance_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of the image source instance."
+      },
+      "os_arch": {
+        "Type": "String",
+        "Description": "Image os arch.",
+        "Computed": true
+      },
+      "os_build": {
+        "Type": "String",
+        "Description": "Image os build.",
+        "Computed": true
+      },
+      "os_name": {
+        "Type": "String",
+        "Description": "Image os name.",
+        "Computed": true
+      },
+      "os_type": {
+        "Type": "String",
+        "Description": "Image os type.CentOS, Windows, etc.",
+        "Computed": true
+      },
+      "os_version": {
+        "Type": "String",
+        "Description": "Image os version.",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Image status.Creating, CreatedFailed, Available, NotAvailable, Error",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Image type.System, Custom, Integration",
+        "Computed": true
+      }
+    },
+    "baiducloud_bbc_instance": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "action."
+      },
+      "admin_pass": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "admin password."
+      },
+      "auto_renew_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The automatic renewal time is 1-9 per month and 1-3 per year."
+      },
+      "auto_renew_time_unit": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Monthly payment or annual payment, month is \"month\" and year is \"year\"."
+      },
+      "create_time": {
+        "Type": "String",
+        "Description": "BBC create time.",
+        "Computed": true
+      },
+      "data_partition_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "data_partition_type."
+      },
+      "deploy_set_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "deploy set of bbc."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "description."
+      },
+      "enable_numa": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "enableNuma."
+      },
+      "expire_time": {
+        "Type": "String",
+        "Description": "expire time.",
+        "Computed": true
+      },
+      "flavor_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the BBC Flavor."
+      },
+      "has_alive": {
+        "Type": "Int",
+        "Description": "hasAlive.",
+        "Computed": true
+      },
+      "host_id": {
+        "Type": "String",
+        "Description": "switch id.",
+        "Computed": true
+      },
+      "host_name": {
+        "Type": "String",
+        "Description": "host_name.",
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Hostname is not specified by default. Hostname only supports lowercase letters, numbers and -. Special characters. It must start with a letter. Special symbols cannot be used consecutively. It does not support starting or ending with special symbols. The length is 2-64."
+      },
+      "image_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the BBC Image."
+      },
+      "internal_ip": {
+        "Type": "String",
+        "Description": "internal ip.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BBC name.Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as \"-\",\"_\",\"/\",\".\", the value must start with a letter, length 1-65."
+      },
+      "network_capacity_in_mbps": {
+        "Type": "String",
+        "Description": "network capacity in mbps.",
+        "Computed": true
+      },
+      "payment_timing": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Payment timing of billing, which can be Prepaid or Postpaid. The default is Postpaid.",
+        "Default": {
+          "Type": "bbc.PaymentTimingType",
+          "Value": "Postpaid"
+        }
+      },
+      "public_ip": {
+        "Type": "String",
+        "Description": "public ip.",
+        "Computed": true
+      },
+      "purchase_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of BBC instances created (purchased) in batch. It must be an integer greater than 0. It is an optional parameter. The default value is 1.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "rack_id": {
+        "Type": "String",
+        "Description": "rack id.",
+        "Computed": true
+      },
+      "raid": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Type of the raid to start. Available values are Raid5, NoRaid."
+      },
+      "raid_id": {
+        "Type": "String",
+        "Description": "Id of the raid.",
+        "Computed": true
+      },
+      "rdma_ip": {
+        "Type": "String",
+        "Description": "rdma ip.",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Description": "region.",
+        "Computed": true
+      },
+      "request_token": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "request_token."
+      },
+      "reservation": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Reservation of the instance.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "root_disk_size_in_gb": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The system disk size of the BBC instance to be created."
+      },
+      "root_partition_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "namroot_partition_type."
+      },
+      "security_groups": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Security groups of the bbc instance.It can use",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the bbc instance.",
+        "Computed": true
+      },
+      "subnet_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Id of bbc subnet."
+      },
+      "switch_id": {
+        "Type": "String",
+        "Description": "switch id.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Tags, do not support modify",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "uuid.",
+        "Computed": true
+      },
+      "zone_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The naming convention of zonename is \"country-region-availability area\", in lowercase, for example, Beijing availability area A is \"cn-bj-a\"“"
+      }
+    },
+    "baiducloud_blb": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "address": {
+        "Type": "String",
+        "Description": "LoadBalance instance's service IP, instance can be accessed through this IP",
+        "Computed": true
+      },
+      "cidr": {
+        "Type": "String",
+        "Description": "Cidr of the network where the LoadBalance instance reside",
+        "Computed": true
+      },
+      "create_time": {
+        "Type": "String",
+        "Description": "LoadBalance instance's create time",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "LoadBalance's description, length must be between 0 and 450 bytes, and support Chinese"
+      },
+      "listener": {
+        "Type": "Set",
+        "Description": "List of listeners mounted under the instance",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "port": {
+              "Type": "Int",
+              "Description": "Listening port",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Listening protocol type",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "LoadBalance instance's name, length must be between 1 and 65 bytes, and will be automatically generated if not set",
+        "Computed": true
+      },
+      "public_ip": {
+        "Type": "String",
+        "Description": "LoadBalance instance's public ip",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "LoadBalance instance's status, see https://cloud.baidu.com/doc/BLB/s/Pjwvxnxdm/#blbstatus for detail",
+        "Computed": true
+      },
+      "subnet_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The subnet ID to which the LoadBalance instance belongs"
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Tags, do not support modify",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The VPC short ID to which the LoadBalance instance belongs"
+      },
+      "vpc_name": {
+        "Type": "String",
+        "Description": "The VPC name to which the LoadBalance instance belongs",
+        "Computed": true
+      }
+    },
+    "baiducloud_blb_listener": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "applied_ciphers": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "applied ciphers",
+        "Computed": true
+      },
+      "backend_port": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "backend port, range from 1-65535"
+      },
+      "blb_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the Application LoadBalance instance"
+      },
+      "cert_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Listener bind certifications",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "client_cert_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Listener import cert list, only useful when dual_auth is true",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dual_auth": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Listener open dual authorization or not, default false"
+      },
+      "encryption_protocols": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Listener encryption protocol, only useful when encryption_type is userDefind, support [sslv3, tlsv10, tlsv11, tlsv12]",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "encryption_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Listener encryption option, support [compatibleIE, incompatibleIE, userDefind]",
+        "Computed": true
+      },
+      "get_blb_ip": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "get blb ip or not",
+        "Computed": true
+      },
+      "health_check_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "health check interval",
+        "Computed": true
+      },
+      "health_check_normal_status": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "health check normal status",
+        "Computed": true
+      },
+      "health_check_port": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "health check port",
+        "Computed": true
+      },
+      "health_check_string": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "health check string, This parameter is mandatory when the listening protocol is UDP",
+        "Computed": true
+      },
+      "health_check_timeout_in_second": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "health check timeout in second",
+        "Computed": true
+      },
+      "health_check_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "health check type",
+        "Computed": true
+      },
+      "health_check_uri": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "health check uri",
+        "Computed": true
+      },
+      "healthy_threshold": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "healthy threshold",
+        "Computed": true
+      },
+      "ie6_compatible": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Listener support ie6 option, default true",
+        "Computed": true
+      },
+      "keep_session": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "KeepSession or not",
+        "Computed": true
+      },
+      "keep_session_cookie_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "CookieName which need to covered, useful when keep_session_type is rewrite",
+        "Computed": true
+      },
+      "keep_session_duration": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "keep session duration",
+        "Computed": true
+      },
+      "keep_session_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "KeepSessionType option, support insert/rewrite, default insert",
+        "Computed": true
+      },
+      "listener_port": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Listening port, range from 1-65535"
+      },
+      "protocol": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Listening protocol, support TCP/UDP/HTTP/HTTPS/SSL"
+      },
+      "redirect_port": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Redirect HTTP request to HTTPS Listener, HTTPS Listener port set by this parameter",
+        "Computed": true
+      },
+      "scheduler": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Load balancing algorithm, support RoundRobin/LeastConnection/Hash, if protocol is HTTP/HTTPS, only support RoundRobin/LeastConnection"
+      },
+      "server_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Backend server maximum timeout time, only support in [1, 3600] second, default 30s",
+        "Computed": true
+      },
+      "tcp_session_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "TCP Listener connection session timeout time(second), default 900, support 10-4000",
+        "Computed": true
+      },
+      "udp_session_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "UDP Listener connection session timeout time(second), default 900, support 10-4000",
+        "Computed": true
+      },
+      "unhealthy_threshold": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "unhealthy threshold",
+        "Computed": true
+      },
+      "x_forwarded_for": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Listener xForwardedFor, determine get client real ip or not, default false",
+        "Computed": true
       }
     },
     "baiducloud_bos_bucket": {
@@ -6027,6 +6628,519 @@
         }
       }
     },
+    "baiducloud_cdn_domain": {
+      "cname": {
+        "Type": "String",
+        "Description": "CNAME address of the acceleration domain.",
+        "Computed": true
+      },
+      "create_time": {
+        "Type": "String",
+        "Description": "Creation time of the acceleration domain.",
+        "Computed": true
+      },
+      "default_host": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Domain-level host. Priority is lower than origin server host(ie origin.host)."
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      },
+      "form": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Business type of the domain name. Defaults to `default`. Valid values: `image`(small image file), `download`(large file downloading), `media` (streaming media on demand), `dynamic`(dynamic and static acceleration).",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "is_ban": {
+        "Type": "String",
+        "Description": "Whether the acceleration domain is blocked. `YES` means blocked, and `NO` means not blocked.",
+        "Computed": true
+      },
+      "last_modify_time": {
+        "Type": "String",
+        "Description": "Latest modification time of the acceleration domain.",
+        "Computed": true
+      },
+      "origin": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Origin server configuration of the acceleration domain.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backup": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether is a backup origin server. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "host": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The host value used when forwarding to origin server"
+            },
+            "isp": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "ISP of the origin server. Valid values: `un`(China Unicom), `ct`(China Telecom), `cm`(China Mobile)"
+            },
+            "peer": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Format is {protocol://}{address}{:port}. `protocol` is optional, and valid values: `http`, `https`. `address` must be ip address or domain name. IPv6 address must be in '[ipv6]' format. `port` is optional."
+            },
+            "weight": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The origin server weight. Must be between `1` and `100`. Sum of all weights should not be greater than 100. No effect when `peer` is domain name."
+            }
+          }
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the domain name. Possible values: `RUNNING`,`OPERATING`, `STOPPED`.",
+        "Computed": true
+      }
+    },
+    "baiducloud_cdn_domain_config_acl": {
+      "access_limit": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP access limit configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether visit frequency limit for a single IP node is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "limit": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of requests a single IP node can send in one second. Defaults to `1000`.",
+              "Default": {
+                "Type": "int",
+                "Value": "1000"
+              }
+            }
+          }
+        }
+      },
+      "cors": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Cors cross-domain configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether allowing cross-domain access. Defaults to `off`. Other valid value: `on`",
+              "Default": {
+                "Type": "string",
+                "Value": "off"
+              }
+            },
+            "origin_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Domain names with cross-domain allowed. Support extensive domain name. Each name can contain at most one wildcard",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      },
+      "ip_acl": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP access configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "black_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "IP blacklist, support IP segments in CIDR format. Conflict with `white_list`",
+              "ConflictsWith": [
+                "ip_acl.0.white_list"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "white_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "IP whitelist, support IP segments in CIDR format. Conflict with `black_list`",
+              "ConflictsWith": [
+                "ip_acl.0.black_list"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "referer_acl": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Referer access configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_empty": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether empty referer access is allowed. Defaults to `true`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "black_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Referer blacklist. Support wildcard and no protocol required. Conflict with `white_list`",
+              "ConflictsWith": [
+                "referer_acl.0.white_list"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "white_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Referer whitelist. Support wildcard and no protocol required. Conflict with `black_list`",
+              "ConflictsWith": [
+                "referer_acl.0.black_list"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "request_auth": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Access authentication configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key1": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Main authorization key. Letters and numbers can be used. Length should be in 6-32."
+            },
+            "key2": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Secondary authorization key. Letters and numbers can be used. Length should be in 6-32."
+            },
+            "timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Authorization cache time."
+            },
+            "timestamp_metric": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Time format. Valid values: `10`, `16`."
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Authentication method. Valid values: `A`, `B`, `C`"
+            }
+          }
+        }
+      },
+      "traffic_limit": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Rate limit for a single link configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether rate limit is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "limit_end_hour": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Time to start speed limit. Should be in 0-24, and greater than `limit_start_hour`. Defaults to `24`.",
+              "Default": {
+                "Type": "int",
+                "Value": "24"
+              }
+            },
+            "limit_rate": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Limit rate in Byte/s"
+            },
+            "limit_start_hour": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Time to start speed limit. Should be in 0-24, and smaller than `limit_end_hour`. Defaults to `0`.",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            }
+          }
+        }
+      },
+      "ua_acl": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "User agent access configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "black_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "UA blacklist, length of a single ua should be in 1-200.",
+              "ConflictsWith": [
+                "ua_acl.0.white_list"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "white_list": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "UA whitelist, length of a single ua should be in 1-200.",
+              "ConflictsWith": [
+                "ua_acl.0.black_list"
+              ],
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      }
+    },
+    "baiducloud_cdn_domain_config_cache": {
+      "cache_share": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Cache sharing configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Another acceleration domain under current user. Must be set when enabled."
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether cache sharing is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "cache_ttl": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Cache expiration rules of the acceleration domain.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ttl": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Cache duration in seconds."
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Cache rule type. Valid values: `suffix`(file name suffix), `path`(directory in the url), `origin`(origin server rule. There is only one such rule, and only `weight` is required. Set `value` to `-`, `ttl` to `0`), `code`(status code cache, currently supports `404`, `502`, `503`, `504`), `exactPath`(path is completely matched)."
+            },
+            "value": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Configuration rule for the specified type."
+            },
+            "weight": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The origin server weight. Must be between `0` and `100`. Defaults to `0`. The higher the weight, the higher the priority. No effect when `type` is `code`.",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            }
+          }
+        }
+      },
+      "cache_url_args": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Cache parameter filter configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cache_full_url": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether caching of full url is enabled. Defaults to `true`",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "cache_url_args": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Query parameters in url that will be preserved. No effect when `cache_full_url` is `true`.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      },
+      "error_page": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Error page configuration of the acceleration domain.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "code": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Error status code. Valid values: `401`, `403`, `404`, `405`, `414`, `429`, `500`, `501`, `502`, `503`, `504`."
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Destination address of redirection."
+            }
+          }
+        }
+      },
+      "mobile_access": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Mobile access configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "distinguish_client": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether mobile access is enabled. Defaults to `false`",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    },
     "baiducloud_cds": {
       "__timeouts__": [
         "create",
@@ -7113,6 +8227,11 @@
           "auto_renew_time_unit"
         ]
       },
+      "route_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "EIP route type"
+      },
       "share_group_id": {
         "Type": "String",
         "Description": "Eip share group id",
@@ -7376,7 +8495,11 @@
       "card_count": {
         "Type": "String",
         "Optional": true,
-        "Description": "Count of the GPU cards or FPGA cards to be carried for the instance to be created, it is valid only when the gpu_card or fpga_card field is not empty."
+        "Description": "Count of the GPU cards or FPGA cards to be carried for the instance to be created, it is valid only when the gpu_card or fpga_card field is not empty.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
       },
       "cds_auto_renew": {
         "Type": "Bool",
@@ -7426,7 +8549,7 @@
       },
       "cpu_count": {
         "Type": "Int",
-        "Required": true,
+        "Optional": true,
         "Description": "Number of CPU cores to be created for the instance."
       },
       "create_time": {
@@ -7507,6 +8630,11 @@
         "Required": true,
         "Description": "ID of the image to be used for the instance."
       },
+      "instance_spec": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "spec"
+      },
       "instance_type": {
         "Type": "String",
         "Optional": true,
@@ -7534,13 +8662,14 @@
       },
       "memory_capacity_in_gb": {
         "Type": "Int",
-        "Required": true,
+        "Optional": true,
         "Description": "Memory capacity(GB) of the instance to be created."
       },
       "name": {
         "Type": "String",
         "Optional": true,
-        "Description": "Name of the instance. Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as \"-\",\"_\",\"/\",\".\", the value must start with a letter, length 1-65."
+        "Description": "Name of the instance. Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as \"-\",\"_\",\"/\",\".\", the value must start with a letter, length 1-65.",
+        "Computed": true
       },
       "network_capacity_in_mbps": {
         "Type": "Int",
@@ -7621,10 +8750,149 @@
           "ElementsType": "String"
         }
       },
+      "user_data": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "User Data"
+      },
       "vpc_id": {
         "Type": "String",
         "Description": "VPC ID of the instance.",
         "Computed": true
+      }
+    },
+    "baiducloud_localdns_privatezone": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Description": "Creation time of the DNS local PrivateZone.",
+        "Computed": true
+      },
+      "record_count": {
+        "Type": "Int",
+        "Description": "record_count of the DNS local PrivateZone.",
+        "Computed": true
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "update time of the DNS local PrivateZone.",
+        "Computed": true
+      },
+      "zone_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "name of the DNS local PrivateZone"
+      }
+    },
+    "baiducloud_localdns_record": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "description of record"
+      },
+      "priority": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "priority,when the record type is NOT MX,priority should be 0"
+      },
+      "record_id": {
+        "Type": "String",
+        "Description": "Id of private zone dns record",
+        "Computed": true
+      },
+      "rr": {
+        "Type": "String",
+        "Required": true,
+        "Description": "rr"
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "status of record,enable or disable"
+      },
+      "ttl": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ttl"
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "record type"
+      },
+      "value": {
+        "Type": "String",
+        "Required": true,
+        "Description": "record value"
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of private zone."
+      }
+    },
+    "baiducloud_localdns_vpc": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "bind_vpcs": {
+        "Type": "List",
+        "Description": "privatezone bind vpcs",
+        "Computed": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "vpc_id": {
+              "Type": "String",
+              "Description": "bind vpc id",
+              "Computed": true
+            },
+            "vpc_name": {
+              "Type": "String",
+              "Description": "name of vpc",
+              "Computed": true
+            },
+            "vpc_region": {
+              "Type": "String",
+              "Description": "region of vpc",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "region of the DNS  vpc"
+      },
+      "vpc_ids": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "vpc_ids  of the DNS  vpc.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "zone_id of the DNS privatezone "
       }
     },
     "baiducloud_nat_gateway": {
@@ -7641,6 +8909,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "cu_num": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "cu num."
       },
       "eips": {
         "Type": "Set",
@@ -7680,6 +8953,38 @@
         "Type": "String",
         "Required": true,
         "Description": "VPC ID of the NAT gateway."
+      }
+    },
+    "baiducloud_nat_snat_rule": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "nat_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of NAT Gateway."
+      },
+      "public_ips_address": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Public network IPs, EIPs associated on the NAT gateway SNAT or IPs in the shared bandwidth.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "rule_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Rule name, consisting of uppercase and lowercase letters、 numbers and special characters, such as \"-\"_\"/\".\". The value must start with a letter, and the length should between 1-65."
+      },
+      "source_cidr": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Intranet IP/segment."
       }
     },
     "baiducloud_peer_conn": {
@@ -8319,7 +9624,7 @@
       },
       "auto_renew_time_length": {
         "Type": "Int",
-        "Description": "The time length of automatic renewal. It is valid when payment_timing is Prepaid, and the value should be 1-9 when the auto_renew_time_unit is month and 1-3 when the auto_renew_time_unit is year. Default to 1.",
+        "Description": "The time length of automatic renewal. It is valid when payment_timing is Prepaid, and the value should be 1-9 when the auto_renew_time_unit is month and 1-3 when the auto_renew_time_unit is year.",
         "Computed": true
       },
       "auto_renew_time_unit": {
@@ -8329,8 +9634,8 @@
       },
       "billing": {
         "Type": "Map",
-        "Required": true,
-        "Description": "Billing information of the Scs.",
+        "Optional": true,
+        "Description": "**Deprecated**. Use `payment_timing`, `reservation_length`, `reservation_time_unit` instead. Billing information of the Scs.",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
@@ -8341,10 +9646,15 @@
         "Description": "Memory capacity(GB) of the instance.",
         "Computed": true
       },
+      "client_auth": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Access password of the instance. Should be 8-16 characters, and contains at least two types of letters, numbers and symbols. Allowed symbols include `$ ^ * ( ) _ + - =`."
+      },
       "cluster_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "Type of the instance,  Available values are cluster, master_slave.",
+        "Description": "Type of the instance. If `engine` is `memcache`, must be `default`. Valid values for other engine type: `cluster`, `master_slave`.  Defaults to `master_slave`.",
         "Default": {
           "Type": "string",
           "Value": "master_slave"
@@ -8355,24 +9665,44 @@
         "Description": "Create time of the instance.",
         "Computed": true
       },
+      "disk_flavor": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Storage size(GB) when use PegaDB. Must be between `50` and `160`"
+      },
+      "disk_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Disk type of the instance. Valid values: `cloud_hp1`, `enhanced_ssd_pl1`."
+      },
       "domain": {
         "Type": "String",
         "Description": "Domain of the instance.",
         "Computed": true
       },
+      "enable_read_only": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Whether the copies are read only. Valid values: `1`(enabled), `2`(disabled). Defaults to `2`.",
+        "Default": {
+          "Type": "int",
+          "Value": "2"
+        }
+      },
       "engine": {
         "Type": "String",
-        "Description": "Engine of the instance. Available values are redis, memcache.",
-        "Computed": true
+        "Optional": true,
+        "Description": "Engine of the instance. Valid values: `memcache`, `redis`, `PegaDB`. Defaults to `redis`.",
+        "Default": {
+          "Type": "string",
+          "Value": "redis"
+        }
       },
       "engine_version": {
         "Type": "String",
         "Optional": true,
-        "Description": "Engine version of the instance. Available values are 3.2, 4.0.",
-        "Default": {
-          "Type": "string",
-          "Value": "3.2"
-        }
+        "Description": "Engine version of the instance. Must be set when `engine` is `redis`. Valid values: `3.2`, `4.0`, `5.0`, `6.0`.",
+        "Computed": true
       },
       "expire_time": {
         "Type": "String",
@@ -8387,7 +9717,7 @@
       "instance_name": {
         "Type": "String",
         "Required": true,
-        "Description": "Name of the instance. Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as \"-\",\"_\",\"/\",\".\", the value must start with a letter, length 1-65."
+        "Description": "Name of the instance. Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as `-`, `_`, `/`, `.`. Must start with a letter, length 1-65."
       },
       "instance_status": {
         "Type": "String",
@@ -8397,17 +9727,17 @@
       "node_type": {
         "Type": "String",
         "Required": true,
-        "Description": "Type of the instance. Available values are cache.n1.micro, cache.n1.small, cache.n1.medium...cache.n1hs3.4xlarge."
+        "Description": "Node type of the instance. e.g. `cache.n1.micro`. To learn about supported node type, see documentation on [Supported Node Types](https://cloud.baidu.com/doc/SCS/s/1jwvxtsh0#%E5%AE%9E%E4%BE%8B%E8%A7%84%E6%A0%BC)"
       },
       "payment_timing": {
         "Type": "String",
-        "Description": "SCS payment timing",
-        "Computed": true
+        "Optional": true,
+        "Description": "Payment timing of billing, Valid values: `Prepaid`, `Postpaid`."
       },
       "port": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The port used to access a instance.",
+        "Description": "Port number used to access the instance. Must be between `1025` and `65534`. Defaults to `6379`.",
         "Default": {
           "Type": "int",
           "Value": "6379"
@@ -8416,7 +9746,7 @@
       "proxy_num": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The number of instance proxy.",
+        "Description": "The number of instance proxy. If `cluster_type` is `cluster`, set to the value of `shard_num` (if `shard_num` equals `1`, set to `2`). If `cluster_type` is `master_slave`, set to `0`. Defaults to `0`.",
         "Default": {
           "Type": "int",
           "Value": "0"
@@ -8425,29 +9755,77 @@
       "purchase_count": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Count of the instance to buy",
+        "Description": "Count of the instance to buy. Must be between `1` and `10`. Defaults to `1`.",
         "Default": {
           "Type": "int",
           "Value": "1"
+        }
+      },
+      "replication_info": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Replica info of the instance. Adding and removing replicas at same time in one operation is not supported.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "availability_zone": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Availability zone of the replica. e.g. `cn-bj-a`."
+            },
+            "is_master": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Whether the replica is master node. Valid values: `1`(master node), `0`(slave node)."
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Subnet id of the replica."
+            }
+          }
         }
       },
       "replication_num": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The number of instance copies.",
+        "Description": "The number of instance replicas. If `cluster_type` is `cluster`, must be between `2` and `5`. If `cluster_type` is `master_slave`, must be between `1` and `5`. Defaults to `2`.",
         "Default": {
           "Type": "int",
           "Value": "2"
         }
       },
+      "replication_resize_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Replica resize type. Must set when change `replication_info`. Valid values: `add`, `delete`."
+      },
+      "reservation_length": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Prepaid billing reservation length, only useful when `payment_timing` is `Prepaid`. Valid values: `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`, `12`, `24`, `36`"
+      },
+      "reservation_time_unit": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Prepaid billing reservation time unit, only useful when `payment_timing` is `Prepaid`. Only support `month` now."
+      },
       "shard_num": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The number of instance shard. IF cluster_type is cluster, support 2/4/6/8/12/16/24/32/48/64/96/128, if cluster_type is master_slave, support 1.",
+        "Description": "The number of instance shard. Defaults to `1`. To learn about supported shard number, see documentation on [Supported Node Types](https://cloud.baidu.com/doc/SCS/s/1jwvxtsh0#%E5%AE%9E%E4%BE%8B%E8%A7%84%E6%A0%BC)",
         "Default": {
           "Type": "int",
           "Value": "1"
         }
+      },
+      "store_type": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Store type of the instance. Valid values: `0`(high performance memory), `1`(ssd local disk), `3`(capacity storage, only for PegaDB)."
       },
       "subnets": {
         "Type": "List",
@@ -8462,21 +9840,20 @@
             "subnet_id": {
               "Type": "String",
               "Optional": true,
-              "Description": "ID of the subnet.",
-              "Computed": true
+              "Description": "ID of the subnet."
             },
             "zone_name": {
               "Type": "String",
               "Optional": true,
-              "Description": "Zone name of the subnet.",
-              "Computed": true
+              "Description": "Zone name of the subnet. e.g. `cn-bj-a`."
             }
           }
         }
       },
       "tags": {
         "Type": "Map",
-        "Description": "Tags",
+        "Optional": true,
+        "Description": "Tags, support setting when creating instance, do not support modify",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -8486,7 +9863,7 @@
       },
       "used_capacity": {
         "Type": "Int",
-        "Description": "Memory capacity(GB) of the instance to be used.",
+        "Description": "The amount of memory(GB) used by the instance.",
         "Computed": true
       },
       "v_net_ip": {
@@ -9634,6 +11011,768 @@
         "Type": "String",
         "Optional": true,
         "Description": "Name of the volume."
+      }
+    },
+    "baiducloud_bbc_flavors": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "flavors": {
+        "Type": "List",
+        "Description": "flavor list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cpu_count": {
+              "Type": "Int",
+              "Description": "cpu count",
+              "Computed": true
+            },
+            "cpu_type": {
+              "Type": "String",
+              "Description": "cpu type",
+              "Computed": true
+            },
+            "disk": {
+              "Type": "String",
+              "Description": "disk",
+              "Computed": true
+            },
+            "flavor_id": {
+              "Type": "String",
+              "Description": "flavor id",
+              "Computed": true
+            },
+            "memory_capacity_in_gb": {
+              "Type": "Int",
+              "Description": "memory capacity in GB",
+              "Computed": true
+            },
+            "network_card": {
+              "Type": "String",
+              "Description": "network card",
+              "Computed": true
+            },
+            "others": {
+              "Type": "String",
+              "Description": "others",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Flavor search result output file"
+      }
+    },
+    "baiducloud_bbc_images": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "image_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Image type of the images to be queried, support ALL/System/Custom/Integration/Sharing/GpuBccSystem/GpuBccCustom/FpgaBccSystem/FpgaBccCustom"
+      },
+      "images": {
+        "Type": "List",
+        "Description": "Image list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "create_time": {
+              "Type": "String",
+              "Description": "Image create time",
+              "Computed": true
+            },
+            "desc": {
+              "Type": "String",
+              "Description": "Image description",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "Image id",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Image name",
+              "Computed": true
+            },
+            "os_arch": {
+              "Type": "String",
+              "Description": "Image os arch",
+              "Computed": true
+            },
+            "os_build": {
+              "Type": "String",
+              "Description": "Image os build",
+              "Computed": true
+            },
+            "os_name": {
+              "Type": "String",
+              "Description": "Image os name",
+              "Computed": true
+            },
+            "os_type": {
+              "Type": "String",
+              "Description": "Image os type",
+              "Computed": true
+            },
+            "os_version": {
+              "Type": "String",
+              "Description": "Image os version",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Image status",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Image type",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name_regex": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Regex pattern of the search image name"
+      },
+      "os_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Search image OS Name"
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Images search result output file"
+      }
+    },
+    "baiducloud_bbc_instances": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "instances": {
+        "Type": "List",
+        "Description": "The result of the bbc instances list.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "create_time": {
+              "Type": "String",
+              "Description": "BBC create time.",
+              "Computed": true
+            },
+            "deployset_id": {
+              "Type": "String",
+              "Description": "The deployset ID of the BBC instance.",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "The description of the BBC instance.",
+              "Computed": true
+            },
+            "expire_time": {
+              "Type": "String",
+              "Description": "BBC expire time.",
+              "Computed": true
+            },
+            "flavor_id": {
+              "Type": "String",
+              "Description": "The flavor ID of the BBC instance.",
+              "Computed": true
+            },
+            "has_alive": {
+              "Type": "Int",
+              "Description": "BBC instance has alive.",
+              "Computed": true
+            },
+            "host_id": {
+              "Type": "String",
+              "Description": "The host ID of the BBC instance.",
+              "Computed": true
+            },
+            "hostname": {
+              "Type": "String",
+              "Description": "The hostname of the BBC instance.",
+              "Computed": true
+            },
+            "image_id": {
+              "Type": "String",
+              "Description": "The image ID of the BBC instance.",
+              "Computed": true
+            },
+            "instance_id": {
+              "Type": "String",
+              "Description": "The ID of the BBC instance.",
+              "Computed": true
+            },
+            "instance_name": {
+              "Type": "String",
+              "Description": "The name of the BBC instance.",
+              "Computed": true
+            },
+            "internal_ip": {
+              "Type": "String",
+              "Description": "The internal IP of the BBC instance.",
+              "Computed": true
+            },
+            "network_capacity_in_mbps": {
+              "Type": "Int",
+              "Description": "network capacity in mbps.",
+              "Computed": true
+            },
+            "payment_timing": {
+              "Type": "String",
+              "Description": "Payment timing of billing, which can be Prepaid or Postpaid. The default is Postpaid.",
+              "Computed": true
+            },
+            "public_ip": {
+              "Type": "String",
+              "Description": "The public IP of the BBC instance.",
+              "Computed": true
+            },
+            "rack_id": {
+              "Type": "String",
+              "Description": "The rack ID of the BBC instance.",
+              "Computed": true
+            },
+            "rdma_ip": {
+              "Type": "String",
+              "Description": "The rdma IP of the BBC instance.",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Description": "The region of the BBC instance.",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "The status of the instance.Include starting running stopped deleted",
+              "Computed": true
+            },
+            "switch_id": {
+              "Type": "String",
+              "Description": "The switch ID of the BBC instance.",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Tags, do not support modify",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uuid": {
+              "Type": "String",
+              "Description": "The UUID of the BBC instance.",
+              "Computed": true
+            },
+            "zone": {
+              "Type": "String",
+              "Description": "The zone name of the BBC instance.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internal_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "internal ip."
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Output file of the bbc instances search result"
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "bbc vpc id."
+      }
+    },
+    "baiducloud_blb_listeners": {
+      "blb_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the LoadBalance instance"
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "listener_port": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The port of the Listener to be queried"
+      },
+      "listeners": {
+        "Type": "List",
+        "Description": "A list of LoadBalance Listener",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "applied_ciphers": {
+              "Type": "String",
+              "Description": "applied ciphers",
+              "Computed": true
+            },
+            "backend_port": {
+              "Type": "Int",
+              "Description": "backend port, range from 1-65535",
+              "Computed": true
+            },
+            "cert_ids": {
+              "Type": "List",
+              "Description": "Listener bind certifications",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "client_cert_ids": {
+              "Type": "List",
+              "Description": "Listener import cert list, only useful when dual_auth is true",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "dual_auth": {
+              "Type": "Bool",
+              "Description": "Listener open dual authorization or not, default false",
+              "Computed": true
+            },
+            "encryption_protocols": {
+              "Type": "List",
+              "Description": "Listener encryption protocol",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "encryption_type": {
+              "Type": "String",
+              "Description": "Listener encryption option",
+              "Computed": true
+            },
+            "get_blb_ip": {
+              "Type": "Bool",
+              "Description": "get blb ip or not",
+              "Computed": true
+            },
+            "health_check_interval": {
+              "Type": "Int",
+              "Description": "health check interval",
+              "Computed": true
+            },
+            "health_check_normal_status": {
+              "Type": "String",
+              "Description": "health check normal status",
+              "Computed": true
+            },
+            "health_check_port": {
+              "Type": "Int",
+              "Description": "health check port",
+              "Computed": true
+            },
+            "health_check_string": {
+              "Type": "String",
+              "Description": "health check string, This parameter is mandatory when the listening protocol is UDP",
+              "Computed": true
+            },
+            "health_check_timeout_in_second": {
+              "Type": "Int",
+              "Description": "health check timeout in second",
+              "Computed": true
+            },
+            "health_check_type": {
+              "Type": "String",
+              "Description": "health check type",
+              "Computed": true
+            },
+            "health_check_uri": {
+              "Type": "String",
+              "Description": "health check uri",
+              "Computed": true
+            },
+            "healthy_threshold": {
+              "Type": "Int",
+              "Description": "healthy threshold",
+              "Computed": true
+            },
+            "ie6_compatible": {
+              "Type": "Bool",
+              "Description": "Listener support ie6 option, default true",
+              "Computed": true
+            },
+            "keep_session": {
+              "Type": "Bool",
+              "Description": "Listener keepSession or not",
+              "Computed": true
+            },
+            "keep_session_cookie_name": {
+              "Type": "String",
+              "Description": "Listener keepSeesionCookieName",
+              "Computed": true
+            },
+            "keep_session_duration": {
+              "Type": "Int",
+              "Description": "keep session duration",
+              "Computed": true
+            },
+            "keep_session_timeout": {
+              "Type": "Int",
+              "Description": "Listener keepSessionTimeout value",
+              "Computed": true
+            },
+            "keep_session_type": {
+              "Type": "String",
+              "Description": "Listener keepSessionType option",
+              "Computed": true
+            },
+            "listener_port": {
+              "Type": "Int",
+              "Description": "Listener bind port",
+              "Computed": true
+            },
+            "protocol": {
+              "Type": "String",
+              "Description": "Listener protocol",
+              "Computed": true
+            },
+            "redirect_port": {
+              "Type": "Int",
+              "Description": "Listener redirect request to https listener port",
+              "Computed": true
+            },
+            "scheduler": {
+              "Type": "String",
+              "Description": "Load balancing algorithm",
+              "Computed": true
+            },
+            "server_timeout": {
+              "Type": "Int",
+              "Description": "Backend server maximum timeout time, only support in [1, 3600] second, default 30s",
+              "Computed": true
+            },
+            "tcp_session_timeout": {
+              "Type": "Int",
+              "Description": "TCP Listener connetion session timeout time",
+              "Computed": true
+            },
+            "udp_session_timeout": {
+              "Type": "Int",
+              "Description": "UDP Listener connection session timeout time(second), default 900, support 10-4000",
+              "Computed": true
+            },
+            "unhealthy_threshold": {
+              "Type": "Int",
+              "Description": "unhealthy threshold",
+              "Computed": true
+            },
+            "x_forwarded_for": {
+              "Type": "Bool",
+              "Description": "Listener xForwardedFor, determine get client real ip or not, default false",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Query result output file path"
+      },
+      "protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Protocol of the Listener to be queried"
+      }
+    },
+    "baiducloud_blbs": {
+      "address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Address ip of the LoadBalance instance to be queried"
+      },
+      "bcc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of the BCC instance bound to the LoadBalance"
+      },
+      "blb_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of the LoadBalance instance to be queried"
+      },
+      "blbs": {
+        "Type": "List",
+        "Description": "A list of lication LoadBalance Instance",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "address": {
+              "Type": "String",
+              "Description": "LoadBalance instance's service IP, instance can be accessed through this IP",
+              "Computed": true
+            },
+            "blb_id": {
+              "Type": "String",
+              "Description": "LoadBalance instance's ID",
+              "Computed": true
+            },
+            "cidr": {
+              "Type": "String",
+              "Description": "Cidr of the network where the LoadBalance instance reside",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "String",
+              "Description": "LoadBalance instance's create time",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "LoadBalance instance's description",
+              "Computed": true
+            },
+            "listener": {
+              "Type": "List",
+              "Description": "List of listeners mounted under the instance",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "port": {
+                    "Type": "Int",
+                    "Description": "Listening port",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Description": "Listening protocol type",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Description": "LoadBalance instance's name",
+              "Computed": true
+            },
+            "public_ip": {
+              "Type": "String",
+              "Description": "LoadBalance instance's public ip",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "LoadBalance instance's status",
+              "Computed": true
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Description": "The subnet ID to which the LoadBalance instance belongs",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Map",
+              "Description": "Tags",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "vpc_id": {
+              "Type": "String",
+              "Description": "The VPC short ID to which the LoadBalance instance belongs",
+              "Computed": true
+            },
+            "vpc_name": {
+              "Type": "String",
+              "Description": "The VPC name to which the LoadBalance instance belongs",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "exactly_match": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the query condition is an exact match or not, default false"
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the LoadBalance instance to be queried"
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Query result output file path"
       }
     },
     "baiducloud_bos_bucket_objects": {
@@ -13104,6 +15243,44 @@
         "Computed": true
       }
     },
+    "baiducloud_cdn_domains": {
+      "domains": {
+        "Type": "List",
+        "Description": "Domain name list.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain": {
+              "Type": "String",
+              "Description": "Name of the acceleration domain.",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Status of the domain name. Possible values: `RUNNING`,`OPERATING`, `STOPPED`.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "rule": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Domain name filter. Support fuzzy matching. Can only contain letters, numbers and periods"
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Domain status filter. Defaults to `ALL`. Other valid values: `RUNNING`,`OPERATING`, `STOPPED`",
+        "Default": {
+          "Type": "string",
+          "Value": "ALL"
+        }
+      }
+    },
     "baiducloud_cdss": {
       "cdss": {
         "Type": "List",
@@ -14298,6 +16475,11 @@
               "Description": "The ID of the instance.",
               "Computed": true
             },
+            "instance_spec": {
+              "Type": "String",
+              "Description": "spec",
+              "Computed": true
+            },
             "instance_type": {
               "Type": "String",
               "Description": "The type of the instance.",
@@ -14405,6 +16587,235 @@
         "Type": "String",
         "Optional": true,
         "Description": "Name of the available zone to which the instance belongs."
+      }
+    },
+    "baiducloud_localdns_privatezones": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "local dns privatezone search result output file"
+      },
+      "zones": {
+        "Type": "List",
+        "Description": "zone list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "create_time": {
+              "Type": "String",
+              "Description": "Creation time of the DNS local PrivateZone.",
+              "Computed": true
+            },
+            "record_count": {
+              "Type": "Int",
+              "Description": "record_count of the DNS local PrivateZone.",
+              "Computed": true
+            },
+            "update_time": {
+              "Type": "String",
+              "Description": "update time of the DNS local PrivateZone.",
+              "Computed": true
+            },
+            "zone_id": {
+              "Type": "String",
+              "Description": "id of the DNS local PrivateZone",
+              "Computed": true
+            },
+            "zone_name": {
+              "Type": "String",
+              "Description": "name of the DNS local PrivateZone",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "baiducloud_localdns_records": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Output file for saving result."
+      },
+      "records": {
+        "Type": "List",
+        "Description": "Result of records.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "description",
+              "Computed": true
+            },
+            "priority": {
+              "Type": "Int",
+              "Description": "priority",
+              "Computed": true
+            },
+            "record_id": {
+              "Type": "String",
+              "Description": "Id of private zone dns record",
+              "Computed": true
+            },
+            "rr": {
+              "Type": "String",
+              "Description": "rr",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "status",
+              "Computed": true
+            },
+            "ttl": {
+              "Type": "Int",
+              "Description": "ttl",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "type",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Description": "value",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the private zone."
+      }
+    },
+    "baiducloud_localdns_vpcs": {
+      "bind_vpcs": {
+        "Type": "List",
+        "Description": "privatezone bind vpcs",
+        "Computed": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "vpc_id": {
+              "Type": "String",
+              "Description": "bind vpc id",
+              "Computed": true
+            },
+            "vpc_name": {
+              "Type": "String",
+              "Description": "name of vpc",
+              "Computed": true
+            },
+            "vpc_region": {
+              "Type": "String",
+              "Description": "region of vpc",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "local dns vpc search result output file"
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "zone_id of the DNS privatezone "
       }
     },
     "baiducloud_nat_gateways": {
@@ -14516,6 +16927,87 @@
         "Type": "String",
         "Optional": true,
         "Description": "VPC ID where the NAT gateways located."
+      }
+    },
+    "baiducloud_nat_snat_rules": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "nat_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the NAT gateway to retrieve."
+      },
+      "nat_snat_rules": {
+        "Type": "List",
+        "Description": "The list of NAT SNAT rules.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "public_ips_address": {
+              "Type": "List",
+              "Description": "Public network IPs, EIPs associated on the NAT gateway SNAT or IPs in the shared bandwidth.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "rule_id": {
+              "Type": "String",
+              "Description": "ID of the NAT SNAT rule.",
+              "Computed": true
+            },
+            "rule_name": {
+              "Type": "String",
+              "Description": "Name of the NAT SNAT rule.",
+              "Computed": true
+            },
+            "source_cidr": {
+              "Type": "String",
+              "Description": "Intranet IP/segment.",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Status of the NAT SNAT rule.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Output file for saving result."
       }
     },
     "baiducloud_peer_conns": {

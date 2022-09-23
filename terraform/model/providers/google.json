@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "google",
   "type": "provider",
-  "version": "v4.33.0",
+  "version": "v4.37.0",
   "provider": {
     "access_approval_custom_endpoint": {
       "Type": "String",
@@ -266,6 +266,11 @@
       "Type": "String",
       "Optional": true,
       "DefaultFunc": "MENV(GOOGLE_DATASTORE_CUSTOM_ENDPOINT)"
+    },
+    "datastream_custom_endpoint": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "MENV(GOOGLE_DATASTREAM_CUSTOM_ENDPOINT)"
     },
     "deployment_manager_custom_endpoint": {
       "Type": "String",
@@ -2842,6 +2847,11 @@
         "create",
         "delete"
       ],
+      "connection_state": {
+        "Type": "String",
+        "Description": "State of the endpoint attachment connection to the service attachment.",
+        "Computed": true
+      },
       "endpoint_attachment_id": {
         "Type": "String",
         "Required": true,
@@ -2953,6 +2963,35 @@
         "Type": "String",
         "Required": true,
         "Description": "The resource ID of the environment."
+      },
+      "node_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "NodeConfig for setting the min/max number of nodes associated with the environment.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "current_aggregate_node_count": {
+              "Type": "String",
+              "Description": "The current total number of gateway nodes that each environment currently has across\nall instances.",
+              "Computed": true
+            },
+            "max_node_count": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The maximum total number of gateway nodes that the is reserved for all instances that\nhas the specified environment. If not specified, the default is determined by the\nrecommended maximum number of nodes for that gateway."
+            },
+            "min_node_count": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The minimum total number of gateway nodes that the is reserved for all instances that\nhas the specified environment. If not specified, the default is determined by the\nrecommended minimum number of nodes for that gateway."
+            }
+          }
+        }
       },
       "org_id": {
         "Type": "String",
@@ -3134,7 +3173,7 @@
       "peering_cidr_range": {
         "Type": "String",
         "Optional": true,
-        "Description": "The size of the CIDR block range that will be reserved by the instance. For valid values, \nsee [CidrRange](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances#CidrRange) on the documentation.",
+        "Description": "The size of the CIDR block range that will be reserved by the instance. For valid values,\nsee [CidrRange](https://cloud.google.com/apigee/docs/reference/apis/apigee/rest/v1/organizations.instances#CidrRange) on the documentation.",
         "Computed": true
       },
       "port": {
@@ -3166,6 +3205,32 @@
       "name": {
         "Type": "String",
         "Description": "The name of the newly created  attachment (output parameter).",
+        "Computed": true
+      }
+    },
+    "google_apigee_nat_address": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "instance_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Apigee instance associated with the Apigee environment,\nin the format 'organizations/{{org_name}}/instances/{{instance_name}}'."
+      },
+      "ip_address": {
+        "Type": "String",
+        "Description": "The allocated NAT IP address.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Resource ID of the NAT address."
+      },
+      "state": {
+        "Type": "String",
+        "Description": "State of the NAT IP address.",
         "Computed": true
       }
     },
@@ -3215,6 +3280,51 @@
         "Type": "String",
         "Required": true,
         "Description": "The project ID associated with the Apigee organization."
+      },
+      "properties": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Properties defined in the Apigee organization profile.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "property": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of all properties in the object.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Name of the property."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Value of the property."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "retention": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optional. This setting is applicable only for organizations that are soft-deleted (i.e., BillingType\nis not EVALUATION). It controls how long Organization data will be retained after the initial delete\noperation completes. During this period, the Organization may be restored to its last known state.\nAfter this period, the Organization will no longer be able to be restored. Default value: \"DELETION_RETENTION_UNSPECIFIED\" Possible values: [\"DELETION_RETENTION_UNSPECIFIED\", \"MINIMUM\"]",
+        "Default": {
+          "Type": "string",
+          "Value": "DELETION_RETENTION_UNSPECIFIED"
+        }
       },
       "runtime_database_encryption_key_name": {
         "Type": "String",
@@ -4574,6 +4684,11 @@
         "Required": true,
         "Description": "AppEngine service resource. Can contain numbers, letters, and hyphens."
       },
+      "service_account": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The identity that the deployed version will run as. Admin API will use the App Engine Appspot service account as\ndefault if this field is neither provided in app.yaml file nor through CLI flag."
+      },
       "serving_status": {
         "Type": "String",
         "Optional": true,
@@ -4702,6 +4817,11 @@
         "update",
         "delete"
       ],
+      "app_engine_apis": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Allows App Engine second generation runtimes to access the legacy bundled services."
+      },
       "automatic_scaling": {
         "Type": "List",
         "Optional": true,
@@ -5144,6 +5264,229 @@
         "delete"
       ],
 
+      "create_time": {
+        "Type": "String",
+        "Description": "The time when the repository was created.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The user-provided description of the repository."
+      },
+      "format": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The format of packages that are stored in the repository. Supported formats\ncan be found [here](https://cloud.google.com/artifact-registry/docs/supported-formats).\nYou can only create alpha formats if you are a member of the\n[alpha user group](https://cloud.google.com/artifact-registry/docs/supported-formats#alpha-access)."
+      },
+      "kms_key_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Cloud KMS resource name of the customer managed encryption key that’s\nused to encrypt the contents of the Repository. Has the form:\n'projects/my-project/locations/my-region/keyRings/my-kr/cryptoKeys/my-key'.\nThis value may not be changed after the Repository has been created."
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Labels with user-defined metadata.\nThis field may contain up to 64 entries. Label keys and values may be no\nlonger than 63 characters. Label keys must begin with a lowercase letter\nand may only contain lowercase letters, numeric characters, underscores,\nand dashes.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the location this repository is located in.",
+        "Computed": true
+      },
+      "maven_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "MavenRepositoryConfig is maven related repository details.\nProvides additional configuration details for repositories of the maven\nformat type.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_snapshot_overwrites": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "The repository with this flag will allow publishing the same\nsnapshot versions."
+            },
+            "version_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Version policy defines the versions that the registry will accept. Default value: \"VERSION_POLICY_UNSPECIFIED\" Possible values: [\"VERSION_POLICY_UNSPECIFIED\", \"RELEASE\", \"SNAPSHOT\"]",
+              "Default": {
+                "Type": "string",
+                "Value": "VERSION_POLICY_UNSPECIFIED"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The name of the repository, for example:\n\"projects/p1/locations/us-central1/repositories/repo1\"",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "repository_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The last part of the repository name, for example:\n\"repo1\""
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "The time when the repository was last updated.",
+        "Computed": true
+      }
+    },
+    "google_artifact_registry_repository_iam_binding": {
+      "condition": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "expression": {
+              "Type": "String",
+              "Required": true
+            },
+            "title": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "members": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "role": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "google_artifact_registry_repository_iam_member": {
+      "condition": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "expression": {
+              "Type": "String",
+              "Required": true
+            },
+            "title": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "member": {
+        "Type": "String",
+        "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "role": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "google_artifact_registry_repository_iam_policy": {
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "policy_data": {
+        "Type": "String",
+        "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "google_artifact_registry_repository": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
       "create_time": {
         "Type": "String",
         "Description": "The time when the repository was created.",
@@ -6868,7 +7211,7 @@
             "source_uris": {
               "Type": "List",
               "Required": true,
-              "Description": "The fully-qualified URIs that point to your data in Google Cloud.\nFor Google Cloud Storage URIs: Each URI can contain one '*' wildcard character\nand it must come after the 'bucket' name. Size limits related to load jobs apply\nto external data sources. For Google Cloud Bigtable URIs: Exactly one URI can be\nspecified and it has be a fully specified and valid HTTPS URL for a Google Cloud Bigtable table.\nFor Google Cloud Datastore backups: Exactly one URI can be specified. Also, the '*' wildcard character is not allowed.",
+              "Description": "The fully-qualified URIs that point to your data in Google Cloud.\nFor Google Cloud Storage URIs: Each URI can contain one '\\*' wildcard character\nand it must come after the 'bucket' name. Size limits related to load jobs apply\nto external data sources. For Google Cloud Bigtable URIs: Exactly one URI can be\nspecified and it has be a fully specified and valid HTTPS URL for a Google Cloud Bigtable table.\nFor Google Cloud Datastore backups: Exactly one URI can be specified. Also, the '\\*' wildcard character is not allowed.",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -8219,6 +8562,12 @@
                     "Type": "Int",
                     "Required": true,
                     "Description": "The minimum number of nodes for autoscaling."
+                  },
+                  "storage_target": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The target storage utilization for autoscaling, in GB, for each node in a cluster. This number is limited between 2560 (2.5TiB) and 5120 (5TiB) for a SSD cluster and between 8192 (8TiB) and 16384 (16 TiB) for an HDD cluster. If not set, whatever is already set for the cluster will not change, or if the cluster is just being created, it will use the default value of 2560 for SSD clusters and 8192 for HDD clusters.",
+                    "Computed": true
                   }
                 }
               }
@@ -8424,6 +8773,9 @@
       }
     },
     "google_bigtable_table": {
+      "__timeouts__": [
+        "create"
+      ],
       "column_family": {
         "Type": "Set",
         "Optional": true,
@@ -10756,7 +11108,7 @@
                                           "name": {
                                             "Type": "String",
                                             "Required": true,
-                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/<project-id|project-number>/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation."
+                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/{project-id|project-number}/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation."
                                           }
                                         }
                                       }
@@ -10875,7 +11227,7 @@
                               "container_port": {
                                 "Type": "Int",
                                 "Optional": true,
-                                "Description": "Port number the container listens on. This must be a valid port number, 0 < x < 65536."
+                                "Description": "Port number the container listens on. This must be a valid port number, 0 \u003c x \u003c 65536."
                               },
                               "name": {
                                 "Type": "String",
@@ -11034,7 +11386,7 @@
                               "secret_name": {
                                 "Type": "String",
                                 "Required": true,
-                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n<alias>:projects/<project-id|project-number>/secrets/<secret-name>.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation."
+                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n{alias}:projects/{project-id|project-number}/secrets/{secret-name}.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation."
                               }
                             }
                           }
@@ -12366,7 +12718,7 @@
             "repo_type": {
               "Type": "String",
               "Required": true,
-              "Description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). \nValues can be UNKNOWN, CLOUD_SOURCE_REPOSITORIES, GITHUB Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\"]"
+              "Description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL). \nValues can be UNKNOWN, CLOUD_SOURCE_REPOSITORIES, GITHUB, BITBUCKET Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\", \"BITBUCKET\"]"
             },
             "revision": {
               "Type": "String",
@@ -12485,6 +12837,15 @@
           "ElementsType": "String"
         }
       },
+      "location": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The [Cloud Build location](https://cloud.google.com/build/docs/locations) for the trigger.\nIf not specified, \"global\" is used.",
+        "Default": {
+          "Type": "string",
+          "Value": "global"
+        }
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -12566,6 +12927,34 @@
         "Type": "String",
         "Optional": true,
         "Description": "The service account used for all user-controlled operations including\ntriggers.patch, triggers.run, builds.create, and builds.cancel.\n\nIf no service account is set, then the standard Cloud Build service account\n([PROJECT_NUM]@system.gserviceaccount.com) will be used instead.\n\nFormat: projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT_ID_OR_EMAIL}"
+      },
+      "source_to_build": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The repo and ref of the repository from which to build. \nThis field is used only for those triggers that do not respond to SCM events. \nTriggers that respond to such events build source at whatever commit caused the event. \nThis field is currently only used by Webhook, Pub/Sub, Manual, and Cron triggers.\n\nOne of 'trigger_template', 'github', 'pubsub_config' 'webhook_config' or 'source_to_build' must be provided.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ref": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The branch or tag to use. Must start with \"refs/\" (required)."
+            },
+            "repo_type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of the repo, since it may not be explicit from the repo field (e.g from a URL).\nValues can be UNKNOWN, CLOUD_SOURCE_REPOSITORIES, GITHUB, BITBUCKET Possible values: [\"UNKNOWN\", \"CLOUD_SOURCE_REPOSITORIES\", \"GITHUB\", \"BITBUCKET\"]"
+            },
+            "uri": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The URI of the repo (required)."
+            }
+          }
+        }
       },
       "substitutions": {
         "Type": "Map",
@@ -12880,7 +13269,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.",
+        "Description": "Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be \u003c= 128 bytes.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -13080,7 +13469,7 @@
       "labels": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be <= 128 bytes.",
+        "Description": "Optional. Labels are attributes that can be set and used by both the user and by Google Cloud Deploy. Labels must meet the following constraints: * Keys and values can contain only lowercase letters, numeric characters, underscores, and dashes. * All characters must use UTF-8 encoding, and international characters are allowed. * Keys must start with a lowercase letter or international character. * Each resource is limited to a maximum of 64 labels. Both keys and values are additionally constrained to be \u003c= 128 bytes.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -13433,6 +13822,88 @@
               "Optional": true,
               "Description": "The limit on the minimum number of function instances that may coexist at a\ngiven time."
             },
+            "secret_environment_variables": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Secret environment variables configuration.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the environment variable."
+                  },
+                  "project_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Project identifier (preferrably project number but can also be the project ID) of the project that contains the secret. If not set, it will be populated with the function's project assuming that the secret exists in the same project as of the function."
+                  },
+                  "secret": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the secret in secret manager (not the full resource name)."
+                  },
+                  "version": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Version of the secret (version number or the string 'latest'). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new instances start."
+                  }
+                }
+              }
+            },
+            "secret_volumes": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Secret volumes configuration.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mount_path": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The path within the container to mount the secret volume. For example, setting the mountPath as /etc/secrets would mount the secret value files under the /etc/secrets directory. This directory will also be completely shadowed and unavailable to mount any other secrets. Recommended mount path: /etc/secrets"
+                  },
+                  "project_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Project identifier (preferrably project number but can also be the project ID) of the project that contains the secret. If not set, it will be populated with the function's project assuming that the secret exists in the same project as of the function."
+                  },
+                  "secret": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the secret in secret manager (not the full resource name)."
+                  },
+                  "versions": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "List of secret versions to mount for this secret. If empty, the latest version of the secret will be made available in a file named after the secret under the mount point.'",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "path": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Relative path of the file under the mount path where the secret value for this version will be fetched and made available. For example, setting the mountPath as '/etc/secrets' and path as secret_foo would mount the secret value file at /etc/secrets/secret_foo."
+                        },
+                        "version": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Version of the secret (version number or the string 'latest'). It is preferable to use latest version with secret volumes as secret value changes are reflected immediately."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "service": {
               "Type": "String",
               "Optional": true,
@@ -13610,116 +14081,6 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
-      }
-    },
-    "google_cloudbuild_worker_pool": {
-      "__timeouts__": [
-        "create",
-        "update",
-        "delete"
-      ],
-      "annotations": {
-        "Type": "Map",
-        "Optional": true,
-        "Description": "User specified annotations. See https://google.aip.dev/128#annotations for more details such as format and size limitations.",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "create_time": {
-        "Type": "String",
-        "Description": "Output only. Time at which the request to create the `WorkerPool` was received.",
-        "Computed": true
-      },
-      "delete_time": {
-        "Type": "String",
-        "Description": "Output only. Time at which the request to delete the `WorkerPool` was received.",
-        "Computed": true
-      },
-      "display_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A user-specified, human-readable name for the `WorkerPool`. If provided, this value must be 1-63 characters."
-      },
-      "location": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The location for the resource"
-      },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "User-defined name of the `WorkerPool`."
-      },
-      "network_config": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Network configuration for the `WorkerPool`.",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "peered_network": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Required. Immutable. The network definition that the workers are peered to. If this section is left empty, the workers will be peered to `WorkerPool.project_id` on the service producer network. Must be in the format `projects/{project}/global/networks/{network}`, where `{project}` is a project number, such as `12345`, and `{network}` is the name of a VPC network in the project. See [Understanding network configuration options](https://cloud.google.com/cloud-build/docs/custom-workers/set-up-custom-worker-pool-environment#understanding_the_network_configuration_options)"
-            }
-          }
-        }
-      },
-      "project": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The project for the resource",
-        "Computed": true
-      },
-      "state": {
-        "Type": "String",
-        "Description": "Output only. `WorkerPool` state. Possible values: STATE_UNSPECIFIED, PENDING, APPROVED, REJECTED, CANCELLED",
-        "Computed": true
-      },
-      "uid": {
-        "Type": "String",
-        "Description": "Output only. A unique identifier for the `WorkerPool`.",
-        "Computed": true
-      },
-      "update_time": {
-        "Type": "String",
-        "Description": "Output only. Time at which the request to update the `WorkerPool` was received.",
-        "Computed": true
-      },
-      "worker_config": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "Configuration to be used for a creating workers in the `WorkerPool`.",
-        "Computed": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "disk_size_gb": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Size of the disk attached to the worker, in GB. See [Worker pool config file](https://cloud.google.com/cloud-build/docs/custom-workers/worker-pool-config-file). Specify a value of up to 1000. If `0` is specified, Cloud Build will use a standard disk size."
-            },
-            "machine_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Machine type of a worker, such as `n1-standard-1`. See [Worker pool config file](https://cloud.google.com/cloud-build/docs/custom-workers/worker-pool-config-file). If left blank, Cloud Build will use `n1-standard-1`."
-            },
-            "no_external_ip": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "If true, workers are created without any public address, which prevents network egress to public IPs."
-            }
-          }
-        }
       }
     },
     "google_cloudfunctions_function": {
@@ -14988,7 +15349,7 @@
                   "env_variables": {
                     "Type": "Map",
                     "Optional": true,
-                    "Description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                    "Description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -15672,7 +16033,7 @@
                   "query_string_whitelist": {
                     "Type": "List",
                     "Optional": true,
-                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '&' and '=' will\nbe percent encoded and not treated as delimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '\u0026' and '=' will\nbe percent encoded and not treated as delimiters.",
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
                       "Type": "SchemaElements",
@@ -17783,6 +18144,16 @@
         "Description": "The PSC connection status of the PSC Forwarding Rule. Possible values: STATUS_UNSPECIFIED, PENDING, ACCEPTED, REJECTED, CLOSED",
         "Computed": true
       },
+      "psc_connection_id": {
+        "Type": "String",
+        "Description": "The PSC connection id of the PSC Forwarding Rule.",
+        "Computed": true
+      },
+      "psc_connection_status": {
+        "Type": "String",
+        "Description": "The PSC connection status of the PSC Forwarding Rule. Possible values: STATUS_UNSPECIFIED, PENDING, ACCEPTED, REJECTED, CLOSED",
+        "Computed": true
+      },
       "self_link": {
         "Type": "String",
         "Description": "[Output Only] Server-defined URL for the resource.",
@@ -19284,7 +19655,7 @@
       "resource_policies": {
         "Type": "List",
         "Optional": true,
-        "Description": "A list of short names or self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
+        "Description": "A list of self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
         "MaxItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -20030,7 +20401,7 @@
       "resource_policies": {
         "Type": "List",
         "Optional": true,
-        "Description": "A list of short names or self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
+        "Description": "A list of self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
         "Computed": true,
         "MaxItems": 1,
         "ConfigImplicitMode": "Attr",
@@ -20054,6 +20425,12 @@
               "Type": "Bool",
               "Optional": true,
               "Description": "Specifies if the instance should be restarted if it was terminated by Compute Engine (not a user).",
+              "Computed": true
+            },
+            "instance_termination_action": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specifies the action GCE should take when SPOT VM is preempted.",
               "Computed": true
             },
             "instance_termination_action": {
@@ -26898,6 +27275,11 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "chain_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Creates the new snapshot in the snapshot chain labeled with the \nspecified name. The chain name must be 1-63 characters long and comply \nwith RFC1035."
+                  },
                   "guest_flush": {
                     "Type": "Bool",
                     "Optional": true,
@@ -28136,6 +28518,11 @@
         "update",
         "delete"
       ],
+      "chain_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Creates the new snapshot in the snapshot chain labeled with the \nspecified name. The chain name must be 1-63 characters long and \ncomply with RFC1035. This is an uncommon option only for advanced \nservice owners who needs to create separate snapshot chains, for \nexample, for chargeback tracking.  When you describe your snapshot \nresource, this field is visible only if it has a non-empty value."
+      },
       "creation_timestamp": {
         "Type": "String",
         "Description": "Creation timestamp in RFC3339 text format.",
@@ -29151,6 +29538,11 @@
         "Required": true,
         "Description": "A reference to the BackendService resource."
       },
+      "certificate_map": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A reference to the CertificateMap resource uri that identifies a certificate map\nassociated with the given target proxy. This field can only be set for global target proxies.\nAccepted format is '//certificatemanager.googleapis.com/projects/{project}/locations/{location}/certificateMaps/{resourceName}'."
+      },
       "creation_timestamp": {
         "Type": "String",
         "Description": "Creation timestamp in RFC3339 text format.",
@@ -29191,7 +29583,7 @@
       },
       "ssl_certificates": {
         "Type": "List",
-        "Required": true,
+        "Optional": true,
         "Description": "A list of SslCertificate resources that are used to authenticate\nconnections between users and the load balancer. At least one\nSSL certificate must be specified.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -32548,12 +32940,12 @@
             "max_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count."
+              "Description": "Maximum number of nodes in the NodePool. Must be \u003e= min_node_count."
             },
             "min_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Minimum number of nodes in the NodePool. Must be >= 1 and <= max_node_count."
+              "Description": "Minimum number of nodes in the NodePool. Must be \u003e= 1 and \u003c= max_node_count."
             }
           }
         }
@@ -32916,7 +33308,7 @@
       "client": {
         "Type": "String",
         "Required": true,
-        "Description": "Name of the AzureClient. The `AzureClient` resource must reside on the same GCP project and region as the `AzureCluster`. `AzureClient` names are formatted as `projects/<project-number>/locations/<region>/azureClients/<client-id>`. See Resource Names (https:cloud.google.com/apis/design/resource_names) for more details on Google Cloud resource names."
+        "Description": "Name of the AzureClient. The `AzureClient` resource must reside on the same GCP project and region as the `AzureCluster`. `AzureClient` names are formatted as `projects/\u003cproject-number\u003e/locations/\u003cregion\u003e/azureClients/\u003cclient-id\u003e`. See Resource Names (https:cloud.google.com/apis/design/resource_names) for more details on Google Cloud resource names."
       },
       "control_plane": {
         "Type": "List",
@@ -33258,12 +33650,12 @@
             "max_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Maximum number of nodes in the node pool. Must be >= min_node_count."
+              "Description": "Maximum number of nodes in the node pool. Must be \u003e= min_node_count."
             },
             "min_node_count": {
               "Type": "Int",
               "Required": true,
-              "Description": "Minimum number of nodes in the node pool. Must be >= 1 and <= max_node_count."
+              "Description": "Minimum number of nodes in the node pool. Must be \u003e= 1 and \u003c= max_node_count."
             }
           }
         }
@@ -33302,12 +33694,12 @@
                   "resource_group_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/<subscription-id>/resourceGroups/<resource-group-name>`"
+                    "Description": "The ARM ID the of the resource group containing proxy keyvault. Resource group ids are formatted as `/subscriptions/\u003csubscription-id\u003e/resourceGroups/\u003cresource-group-name\u003e`"
                   },
                   "secret_id": {
                     "Type": "String",
                     "Required": true,
-                    "Description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:<key-vault-name>.vault.azure.net/secrets/<secret-name>/<secret-version>`."
+                    "Description": "The URL the of the proxy setting secret with its version. Secret ids are formatted as `https:\u003ckey-vault-name\u003e.vault.azure.net/secrets/\u003csecret-name\u003e/\u003csecret-version\u003e`."
                   }
                 }
               }
@@ -34507,6 +34899,39 @@
                 "Value": "false"
               }
             },
+            "reservation_affinity": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The reservation affinity configuration for the node pool.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "consume_reservation_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Corresponds to the type of reservation consumption."
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The label key of a reservation resource."
+                  },
+                  "values": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "The label values of the reservation resource.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
             "service_account": {
               "Type": "String",
               "Optional": true,
@@ -34647,15 +35072,30 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "location_policy": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Location policy specifies the algorithm used when scaling-up the node pool. \"BALANCED\" - Is a best effort policy that aims to balance the sizes of available zones. \"ANY\" - Instructs the cluster autoscaler to prioritize utilization of unused reservations, and reduces preemption risk for Spot VMs."
+                  },
                   "max_node_count": {
                     "Type": "Int",
-                    "Required": true,
-                    "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count."
+                    "Optional": true,
+                    "Description": "Maximum number of nodes per zone in the node pool. Must be \u003e= min_node_count. Cannot be used with total limits."
                   },
                   "min_node_count": {
                     "Type": "Int",
-                    "Required": true,
-                    "Description": "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
+                    "Optional": true,
+                    "Description": "Minimum number of nodes per zone in the node pool. Must be \u003e=0 and \u003c= max_node_count. Cannot be used with total limits."
+                  },
+                  "total_max_node_count": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "Maximum number of all nodes in the node pool. Must be \u003e= total_min_node_count. Cannot be used with per zone limits."
+                  },
+                  "total_min_node_count": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "Minimum number of all nodes in the node pool. Must be \u003e=0 and \u003c= total_max_node_count. Cannot be used with per zone limits."
                   }
                 }
               }
@@ -34896,6 +35336,39 @@
                     "Default": {
                       "Type": "bool",
                       "Value": "false"
+                    }
+                  },
+                  "reservation_affinity": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "The reservation affinity configuration for the node pool.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "consume_reservation_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Corresponds to the type of reservation consumption."
+                        },
+                        "key": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The label key of a reservation resource."
+                        },
+                        "values": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The label values of the reservation resource.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
                     }
                   },
                   "service_account": {
@@ -35268,6 +35741,25 @@
         "Description": "Server-defined URL for the resource.",
         "Computed": true
       },
+      "service_external_ips_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "If set, and enabled=true, services with external ips field will not be blocked",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "When enabled, services with exterenal ips specified will be allowed."
+            }
+          }
+        }
+      },
       "services_ipv4_cidr": {
         "Type": "String",
         "Description": "The IP address range of the Kubernetes services in this cluster, in CIDR notation (e.g. 1.2.3.4/29). Service addresses are typically put in the last /16 from the container CIDR.",
@@ -35342,15 +35834,30 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "location_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Location policy specifies the algorithm used when scaling-up the node pool. \"BALANCED\" - Is a best effort policy that aims to balance the sizes of available zones. \"ANY\" - Instructs the cluster autoscaler to prioritize utilization of unused reservations, and reduces preemption risk for Spot VMs."
+            },
             "max_node_count": {
               "Type": "Int",
-              "Required": true,
-              "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count."
+              "Optional": true,
+              "Description": "Maximum number of nodes per zone in the node pool. Must be \u003e= min_node_count. Cannot be used with total limits."
             },
             "min_node_count": {
               "Type": "Int",
-              "Required": true,
-              "Description": "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
+              "Optional": true,
+              "Description": "Minimum number of nodes per zone in the node pool. Must be \u003e=0 and \u003c= max_node_count. Cannot be used with total limits."
+            },
+            "total_max_node_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of all nodes in the node pool. Must be \u003e= total_min_node_count. Cannot be used with per zone limits."
+            },
+            "total_min_node_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Minimum number of all nodes in the node pool. Must be \u003e=0 and \u003c= total_max_node_count. Cannot be used with per zone limits."
             }
           }
         }
@@ -35602,6 +36109,39 @@
               "Default": {
                 "Type": "bool",
                 "Value": "false"
+              }
+            },
+            "reservation_affinity": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The reservation affinity configuration for the node pool.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "consume_reservation_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Corresponds to the type of reservation consumption."
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The label key of a reservation resource."
+                  },
+                  "values": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "The label values of the reservation resource.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
               }
             },
             "service_account": {
@@ -38497,6 +39037,7 @@
               "Type": "List",
               "Optional": true,
               "Description": "Optional. Configuration for CSV data.",
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -38555,6 +39096,7 @@
               "Type": "List",
               "Optional": true,
               "Description": "Optional. Configuration for Json data.",
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -38982,6 +39524,7 @@
               "Type": "List",
               "Optional": true,
               "Description": "Optional. Configuration for CSV data.",
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -39040,6 +39583,7 @@
               "Type": "List",
               "Optional": true,
               "Description": "Optional. Configuration for Json data.",
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -40339,12 +40883,12 @@
                                           "max_node_count": {
                                             "Type": "Int",
                                             "Optional": true,
-                                            "Description": "The maximum number of nodes in the node pool. Must be >= minNodeCount, and must be > 0."
+                                            "Description": "The maximum number of nodes in the node pool. Must be \u003e= minNodeCount, and must be \u003e 0."
                                           },
                                           "min_node_count": {
                                             "Type": "Int",
                                             "Optional": true,
-                                            "Description": "The minimum number of nodes in the node pool. Must be >= 0 and <= maxNodeCount."
+                                            "Description": "The minimum number of nodes in the node pool. Must be \u003e= 0 and \u003c= maxNodeCount."
                                           }
                                         }
                                       }
@@ -40363,7 +40907,7 @@
                                           "local_ssd_count": {
                                             "Type": "Int",
                                             "Optional": true,
-                                            "Description": "The minimum number of nodes in the node pool. Must be >= 0 and <= maxNodeCount."
+                                            "Description": "The minimum number of nodes in the node pool. Must be \u003e= 0 and \u003c= maxNodeCount."
                                           },
                                           "machine_type": {
                                             "Type": "String",
@@ -42991,6 +43535,34 @@
                                   "ElementsType": "String"
                                 }
                               },
+                              "shielded_instance_config": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "Optional. Shielded Instance Config for clusters using Compute Engine Shielded VMs.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "enable_integrity_monitoring": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Optional. Defines whether instances have integrity monitoring enabled. Integrity monitoring compares the most recent boot measurements to the integrity policy baseline and returns a pair of pass/fail results depending on whether they match or not."
+                                    },
+                                    "enable_secure_boot": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Optional. Defines whether the instances have Secure Boot enabled. Secure Boot helps ensure that the system only runs authentic software by verifying the digital signature of all boot components, and halting the boot process if signature verification fails."
+                                    },
+                                    "enable_vtpm": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Optional. Defines whether the instance have the vTPM enabled. Virtual Trusted Platform Module protects objects like keys, certificates and enables Measured Boot by performing the measurements needed to create a known good boot baseline, called the integrity policy baseline."
+                                    }
+                                  }
+                                }
+                              },
                               "subnetwork": {
                                 "Type": "String",
                                 "Optional": true,
@@ -43203,7 +43775,7 @@
                         "secondary_worker_config": {
                           "Type": "List",
                           "Optional": true,
-                          "Description": "Optional. The Compute Engine config settings for worker instances in a cluster.",
+                          "Description": "Optional. The Compute Engine config settings for additional worker instances in a cluster.",
                           "Computed": true,
                           "MaxItems": 1,
                           "IsBlock": true,
@@ -43700,6 +44272,287 @@
         }
       }
     },
+    "google_datastream_connection_profile": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "connection_profile_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The connection profile identifier."
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name."
+      },
+      "forward_ssh_connectivity": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Forward SSH tunnel connectivity.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "hostname": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Hostname for the SSH tunnel."
+            },
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "SSH password."
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Port for the SSH tunnel.",
+              "Default": {
+                "Type": "int",
+                "Value": "22"
+              }
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "SSH private key."
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Username for the SSH tunnel."
+            }
+          }
+        }
+      },
+      "gcs_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Cloud Storage bucket profile.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Cloud Storage bucket name."
+            },
+            "root_path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The root path inside the Cloud Storage bucket."
+            }
+          }
+        }
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Labels.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the location this repository is located in."
+      },
+      "mysql_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "MySQL database profile.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "hostname": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Hostname for the MySQL connection."
+            },
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Password for the MySQL connection."
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Port for the MySQL connection.",
+              "Default": {
+                "Type": "int",
+                "Value": "3306"
+              }
+            },
+            "ssl_config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "SSL configuration for the MySQL connection.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ca_certificate": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "PEM-encoded certificate of the CA that signed the source database\nserver's certificate."
+                  },
+                  "ca_certificate_set": {
+                    "Type": "Bool",
+                    "Description": "Indicates whether the clientKey field is set.",
+                    "Computed": true
+                  },
+                  "client_certificate": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "PEM-encoded certificate that will be used by the replica to\nauthenticate against the source database server. If this field\nis used then the 'clientKey' and the 'caCertificate' fields are\nmandatory."
+                  },
+                  "client_certificate_set": {
+                    "Type": "Bool",
+                    "Description": "Indicates whether the clientCertificate field is set.",
+                    "Computed": true
+                  },
+                  "client_key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "PEM-encoded private key associated with the Client Certificate.\nIf this field is used then the 'client_certificate' and the\n'ca_certificate' fields are mandatory."
+                  },
+                  "client_key_set": {
+                    "Type": "Bool",
+                    "Description": "Indicates whether the clientKey field is set.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Username for the MySQL connection."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The resource's name.",
+        "Computed": true
+      },
+      "oracle_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Oracle database profile.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_attributes": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Connection string attributes",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "database_service": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Database for the Oracle connection."
+            },
+            "hostname": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Hostname for the Oracle connection."
+            },
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Password for the Oracle connection."
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Port for the Oracle connection.",
+              "Default": {
+                "Type": "int",
+                "Value": "1521"
+              }
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Username for the Oracle connection."
+            }
+          }
+        }
+      },
+      "postgresql_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "PostgreSQL database profile.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "database": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Database for the PostgreSQL connection."
+            },
+            "hostname": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Hostname for the PostgreSQL connection."
+            },
+            "password": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Password for the PostgreSQL connection."
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Port for the PostgreSQL connection.",
+              "Default": {
+                "Type": "int",
+                "Value": "5432"
+              }
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Username for the PostgreSQL connection."
+            }
+          }
+        }
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "google_deployment_manager_deployment": {
       "__timeouts__": [
         "create",
@@ -43932,7 +44785,7 @@
       "default_language_code": {
         "Type": "String",
         "Required": true,
-        "Description": "The default language of the agent as a language tag. [See Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language) \nfor a list of the currently supported language codes. This field cannot be updated after creation."
+        "Description": "The default language of the agent as a language tag. [See Language Support](https://cloud.google.com/dialogflow/cx/docs/reference/language)\nfor a list of the currently supported language codes. This field cannot be updated after creation."
       },
       "description": {
         "Type": "String",
@@ -44064,7 +44917,7 @@
       "excluded_phrases": {
         "Type": "List",
         "Optional": true,
-        "Description": "Collection of exceptional words and phrases that shouldn't be matched. For example, if you have a size entity type with entry giant(an adjective), you might consider adding giants(a noun) as an exclusion. \nIf the kind of entity type is KIND_MAP, then the phrases specified by entities and excluded phrases should be mutually exclusive.",
+        "Description": "Collection of exceptional words and phrases that shouldn't be matched. For example, if you have a size entity type with entry giant(an adjective), you might consider adding giants(a noun) as an exclusion.\nIf the kind of entity type is KIND_MAP, then the phrases specified by entities and excluded phrases should be mutually exclusive.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -44096,7 +44949,7 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The agent to create a entity type for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
+        "Description": "The agent to create a entity type for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
       },
       "redact": {
         "Type": "Bool",
@@ -44128,7 +44981,7 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Agent to create an Environment for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
+        "Description": "The Agent to create an Environment for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
       },
       "update_time": {
         "Type": "String",
@@ -44192,12 +45045,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
+              "Description": "The target flow to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
+              "Description": "The target page to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -44277,7 +45130,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the flow. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>.",
+        "Description": "The unique identifier of the flow.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e.",
         "Computed": true
       },
       "nlu_settings": {
@@ -44293,7 +45146,7 @@
             "classification_threshold": {
               "Type": "Float",
               "Optional": true,
-              "Description": "To filter out false positive results and still get variety in matched natural language inputs for your agent, you can tune the machine learning classification threshold. \nIf the returned score value is less than the threshold value, then a no-match event will be triggered. The score values range from 0.0 (completely uncertain) to 1.0 (completely certain). If set to 0.0, the default of 0.3 is used."
+              "Description": "To filter out false positive results and still get variety in matched natural language inputs for your agent, you can tune the machine learning classification threshold.\nIf the returned score value is less than the threshold value, then a no-match event will be triggered. The score values range from 0.0 (completely uncertain) to 1.0 (completely certain). If set to 0.0, the default of 0.3 is used."
             },
             "model_training_mode": {
               "Type": "String",
@@ -44311,7 +45164,7 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The agent to create a flow for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>."
+        "Description": "The agent to create a flow for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
       },
       "transition_route_groups": {
         "Type": "List",
@@ -44326,7 +45179,7 @@
       "transition_routes": {
         "Type": "List",
         "Optional": true,
-        "Description": "A flow's transition routes serve two purposes:\nThey are responsible for matching the user's first utterances in the flow.\nThey are inherited by every page's [transition routes][Page.transition_routes] and can support use cases such as the user saying \"help\" or \"can I talk to a human?\", which can be handled in a common way regardless of the current page. Transition routes defined in the page have higher priority than those defined in the flow.\n  \nTransitionRoutes are evalauted in the following order:\n  TransitionRoutes with intent specified.\n  TransitionRoutes with only condition specified.\n  TransitionRoutes with intent specified are inherited by pages in the flow.",
+        "Description": "A flow's transition routes serve two purposes:\nThey are responsible for matching the user's first utterances in the flow.\nThey are inherited by every page's [transition routes][Page.transition_routes] and can support use cases such as the user saying \"help\" or \"can I talk to a human?\", which can be handled in a common way regardless of the current page. Transition routes defined in the page have higher priority than those defined in the flow.\n\nTransitionRoutes are evalauted in the following order:\n  TransitionRoutes with intent specified.\n  TransitionRoutes with only condition specified.\n  TransitionRoutes with intent specified are inherited by pages in the flow.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -44340,7 +45193,7 @@
             "intent": {
               "Type": "String",
               "Optional": true,
-              "Description": "The unique identifier of an Intent. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/intents/<Intent ID>. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
+              "Description": "The unique identifier of an Intent.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/intents/\u003cIntent ID\u003e. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
             },
             "name": {
               "Type": "String",
@@ -44350,12 +45203,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
+              "Description": "The target flow to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
+              "Description": "The target page to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -44448,7 +45301,7 @@
       "is_fallback": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether this is a fallback intent. Currently only default fallback intent is allowed in the agent, which is added upon agent creation. \nAdding training phrases to fallback intent is useful in the case of requests that are mistakenly matched, since training phrases assigned to fallback intents act as negative examples that triggers no-match event."
+        "Description": "Indicates whether this is a fallback intent. Currently only default fallback intent is allowed in the agent, which is added upon agent creation.\nAdding training phrases to fallback intent is useful in the case of requests that are mistakenly matched, since training phrases assigned to fallback intents act as negative examples that triggers no-match event."
       },
       "labels": {
         "Type": "Map",
@@ -44467,7 +45320,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the intent.  \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/intents/<Intent ID>.",
+        "Description": "The unique identifier of the intent.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/intents/\u003cIntent ID\u003e.",
         "Computed": true
       },
       "parameters": {
@@ -44482,7 +45335,7 @@
             "entity_type": {
               "Type": "String",
               "Required": true,
-              "Description": "The entity type of the parameter. \nFormat: projects/-/locations/-/agents/-/entityTypes/<System Entity Type ID> for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/entityTypes/<Entity Type ID> for developer entity types."
+              "Description": "The entity type of the parameter.\nFormat: projects/-/locations/-/agents/-/entityTypes/\u003cSystem Entity Type ID\u003e for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/entityTypes/\u003cEntity Type ID\u003e for developer entity types."
             },
             "id": {
               "Type": "String",
@@ -44497,7 +45350,7 @@
             "redact": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Indicates whether the parameter content should be redacted in log. If redaction is enabled, the parameter content will be replaced by parameter name during logging. \nNote: the parameter content is subject to redaction if either parameter level redaction or entity type level redaction is enabled."
+              "Description": "Indicates whether the parameter content should be redacted in log. If redaction is enabled, the parameter content will be replaced by parameter name during logging.\nNote: the parameter content is subject to redaction if either parameter level redaction or entity type level redaction is enabled."
             }
           }
         }
@@ -44658,12 +45511,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
+              "Description": "The target flow to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
+              "Description": "The target page to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -44763,7 +45616,7 @@
                   "entity_type": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The entity type of the parameter. \nFormat: projects/-/locations/-/agents/-/entityTypes/<System Entity Type ID> for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/entityTypes/<Entity Type ID> for developer entity types."
+                    "Description": "The entity type of the parameter.\nFormat: projects/-/locations/-/agents/-/entityTypes/\u003cSystem Entity Type ID\u003e for system entity types (for example, projects/-/locations/-/agents/-/entityTypes/sys.date), or projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/entityTypes/\u003cEntity Type ID\u003e for developer entity types."
                   },
                   "fill_behavior": {
                     "Type": "List",
@@ -44854,12 +45707,12 @@
                   "redact": {
                     "Type": "Bool",
                     "Optional": true,
-                    "Description": "Indicates whether the parameter content should be redacted in log. \nIf redaction is enabled, the parameter content will be replaced by parameter name during logging. Note: the parameter content is subject to redaction if either parameter level redaction or entity type level redaction is enabled."
+                    "Description": "Indicates whether the parameter content should be redacted in log.\nIf redaction is enabled, the parameter content will be replaced by parameter name during logging. Note: the parameter content is subject to redaction if either parameter level redaction or entity type level redaction is enabled."
                   },
                   "required": {
                     "Type": "Bool",
                     "Optional": true,
-                    "Description": "Indicates whether the parameter is required. Optional parameters will not trigger prompts; however, they are filled if the user specifies them. \nRequired parameters must be filled before form filling concludes."
+                    "Description": "Indicates whether the parameter is required. Optional parameters will not trigger prompts; however, they are filled if the user specifies them.\nRequired parameters must be filled before form filling concludes."
                   }
                 }
               }
@@ -44874,13 +45727,13 @@
       },
       "name": {
         "Type": "String",
-        "Description": "The unique identifier of the page. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>.",
+        "Description": "The unique identifier of the page.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e.",
         "Computed": true
       },
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The flow to create a page for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
+        "Description": "The flow to create a page for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
       },
       "transition_route_groups": {
         "Type": "List",
@@ -44909,7 +45762,7 @@
             "intent": {
               "Type": "String",
               "Optional": true,
-              "Description": "The unique identifier of an Intent. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/intents/<Intent ID>. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
+              "Description": "The unique identifier of an Intent.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/intents/\u003cIntent ID\u003e. Indicates that the transition can only happen when the given intent is matched. At least one of intent or condition must be specified. When both intent and condition are specified, the transition can only happen when both are fulfilled."
             },
             "name": {
               "Type": "String",
@@ -44919,12 +45772,12 @@
             "target_flow": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target flow to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
+              "Description": "The target flow to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
             },
             "target_page": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target page to transition to. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>/pages/<Page ID>."
+              "Description": "The target page to transition to.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e/pages/\u003cPage ID\u003e."
             },
             "trigger_fulfillment": {
               "Type": "List",
@@ -45036,7 +45889,7 @@
             "classification_threshold": {
               "Type": "Float",
               "Optional": true,
-              "Description": "To filter out false positive results and still get variety in matched natural language inputs for your agent, you can tune the machine learning classification threshold. If the returned score value is less than the threshold value, then a no-match event will be triggered. \nThe score values range from 0.0 (completely uncertain) to 1.0 (completely certain). If set to 0.0, the default of 0.3 is used."
+              "Description": "To filter out false positive results and still get variety in matched natural language inputs for your agent, you can tune the machine learning classification threshold. If the returned score value is less than the threshold value, then a no-match event will be triggered.\nThe score values range from 0.0 (completely uncertain) to 1.0 (completely certain). If set to 0.0, the default of 0.3 is used."
             },
             "model_training_mode": {
               "Type": "String",
@@ -45054,12 +45907,158 @@
       "parent": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Flow to create an Version for. \nFormat: projects/<Project ID>/locations/<Location ID>/agents/<Agent ID>/flows/<Flow ID>."
+        "Description": "The Flow to create an Version for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e."
       },
       "state": {
         "Type": "String",
         "Description": "The state of this version.\n* RUNNING: Version is not ready to serve (e.g. training is running).\n* SUCCEEDED: Training has succeeded and this version is ready to serve.\n* FAILED: Version training failed.",
         "Computed": true
+      }
+    },
+    "google_dialogflow_cx_webhook": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "disabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether the webhook is disabled."
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The human-readable name of the webhook, unique within the agent."
+      },
+      "enable_spell_correction": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates if automatic spell correction is enabled in detect intent requests."
+      },
+      "enable_stackdriver_logging": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Determines whether this agent should log conversation queries."
+      },
+      "generic_web_service": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configuration for a generic web service.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allowed_ca_certs": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specifies a list of allowed custom CA certificates (in DER format) for HTTPS verification.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "request_headers": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "The HTTP request headers to send together with webhook requests.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "uri": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to use speech adaptation for speech recognition."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The unique identifier of the webhook.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/webhooks/\u003cWebhook ID\u003e.",
+        "Computed": true
+      },
+      "parent": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The agent to create a webhook for.\nFormat: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e."
+      },
+      "security_settings": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the SecuritySettings reference for the agent. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/securitySettings/\u003cSecurity Settings ID\u003e."
+      },
+      "service_directory": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Configuration for a Service Directory service.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "generic_web_service": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The name of Service Directory service.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "allowed_ca_certs": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Specifies a list of allowed custom CA certificates (in DER format) for HTTPS verification.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "request_headers": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "The HTTP request headers to send together with webhook requests.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "uri": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Whether to use speech adaptation for speech recognition."
+                  }
+                }
+              }
+            },
+            "service": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of Service Directory service."
+            }
+          }
+        }
+      },
+      "start_flow": {
+        "Type": "String",
+        "Description": "Name of the start flow in this agent. A start flow will be automatically created when the agent is created, and can only be deleted by deleting the agent. Format: projects/\u003cProject ID\u003e/locations/\u003cLocation ID\u003e/agents/\u003cAgent ID\u003e/flows/\u003cFlow ID\u003e.",
+        "Computed": true
+      },
+      "timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Webhook execution timeout."
       }
     },
     "google_dialogflow_entity_type": {
@@ -45740,7 +46739,7 @@
       },
       "rrdatas": {
         "Type": "List",
-        "Required": true,
+        "Optional": true,
         "Description": "The string data for the records in this record set whose meaning depends on the DNS type. For TXT record, if the string data contains spaces, add surrounding \\\" if you don't want your string to get split on spaces. To specify a single record value longer than 255 characters such as a TXT record for DKIM, add \\\"\\\" inside the Terraform configuration string (e.g. \"first255characters\\\"\\\"morecharacters\").",
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -46596,6 +47595,63 @@
         "Description": "The name of the Filestore zone of the instance.",
         "Computed": true,
         "Deprecated": "Deprecated in favor of location."
+      }
+    },
+    "google_filestore_snapshot": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Description": "The time when the snapshot was created in RFC3339 text format.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A description of the snapshot with 2048 characters or less. Requests with longer descriptions will be rejected."
+      },
+      "filesystem_used_bytes": {
+        "Type": "String",
+        "Description": "The amount of bytes needed to allocate a full copy of the snapshot content.",
+        "Computed": true
+      },
+      "instance": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The resource name of the filestore instance."
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Resource labels to represent user-provided metadata.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the location of the instance. This can be a region for ENTERPRISE tier instances."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The resource name of the snapshot. The name must be unique within the specified instance.\n\nThe name must be 1-63 characters long, and comply with\nRFC1035. Specifically, the name must be 1-63 characters long and match\nthe regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means the\nfirst character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the last\ncharacter, which cannot be a dash."
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The snapshot state.",
+        "Computed": true
       }
     },
     "google_firebaserules_release": {
@@ -47869,6 +48925,124 @@
         "Computed": true
       }
     },
+    "google_gke_hub_membership_iam_binding": {
+      "condition": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "expression": {
+              "Type": "String",
+              "Required": true
+            },
+            "title": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "members": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "google_gke_hub_membership_iam_member": {
+      "condition": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "expression": {
+              "Type": "String",
+              "Required": true
+            },
+            "title": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "member": {
+        "Type": "String",
+        "Required": true
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "google_gke_hub_membership_iam_policy": {
+      "etag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "membership_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "policy_data": {
+        "Type": "String",
+        "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "google_healthcare_consent_store": {
       "__timeouts__": [
         "create",
@@ -48882,7 +50056,7 @@
             "allowed_audiences": {
               "Type": "List",
               "Optional": true,
-              "Description": "Acceptable values for the 'aud' field (audience) in the OIDC token. Token exchange\nrequests are rejected if the token audience does not match one of the configured\nvalues. Each audience may be at most 256 characters. A maximum of 10 audiences may\nbe configured.\n\nIf this list is empty, the OIDC token audience must be equal to the full canonical\nresource name of the WorkloadIdentityPoolProvider, with or without the HTTPS prefix.\nFor example:\n'''\n//iam.googleapis.com/projects/<project-number>/locations/<location>/workloadIdentityPools/<pool-id>/providers/<provider-id>\nhttps://iam.googleapis.com/projects/<project-number>/locations/<location>/workloadIdentityPools/<pool-id>/providers/<provider-id>\n'''",
+              "Description": "Acceptable values for the 'aud' field (audience) in the OIDC token. Token exchange\nrequests are rejected if the token audience does not match one of the configured\nvalues. Each audience may be at most 256 characters. A maximum of 10 audiences may\nbe configured.\n\nIf this list is empty, the OIDC token audience must be equal to the full canonical\nresource name of the WorkloadIdentityPoolProvider, with or without the HTTPS prefix.\nFor example:\n'''\n//iam.googleapis.com/projects/\u003cproject-number\u003e/locations/\u003clocation\u003e/workloadIdentityPools/\u003cpool-id\u003e/providers/\u003cprovider-id\u003e\nhttps://iam.googleapis.com/projects/\u003cproject-number\u003e/locations/\u003clocation\u003e/workloadIdentityPools/\u003cpool-id\u003e/providers/\u003cprovider-id\u003e\n'''",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -50897,7 +52071,7 @@
       "exclusions": {
         "Type": "List",
         "Optional": true,
-        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion_filters it will not be exported.",
+        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion's filters, it will not be exported.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -51052,7 +52226,7 @@
       "exclusions": {
         "Type": "List",
         "Optional": true,
-        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion_filters it will not be exported.",
+        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion's filters, it will not be exported.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -51112,6 +52286,55 @@
       "writer_identity": {
         "Type": "String",
         "Description": "The identity associated with this sink. This identity must be granted write access to the configured destination.",
+        "Computed": true
+      }
+    },
+    "google_logging_log_view": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "bucket": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The bucket of the resource"
+      },
+      "create_time": {
+        "Type": "String",
+        "Description": "Output only. The creation timestamp of the view.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Describes this view."
+      },
+      "filter": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Filter that restricts which log entries in a bucket are visible in this view. Filters are restricted to be a logical AND of ==/!= of any of the following: - originating project/folder/organization/billing account. - resource type - log id For example: SOURCE(\"projects/myproject\") AND resource.type = \"gce_instance\" AND LOG_ID(\"stdout\")"
+      },
+      "location": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The location of the resource. The supported locations are: global, us-central1, us-east1, us-west1, asia-east1, europe-west1.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The resource name of the view. For example: `projects/my-project/locations/global/buckets/my-bucket/views/my-view`"
+      },
+      "parent": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The parent of the resource.",
+        "Computed": true
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "Output only. The last update timestamp of the view.",
         "Computed": true
       }
     },
@@ -51472,7 +52695,7 @@
       "exclusions": {
         "Type": "List",
         "Optional": true,
-        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion_filters it will not be exported.",
+        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion's filters, it will not be exported.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -51642,7 +52865,7 @@
       "exclusions": {
         "Type": "List",
         "Optional": true,
-        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion_filters it will not be exported.",
+        "Description": "Log entries that match any of the exclusion filters will not be exported. If a log entry is matched by both filter and one of exclusion's filters, it will not be exported.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -52772,6 +53995,27 @@
         "Description": "Immutable. The resource name of the `MonitoredProject`. On input, the resource name includes the scoping project ID and monitored project ID. On output, it contains the equivalent project numbers. Example: `locations/global/metricsScopes/{SCOPING_PROJECT_ID_OR_NUMBER}/projects/{MONITORED_PROJECT_ID_OR_NUMBER}`"
       }
     },
+    "google_monitoring_monitored_project": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Description": "Output only. The time when this `MonitoredProject` was created.",
+        "Computed": true
+      },
+      "metrics_scope": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Required. The resource name of the existing Metrics Scope that will monitor this project. Example: locations/global/metricsScopes/{SCOPING_PROJECT_ID_OR_NUMBER}"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Immutable. The resource name of the `MonitoredProject`. On input, the resource name includes the scoping project ID and monitored project ID. On output, it contains the equivalent project numbers. Example: `locations/global/metricsScopes/{SCOPING_PROJECT_ID_OR_NUMBER}/projects/{MONITORED_PROJECT_ID_OR_NUMBER}`"
+      }
+    },
     "google_monitoring_notification_channel": {
       "__timeouts__": [
         "create",
@@ -52795,6 +54039,14 @@
         "Default": {
           "Type": "bool",
           "Value": "true"
+        }
+      },
+      "force_delete": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "labels": {
@@ -54730,18 +55982,18 @@
                                     "client_ttl": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "Specifies a separate client (e.g. browser client) TTL, separate from the TTL used by the edge caches. Leaving this empty will use the same cache TTL for both the CDN and the client-facing response.\n\n- The TTL must be > 0 and <= 86400s (1 day)\n- The clientTtl cannot be larger than the defaultTtl (if set)\n- Fractions of a second are not allowed.\n\nOmit this field to use the defaultTtl, or the max-age set by the origin, as the client-facing TTL.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\nA duration in seconds terminated by 's'. Example: \"3s\"."
+                                      "Description": "Specifies a separate client (e.g. browser client) TTL, separate from the TTL used by the edge caches. Leaving this empty will use the same cache TTL for both the CDN and the client-facing response.\n\n- The TTL must be \u003e 0 and \u003c= 86400s (1 day)\n- The clientTtl cannot be larger than the defaultTtl (if set)\n- Fractions of a second are not allowed.\n\nOmit this field to use the defaultTtl, or the max-age set by the origin, as the client-facing TTL.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\nA duration in seconds terminated by 's'. Example: \"3s\"."
                                     },
                                     "default_ttl": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "Specifies the default TTL for cached content served by this origin for responses that do not have an existing valid TTL (max-age or s-max-age).\n\nDefaults to 3600s (1 hour).\n\n- The TTL must be >= 0 and <= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\" (equivalent to must-revalidate)\n- The value of defaultTTL cannot be set to a value greater than that of maxTTL.\n- Fractions of a second are not allowed.\n- When the cacheMode is set to FORCE_CACHE_ALL, the defaultTTL will overwrite the TTL set in all responses.\n\nNote that infrequently accessed objects may be evicted from the cache before the defined TTL. Objects that expire will be revalidated with the origin.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
+                                      "Description": "Specifies the default TTL for cached content served by this origin for responses that do not have an existing valid TTL (max-age or s-max-age).\n\nDefaults to 3600s (1 hour).\n\n- The TTL must be \u003e= 0 and \u003c= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\" (equivalent to must-revalidate)\n- The value of defaultTTL cannot be set to a value greater than that of maxTTL.\n- Fractions of a second are not allowed.\n- When the cacheMode is set to FORCE_CACHE_ALL, the defaultTTL will overwrite the TTL set in all responses.\n\nNote that infrequently accessed objects may be evicted from the cache before the defined TTL. Objects that expire will be revalidated with the origin.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\" or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                       "Computed": true
                                     },
                                     "max_ttl": {
                                       "Type": "String",
                                       "Optional": true,
-                                      "Description": "Specifies the maximum allowed TTL for cached content served by this origin.\n\nDefaults to 86400s (1 day).\n\nCache directives that attempt to set a max-age or s-maxage higher than this, or an Expires header more than maxTtl seconds in the future will be capped at the value of maxTTL, as if it were the value of an s-maxage Cache-Control directive.\n\n- The TTL must be >= 0 and <= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\"\n- The value of maxTtl must be equal to or greater than defaultTtl.\n- Fractions of a second are not allowed.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\", \"FORCE_CACHE_ALL\", or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
+                                      "Description": "Specifies the maximum allowed TTL for cached content served by this origin.\n\nDefaults to 86400s (1 day).\n\nCache directives that attempt to set a max-age or s-maxage higher than this, or an Expires header more than maxTtl seconds in the future will be capped at the value of maxTTL, as if it were the value of an s-maxage Cache-Control directive.\n\n- The TTL must be \u003e= 0 and \u003c= 31,536,000 seconds (1 year)\n- Setting a TTL of \"0\" means \"always revalidate\"\n- The value of maxTtl must be equal to or greater than defaultTtl.\n- Fractions of a second are not allowed.\n\nWhen the cache mode is set to \"USE_ORIGIN_HEADERS\", \"FORCE_CACHE_ALL\", or \"BYPASS_CACHE\", you must omit this field.\n\nA duration in seconds terminated by 's'. Example: \"3s\".",
                                       "Computed": true
                                     },
                                     "negative_caching": {
@@ -61144,7 +62396,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Type of this CertificateAuthority.\n\n~> **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
+        "Description": "The Type of this CertificateAuthority.\n\n~\u003e **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
         "Default": {
           "Type": "string",
           "Value": "SELF_SIGNED"
@@ -62525,7 +63777,7 @@
             "table": {
               "Type": "String",
               "Required": true,
-              "Description": "The name of the table to which to write data, of the form {projectId}.{datasetId}.{tableId}"
+              "Description": "The name of the table to which to write data, of the form {projectId}:{datasetId}.{tableId}"
             },
             "use_topic_schema": {
               "Type": "Bool",
@@ -62858,7 +64110,7 @@
       "message_retention_duration": {
         "Type": "String",
         "Optional": true,
-        "Description": "Indicates the minimum duration to retain a message after it is published\nto the topic. If this field is set, messages published to the topic in\nthe last messageRetentionDuration are always available to subscribers.\nFor instance, it allows any attached subscription to seek to a timestamp\nthat is up to messageRetentionDuration in the past. If this field is not\nset, message retention is controlled by settings on individual subscriptions.\nCannot be more than 7 days or less than 10 minutes."
+        "Description": "Indicates the minimum duration to retain a message after it is published\nto the topic. If this field is set, messages published to the topic in\nthe last messageRetentionDuration are always available to subscribers.\nFor instance, it allows any attached subscription to seek to a timestamp\nthat is up to messageRetentionDuration in the past. If this field is not\nset, message retention is controlled by settings on individual subscriptions.\nCannot be more than 31 days or less than 10 minutes."
       },
       "message_storage_policy": {
         "Type": "List",
@@ -66083,6 +67335,7 @@
         "Type": "List",
         "Optional": true,
         "Description": "The bucket's Versioning configuration.",
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -67621,7 +68874,7 @@
             "kms_key_name": {
               "Type": "String",
               "Optional": true,
-              "Description": "Required. The Cloud KMS resource identifier of the customer managed encryption key used to protect a resource. \nHas the form: projects/my-project/locations/my-region/keyRings/my-kr/cryptoKeys/my-key. The key needs to be in the same region as where the resource is created."
+              "Description": "Required. The Cloud KMS resource identifier of the customer managed encryption key used to protect a resource.\nHas the form: projects/my-project/locations/my-region/keyRings/my-kr/cryptoKeys/my-key. The key needs to be in the same region as where the resource is created."
             }
           }
         }
@@ -68437,7 +69690,7 @@
                                           },
                                           "name": {
                                             "Type": "String",
-                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/<project-id|project-number>/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation.",
+                                            "Description": "The name of the secret in Cloud Secret Manager. By default, the secret is assumed to be in the same project. \nIf the secret is in another project, you must define an alias. \nAn alias definition has the form: :projects/{project-id|project-number}/secrets/. \nIf multiple alias definitions are needed, they must be separated by commas. \nThe alias definitions must be set on the run.googleapis.com/secrets annotation.",
                                             "Computed": true
                                           }
                                         }
@@ -68550,7 +69803,7 @@
                             "Info": {
                               "container_port": {
                                 "Type": "Int",
-                                "Description": "Port number the container listens on. This must be a valid port number, 0 < x < 65536.",
+                                "Description": "Port number the container listens on. This must be a valid port number, 0 \u003c x \u003c 65536.",
                                 "Computed": true
                               },
                               "name": {
@@ -68700,7 +69953,7 @@
                               },
                               "secret_name": {
                                 "Type": "String",
-                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n<alias>:projects/<project-id|project-number>/secrets/<secret-name>.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation.",
+                                "Description": "The name of the secret in Cloud Secret Manager. By default, the secret\nis assumed to be in the same project.\nIf the secret is in another project, you must define an alias.\nAn alias definition has the form:\n{alias}:projects/{project-id|project-number}/secrets/{secret-name}.\nIf multiple alias definitions are needed, they must be separated by\ncommas.\nThe alias definitions must be set on the run.googleapis.com/secrets\nannotation.",
                                 "Computed": true
                               }
                             }
@@ -68841,6 +70094,11 @@
       "ingress_settings": {
         "Type": "String",
         "Description": "String value that controls what traffic can reach the function. Allowed values are ALLOW_ALL and ALLOW_INTERNAL_ONLY. Changes to this field will recreate the cloud function.",
+        "Computed": true
+      },
+      "kms_key_name": {
+        "Type": "String",
+        "Description": "Resource name of a KMS crypto key (managed by the user) used to encrypt/decrypt function resources.",
         "Computed": true
       },
       "kms_key_name": {
@@ -69334,7 +70592,7 @@
                   },
                   "env_variables": {
                     "Type": "Map",
-                    "Description": "Additional environment variables to provide to the Apache Airflow schedulerf, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
+                    "Description": "Additional environment variables to provide to the Apache Airflow scheduler, worker, and webserver processes. Environment variable names must match the regular expression [a-zA-Z_][a-zA-Z0-9_]*. They cannot specify Apache Airflow software configuration overrides (they cannot match the regular expression AIRFLOW__[A-Z0-9_]+__[A-Z0-9_]+), and they cannot match any of the following reserved names: AIRFLOW_HOME C_FORCE_ROOT CONTAINER_NAME DAGS_FOLDER GCP_PROJECT GCS_BUCKET GKE_CLUSTER_NAME SQL_DATABASE SQL_INSTANCE SQL_PASSWORD SQL_PROJECT SQL_REGION SQL_USER.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -69675,7 +70933,7 @@
                   },
                   "query_string_whitelist": {
                     "Type": "List",
-                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '&' and '=' will\nbe percent encoded and not treated as delimiters.",
+                    "Description": "Names of query string parameters to include in cache keys.\nDefault parameters are always included. '\u0026' and '=' will\nbe percent encoded and not treated as delimiters.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -70404,12 +71662,12 @@
     "google_compute_disk": {
       "creation_timestamp": {
         "Type": "String",
-        "Description": "[Output Only] Creation timestamp in [RFC3339](https://www.ietf.org/rfc/rfc3339.txt) text format.",
+        "Description": "Creation timestamp in RFC3339 text format.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Description": "An optional description of this resource. Provide this property when you create the resource.",
+        "Description": "An optional description of this resource. Provide this property when\nyou create the resource.",
         "Computed": true
       },
       "disk_encryption_key": {
@@ -70456,7 +71714,7 @@
       },
       "labels": {
         "Type": "Map",
-        "Description": "Labels to apply to this disk.  A list of key->value pairs.",
+        "Description": "Labels to apply to this disk.  A list of key-\u003evalue pairs.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -70499,7 +71757,7 @@
       },
       "size": {
         "Type": "Int",
-        "Description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~>**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
+        "Description": "Size of the persistent disk, specified in GB. You can specify this\nfield when creating a persistent disk using the 'image' or\n'snapshot' parameter, or specify it alone to create an empty\npersistent disk.\n\nIf you specify this field along with 'image' or 'snapshot',\nthe value must not be less than the size of the image\nor the size of the snapshot.\n\n~\u003e**NOTE** If you change the size, Terraform updates the disk size\nif upsizing is detected but recreates the disk if downsizing is requested.\nYou can add 'lifecycle.prevent_destroy' in the config to prevent destroying\nand recreating.",
         "Computed": true
       },
       "snapshot": {
@@ -71849,7 +73107,7 @@
       },
       "resource_policies": {
         "Type": "List",
-        "Description": "A list of short names or self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
+        "Description": "A list of self_links of resource policies to attach to the instance. Currently a max of 1 resource policy is supported.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -71869,6 +73127,11 @@
             "automatic_restart": {
               "Type": "Bool",
               "Description": "Specifies if the instance should be restarted if it was terminated by Compute Engine (not a user).",
+              "Computed": true
+            },
+            "instance_termination_action": {
+              "Type": "String",
+              "Description": "Specifies the action GCE should take when SPOT VM is preempted.",
               "Computed": true
             },
             "instance_termination_action": {
@@ -73198,6 +74461,11 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "chain_name": {
+                    "Type": "String",
+                    "Description": "Creates the new snapshot in the snapshot chain labeled with the \nspecified name. The chain name must be 1-63 characters long and comply \nwith RFC1035.",
+                    "Computed": true
+                  },
                   "guest_flush": {
                     "Type": "Bool",
                     "Description": "Whether to perform a 'guest aware' snapshot.",
@@ -74895,6 +76163,38 @@
               "Description": "Whether the nodes are created as preemptible VM instances.",
               "Computed": true
             },
+            "reservation_affinity": {
+              "Type": "List",
+              "Description": "The reservation affinity configuration for the node pool.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "consume_reservation_type": {
+                    "Type": "String",
+                    "Description": "Corresponds to the type of reservation consumption.",
+                    "Computed": true
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Description": "The label key of a reservation resource.",
+                    "Computed": true
+                  },
+                  "values": {
+                    "Type": "Set",
+                    "Description": "The label values of the reservation resource.",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
             "service_account": {
               "Type": "String",
               "Description": "The Google Cloud Platform Service Account to be used by the node VMs.",
@@ -75012,14 +76312,29 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "location_policy": {
+                    "Type": "String",
+                    "Description": "Location policy specifies the algorithm used when scaling-up the node pool. \"BALANCED\" - Is a best effort policy that aims to balance the sizes of available zones. \"ANY\" - Instructs the cluster autoscaler to prioritize utilization of unused reservations, and reduces preemption risk for Spot VMs.",
+                    "Computed": true
+                  },
                   "max_node_count": {
                     "Type": "Int",
-                    "Description": "Maximum number of nodes in the NodePool. Must be >= min_node_count.",
+                    "Description": "Maximum number of nodes per zone in the node pool. Must be \u003e= min_node_count. Cannot be used with total limits.",
                     "Computed": true
                   },
                   "min_node_count": {
                     "Type": "Int",
-                    "Description": "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count.",
+                    "Description": "Minimum number of nodes per zone in the node pool. Must be \u003e=0 and \u003c= max_node_count. Cannot be used with total limits.",
+                    "Computed": true
+                  },
+                  "total_max_node_count": {
+                    "Type": "Int",
+                    "Description": "Maximum number of all nodes in the node pool. Must be \u003e= total_min_node_count. Cannot be used with per zone limits.",
+                    "Computed": true
+                  },
+                  "total_min_node_count": {
+                    "Type": "Int",
+                    "Description": "Minimum number of all nodes in the node pool. Must be \u003e=0 and \u003c= total_max_node_count. Cannot be used with per zone limits.",
                     "Computed": true
                   }
                 }
@@ -75236,6 +76551,38 @@
                     "Type": "Bool",
                     "Description": "Whether the nodes are created as preemptible VM instances.",
                     "Computed": true
+                  },
+                  "reservation_affinity": {
+                    "Type": "List",
+                    "Description": "The reservation affinity configuration for the node pool.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "consume_reservation_type": {
+                          "Type": "String",
+                          "Description": "Corresponds to the type of reservation consumption.",
+                          "Computed": true
+                        },
+                        "key": {
+                          "Type": "String",
+                          "Description": "The label key of a reservation resource.",
+                          "Computed": true
+                        },
+                        "values": {
+                          "Type": "Set",
+                          "Description": "The label values of the reservation resource.",
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
                   },
                   "service_account": {
                     "Type": "String",
@@ -75558,6 +76905,23 @@
         "Type": "String",
         "Description": "Server-defined URL for the resource.",
         "Computed": true
+      },
+      "service_external_ips_config": {
+        "Type": "List",
+        "Description": "If set, and enabled=true, services with external ips field will not be blocked",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Description": "When enabled, services with exterenal ips specified will be allowed.",
+              "Computed": true
+            }
+          }
+        }
       },
       "services_ipv4_cidr": {
         "Type": "String",
@@ -77003,6 +78367,10 @@
         "Description": "Whether notifications are forwarded to the described channel. This makes it possible to disable delivery of notifications to a particular channel without removing the channel from all alerting policies that reference the channel. This is a more convenient approach when the change is temporary and you want to receive notifications from the same set of alerting policies on the channel at some point in the future.",
         "Computed": true
       },
+      "force_delete": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "labels": {
         "Type": "Map",
         "Optional": true,
@@ -77727,7 +79095,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The Type of this CertificateAuthority.\n\n~> **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
+        "Description": "The Type of this CertificateAuthority.\n\n~\u003e **Note:** For 'SUBORDINATE' Certificate Authorities, they need to\nbe activated before they can issue certificates. Default value: \"SELF_SIGNED\" Possible values: [\"SELF_SIGNED\", \"SUBORDINATE\"]",
         "Computed": true
       },
       "update_time": {
@@ -78003,7 +79371,7 @@
       },
       "message_retention_duration": {
         "Type": "String",
-        "Description": "Indicates the minimum duration to retain a message after it is published\nto the topic. If this field is set, messages published to the topic in\nthe last messageRetentionDuration are always available to subscribers.\nFor instance, it allows any attached subscription to seek to a timestamp\nthat is up to messageRetentionDuration in the past. If this field is not\nset, message retention is controlled by settings on individual subscriptions.\nCannot be more than 7 days or less than 10 minutes.",
+        "Description": "Indicates the minimum duration to retain a message after it is published\nto the topic. If this field is set, messages published to the topic in\nthe last messageRetentionDuration are always available to subscribers.\nFor instance, it allows any attached subscription to seek to a timestamp\nthat is up to messageRetentionDuration in the past. If this field is not\nset, message retention is controlled by settings on individual subscriptions.\nCannot be more than 31 days or less than 10 minutes.",
         "Computed": true
       },
       "message_storage_policy": {
@@ -78800,6 +80168,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "expires_in": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds until the JWT expires. If set and non-zero an `exp` claim will be added to the payload derived from the current timestamp plus expires_in seconds."
       },
       "jwt": {
         "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "fastly",
   "type": "provider",
-  "version": "v0.41.0",
+  "version": "v2.3.2",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -29,7 +29,7 @@
     "no_auth": {
       "Type": "Bool",
       "Optional": true,
-      "Description": "Set this to `true` if you only need data source that does not require authentication such as `fastly_ip_ranges`",
+      "Description": "Set to `true` if your configuration only consumes data sources that do not require authentication, such as `fastly_ip_ranges`",
       "Default": {
         "Type": "bool",
         "Value": "false"
@@ -37,7 +37,7 @@
     }
   },
   "resources": {
-    "fastly_service_acl_entries_v1": {
+    "fastly_service_acl_entries": {
       "acl_id": {
         "Type": "String",
         "Required": true,
@@ -85,10 +85,41 @@
           }
         }
       },
+      "manage_entries": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to reapply changes if the state of the entries drifts, i.e. if entries are managed externally",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "service_id": {
         "Type": "String",
         "Required": true,
         "Description": "The ID of the Service that the ACL belongs to"
+      }
+    },
+    "fastly_service_authorization": {
+      "id": {
+        "Type": "String",
+        "Description": "The ID of this service authorization.",
+        "Computed": true
+      },
+      "permission": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The permissions to grant the user. Can be `full`, `read_only`, `purge_select` or `purge_all`."
+      },
+      "service_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the service to grant permissions for."
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the user which will receive the granted permissions."
       }
     },
     "fastly_service_compute": {
@@ -108,7 +139,7 @@
       },
       "backend": {
         "Type": "Set",
-        "Required": true,
+        "Optional": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -122,10 +153,10 @@
             "auto_loadbalance": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Denotes if this Backend should be included in the pool of backends that requests are load balanced against. Default `true`",
+              "Description": "Denotes if this Backend should be included in the pool of backends that requests are load balanced against. Default `false`",
               "Default": {
                 "Type": "bool",
-                "Value": "true"
+                "Value": "false"
               }
             },
             "between_bytes_timeout": {
@@ -314,7 +345,90 @@
           }
         }
       },
-      "bigquerylogging": {
+      "cloned_version": {
+        "Type": "Int",
+        "Description": "The latest cloned version by the provider",
+        "Computed": true
+      },
+      "comment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description field for the service. Default `Managed by Terraform`",
+        "Default": {
+          "Type": "string",
+          "Value": "Managed by Terraform"
+        }
+      },
+      "dictionary": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dictionary_id": {
+              "Type": "String",
+              "Description": "The ID of the dictionary",
+              "Computed": true
+            },
+            "force_destroy": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow the dictionary to be deleted, even if it contains entries. Defaults to false.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this dictionary. It is important to note that changing this attribute will delete and recreate the dictionary, and discard the current items in the dictionary"
+            },
+            "write_only": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If `true`, the dictionary is a [private dictionary](https://docs.fastly.com/en/guides/private-dictionaries). Default is `false`. Please note that changing this attribute will delete and recreate the dictionary, and discard the current items in the dictionary. `fastly_service_vcl` resource will only manage the dictionary object itself, and items under private dictionaries can not be managed using [`fastly_service_dictionary_items`](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#limitations) resource. Therefore, using a write-only/private dictionary should only be done if the items are managed outside of Terraform",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "domain": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "A set of Domain names to serve as entry points for your Service",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comment": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "An optional comment about the Domain."
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The domain that this Service will respond to. It is important to note that changing this attribute will delete and recreate the resource."
+            }
+          }
+        }
+      },
+      "force_destroy": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Services that are active cannot be destroyed. In order to destroy the Service, set `force_destroy` to `true`. Default `false`",
+        "ConflictsWith": [
+          "reuse"
+        ]
+      },
+      "logging_bigquery": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -365,7 +479,7 @@
           }
         }
       },
-      "blobstoragelogging": {
+      "logging_blobstorage": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -448,484 +562,6 @@
               "Default": {
                 "Type": "string",
                 "Value": "%Y-%m-%dT%H:%M:%S.000"
-              }
-            }
-          }
-        }
-      },
-      "cloned_version": {
-        "Type": "Int",
-        "Description": "The latest cloned version by the provider",
-        "Computed": true
-      },
-      "comment": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Description field for the service. Default `Managed by Terraform`",
-        "Default": {
-          "Type": "string",
-          "Value": "Managed by Terraform"
-        }
-      },
-      "default_host": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The default hostname"
-      },
-      "default_ttl": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The default Time-to-live (TTL) for requests",
-        "Default": {
-          "Type": "int",
-          "Value": "3600"
-        }
-      },
-      "dictionary": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "dictionary_id": {
-              "Type": "String",
-              "Description": "The ID of the dictionary",
-              "Computed": true
-            },
-            "force_destroy": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Allow the dictionary to be deleted, even if it contains entries. Defaults to false.",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this dictionary. It is important to note that changing this attribute will delete and recreate the dictionary, and discard the current items in the dictionary"
-            },
-            "write_only": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "If `true`, the dictionary is a [private dictionary](https://docs.fastly.com/en/guides/private-dictionaries). Default is `false`. Please note that changing this attribute will delete and recreate the dictionary, and discard the current items in the dictionary. `fastly_service_v1` resource will only manage the dictionary object itself, and items under private dictionaries can not be managed using [`fastly_service_dictionary_items_v1`](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items_v1#limitations) resource. Therefore, using a write-only/private dictionary should only be done if the items are managed outside of Terraform",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
-            }
-          }
-        }
-      },
-      "director": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "backends": {
-              "Type": "Set",
-              "Required": true,
-              "Description": "Names of defined backends to map the director to. Example: `[ \"origin1\", \"origin2\" ]`",
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            },
-            "capacity": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Load balancing weight for the backends. Default `100`",
-              "Default": {
-                "Type": "int",
-                "Value": "100"
-              }
-            },
-            "comment": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "An optional comment about the Director"
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Unique name for this Director. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "quorum": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Percentage of capacity that needs to be up for the director itself to be considered up. Default `75`",
-              "Default": {
-                "Type": "int",
-                "Value": "75"
-              }
-            },
-            "retries": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How many backends to search if it fails. Default `5`",
-              "Default": {
-                "Type": "int",
-                "Value": "5"
-              }
-            },
-            "shield": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Selected POP to serve as a \"shield\" for backends. Valid values for `shield` are included in the [`GET /datacenters`](https://developer.fastly.com/reference/api/utils/datacenter/) API response",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "type": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Type of load balance group to use. Integer, 1 to 4. Values: `1` (random), `3` (hash), `4` (client). Default `1`",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
-              }
-            }
-          }
-        }
-      },
-      "domain": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "A set of Domain names to serve as entry points for your Service",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "comment": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "An optional comment about the Domain."
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The domain that this Service will respond to. It is important to note that changing this attribute will delete and recreate the resource."
-            }
-          }
-        }
-      },
-      "force_destroy": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Services that are active cannot be destroyed. In order to destroy the Service, set `force_destroy` to `true`. Default `false`"
-      },
-      "gcslogging": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "bucket_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of the bucket in which to store the logs"
-            },
-            "compression_codec": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
-            },
-            "email": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The email address associated with the target GCS bucket on your account. You may optionally provide this secret via an environment variable, `FASTLY_GCS_EMAIL`",
-              "DefaultFunc": "ENV(FASTLY_GCS_EMAIL)"
-            },
-            "gzip_level": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
-              "Default": {
-                "Type": "int",
-                "Value": "0"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this GCS endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "path": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
-            },
-            "period": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How frequently the logs should be transferred, in seconds (Default 3600)",
-              "Default": {
-                "Type": "int",
-                "Value": "3600"
-              }
-            },
-            "secret_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The secret key associated with the target gcs bucket on your account. You may optionally provide this secret via an environment variable, `FASTLY_GCS_SECRET_KEY`. A typical format for the key is PEM format, containing actual newline characters where required",
-              "DefaultFunc": "ENV(FASTLY_GCS_SECRET_KEY)"
-            },
-            "timestamp_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%Y-%m-%dT%H:%M:%S.000"
-              }
-            }
-          }
-        }
-      },
-      "healthcheck": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "check_interval": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How often to run the Healthcheck in milliseconds. Default `5000`",
-              "Default": {
-                "Type": "int",
-                "Value": "5000"
-              }
-            },
-            "expected_response": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The status code expected from the host. Default `200`",
-              "Default": {
-                "Type": "int",
-                "Value": "200"
-              }
-            },
-            "host": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The Host header to send for this Healthcheck"
-            },
-            "http_version": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Whether to use version 1.0 or 1.1 HTTP. Default `1.1`",
-              "Default": {
-                "Type": "string",
-                "Value": "1.1"
-              }
-            },
-            "initial": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "When loading a config, the initial number of probes to be seen as OK. Default `3`",
-              "Default": {
-                "Type": "int",
-                "Value": "3"
-              }
-            },
-            "method": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Which HTTP method to use. Default `HEAD`",
-              "Default": {
-                "Type": "string",
-                "Value": "HEAD"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this Healthcheck. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "path": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The path to check"
-            },
-            "threshold": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How many Healthchecks must succeed to be considered healthy. Default `3`",
-              "Default": {
-                "Type": "int",
-                "Value": "3"
-              }
-            },
-            "timeout": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Timeout in milliseconds. Default `500`",
-              "Default": {
-                "Type": "int",
-                "Value": "500"
-              }
-            },
-            "window": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The number of most recent Healthcheck queries to keep for this Healthcheck. Default `5`",
-              "Default": {
-                "Type": "int",
-                "Value": "5"
-              }
-            }
-          }
-        }
-      },
-      "httpslogging": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "content_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Value of the `Content-Type` header sent with the request"
-            },
-            "header_name": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Custom header sent with the request"
-            },
-            "header_value": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Value of the custom header sent with the request"
-            },
-            "json_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Formats log entries as JSON. Can be either disabled (`0`), array of json (`1`), or newline delimited json (`2`)",
-              "Default": {
-                "Type": "string",
-                "Value": "0"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "blank"
-              }
-            },
-            "method": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "HTTP method used for request. Can be either `POST` or `PUT`. Default `POST`",
-              "Default": {
-                "Type": "string",
-                "Value": "POST"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The unique name of the HTTPS logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "request_max_bytes": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The maximum number of bytes sent in one request"
-            },
-            "request_max_entries": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The maximum number of logs sent in one request"
-            },
-            "tls_ca_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A secure certificate to authenticate the server with. Must be in PEM format"
-            },
-            "tls_client_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client certificate used to make authenticated requests. Must be in PEM format"
-            },
-            "tls_client_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client private key used to make authenticated requests. Must be in PEM format"
-            },
-            "tls_hostname": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Used during the TLS handshake to validate the certificate"
-            },
-            "url": {
-              "Type": "String",
-              "Required": true,
-              "Description": "URL that log data will be sent to. Must use the https protocol"
-            }
-          }
-        }
-      },
-      "logentries": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The unique name of the Logentries logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "port": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The port number configured in Logentries",
-              "Default": {
-                "Type": "int",
-                "Value": "20000"
-              }
-            },
-            "token": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Use token based authentication (https://logentries.com/doc/input-token/)"
-            },
-            "use_tls": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether to use TLS for secure logging",
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
               }
             }
           }
@@ -1297,6 +933,85 @@
           }
         }
       },
+      "logging_gcs": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the bucket in which to store the logs"
+            },
+            "compression_codec": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
+            },
+            "gzip_level": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "classic"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this GCS endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
+            },
+            "period": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How frequently the logs should be transferred, in seconds (Default 3600)",
+              "Default": {
+                "Type": "int",
+                "Value": "3600"
+              }
+            },
+            "secret_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The secret key associated with the target gcs bucket on your account. You may optionally provide this secret via an environment variable, `FASTLY_GCS_SECRET_KEY`. A typical format for the key is PEM format, containing actual newline characters where required",
+              "DefaultFunc": "ENV(FASTLY_GCS_SECRET_KEY)"
+            },
+            "timestamp_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
+              "Default": {
+                "Type": "string",
+                "Value": "%Y-%m-%dT%H:%M:%S.000"
+              }
+            },
+            "user": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Your Google Cloud Platform service account email address. The `client_email` field in your service account authentication JSON. You may optionally provide this via an environment variable, `FASTLY_GCS_EMAIL`.",
+              "DefaultFunc": "ENV(FASTLY_GCS_EMAIL)"
+            }
+          }
+        }
+      },
       "logging_googlepubsub": {
         "Type": "Set",
         "Optional": true,
@@ -1387,6 +1102,99 @@
           }
         }
       },
+      "logging_https": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "content_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Value of the `Content-Type` header sent with the request"
+            },
+            "header_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Custom header sent with the request"
+            },
+            "header_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Value of the custom header sent with the request"
+            },
+            "json_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Formats log entries as JSON. Can be either disabled (`0`), array of json (`1`), or newline delimited json (`2`)",
+              "Default": {
+                "Type": "string",
+                "Value": "0"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "blank"
+              }
+            },
+            "method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "HTTP method used for request. Can be either `POST` or `PUT`. Default `POST`",
+              "Default": {
+                "Type": "string",
+                "Value": "POST"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the HTTPS logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "request_max_bytes": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum number of bytes sent in one request"
+            },
+            "request_max_entries": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum number of logs sent in one request"
+            },
+            "tls_ca_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A secure certificate to authenticate the server with. Must be in PEM format"
+            },
+            "tls_client_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client certificate used to make authenticated requests. Must be in PEM format"
+            },
+            "tls_client_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client private key used to make authenticated requests. Must be in PEM format"
+            },
+            "tls_hostname": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Used during the TLS handshake to validate the certificate"
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "URL that log data will be sent to. Must use the https protocol"
+            }
+          }
+        }
+      },
       "logging_kafka": {
         "Type": "Set",
         "Optional": true,
@@ -1437,7 +1245,7 @@
             "required_acks": {
               "Type": "String",
               "Optional": true,
-              "Description": "The Number of acknowledgements a leader must receive before a write is considered successful. One of: `1` (default) One server needs to respond. `0` No servers need to respond. `-1`\tWait for all in-sync replicas to respond"
+              "Description": "The Number of acknowledgements a leader must receive before a write is considered successful. One of: `1` (default) One server needs to respond. `0` No servers need to respond. `-1` Wait for all in-sync replicas to respond"
             },
             "tls_ca_cert": {
               "Type": "String",
@@ -1522,6 +1330,45 @@
               "Type": "String",
               "Required": true,
               "Description": "The Kinesis stream name"
+            }
+          }
+        }
+      },
+      "logging_logentries": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the Logentries logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The port number configured in Logentries",
+              "Default": {
+                "Type": "int",
+                "Value": "20000"
+              }
+            },
+            "token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Use token based authentication (https://logentries.com/doc/input-token/)"
+            },
+            "use_tls": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use TLS for secure logging",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
             }
           }
         }
@@ -1690,6 +1537,151 @@
           }
         }
       },
+      "logging_papertrail": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "address": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The address of the Papertrail endpoint"
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this Papertrail endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The port associated with the address where the Papertrail endpoint can be accessed"
+            }
+          }
+        }
+      },
+      "logging_s3": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "acl": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS [Canned ACL](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl) to use for objects uploaded to the S3 bucket. Options are: `private`, `public-read`, `public-read-write`, `aws-exec-read`, `authenticated-read`, `bucket-owner-read`, `bucket-owner-full-control`"
+            },
+            "bucket_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the bucket in which to store the logs"
+            },
+            "compression_codec": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
+            },
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "If you created the S3 bucket outside of `us-east-1`, then specify the corresponding bucket endpoint. Example: `s3-us-west-2.amazonaws.com`",
+              "Default": {
+                "Type": "string",
+                "Value": "s3.amazonaws.com"
+              }
+            },
+            "gzip_level": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "classic"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the S3 logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
+            },
+            "period": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How frequently the logs should be transferred, in seconds. Default `3600`",
+              "Default": {
+                "Type": "int",
+                "Value": "3600"
+              }
+            },
+            "public_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A PGP public key that Fastly will use to encrypt your log files before writing them to disk"
+            },
+            "redundancy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The S3 storage class (redundancy level). Should be one of: `standard`, `intelligent_tiering`, `standard_ia`, `onezone_ia`, `glacier`, `glacier_ir`, `deep_archive`, or `reduced_redundancy`"
+            },
+            "s3_access_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "AWS Access Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This key will be not be encrypted. Not required if `iam_role` is provided. You can provide this key via an environment variable, `FASTLY_S3_ACCESS_KEY`",
+              "DefaultFunc": "ENV(FASTLY_S3_ACCESS_KEY)"
+            },
+            "s3_iam_role": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The Amazon Resource Name (ARN) for the IAM role granting Fastly access to S3. Not required if `access_key` and `secret_key` are provided. You can provide this value via an environment variable, `FASTLY_S3_IAM_ROLE`",
+              "DefaultFunc": "ENV(FASTLY_S3_IAM_ROLE)"
+            },
+            "s3_secret_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "AWS Secret Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This secret will be not be encrypted. Not required if `iam_role` is provided. You can provide this secret via an environment variable, `FASTLY_S3_SECRET_KEY`",
+              "DefaultFunc": "ENV(FASTLY_S3_SECRET_KEY)"
+            },
+            "server_side_encryption": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify what type of server side encryption should be used. Can be either `AES256` or `aws:kms`"
+            },
+            "server_side_encryption_kms_key_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Optional server-side KMS Key Id. Must be set if server_side_encryption is set to `aws:kms`"
+            },
+            "timestamp_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
+              "Default": {
+                "Type": "string",
+                "Value": "%Y-%m-%dT%H:%M:%S.000"
+              }
+            }
+          }
+        }
+      },
       "logging_scalyr": {
         "Type": "Set",
         "Optional": true,
@@ -1821,182 +1813,7 @@
           }
         }
       },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The unique name for the Service to create"
-      },
-      "package": {
-        "Type": "List",
-        "Required": true,
-        "Description": "The `package` block supports uploading or modifying Wasm packages for use in a Fastly Compute@Edge service. See Fastly's documentation on [Compute@Edge](https://developer.fastly.com/learning/compute/)",
-        "MaxItems": 1,
-        "MinItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "filename": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The path to the Wasm deployment package within your local filesystem"
-            },
-            "source_code_hash": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Used to trigger updates. Must be set to a SHA512 hash of the package file specified with the filename. The usual way to set this is filesha512(\"package.tar.gz\") (Terraform 0.11.12 and later) or filesha512(file(\"package.tar.gz\")) (Terraform 0.11.11 and earlier), where \"package.tar.gz\" is the local filename of the Wasm deployment package",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "papertrail": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "address": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The address of the Papertrail endpoint"
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this Papertrail endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "port": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "The port associated with the address where the Papertrail endpoint can be accessed"
-            }
-          }
-        }
-      },
-      "s3logging": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "acl": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The AWS [Canned ACL](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl) to use for objects uploaded to the S3 bucket. Options are: `private`, `public-read`, `public-read-write`, `aws-exec-read`, `authenticated-read`, `bucket-owner-read`, `bucket-owner-full-control`"
-            },
-            "bucket_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of the bucket in which to store the logs"
-            },
-            "compression_codec": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
-            },
-            "domain": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "If you created the S3 bucket outside of `us-east-1`, then specify the corresponding bucket endpoint. Example: `s3-us-west-2.amazonaws.com`",
-              "Default": {
-                "Type": "string",
-                "Value": "s3.amazonaws.com"
-              }
-            },
-            "gzip_level": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
-              "Default": {
-                "Type": "int",
-                "Value": "0"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The unique name of the S3 logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "path": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
-            },
-            "period": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How frequently the logs should be transferred, in seconds. Default `3600`",
-              "Default": {
-                "Type": "int",
-                "Value": "3600"
-              }
-            },
-            "public_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A PGP public key that Fastly will use to encrypt your log files before writing them to disk"
-            },
-            "redundancy": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The S3 storage class (redundancy level). Should be one of: `standard`, `reduced_redundancy`, `standard_ia`, or `onezone_ia`"
-            },
-            "s3_access_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "AWS Access Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This key will be not be encrypted. Not required if `iam_role` is provided. You can provide this key via an environment variable, `FASTLY_S3_ACCESS_KEY`",
-              "DefaultFunc": "ENV(FASTLY_S3_ACCESS_KEY)"
-            },
-            "s3_iam_role": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The Amazon Resource Name (ARN) for the IAM role granting Fastly access to S3. Not required if `access_key` and `secret_key` are provided. You can provide this value via an environment variable, `FASTLY_S3_IAM_ROLE`",
-              "DefaultFunc": "ENV(FASTLY_S3_IAM_ROLE)"
-            },
-            "s3_secret_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "AWS Secret Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This secret will be not be encrypted. Not required if `iam_role` is provided. You can provide this secret via an environment variable, `FASTLY_S3_SECRET_KEY`",
-              "DefaultFunc": "ENV(FASTLY_S3_SECRET_KEY)"
-            },
-            "server_side_encryption": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Specify what type of server side encryption should be used. Can be either `AES256` or `aws:kms`"
-            },
-            "server_side_encryption_kms_key_id": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Optional server-side KMS Key Id. Must be set if server_side_encryption is set to `aws:kms`"
-            },
-            "timestamp_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%Y-%m-%dT%H:%M:%S.000"
-              }
-            }
-          }
-        }
-      },
-      "splunk": {
+      "logging_splunk": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -2055,25 +1872,7 @@
           }
         }
       },
-      "stale_if_error": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Enables serving a stale object if there is an error",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "stale_if_error_ttl": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "The default time-to-live (TTL) for serving the stale object for the version",
-        "Default": {
-          "Type": "int",
-          "Value": "43200"
-        }
-      },
-      "sumologic": {
+      "logging_sumologic": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -2103,7 +1902,7 @@
           }
         }
       },
-      "syslog": {
+      "logging_syslog": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -2185,13 +1984,51 @@
           }
         }
       },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The unique name for the Service to create"
+      },
+      "package": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The `package` block supports uploading or modifying Wasm packages for use in a Fastly Compute@Edge service. See Fastly's documentation on [Compute@Edge](https://developer.fastly.com/learning/compute/)",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "filename": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The path to the Wasm deployment package within your local filesystem"
+            },
+            "source_code_hash": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Used to trigger updates. Must be set to a SHA512 hash of the package file specified with the filename. The usual way to set this is filesha512(\"package.tar.gz\") (Terraform 0.11.12 and later) or filesha512(file(\"package.tar.gz\")) (Terraform 0.11.11 and earlier), where \"package.tar.gz\" is the local filename of the Wasm deployment package",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "reuse": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Services that are active cannot be destroyed. If set to `true` a service Terraform intends to destroy will instead be deactivated (allowing it to be reused by importing it into another Terraform project). If `false`, attempting to destroy an active service will cause an error. Default `false`",
+        "ConflictsWith": [
+          "force_destroy"
+        ]
+      },
       "version_comment": {
         "Type": "String",
         "Optional": true,
         "Description": "Description field for the version"
       }
     },
-    "fastly_service_dictionary_items_v1": {
+    "fastly_service_dictionary_items": {
       "dictionary_id": {
         "Type": "String",
         "Required": true,
@@ -2206,17 +2043,35 @@
           "Value": "String"
         }
       },
+      "manage_items": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to reapply changes if the state of the items drifts, i.e. if items are managed externally",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "service_id": {
         "Type": "String",
         "Required": true,
         "Description": "The ID of the service that the dictionary belongs to"
       }
     },
-    "fastly_service_dynamic_snippet_content_v1": {
+    "fastly_service_dynamic_snippet_content": {
       "content": {
         "Type": "String",
         "Required": true,
         "Description": "The VCL code that specifies exactly what the snippet does"
+      },
+      "manage_snippets": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to reapply changes if the state of the snippets drifts, i.e. if snippets are managed externally",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "service_id": {
         "Type": "String",
@@ -2229,7 +2084,7 @@
         "Description": "The ID of the dynamic snippet that the content belong to"
       }
     },
-    "fastly_service_v1": {
+    "fastly_service_vcl": {
       "acl": {
         "Type": "Set",
         "Optional": true,
@@ -2290,10 +2145,10 @@
             "auto_loadbalance": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Denotes if this Backend should be included in the pool of backends that requests are load balanced against. Default `true`",
+              "Description": "Denotes if this Backend should be included in the pool of backends that requests are load balanced against. Default `false`",
               "Default": {
                 "Type": "bool",
-                "Value": "true"
+                "Value": "false"
               }
             },
             "between_bytes_timeout": {
@@ -2490,195 +2345,6 @@
           }
         }
       },
-      "bigquerylogging": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "dataset": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The ID of your BigQuery dataset"
-            },
-            "email": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The email for the service account with write access to your BigQuery dataset. If not provided, this will be pulled from a `FASTLY_BQ_EMAIL` environment variable",
-              "DefaultFunc": "ENV(FASTLY_BQ_EMAIL)"
-            },
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The logging format desired.",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t \"%r\" %\u003es %b"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this BigQuery logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed."
-            },
-            "project_id": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The ID of your GCP project"
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Name of a condition to apply this logging.",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "secret_key": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The secret key associated with the service account that has write access to your BigQuery table. If not provided, this will be pulled from the `FASTLY_BQ_SECRET_KEY` environment variable. Typical format for this is a private key in a string with newlines",
-              "DefaultFunc": "ENV(FASTLY_BQ_SECRET_KEY)"
-            },
-            "table": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The ID of your BigQuery table"
-            },
-            "template": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "BigQuery table name suffix template",
-              "Default": {
-                "Type": "string"
-              }
-            }
-          }
-        }
-      },
-      "blobstoragelogging": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "account_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The unique Azure Blob Storage namespace in which your data objects are stored"
-            },
-            "compression_codec": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
-            },
-            "container": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of the Azure Blob Storage container in which to store logs"
-            },
-            "file_max_bytes": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Maximum size of an uploaded log file, if non-zero."
-            },
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting (default: `%h %l %u %t \"%r\" %\u003es %b`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t \"%r\" %\u003es %b"
-              }
-            },
-            "format_version": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (default: 2)",
-              "Default": {
-                "Type": "int",
-                "Value": "2"
-              }
-            },
-            "gzip_level": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
-              "Default": {
-                "Type": "int",
-                "Value": "0"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify the Azure Blob Storage endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "path": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The path to upload logs to. Must end with a trailing slash. If this field is left empty, the files will be saved in the container's root path"
-            },
-            "period": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How frequently the logs should be transferred in seconds. Default `3600`",
-              "Default": {
-                "Type": "int",
-                "Value": "3600"
-              }
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed"
-            },
-            "public_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A PGP public key that Fastly will use to encrypt your log files before writing them to disk"
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The name of the condition to apply"
-            },
-            "sas_token": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The Azure shared access signature providing write access to the blob service objects. Be sure to update your token before it expires or the logging functionality will not work",
-              "DefaultFunc": "ENV(FASTLY_AZURE_SHARED_ACCESS_SIGNATURE)"
-            },
-            "timestamp_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%Y-%m-%dT%H:%M:%S.000"
-              }
-            }
-          }
-        }
-      },
       "cache_setting": {
         "Type": "Set",
         "Optional": true,
@@ -2811,7 +2477,7 @@
             "write_only": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "If `true`, the dictionary is a [private dictionary](https://docs.fastly.com/en/guides/private-dictionaries). Default is `false`. Please note that changing this attribute will delete and recreate the dictionary, and discard the current items in the dictionary. `fastly_service_v1` resource will only manage the dictionary object itself, and items under private dictionaries can not be managed using [`fastly_service_dictionary_items_v1`](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items_v1#limitations) resource. Therefore, using a write-only/private dictionary should only be done if the items are managed outside of Terraform",
+              "Description": "If `true`, the dictionary is a [private dictionary](https://docs.fastly.com/en/guides/private-dictionaries). Default is `false`. Please note that changing this attribute will delete and recreate the dictionary, and discard the current items in the dictionary. `fastly_service_vcl` resource will only manage the dictionary object itself, and items under private dictionaries can not be managed using [`fastly_service_dictionary_items`](https://registry.terraform.io/providers/fastly/fastly/latest/docs/resources/service_dictionary_items#limitations) resource. Therefore, using a write-only/private dictionary should only be done if the items are managed outside of Terraform",
               "Default": {
                 "Type": "bool",
                 "Value": "false"
@@ -2838,19 +2504,13 @@
                 "ElementsType": "String"
               }
             },
-            "capacity": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Load balancing weight for the backends. Default `100`",
-              "Default": {
-                "Type": "int",
-                "Value": "100"
-              }
-            },
             "comment": {
               "Type": "String",
               "Optional": true,
-              "Description": "An optional comment about the Director"
+              "Description": "An optional comment about the Director",
+              "Default": {
+                "Type": "string"
+              }
             },
             "name": {
               "Type": "String",
@@ -2955,108 +2615,10 @@
       "force_destroy": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Services that are active cannot be destroyed. In order to destroy the Service, set `force_destroy` to `true`. Default `false`"
-      },
-      "gcslogging": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "bucket_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of the bucket in which to store the logs"
-            },
-            "compression_codec": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
-            },
-            "email": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The email address associated with the target GCS bucket on your account. You may optionally provide this secret via an environment variable, `FASTLY_GCS_EMAIL`",
-              "DefaultFunc": "ENV(FASTLY_GCS_EMAIL)"
-            },
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t %r %\u003es"
-              }
-            },
-            "gzip_level": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
-              "Default": {
-                "Type": "int",
-                "Value": "0"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this GCS endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "path": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
-            },
-            "period": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How frequently the logs should be transferred, in seconds (Default 3600)",
-              "Default": {
-                "Type": "int",
-                "Value": "3600"
-              }
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed."
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Name of a condition to apply this logging.",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "secret_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The secret key associated with the target gcs bucket on your account. You may optionally provide this secret via an environment variable, `FASTLY_GCS_SECRET_KEY`. A typical format for the key is PEM format, containing actual newline characters where required",
-              "DefaultFunc": "ENV(FASTLY_GCS_SECRET_KEY)"
-            },
-            "timestamp_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%Y-%m-%dT%H:%M:%S.000"
-              }
-            }
-          }
-        }
+        "Description": "Services that are active cannot be destroyed. In order to destroy the Service, set `force_destroy` to `true`. Default `false`",
+        "ConflictsWith": [
+          "reuse"
+        ]
       },
       "gzip": {
         "Type": "Set",
@@ -3075,7 +2637,7 @@
               }
             },
             "content_types": {
-              "Type": "Set",
+              "Type": "List",
               "Optional": true,
               "Description": "The content-type for each type of content you wish to have dynamically gzip'ed. Example: `[\"text/html\", \"text/css\"]`",
               "ConfigImplicitMode": "Attr",
@@ -3085,7 +2647,7 @@
               }
             },
             "extensions": {
-              "Type": "Set",
+              "Type": "List",
               "Optional": true,
               "Description": "File extensions for each file type to dynamically gzip. Example: `[\"css\", \"js\"]`",
               "ConfigImplicitMode": "Attr",
@@ -3291,7 +2853,7 @@
           }
         }
       },
-      "httpslogging": {
+      "logging_bigquery": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -3299,15 +2861,107 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "content_type": {
+            "dataset": {
               "Type": "String",
-              "Optional": true,
-              "Description": "Value of the `Content-Type` header sent with the request"
+              "Required": true,
+              "Description": "The ID of your BigQuery dataset"
+            },
+            "email": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The email for the service account with write access to your BigQuery dataset. If not provided, this will be pulled from a `FASTLY_BQ_EMAIL` environment variable",
+              "DefaultFunc": "ENV(FASTLY_BQ_EMAIL)"
             },
             "format": {
               "Type": "String",
               "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting."
+              "Description": "The logging format desired.",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this BigQuery logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed."
+            },
+            "project_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The ID of your GCP project"
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of a condition to apply this logging.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "secret_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The secret key associated with the service account that has write access to your BigQuery table. If not provided, this will be pulled from the `FASTLY_BQ_SECRET_KEY` environment variable. Typical format for this is a private key in a string with newlines",
+              "DefaultFunc": "ENV(FASTLY_BQ_SECRET_KEY)"
+            },
+            "table": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The ID of your BigQuery table"
+            },
+            "template": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "BigQuery table name suffix template",
+              "Default": {
+                "Type": "string"
+              }
+            }
+          }
+        }
+      },
+      "logging_blobstorage": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "account_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique Azure Blob Storage namespace in which your data objects are stored"
+            },
+            "compression_codec": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
+            },
+            "container": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Azure Blob Storage container in which to store logs"
+            },
+            "file_max_bytes": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum size of an uploaded log file, if non-zero."
+            },
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting (default: `%h %l %u %t \"%r\" %\u003es %b`)",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
             },
             "format_version": {
               "Type": "Int",
@@ -3318,22 +2972,12 @@
                 "Value": "2"
               }
             },
-            "header_name": {
-              "Type": "String",
+            "gzip_level": {
+              "Type": "Int",
               "Optional": true,
-              "Description": "Custom header sent with the request"
-            },
-            "header_value": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Value of the custom header sent with the request"
-            },
-            "json_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Formats log entries as JSON. Can be either disabled (`0`), array of json (`1`), or newline delimited json (`2`)",
+              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
               "Default": {
-                "Type": "string",
+                "Type": "int",
                 "Value": "0"
               }
             },
@@ -3343,136 +2987,56 @@
               "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
               "Default": {
                 "Type": "string",
-                "Value": "blank"
-              }
-            },
-            "method": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "HTTP method used for request. Can be either `POST` or `PUT`. Default `POST`",
-              "Default": {
-                "Type": "string",
-                "Value": "POST"
+                "Value": "classic"
               }
             },
             "name": {
               "Type": "String",
               "Required": true,
-              "Description": "The unique name of the HTTPS logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+              "Description": "A unique name to identify the Azure Blob Storage endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The path to upload logs to. Must end with a trailing slash. If this field is left empty, the files will be saved in the container's root path"
+            },
+            "period": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How frequently the logs should be transferred in seconds. Default `3600`",
+              "Default": {
+                "Type": "int",
+                "Value": "3600"
+              }
             },
             "placement": {
               "Type": "String",
               "Optional": true,
               "Description": "Where in the generated VCL the logging call should be placed"
             },
-            "request_max_bytes": {
-              "Type": "Int",
+            "public_key": {
+              "Type": "String",
               "Optional": true,
-              "Description": "The maximum number of bytes sent in one request"
-            },
-            "request_max_entries": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The maximum number of logs sent in one request"
+              "Description": "A PGP public key that Fastly will use to encrypt your log files before writing them to disk"
             },
             "response_condition": {
               "Type": "String",
               "Optional": true,
               "Description": "The name of the condition to apply"
             },
-            "tls_ca_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A secure certificate to authenticate the server with. Must be in PEM format"
-            },
-            "tls_client_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client certificate used to make authenticated requests. Must be in PEM format"
-            },
-            "tls_client_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client private key used to make authenticated requests. Must be in PEM format"
-            },
-            "tls_hostname": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Used during the TLS handshake to validate the certificate"
-            },
-            "url": {
+            "sas_token": {
               "Type": "String",
               "Required": true,
-              "Description": "URL that log data will be sent to. Must use the https protocol"
-            }
-          }
-        }
-      },
-      "logentries": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "format": {
+              "Description": "The Azure shared access signature providing write access to the blob service objects. Be sure to update your token before it expires or the logging functionality will not work",
+              "DefaultFunc": "ENV(FASTLY_AZURE_SHARED_ACCESS_SIGNATURE)"
+            },
+            "timestamp_format": {
               "Type": "String",
               "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting",
+              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
               "Default": {
                 "Type": "string",
-                "Value": "%h %l %u %t %r %\u003es"
-              }
-            },
-            "format_version": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 1)",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The unique name of the Logentries logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed."
-            },
-            "port": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The port number configured in Logentries",
-              "Default": {
-                "Type": "int",
-                "Value": "20000"
-              }
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Name of blockAttributes condition to apply this logging.",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "token": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Use token based authentication (https://logentries.com/doc/input-token/)"
-            },
-            "use_tls": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether to use TLS for secure logging",
-              "Default": {
-                "Type": "bool",
-                "Value": "true"
+                "Value": "%Y-%m-%dT%H:%M:%S.000"
               }
             }
           }
@@ -3968,6 +3532,116 @@
           }
         }
       },
+      "logging_gcs": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the bucket in which to store the logs"
+            },
+            "compression_codec": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
+            },
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 2)",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "gzip_level": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "classic"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this GCS endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
+            },
+            "period": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How frequently the logs should be transferred, in seconds (Default 3600)",
+              "Default": {
+                "Type": "int",
+                "Value": "3600"
+              }
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed."
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of a condition to apply this logging.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "secret_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The secret key associated with the target gcs bucket on your account. You may optionally provide this secret via an environment variable, `FASTLY_GCS_SECRET_KEY`. A typical format for the key is PEM format, containing actual newline characters where required",
+              "DefaultFunc": "ENV(FASTLY_GCS_SECRET_KEY)"
+            },
+            "timestamp_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
+              "Default": {
+                "Type": "string",
+                "Value": "%Y-%m-%dT%H:%M:%S.000"
+              }
+            },
+            "user": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Your Google Cloud Platform service account email address. The `client_email` field in your service account authentication JSON. You may optionally provide this via an environment variable, `FASTLY_GCS_EMAIL`.",
+              "DefaultFunc": "ENV(FASTLY_GCS_EMAIL)"
+            }
+          }
+        }
+      },
       "logging_googlepubsub": {
         "Type": "Set",
         "Optional": true,
@@ -4130,6 +3804,123 @@
           }
         }
       },
+      "logging_https": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "content_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Value of the `Content-Type` header sent with the request"
+            },
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting."
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (default: 2)",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "header_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Custom header sent with the request"
+            },
+            "header_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Value of the custom header sent with the request"
+            },
+            "json_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Formats log entries as JSON. Can be either disabled (`0`), array of json (`1`), or newline delimited json (`2`)",
+              "Default": {
+                "Type": "string",
+                "Value": "0"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "blank"
+              }
+            },
+            "method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "HTTP method used for request. Can be either `POST` or `PUT`. Default `POST`",
+              "Default": {
+                "Type": "string",
+                "Value": "POST"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the HTTPS logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed"
+            },
+            "request_max_bytes": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum number of bytes sent in one request"
+            },
+            "request_max_entries": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The maximum number of logs sent in one request"
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of the condition to apply"
+            },
+            "tls_ca_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A secure certificate to authenticate the server with. Must be in PEM format"
+            },
+            "tls_client_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client certificate used to make authenticated requests. Must be in PEM format"
+            },
+            "tls_client_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client private key used to make authenticated requests. Must be in PEM format"
+            },
+            "tls_hostname": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Used during the TLS handshake to validate the certificate"
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "URL that log data will be sent to. Must use the https protocol"
+            }
+          }
+        }
+      },
       "logging_kafka": {
         "Type": "Set",
         "Optional": true,
@@ -4199,7 +3990,7 @@
             "required_acks": {
               "Type": "String",
               "Optional": true,
-              "Description": "The Number of acknowledgements a leader must receive before a write is considered successful. One of: `1` (default) One server needs to respond. `0` No servers need to respond. `-1`\tWait for all in-sync replicas to respond"
+              "Description": "The Number of acknowledgements a leader must receive before a write is considered successful. One of: `1` (default) One server needs to respond. `0` No servers need to respond. `-1` Wait for all in-sync replicas to respond"
             },
             "response_condition": {
               "Type": "String",
@@ -4313,6 +4104,76 @@
               "Type": "String",
               "Required": true,
               "Description": "The Kinesis stream name"
+            }
+          }
+        }
+      },
+      "logging_logentries": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 2)",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the Logentries logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed."
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The port number configured in Logentries",
+              "Default": {
+                "Type": "int",
+                "Value": "20000"
+              }
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of blockAttributes condition to apply this logging.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Use token based authentication (https://logentries.com/doc/input-token/)"
+            },
+            "use_tls": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use TLS for secure logging",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
             }
           }
         }
@@ -4577,6 +4438,213 @@
           }
         }
       },
+      "logging_papertrail": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "address": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The address of the Papertrail endpoint"
+            },
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A Fastly [log format string](https://docs.fastly.com/en/guides/custom-log-formats)",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. The logging call gets placed by default in `vcl_log` if `format_version` is set to `2` and in `vcl_deliver` if `format_version` is set to `1`",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this Papertrail endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed. If not set, endpoints with `format_version` of 2 are placed in `vcl_log` and those with `format_version` of 1 are placed in `vcl_deliver`"
+            },
+            "port": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The port associated with the address where the Papertrail endpoint can be accessed"
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of an existing condition in the configured endpoint, or leave blank to always execute",
+              "Default": {
+                "Type": "string"
+              }
+            }
+          }
+        }
+      },
+      "logging_s3": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "acl": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS [Canned ACL](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl) to use for objects uploaded to the S3 bucket. Options are: `private`, `public-read`, `public-read-write`, `aws-exec-read`, `authenticated-read`, `bucket-owner-read`, `bucket-owner-full-control`"
+            },
+            "bucket_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the bucket in which to store the logs"
+            },
+            "compression_codec": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
+            },
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "If you created the S3 bucket outside of `us-east-1`, then specify the corresponding bucket endpoint. Example: `s3-us-west-2.amazonaws.com`",
+              "Default": {
+                "Type": "string",
+                "Value": "s3.amazonaws.com"
+              }
+            },
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting.",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 2).",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "gzip_level": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "classic"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique name of the S3 logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
+            },
+            "period": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "How frequently the logs should be transferred, in seconds. Default `3600`",
+              "Default": {
+                "Type": "int",
+                "Value": "3600"
+              }
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed."
+            },
+            "public_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A PGP public key that Fastly will use to encrypt your log files before writing them to disk"
+            },
+            "redundancy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The S3 storage class (redundancy level). Should be one of: `standard`, `intelligent_tiering`, `standard_ia`, `onezone_ia`, `glacier`, `glacier_ir`, `deep_archive`, or `reduced_redundancy`"
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of blockAttributes condition to apply this logging.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "s3_access_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "AWS Access Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This key will be not be encrypted. Not required if `iam_role` is provided. You can provide this key via an environment variable, `FASTLY_S3_ACCESS_KEY`",
+              "DefaultFunc": "ENV(FASTLY_S3_ACCESS_KEY)"
+            },
+            "s3_iam_role": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The Amazon Resource Name (ARN) for the IAM role granting Fastly access to S3. Not required if `access_key` and `secret_key` are provided. You can provide this value via an environment variable, `FASTLY_S3_IAM_ROLE`",
+              "DefaultFunc": "ENV(FASTLY_S3_IAM_ROLE)"
+            },
+            "s3_secret_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "AWS Secret Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This secret will be not be encrypted. Not required if `iam_role` is provided. You can provide this secret via an environment variable, `FASTLY_S3_SECRET_KEY`",
+              "DefaultFunc": "ENV(FASTLY_S3_SECRET_KEY)"
+            },
+            "server_side_encryption": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify what type of server side encryption should be used. Can be either `AES256` or `aws:kms`"
+            },
+            "server_side_encryption_kms_key_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Optional server-side KMS Key Id. Must be set if server_side_encryption is set to `aws:kms`"
+            },
+            "timestamp_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
+              "Default": {
+                "Type": "string",
+                "Value": "%Y-%m-%dT%H:%M:%S.000"
+              }
+            }
+          }
+        }
+      },
       "logging_scalyr": {
         "Type": "Set",
         "Optional": true,
@@ -4760,12 +4828,155 @@
           }
         }
       },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The unique name for the Service to create"
+      "logging_splunk": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting (default: `%h %l %u %t \"%r\" %\u003es %b`)",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (default: 2)",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify the Splunk endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed"
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of the condition to apply"
+            },
+            "tls_ca_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A secure certificate to authenticate the server with. Must be in PEM format. You can provide this certificate via an environment variable, `FASTLY_SPLUNK_CA_CERT`",
+              "DefaultFunc": "ENV(FASTLY_SPLUNK_CA_CERT)"
+            },
+            "tls_client_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client certificate used to make authenticated requests. Must be in PEM format.",
+              "DefaultFunc": "ENV(FASTLY_SPLUNK_CLIENT_CERT)"
+            },
+            "tls_client_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client private key used to make authenticated requests. Must be in PEM format.",
+              "DefaultFunc": "ENV(FASTLY_SPLUNK_CLIENT_KEY)"
+            },
+            "tls_hostname": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The hostname used to verify the server's certificate. It can either be the Common Name or a Subject Alternative Name (SAN)"
+            },
+            "token": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Splunk token to be used for authentication",
+              "DefaultFunc": "ENV(FASTLY_SPLUNK_TOKEN)"
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Splunk URL to stream logs to"
+            },
+            "use_tls": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use TLS for secure logging. Default: `false`",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
       },
-      "papertrail": {
+      "logging_sumologic": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Apache-style string or VCL variables to use for log formatting",
+              "Default": {
+                "Type": "string",
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
+              }
+            },
+            "format_version": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 2)",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "classic"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique name to identify this Sumologic endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+            },
+            "placement": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Where in the generated VCL the logging call should be placed."
+            },
+            "response_condition": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of blockAttributes condition to apply this logging.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The URL to Sumologic collector endpoint"
+            }
+          }
+        }
+      },
+      "logging_syslog": {
         "Type": "Set",
         "Optional": true,
         "IsBlock": true,
@@ -4776,51 +4987,112 @@
             "address": {
               "Type": "String",
               "Required": true,
-              "Description": "The address of the Papertrail endpoint"
+              "Description": "A hostname or IPv4 address of the Syslog endpoint"
             },
             "format": {
               "Type": "String",
               "Optional": true,
-              "Description": "A Fastly [log format string](https://docs.fastly.com/en/guides/custom-log-formats)",
+              "Description": "Apache-style string or VCL variables to use for log formatting",
               "Default": {
                 "Type": "string",
-                "Value": "%h %l %u %t %r %\u003es"
+                "Value": "%h %l %u %t \"%r\" %\u003es %b"
               }
             },
             "format_version": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The version of the custom logging format used for the configured endpoint. The logging call gets placed by default in `vcl_log` if `format_version` is set to `2` and in `vcl_deliver` if `format_version` is set to `1`",
+              "Description": "The version of the custom logging format. Can be either 1 or 2. (Default: 2)",
               "Default": {
                 "Type": "int",
                 "Value": "2"
               }
             },
+            "message_type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
+              "Default": {
+                "Type": "string",
+                "Value": "classic"
+              }
+            },
             "name": {
               "Type": "String",
               "Required": true,
-              "Description": "A unique name to identify this Papertrail endpoint. It is important to note that changing this attribute will delete and recreate the resource"
+              "Description": "A unique name to identify this Syslog endpoint. It is important to note that changing this attribute will delete and recreate the resource"
             },
             "placement": {
               "Type": "String",
               "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed. If not set, endpoints with `format_version` of 2 are placed in `vcl_log` and those with `format_version` of 1 are placed in `vcl_deliver`"
+              "Description": "Where in the generated VCL the logging call should be placed."
             },
             "port": {
               "Type": "Int",
-              "Required": true,
-              "Description": "The port associated with the address where the Papertrail endpoint can be accessed"
+              "Optional": true,
+              "Description": "The port associated with the address where the Syslog endpoint can be accessed. Default `514`",
+              "Default": {
+                "Type": "int",
+                "Value": "514"
+              }
             },
             "response_condition": {
               "Type": "String",
               "Optional": true,
-              "Description": "The name of an existing condition in the configured endpoint, or leave blank to always execute",
+              "Description": "Name of blockAttributes condition to apply this logging.",
               "Default": {
                 "Type": "string"
+              }
+            },
+            "tls_ca_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A secure certificate to authenticate the server with. Must be in PEM format. You can provide this certificate via an environment variable, `FASTLY_SYSLOG_CA_CERT`",
+              "DefaultFunc": "ENV(FASTLY_SYSLOG_CA_CERT)"
+            },
+            "tls_client_cert": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client certificate used to make authenticated requests. Must be in PEM format. You can provide this certificate via an environment variable, `FASTLY_SYSLOG_CLIENT_CERT`",
+              "DefaultFunc": "ENV(FASTLY_SYSLOG_CLIENT_CERT)"
+            },
+            "tls_client_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The client private key used to make authenticated requests. Must be in PEM format. You can provide this key via an environment variable, `FASTLY_SYSLOG_CLIENT_KEY`",
+              "DefaultFunc": "ENV(FASTLY_SYSLOG_CLIENT_KEY)"
+            },
+            "tls_hostname": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Used during the TLS handshake to validate the certificate",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether to prepend each message with a specific token",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "use_tls": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use TLS for secure logging. Default `false`",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
               }
             }
           }
         }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The unique name for the Service to create"
       },
       "request_setting": {
         "Type": "Set",
@@ -4967,155 +5239,13 @@
           }
         }
       },
-      "s3logging": {
-        "Type": "Set",
+      "reuse": {
+        "Type": "Bool",
         "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "acl": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The AWS [Canned ACL](https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl) to use for objects uploaded to the S3 bucket. Options are: `private`, `public-read`, `public-read-write`, `aws-exec-read`, `authenticated-read`, `bucket-owner-read`, `bucket-owner-full-control`"
-            },
-            "bucket_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of the bucket in which to store the logs"
-            },
-            "compression_codec": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The codec used for compression of your logs. Valid values are zstd, snappy, and gzip. If the specified codec is \"gzip\", gzip_level will default to 3. To specify a different level, leave compression_codec blank and explicitly set the level using gzip_level. Specifying both compression_codec and gzip_level in the same API request will result in an error."
-            },
-            "domain": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "If you created the S3 bucket outside of `us-east-1`, then specify the corresponding bucket endpoint. Example: `s3-us-west-2.amazonaws.com`",
-              "Default": {
-                "Type": "string",
-                "Value": "s3.amazonaws.com"
-              }
-            },
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting.",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t %r %\u003es"
-              }
-            },
-            "format_version": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 1).",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
-              }
-            },
-            "gzip_level": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "Level of Gzip compression from `0-9`. `0` means no compression. `1` is the fastest and the least compressed version, `9` is the slowest and the most compressed version. Default `0`",
-              "Default": {
-                "Type": "int",
-                "Value": "0"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The unique name of the S3 logging endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "path": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Path to store the files. Must end with a trailing slash. If this field is left empty, the files will be saved in the bucket's root path"
-            },
-            "period": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "How frequently the logs should be transferred, in seconds. Default `3600`",
-              "Default": {
-                "Type": "int",
-                "Value": "3600"
-              }
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed."
-            },
-            "public_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A PGP public key that Fastly will use to encrypt your log files before writing them to disk"
-            },
-            "redundancy": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The S3 storage class (redundancy level). Should be one of: `standard`, `reduced_redundancy`, `standard_ia`, or `onezone_ia`"
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Name of blockAttributes condition to apply this logging.",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "s3_access_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "AWS Access Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This key will be not be encrypted. Not required if `iam_role` is provided. You can provide this key via an environment variable, `FASTLY_S3_ACCESS_KEY`",
-              "DefaultFunc": "ENV(FASTLY_S3_ACCESS_KEY)"
-            },
-            "s3_iam_role": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The Amazon Resource Name (ARN) for the IAM role granting Fastly access to S3. Not required if `access_key` and `secret_key` are provided. You can provide this value via an environment variable, `FASTLY_S3_IAM_ROLE`",
-              "DefaultFunc": "ENV(FASTLY_S3_IAM_ROLE)"
-            },
-            "s3_secret_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "AWS Secret Key of an account with the required permissions to post logs. It is **strongly** recommended you create a separate IAM user with permissions to only operate on this Bucket. This secret will be not be encrypted. Not required if `iam_role` is provided. You can provide this secret via an environment variable, `FASTLY_S3_SECRET_KEY`",
-              "DefaultFunc": "ENV(FASTLY_S3_SECRET_KEY)"
-            },
-            "server_side_encryption": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Specify what type of server side encryption should be used. Can be either `AES256` or `aws:kms`"
-            },
-            "server_side_encryption_kms_key_id": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Optional server-side KMS Key Id. Must be set if server_side_encryption is set to `aws:kms`"
-            },
-            "timestamp_format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The `strftime` specified timestamp formatting (default `%Y-%m-%dT%H:%M:%S.000`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%Y-%m-%dT%H:%M:%S.000"
-              }
-            }
-          }
-        }
+        "Description": "Services that are active cannot be destroyed. If set to `true` a service Terraform intends to destroy will instead be deactivated (allowing it to be reused by importing it into another Terraform project). If `false`, attempting to destroy an active service will cause an error. Default `false`",
+        "ConflictsWith": [
+          "force_destroy"
+        ]
       },
       "snippet": {
         "Type": "Set",
@@ -5152,93 +5282,6 @@
           }
         }
       },
-      "splunk": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting (default: `%h %l %u %t \"%r\" %\u003es %b`)",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t \"%r\" %\u003es %b"
-              }
-            },
-            "format_version": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (default: 2)",
-              "Default": {
-                "Type": "int",
-                "Value": "2"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify the Splunk endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed"
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The name of the condition to apply"
-            },
-            "tls_ca_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A secure certificate to authenticate the server with. Must be in PEM format. You can provide this certificate via an environment variable, `FASTLY_SPLUNK_CA_CERT`",
-              "DefaultFunc": "ENV(FASTLY_SPLUNK_CA_CERT)"
-            },
-            "tls_client_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client certificate used to make authenticated requests. Must be in PEM format.",
-              "DefaultFunc": "ENV(FASTLY_SPLUNK_CLIENT_CERT)"
-            },
-            "tls_client_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client private key used to make authenticated requests. Must be in PEM format.",
-              "DefaultFunc": "ENV(FASTLY_SPLUNK_CLIENT_KEY)"
-            },
-            "tls_hostname": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The hostname used to verify the server's certificate. It can either be the Common Name or a Subject Alternative Name (SAN)"
-            },
-            "token": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The Splunk token to be used for authentication",
-              "DefaultFunc": "ENV(FASTLY_SPLUNK_TOKEN)"
-            },
-            "url": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The Splunk URL to stream logs to"
-            },
-            "use_tls": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether to use TLS for secure logging. Default: `false`",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
-            }
-          }
-        }
-      },
       "stale_if_error": {
         "Type": "Bool",
         "Optional": true,
@@ -5255,180 +5298,6 @@
         "Default": {
           "Type": "int",
           "Value": "43200"
-        }
-      },
-      "sumologic": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t %r %\u003es"
-              }
-            },
-            "format_version": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The version of the custom logging format used for the configured endpoint. Can be either 1 or 2. (Default: 1)",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this Sumologic endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed."
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Name of blockAttributes condition to apply this logging.",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "url": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The URL to Sumologic collector endpoint"
-            }
-          }
-        }
-      },
-      "syslog": {
-        "Type": "Set",
-        "Optional": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "address": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A hostname or IPv4 address of the Syslog endpoint"
-            },
-            "format": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Apache-style string or VCL variables to use for log formatting",
-              "Default": {
-                "Type": "string",
-                "Value": "%h %l %u %t \"%r\" %\u003es %b"
-              }
-            },
-            "format_version": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The version of the custom logging format. Can be either 1 or 2. (Default: 1)",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
-              }
-            },
-            "message_type": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "How the message should be formatted. Can be either `classic`, `loggly`, `logplex` or `blank`. Default is `classic`",
-              "Default": {
-                "Type": "string",
-                "Value": "classic"
-              }
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A unique name to identify this Syslog endpoint. It is important to note that changing this attribute will delete and recreate the resource"
-            },
-            "placement": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Where in the generated VCL the logging call should be placed."
-            },
-            "port": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The port associated with the address where the Syslog endpoint can be accessed. Default `514`",
-              "Default": {
-                "Type": "int",
-                "Value": "514"
-              }
-            },
-            "response_condition": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Name of blockAttributes condition to apply this logging.",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "tls_ca_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "A secure certificate to authenticate the server with. Must be in PEM format. You can provide this certificate via an environment variable, `FASTLY_SYSLOG_CA_CERT`",
-              "DefaultFunc": "ENV(FASTLY_SYSLOG_CA_CERT)"
-            },
-            "tls_client_cert": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client certificate used to make authenticated requests. Must be in PEM format. You can provide this certificate via an environment variable, `FASTLY_SYSLOG_CLIENT_CERT`",
-              "DefaultFunc": "ENV(FASTLY_SYSLOG_CLIENT_CERT)"
-            },
-            "tls_client_key": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The client private key used to make authenticated requests. Must be in PEM format. You can provide this key via an environment variable, `FASTLY_SYSLOG_CLIENT_KEY`",
-              "DefaultFunc": "ENV(FASTLY_SYSLOG_CLIENT_KEY)"
-            },
-            "tls_hostname": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Used during the TLS handshake to validate the certificate",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "token": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Whether to prepend each message with a specific token",
-              "Default": {
-                "Type": "string"
-              }
-            },
-            "use_tls": {
-              "Type": "Bool",
-              "Optional": true,
-              "Description": "Whether to use TLS for secure logging. Default `false`",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
-              }
-            }
-          }
         }
       },
       "vcl": {
@@ -6097,7 +5966,7 @@
         "Description": "The ID of the TLS Subscription that should be validated."
       }
     },
-    "fastly_user_v1": {
+    "fastly_user": {
       "login": {
         "Type": "String",
         "Required": true,
@@ -6120,6 +5989,40 @@
     }
   },
   "data-sources": {
+    "fastly_datacenters": {
+      "pops": {
+        "Type": "List",
+        "Description": "A list of all Fastly POPs.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "code": {
+              "Type": "String",
+              "Description": "A code representing the POP location.",
+              "Computed": true
+            },
+            "group": {
+              "Type": "String",
+              "Description": "A code representing the general region of the world in which the POP location resides.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the POP.",
+              "Computed": true
+            },
+            "shield": {
+              "Type": "String",
+              "Description": "A code representing the shielding name of the POP. The value may be empty if the POP is not available for shielding.",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "fastly_ip_ranges": {
       "cidr_blocks": {
         "Type": "List",
@@ -6134,6 +6037,70 @@
       "ipv6_cidr_blocks": {
         "Type": "List",
         "Description": "The lexically ordered list of ipv6 CIDR blocks.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "fastly_services": {
+      "details": {
+        "Type": "Set",
+        "Description": "A detailed list of Fastly services in your account. This is limited to the services the API token can read.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comment": {
+              "Type": "String",
+              "Description": "A freeform descriptive note.",
+              "Computed": true
+            },
+            "created_at": {
+              "Type": "String",
+              "Description": "Date and time in ISO 8601 format.",
+              "Computed": true
+            },
+            "customer_id": {
+              "Type": "String",
+              "Description": "Alphanumeric string identifying the customer.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "Alphanumeric string identifying the service.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the service.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "The type of this service. One of `vcl`, `wasm`.",
+              "Computed": true
+            },
+            "updated_at": {
+              "Type": "String",
+              "Description": "Date and time in ISO 8601 format.",
+              "Computed": true
+            },
+            "version": {
+              "Type": "Int",
+              "Description": "The currently activated version.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ids": {
+        "Type": "Set",
+        "Description": "A list of service IDs in your account. This is limited to the services the API token can read.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {

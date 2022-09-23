@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "shipa",
   "type": "provider",
-  "version": "v0.0.6",
+  "version": "v0.0.13",
   "provider": {
     "admin_email": {
       "Type": "String",
@@ -331,6 +331,9 @@
       }
     },
     "shipa_app_deploy": {
+      "__timeouts__": [
+        "default"
+      ],
       "app": {
         "Type": "String",
         "Required": true
@@ -344,8 +347,25 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
             "detach": {
               "Type": "Bool",
+              "Optional": true
+            },
+            "env": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "framework": {
+              "Type": "String",
               "Optional": true
             },
             "image": {
@@ -356,6 +376,57 @@
               "Type": "String",
               "Optional": true
             },
+            "origin": {
+              "Type": "String",
+              "Optional": true
+            },
+            "plan": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cpushare": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "default": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "memory": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "org": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "public": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "swap": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "teams": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Value": "String"
+                    }
+                  }
+                }
+              }
+            },
             "port": {
               "Type": "Int",
               "Optional": true
@@ -364,11 +435,50 @@
               "Type": "Bool",
               "Optional": true
             },
+            "protocol": {
+              "Type": "String",
+              "Optional": true
+            },
             "registry_secret": {
               "Type": "String",
               "Optional": true
             },
             "registry_user": {
+              "Type": "String",
+              "Optional": true
+            },
+            "router": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "address": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "default": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "opts": {
+                    "Type": "Map",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "shipa_yaml": {
               "Type": "String",
               "Optional": true
             },
@@ -382,6 +492,19 @@
             },
             "steps": {
               "Type": "Int",
+              "Optional": true
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "team": {
+              "Type": "String",
               "Optional": true
             }
           }
@@ -674,6 +797,27 @@
                             "Type": "SchemaInfo",
                             "Info": {
                               "allowed_hosts": {
+                                "Type": "List",
+                                "Optional": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "domain_policy": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "allowed_cnames": {
                                 "Type": "List",
                                 "Optional": true,
                                 "ConfigImplicitMode": "Attr",
@@ -1463,6 +1607,31 @@
                             }
                           }
                         },
+                        "node_selector": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "strict": {
+                                "Type": "Bool",
+                                "Optional": true
+                              },
+                              "terms": {
+                                "Type": "Map",
+                                "Required": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              }
+                            }
+                          }
+                        },
                         "plan": {
                           "Type": "List",
                           "Optional": true,
@@ -1475,6 +1644,34 @@
                               "name": {
                                 "Type": "String",
                                 "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "pod_auto_scaler": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "disable_app_override": {
+                                "Type": "Bool",
+                                "Optional": true
+                              },
+                              "max_replicas": {
+                                "Type": "Int",
+                                "Required": true
+                              },
+                              "min_replicas": {
+                                "Type": "Int",
+                                "Required": true
+                              },
+                              "target_cpu_utilization_percentage": {
+                                "Type": "Int",
+                                "Required": true
                               }
                             }
                           }

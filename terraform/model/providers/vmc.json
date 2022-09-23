@@ -3,15 +3,12 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vmc",
   "type": "provider",
-  "version": "v1.8.0",
+  "version": "v1.10.1",
   "provider": {
     "csp_url": {
       "Type": "String",
       "Optional": true,
-      "Default": {
-        "Type": "string",
-        "Value": "https://console.cloud.vmware.com"
-      }
+      "DefaultFunc": "ENV(CSP_URL)"
     },
     "org_id": {
       "Type": "String",
@@ -26,10 +23,7 @@
     "vmc_url": {
       "Type": "String",
       "Optional": true,
-      "Default": {
-        "Type": "string",
-        "Value": "https://vmc.vmware.com"
-      }
+      "DefaultFunc": "ENV(VMC_URL)"
     }
   },
   "resources": {
@@ -108,7 +102,7 @@
         "Description": "The minimum number of hosts that the cluster can scale in to.",
         "Default": {
           "Type": "int",
-          "Value": "3"
+          "Value": "2"
         }
       },
       "num_hosts": {
@@ -173,6 +167,10 @@
           }
         }
       },
+      "account_link_state": {
+        "Type": "String",
+        "Computed": true
+      },
       "availability_zones": {
         "Type": "List",
         "Computed": true,
@@ -198,6 +196,10 @@
         "Type": "Map",
         "Computed": true
       },
+      "created": {
+        "Type": "String",
+        "Computed": true
+      },
       "delay_account_link": {
         "Type": "Bool",
         "Optional": true,
@@ -217,12 +219,14 @@
       "edrs_policy_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The EDRS policy type. This can either be 'cost', 'performance', 'storage-scaleup' or 'rapid-scaleup'. Default : storage-scaleup. "
+        "Description": "The EDRS policy type. This can either be 'cost', 'performance', 'storage-scaleup' or 'rapid-scaleup'. Default : storage-scaleup. ",
+        "Computed": true
       },
       "enable_edrs": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "True if EDRS is enabled"
+        "Description": "True if EDRS is enabled",
+        "Computed": true
       },
       "host_instance_type": {
         "Type": "String",
@@ -240,7 +244,8 @@
       "max_hosts": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The maximum number of hosts that the cluster can scale out to."
+        "Description": "The maximum number of hosts that the cluster can scale out to.",
+        "Computed": true
       },
       "microsoft_licensing_config": {
         "Type": "List",
@@ -267,30 +272,37 @@
       "min_hosts": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The minimum number of hosts that the cluster can scale in to."
+        "Description": "The minimum number of hosts that the cluster can scale in to.",
+        "Computed": true
       },
       "nsxt_cloudadmin": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "nsxt_cloudadmin_password": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "nsxt_cloudaudit": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "nsxt_cloudaudit_password": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "nsxt_private_ip": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "nsxt_private_url": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "nsxt_reverse_proxy_url": {
@@ -299,11 +311,16 @@
       },
       "nsxt_ui": {
         "Type": "Bool",
+        "Optional": true,
         "Computed": true
       },
       "num_host": {
         "Type": "Int",
         "Required": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Computed": true
       },
       "provider_type": {
         "Type": "String",
@@ -316,6 +333,10 @@
       "region": {
         "Type": "String",
         "Required": true
+      },
+      "sddc_access_state": {
+        "Type": "String",
+        "Computed": true
       },
       "sddc_name": {
         "Type": "String",
@@ -366,8 +387,32 @@
         "Type": "String",
         "Optional": true
       },
+      "updated": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_by_user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_by_user_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_name": {
+        "Type": "String",
+        "Computed": true
+      },
       "vc_url": {
         "Type": "String",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
         "Computed": true
       },
       "vpc_cidr": {
@@ -540,6 +585,10 @@
       }
     },
     "vmc_sddc": {
+      "account_link_state": {
+        "Type": "String",
+        "Computed": true
+      },
       "availability_zones": {
         "Type": "List",
         "Computed": true,
@@ -550,6 +599,10 @@
         }
       },
       "cloud_username": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created": {
         "Type": "String",
         "Computed": true
       },
@@ -593,11 +646,19 @@
         "Type": "Int",
         "Computed": true
       },
+      "org_id": {
+        "Type": "String",
+        "Computed": true
+      },
       "provider_type": {
         "Type": "String",
         "Computed": true
       },
       "region": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sddc_access_state": {
         "Type": "String",
         "Computed": true
       },
@@ -626,8 +687,32 @@
         "Type": "String",
         "Computed": true
       },
+      "updated": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_by_user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_by_user_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_name": {
+        "Type": "String",
+        "Computed": true
+      },
       "vc_url": {
         "Type": "String",
+        "Computed": true
+      },
+      "version": {
+        "Type": "Int",
         "Computed": true
       }
     }

@@ -1,0 +1,6738 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "zia",
+  "type": "provider",
+  "version": "v2.2.0",
+  "provider": {
+    "api_key": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "UNKNOWN"
+    },
+    "password": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "UNKNOWN"
+    },
+    "username": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "UNKNOWN"
+    },
+    "zia_cloud": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "UNKNOWN"
+    }
+  },
+  "resources": {
+    "zia_activation_status": {
+      "status": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Organization Policy Edit/Update Activation status"
+      }
+    },
+    "zia_admin_users": {
+      "admin_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "admin_scope": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope_entities": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "list of scope IDs",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Int"
+                    }
+                  }
+                }
+              }
+            },
+            "scope_group_member_entities": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "list of scope group member IDs",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Int"
+                    }
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about the admin or auditor."
+      },
+      "disabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "email": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Admin or auditor's email address."
+      },
+      "is_auditor": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_exec_mobile_app_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_non_editable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_password_expired": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_password_login_allowed": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_product_update_comm_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_security_report_comm_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_service_update_comm_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "login_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The admin's password. If admin single sign-on (SSO) is disabled, then this field is mandatory for POST requests. This information is not provided in a GET response."
+      },
+      "role": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Role of the admin. This is not required for an auditor.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "is_name_l10n_tag": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Admin or auditor's username."
+      }
+    },
+    "zia_auth_settings_urls": {
+      "urls": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 25000,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_dlp_dictionaries": {
+      "confidence_threshold": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The DLP confidence threshold"
+      },
+      "custom_phrase_match_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The desciption of the DLP dictionary"
+      },
+      "dictionary_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "dictionary_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The DLP dictionary type."
+      },
+      "exact_data_match_details": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Exact Data Match (EDM) related information for custom DLP dictionaries.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dictionary_edm_mapping_id": {
+              "Type": "Int",
+              "Description": "The unique identifier for the EDM mapping",
+              "Computed": true
+            },
+            "primary_field": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The EDM template's primary field."
+            },
+            "schema_id": {
+              "Type": "Int",
+              "Description": "The unique identifier for the EDM template (or schema).",
+              "Computed": true
+            },
+            "secondary_field_match_on": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The EDM secondary field to match on."
+            },
+            "secondary_fields": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "idm_profile_match_accuracy": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of Indexed Document Match (IDM) profiles and their corresponding match accuracy for custom DLP dictionaries.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "adp_idm_profile": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "The action applied to a DLP dictionary using patterns",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "match_accuracy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The IDM template match accuracy."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The DLP dictionary's name"
+      },
+      "name_l10n_tag": {
+        "Type": "Bool",
+        "Description": "Indicates whether the name is localized or not. This is always set to True for predefined DLP dictionaries.",
+        "Computed": true
+      },
+      "patterns": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List containing the patterns used within a custom DLP dictionary. This attribute is not applicable to predefined DLP dictionaries",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The action applied to a DLP dictionary using patterns"
+            },
+            "pattern": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "DLP dictionary pattern"
+            }
+          }
+        }
+      },
+      "phrases": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Optional": true
+            },
+            "phrase": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "proximity": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The DLP dictionary proximity length."
+      },
+      "threshold_type": {
+        "Type": "String",
+        "Description": "DLP threshold type",
+        "Computed": true
+      }
+    },
+    "zia_dlp_notification_templates": {
+      "attach_content": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "html_message": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "plain_text_message": {
+        "Type": "String",
+        "Required": true
+      },
+      "subject": {
+        "Type": "String",
+        "Optional": true
+      },
+      "template_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "tls_enabled": {
+        "Type": "Bool",
+        "Optional": true
+      }
+    },
+    "zia_dlp_web_rules": {
+      "access_control": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The access privilege for this DLP policy rule based on the admin's state.",
+        "Computed": true
+      },
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The action taken when traffic matches the DLP policy rule criteria.",
+        "Computed": true
+      },
+      "auditor": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The auditor to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "cloud_applications": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of cloud applications to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "departments": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of departments to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the DLP policy rule.",
+        "Computed": true
+      },
+      "dlp_engines": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of DLP engines to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "excluded_departments": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of users to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "excluded_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of users to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "excluded_users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of users to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "external_auditor_email": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The email address of an external auditor to whom DLP email notifications are sent.",
+        "Computed": true
+      },
+      "file_types": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of file types to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of groups to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "icap_server": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The DLP server, using ICAP, to which the transaction content is forwarded.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of Labels that are applicable to the rule.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "location_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of locations groups to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 32,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of locations to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "match_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The match only criteria for DLP engines.",
+        "Computed": true
+      },
+      "min_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The minimum file size (in KB) used for evaluation of the DLP policy rule.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The DLP policy rule name.",
+        "Computed": true
+      },
+      "notification_template": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The template used for DLP notification emails.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "ocr_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enables or disables image file scanning.",
+        "Computed": true
+      },
+      "order": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Order of execution of rule with respect to other URL Filtering rules"
+      },
+      "protocols": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The protocol criteria specified for the DLP policy rule.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "rank": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Admin rank of the admin who creates this rule",
+        "Default": {
+          "Type": "int",
+          "Value": "7"
+        }
+      },
+      "rule_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Enables or disables the DLP policy rule.",
+        "Computed": true
+      },
+      "time_windows": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of time interval during which rule must be enforced.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "url_categories": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The list of URL categories to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Name-ID pairs of users to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "without_content_inspection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates a DLP policy rule without content inspection, when the value is set to true.",
+        "Computed": true
+      },
+      "zscaler_incident_reciever": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether a Zscaler Incident Receiver is associated to the DLP policy rule.",
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_destination_groups": {
+      "addresses": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Destination IP addresses within the group",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "countries": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Destination countries for which the rule is applicable. If not set, the rule is not restricted to specific destination countries.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about the destination IP group"
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Unique identifer for the destination IP group",
+        "Computed": true
+      },
+      "ip_categories": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of URL categories for which rule must be applied",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ip_destination_id": {
+        "Type": "Int",
+        "Description": "Unique identifer for the destination IP group",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Destination IP group name"
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Destination IP group type (i.e., the group can contain destination IP addresses or FQDNs)",
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_ip_source_groups": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ip_addresses": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ip_source_group_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "zia_firewall_filtering_network_application_groups": {
+      "app_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "network_applications": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_firewall_filtering_network_service": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "dest_tcp_ports": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "dest tcp ports",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "start": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "dest_udp_ports": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "dest udp ports",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "start": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "is_name_l10n_tag": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "network_service_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "src_tcp_ports": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "src tcp ports",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "start": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "src_udp_ports": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "src udp ports",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "start": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "zia_firewall_filtering_network_service_groups": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "network_service_group_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "services": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of services IDs",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      }
+    },
+    "zia_firewall_filtering_rule": {
+      "access_control": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The action the Firewall Filtering policy rule takes when packets match the rule",
+        "Computed": true
+      },
+      "app_service_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of app service groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "app_services": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of app services",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "default_rule": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to true, the default rule is applied",
+        "Computed": true
+      },
+      "departments": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of departments for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about the rule"
+      },
+      "dest_addresses": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dest_countries": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Destination countries for which the rule is applicable. If not set, the rule is not restricted to specific destination countries.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dest_ip_categories": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dest_ip_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of dest ip groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "enable_full_logging": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of groups for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of Labels that are applicable to the rule.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "last_modified_by": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "location_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of locations groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 32,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of locations for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the Firewall Filtering policy rule"
+      },
+      "nw_application_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of nw application groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "nw_applications": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "User-defined network service applications on which the rule is applied. If not set, the rule is not restricted to a specific network service application.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "nw_service_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of nw service groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "nw_services": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of nw services",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1024,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "order": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Rule order number of the Firewall Filtering policy rule",
+        "Computed": true
+      },
+      "predefined": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to true, a predefined rule is applied",
+        "Computed": true
+      },
+      "rank": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Admin rank of the Firewall Filtering policy rule",
+        "Computed": true
+      },
+      "rule_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "src_ip_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of src ip groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "src_ips": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "User-defined source IP addresses for which the rule is applicable. If not set, the rule is not restricted to a specific source IP address.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Determines whether the Firewall Filtering policy rule is enabled or disabled",
+        "Computed": true
+      },
+      "time_windows": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of time interval during which rule must be enforced.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of users for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      }
+    },
+    "zia_location_management": {
+      "aup_block_internet_until_accepted": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "For First Time AUP Behavior, Block Internet Access. When set, all internet access (including non-HTTP traffic) is disabled until the user accepts the AUP.",
+        "Computed": true
+      },
+      "aup_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable AUP. When set to true, AUP is enabled for the location.",
+        "Computed": true
+      },
+      "aup_force_ssl_inspection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "For First Time AUP Behavior, Force SSL Inspection. When set, Zscaler will force SSL Inspection in order to enforce AUP for HTTPS traffic.",
+        "Computed": true
+      },
+      "aup_timeout_in_days": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom AUP Frequency. Refresh time (in days) to re-validate the AUP."
+      },
+      "auth_required": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enforce Authentication. Required when ports are enabled, IP Surrogate is enabled, or Kerberos Authentication is enabled.",
+        "Computed": true
+      },
+      "caution_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable Caution. When set to true, a caution notifcation is enabled for the location.",
+        "Computed": true
+      },
+      "country": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Supported Countries",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional notes or information regarding the location or sub-location. The description cannot exceed 1024 characters."
+      },
+      "display_time_unit": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display Time Unit. The time unit to display for IP Surrogate idle time to disassociation.",
+        "Default": {
+          "Type": "string",
+          "Value": "MINUTE"
+        }
+      },
+      "dn_bandwidth": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Download bandwidth in bytes. The value 0 implies no Bandwidth Control enforcement."
+      },
+      "idle_time_in_minutes": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Idle Time to Disassociation. The user mapping idle time (in minutes) is required if a Surrogate IP is enabled."
+      },
+      "ip_addresses": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "For locations: IP addresses of the egress points that are provisioned in the Zscaler Cloud. Each entry is a single IP address (e.g., 238.10.33.9).",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ips_control": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable IPS Control. When set to true, IPS Control is enabled for the location if Firewall is enabled.",
+        "Computed": true
+      },
+      "location_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Location Name."
+      },
+      "ofw_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable Firewall. When set to true, Firewall is enabled for the location.",
+        "Computed": true
+      },
+      "parent_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Parent Location ID. If this ID does not exist or is 0, it is implied that it is a parent location. Otherwise, it is a sub-location whose parent has this ID. x-applicableTo: SUB"
+      },
+      "ports": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP ports that are associated with the location."
+      },
+      "profile": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Profile tag that specifies the location traffic type. If not specified, this tag defaults to `Unassigned`.",
+        "Computed": true
+      },
+      "ssl_scan_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable SSL Inspection. Set to true in order to apply your SSL Inspection policy to HTTPS traffic in the location and inspect HTTPS transactions for data leakage, malicious content, and viruses.",
+        "Computed": true,
+        "Deprecated": "This parameter was deprecated and no longer has an effect on SSL policy. It remains supported in the API payload in order to maintain backwards compatibility with existing scripts, but it will be removed in future. Enable SSL Inspection. Set to true in order to apply your SSL Inspection policy to HTTPS traffic in the location and inspect HTTPS transactions for data leakage, malicious content, and viruses. To learn more, see Deploying SSL Inspection"
+      },
+      "surrogate_ip": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable Surrogate IP. When set to true, users are mapped to internal device IP addresses.",
+        "Computed": true
+      },
+      "surrogate_ip_enforced_for_known_browsers": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enforce Surrogate IP for Known Browsers. When set to true, IP Surrogate is enforced for all known browsers.",
+        "Computed": true
+      },
+      "surrogate_refresh_time_in_minutes": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Refresh Time for re-validation of Surrogacy. The surrogate refresh time (in minutes) to re-validate the IP surrogates."
+      },
+      "surrogate_refresh_time_unit": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display Refresh Time Unit. The time unit to display for refresh time for re-validation of surrogacy."
+      },
+      "tz": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Timezone of the location. If not specified, it defaults to GMT.",
+        "Computed": true
+      },
+      "up_bandwidth": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Upload bandwidth in bytes. The value 0 implies no Bandwidth Control enforcement."
+      },
+      "vpn_credentials": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fqdn": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "ip_address": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "pre_shared_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "xff_forward_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable XFF Forwarding. When set to true, traffic is passed to Zscaler Cloud via the X-Forwarded-For (XFF) header.",
+        "Computed": true
+      },
+      "zapp_ssl_scan_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable Zscaler App SSL Setting. When set to true, the Zscaler App SSL Scan Setting will take effect, irrespective of the SSL policy that is configured for the location.",
+        "Computed": true,
+        "Deprecated": "This parameter was deprecated and no longer has an effect on SSL policy. It remains supported in the API payload in order to maintain backwards compatibility with existing scripts, but it will be removed in future. Enable Zscaler App SSL Setting. When set to true, the Zscaler App SSL Scan Setting will take effect, irrespective of the SSL policy that is configured for the location. To learn more, see Configuring SSL Inspection for Zscaler App"
+      }
+    },
+    "zia_rule_labels": {
+      "created_by": {
+        "Type": "List",
+        "Description": "The admin that created the rule label. This is a read-only field. Ignored by PUT requests.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The configured name of the entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_modified_by": {
+        "Type": "List",
+        "Description": "The admin that modified the rule label last. This is a read-only field. Ignored by PUT requests.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The configured name of the entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Description": "Timestamp when the rule lable was last modified. This is a read-only field. Ignored by PUT and DELETE requests.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "referenced_rule_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "rule_label_id": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "zia_security_settings": {
+      "blacklist_urls": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "URLs on the denylist for your organization. Allow up to 25000 URLs.",
+        "Computed": true,
+        "MaxItems": 25000,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "whitelist_urls": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Allowlist URLs whose contents will not be scanned. Allows up to 255 URLs.",
+        "Computed": true,
+        "MaxItems": 255,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_traffic_forwarding_gre_tunnel": {
+      "comment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about this GRE tunnel"
+      },
+      "country_code": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "When within_country is enabled, you must set this to the country code.",
+        "Computed": true
+      },
+      "internal_ip_range": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The start of the internal IP address in /29 CIDR range",
+        "Computed": true
+      },
+      "ip_unnumbered": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "This is required to support the automated SD-WAN provisioning of GRE tunnels, when set to true gre_tun_ip and gre_tun_id are set to null",
+        "Computed": true
+      },
+      "last_modification_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_modified_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "primary_dest_vip": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The primary destination data center and virtual IP address (VIP) of the GRE tunnel",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datacenter": {
+              "Type": "String",
+              "Description": "Data center information",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Unique identifer of the GRE virtual IP address (VIP)",
+              "Computed": true
+            },
+            "private_service_edge": {
+              "Type": "Bool",
+              "Description": "Set to true if the virtual IP address (VIP) is a ZIA Private Service Edge",
+              "Computed": true
+            },
+            "virtual_ip": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "GRE cluster virtual IP address (VIP)",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "secondary_dest_vip": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The secondary destination data center and virtual IP address (VIP) of the GRE tunnel",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datacenter": {
+              "Type": "String",
+              "Description": "Data center information",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Unique identifer of the GRE virtual IP address (VIP)",
+              "Computed": true
+            },
+            "private_service_edge": {
+              "Type": "Bool",
+              "Description": "Set to true if the virtual IP address (VIP) is a ZIA Private Service Edge",
+              "Computed": true
+            },
+            "virtual_ip": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "GRE cluster virtual IP address (VIP)",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "source_ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The source IP address of the GRE tunnel. This is typically a static IP address in the organization or SD-WAN."
+      },
+      "tunnel_id": {
+        "Type": "Int",
+        "Description": "The ID of the GRE tunnel.",
+        "Computed": true
+      },
+      "within_country": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Restrict the data center virtual IP addresses (VIPs) only to those within the same country as the source IP address",
+        "Computed": true
+      }
+    },
+    "zia_traffic_forwarding_static_ip": {
+      "comment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about this static IP address"
+      },
+      "geo_override": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If not set, geographic coordinates and city are automatically determined from the IP address. Otherwise, the latitude and longitude coordinates must be provided.",
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The static IP address"
+      },
+      "last_modified_by": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "This is an immutable reference to an entity. which mainly consists of id and name",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Identifier that uniquely identifies an entity"
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "latitude": {
+        "Type": "Float",
+        "Optional": true,
+        "Description": "Required only if the geoOverride attribute is set. Latitude with 7 digit precision after decimal point, ranges between -90 and 90 degrees.",
+        "Computed": true
+      },
+      "longitude": {
+        "Type": "Float",
+        "Optional": true,
+        "Description": "Required only if the geoOverride attribute is set. Longitude with 7 digit precision after decimal point, ranges between -180 and 180 degrees.",
+        "Computed": true
+      },
+      "managed_by": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "This is an immutable reference to an entity. which mainly consists of id and name",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Identifier that uniquely identifies an entity"
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "routable_ip": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether a non-RFC 1918 IP address is publicly routable. This attribute is ignored if there is no ZIA Private Service Edge associated to the organization.",
+        "Computed": true
+      },
+      "static_ip_id": {
+        "Type": "Int",
+        "Description": "The ID of the Static IP.",
+        "Computed": true
+      }
+    },
+    "zia_traffic_forwarding_vpn_credentials": {
+      "comments": {
+        "Type": "String",
+        "Optional": true
+      },
+      "fqdn": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Optional": true
+      },
+      "pre_shared_key": {
+        "Type": "String",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "vpn_credental_id": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "zia_url_categories": {
+      "configured_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "custom_category": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "custom_urls_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "db_categorized_urls": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "editable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "keywords": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "keywords_retaining_parent_category": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "scopes": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope_entities": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "list of scope IDs",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Int"
+                    }
+                  }
+                }
+              }
+            },
+            "scope_group_member_entities": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "list of scope group member IDs",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Int"
+                    }
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "super_category": {
+        "Type": "String",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "url_category_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url_keyword_counts": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "retain_parent_keyword_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "retain_parent_url_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "total_keyword_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "total_url_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "urls": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "urls_retaining_parent_category_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "zia_url_filtering_rules": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Action taken when traffic matches rule criteria"
+      },
+      "block_override": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "ciparule": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to true, the CIPA Compliance rule is enabled",
+        "Computed": true
+      },
+      "departments": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Name-ID pairs of departments for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about the URL Filtering rule"
+      },
+      "device_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of device groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "devices": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of devices",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "end_user_notification_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "URL of end user notification page to be displayed when the rule is matched. Not applicable if either 'overrideUsers' or 'overrideGroups' is specified."
+      },
+      "enforce_time_validity": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enforce a set a validity time period for the URL Filtering rule.",
+        "Computed": true
+      },
+      "groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Name-ID pairs of groups for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Description": "URL Filtering Rule ID",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of labels",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "last_modified_by": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Who modified the rule last",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "When the rule was last modified"
+      },
+      "location_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of locations groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 32,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Name-ID pairs of locations for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 8,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Rule Name"
+      },
+      "order": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Order of execution of rule with respect to other URL Filtering rules",
+        "Computed": true
+      },
+      "override_groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of override groups",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "override_users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "list of override users",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "protocols": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Supported Protocol criteria",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "rank": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Admin rank of the admin who creates this rule",
+        "Default": {
+          "Type": "int",
+          "Value": "7"
+        }
+      },
+      "request_methods": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Request method for which the rule must be applied. If not set, rule will be applied to all methods",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "rule_id": {
+        "Type": "Int",
+        "Description": "URL Filtering Rule ID",
+        "Computed": true
+      },
+      "size_quota": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Size quota in KB beyond which the URL Filtering rule is applied. If not set, no quota is enforced. If a policy rule action is set to 'BLOCK', this field is not applicable."
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true
+      },
+      "time_quota": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Time quota in minutes, after which the URL Filtering rule is applied. If not set, no quota is enforced. If a policy rule action is set to 'BLOCK', this field is not applicable."
+      },
+      "time_windows": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Name-ID pairs of time interval during which rule must be enforced.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "url_categories": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of URL categories for which rule must be applied",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "user_agent_types": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Name-ID pairs of users for which rule must be applied",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 4,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "validity_end_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "If enforceTimeValidity is set to true, the URL Filtering rule will cease to be valid on this end date and time."
+      },
+      "validity_start_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "If enforceTimeValidity is set to true, the URL Filtering rule will be valid starting on this date and time."
+      },
+      "validity_time_zone_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "If enforceTimeValidity is set to true, the URL Filtering rule date and time will be valid based on this time zone ID."
+      }
+    },
+    "zia_user_management": {
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Additional information about this user."
+      },
+      "department": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Additional information about this department",
+              "Computed": true
+            },
+            "deleted": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "idp_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Identity provider (IdP) ID",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Department name",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "email": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User email consists of a user name and domain name. It does not have to be a valid email address, but it must be unique and its domain must belong to the organization."
+      },
+      "groups": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of Groups a user belongs to. Groups are used in policies.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Additional information about this group",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "idp_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Identity provider (IdP) ID",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Group name",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User name. This appears when choosing users for policies."
+      },
+      "password": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User's password. Applicable only when authentication type is Hosted DB. Password strength must follow what is defined in the auth settings."
+      },
+      "temp_auth_email": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Temporary Authentication Email. If you enabled one-time tokens or links, enter the email address to which the Zscaler service sends the tokens or links. If this is empty, the service will send the email to the User email."
+      },
+      "user_id": {
+        "Type": "Int",
+        "Computed": true
+      }
+    }
+  },
+  "data-sources": {
+    "zia_activation_status": {
+      "status": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "zia_admin_roles": {
+      "admin_acct_access": {
+        "Type": "String",
+        "Description": "Admin and role management access permission.",
+        "Computed": true
+      },
+      "analysis_access": {
+        "Type": "String",
+        "Description": "Insights logs access permission.",
+        "Computed": true
+      },
+      "dashboard_access": {
+        "Type": "String",
+        "Description": "Dashboard access permission.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Description": "Admin role Id.",
+        "Computed": true
+      },
+      "is_auditor": {
+        "Type": "Bool",
+        "Description": "Indicates whether this is an auditor role.",
+        "Computed": true
+      },
+      "is_non_editable": {
+        "Type": "Bool",
+        "Description": "Indicates whether or not this admin user is editable/deletable.",
+        "Computed": true
+      },
+      "logs_limit": {
+        "Type": "String",
+        "Description": "Log range limit.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the admin role."
+      },
+      "permissions": {
+        "Type": "List",
+        "Description": "List of functional areas to which this role has access. This attribute is subject to change.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "policy_access": {
+        "Type": "String",
+        "Description": "Policy access permission.",
+        "Computed": true
+      },
+      "rank": {
+        "Type": "Int",
+        "Description": "Admin rank of this admin role. This is applicable only when admin rank is enabled in the advanced settings. Default value is 7 (the lowest rank). The assigned admin rank determines the roles or admin users this user can manage, and which rule orders this admin can access.",
+        "Computed": true
+      },
+      "report_access": {
+        "Type": "String",
+        "Description": "Report access permission.",
+        "Computed": true
+      },
+      "role_type": {
+        "Type": "String",
+        "Description": "The admin role type. ()This attribute is subject to change.)",
+        "Computed": true
+      },
+      "username_access": {
+        "Type": "String",
+        "Description": "Username access permission. When set to NONE, the username will be obfuscated.",
+        "Computed": true
+      }
+    },
+    "zia_admin_users": {
+      "admin_scope": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope_entities": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "scope_group_member_entities": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Computed": true
+      },
+      "disabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "email": {
+        "Type": "String",
+        "Computed": true
+      },
+      "exec_mobile_app_tokens": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud": {
+              "Type": "String",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "device_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "device_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "org_id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "token": {
+              "Type": "String",
+              "Computed": true
+            },
+            "token_expiry": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "token_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_auditor": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_exec_mobile_app_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_non_editable": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_password_expired": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_password_login_allowed": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_product_update_comm_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_security_report_comm_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_service_update_comm_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "login_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pwd_last_modified_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "role": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "zia_auth_settings_urls": {
+      "urls": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_department_management": {
+      "comments": {
+        "Type": "String",
+        "Computed": true
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "idp_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "zia_device_groups": {
+      "description": {
+        "Type": "String",
+        "Description": "The device group's description.",
+        "Computed": true
+      },
+      "device_count": {
+        "Type": "Int",
+        "Description": "The number of devices within the group.",
+        "Computed": true
+      },
+      "device_names": {
+        "Type": "String",
+        "Description": "The names of devices that belong to the device group. The device names are comma-separated.",
+        "Computed": true
+      },
+      "group_type": {
+        "Type": "String",
+        "Description": "The device group type.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Description": "The unique identifer for the device group.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The device group name."
+      },
+      "os_type": {
+        "Type": "String",
+        "Description": "The operating system (OS).",
+        "Computed": true
+      },
+      "predefined": {
+        "Type": "Bool",
+        "Description": "Indicates whether this is a predefined device group. If this value is set to true, the group is predefined.",
+        "Computed": true
+      }
+    },
+    "zia_devices": {
+      "description": {
+        "Type": "String",
+        "Description": "The device group's description.",
+        "Computed": true
+      },
+      "device_group_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The device group type.",
+        "Computed": true
+      },
+      "device_model": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The device model.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Description": "The unique identifier for the device.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The device name.",
+        "Computed": true
+      },
+      "os_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The operating system (OS).",
+        "Computed": true
+      },
+      "os_version": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The operating system version.",
+        "Computed": true
+      },
+      "owner_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The device owner's user name.",
+        "Computed": true
+      },
+      "owner_user_id": {
+        "Type": "Int",
+        "Description": "The unique identifier of the device owner (i.e., user).",
+        "Computed": true
+      }
+    },
+    "zia_dlp_dictionaries": {
+      "confidence_threshold": {
+        "Type": "String",
+        "Computed": true
+      },
+      "custom_phrase_match_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "dictionary_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "exact_data_match_details": {
+        "Type": "Set",
+        "Description": "Exact Data Match (EDM) related information for custom DLP dictionaries.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dictionary_edm_mapping_id": {
+              "Type": "Int",
+              "Description": "The unique identifier for the EDM mapping",
+              "Computed": true
+            },
+            "primary_field": {
+              "Type": "Int",
+              "Description": "The EDM template's primary field.",
+              "Computed": true
+            },
+            "schema_id": {
+              "Type": "Int",
+              "Description": "The unique identifier for the EDM template (or schema).",
+              "Computed": true
+            },
+            "secondary_field_match_on": {
+              "Type": "String",
+              "Description": "The EDM secondary field to match on.",
+              "Computed": true
+            },
+            "secondary_fields": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "idm_profile_match_accuracy": {
+        "Type": "Set",
+        "Description": "List of Indexed Document Match (IDM) profiles and their corresponding match accuracy for custom DLP dictionaries.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "adp_idm_profile": {
+              "Type": "Set",
+              "Description": "The action applied to a DLP dictionary using patterns",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Description": "Identifier that uniquely identifies an entity",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "match_accuracy": {
+              "Type": "String",
+              "Description": "The IDM template match accuracy.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_l10n_tag": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "patterns": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Computed": true
+            },
+            "pattern": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "phrases": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Computed": true
+            },
+            "phrase": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "proximity": {
+        "Type": "Int",
+        "Description": "The DLP dictionary proximity length.",
+        "Computed": true
+      },
+      "threshold_type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "zia_dlp_engines": {
+      "custom_dlp_engine": {
+        "Type": "Bool",
+        "Description": "Indicates whether this is a custom DLP engine. If this value is set to true, the engine is custom.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "The DLP engine's description.",
+        "Computed": true
+      },
+      "engine_expression": {
+        "Type": "String",
+        "Description": "The boolean logical operator in which various DLP dictionaries are combined within a DLP engine's expression.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Description": "The unique identifier for the DLP engine.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The DLP engine name as configured by the admin. This attribute is required in POST and PUT requests for custom DLP engines."
+      },
+      "predefined_engine_name": {
+        "Type": "String",
+        "Description": "The name of the predefined DLP engine.",
+        "Computed": true
+      }
+    },
+    "zia_dlp_notification_templates": {
+      "attach_content": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "html_message": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "plain_test_message": {
+        "Type": "String",
+        "Computed": true
+      },
+      "subject": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tls_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      }
+    },
+    "zia_dlp_web_rules": {
+      "access_control": {
+        "Type": "String",
+        "Description": "The access privilege for this DLP policy rule based on the admin's state.",
+        "Computed": true
+      },
+      "action": {
+        "Type": "String",
+        "Description": "The action taken when traffic matches the DLP policy rule criteria.",
+        "Computed": true
+      },
+      "auditor": {
+        "Type": "List",
+        "Description": "The auditor to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "cloud_applications": {
+        "Type": "List",
+        "Description": "The list of cloud applications to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "departments": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of departments to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Description": "The description of the DLP policy rule.",
+        "Computed": true
+      },
+      "dlp_engines": {
+        "Type": "List",
+        "Description": "The list of DLP engines to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "excluded_departments": {
+        "Type": "List",
+        "Description": "The name-ID pairs of the departments that are excluded from the DLP policy rule.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "excluded_groups": {
+        "Type": "List",
+        "Description": "The name-ID pairs of the groups that are excluded from the DLP policy rule.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "excluded_users": {
+        "Type": "List",
+        "Description": "The name-ID pairs of the users that are excluded from the DLP policy rule.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "external_auditor_email": {
+        "Type": "String",
+        "Description": "The email address of an external auditor to whom DLP email notifications are sent.",
+        "Computed": true
+      },
+      "file_types": {
+        "Type": "List",
+        "Description": "The list of file types to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "groups": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of groups to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "icap_server": {
+        "Type": "List",
+        "Description": "The DLP server, using ICAP, to which the transaction content is forwarded.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "labels": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of rule labels associated to the DLP policy rule.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_by": {
+        "Type": "List",
+        "Description": "The admin that modified the DLP policy rule last.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Description": "Timestamp when the DLP policy rule was last modified.",
+        "Computed": true
+      },
+      "location_groups": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of locations groups to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of locations to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "match_only": {
+        "Type": "Bool",
+        "Description": "The match only criteria for DLP engines.",
+        "Computed": true
+      },
+      "min_size": {
+        "Type": "Int",
+        "Description": "The minimum file size (in KB) used for evaluation of the DLP policy rule.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The DLP policy rule name.",
+        "Computed": true
+      },
+      "notification_template": {
+        "Type": "List",
+        "Description": "The template used for DLP notification emails.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ocr_enabled": {
+        "Type": "Bool",
+        "Description": "Enables or disables image file scanning.",
+        "Computed": true
+      },
+      "order": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "protocols": {
+        "Type": "List",
+        "Description": "The protocol criteria specified for the DLP policy rule.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "rank": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "Enables or disables the DLP policy rule.",
+        "Computed": true
+      },
+      "time_windows": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of time windows to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "url_categories": {
+        "Type": "List",
+        "Description": "The list of URL categories to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "users": {
+        "Type": "List",
+        "Description": "The Name-ID pairs of users to which the DLP policy rule must be applied.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "without_content_inspection": {
+        "Type": "Bool",
+        "Description": "Indicates a DLP policy rule without content inspection, when the value is set to true.",
+        "Computed": true
+      },
+      "zscaler_incident_reciever": {
+        "Type": "Bool",
+        "Description": "Indicates whether a Zscaler Incident Receiver is associated to the DLP policy rule.",
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_destination_groups": {
+      "addresses": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "countries": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_categories": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_ip_source_groups": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_addresses": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_network_application": {
+      "deprecated": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "locale": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "parent_category": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_network_application_groups": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "network_applications": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_firewall_filtering_network_service": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "dest_tcp_ports": {
+        "Type": "List",
+        "Description": "dest tcp ports",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "start": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "dest_udp_ports": {
+        "Type": "List",
+        "Description": "dest udp ports",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "start": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_name_l10n_tag": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "src_tcp_ports": {
+        "Type": "List",
+        "Description": "src tcp ports",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "start": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "src_udp_ports": {
+        "Type": "List",
+        "Description": "src udp ports",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "start": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "tag": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "zia_firewall_filtering_network_service_groups": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "services": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "is_name_l10n_tag": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "zia_firewall_filtering_rule": {
+      "access_control": {
+        "Type": "String",
+        "Computed": true
+      },
+      "action": {
+        "Type": "String",
+        "Optional": true
+      },
+      "app_service_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "app_services": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "default_rule": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "departments": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "dest_addresses": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dest_countries": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dest_ip_categories": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dest_ip_groups": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "enable_full_logging": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "labels": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_by": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "location_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nw_application_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "nw_applications": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "nw_service_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "nw_services": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "order": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "predefined": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "rank": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "src_ip_groups": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "src_ips": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true
+      },
+      "time_windows": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "users": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "zia_firewall_filtering_time_window": {
+      "day_of_week": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "end_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "start_time": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "zia_gre_internal_ip_range_list": {
+      "list": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end_ip_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "start_ip_address": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "required_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "10"
+        }
+      }
+    },
+    "zia_group_management": {
+      "comments": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "idp_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "zia_location_groups": {
+      "comments": {
+        "Type": "String",
+        "Computed": true
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "dynamic_location_group_criteria": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "city": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_string": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "countries": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "enable_bandwidth_control": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enable_caution": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enable_xff_forwarding": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enforce_aup": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enforce_authentication": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "enforce_firewall_control": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "managed_by": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "match_string": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "match_type": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "profiles": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "group_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_mod_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_mod_user": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "predefined": {
+        "Type": "Bool",
+        "Computed": true
+      }
+    },
+    "zia_location_management": {
+      "aup_block_internet_until_accepted": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "aup_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "aup_force_ssl_inspection": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "aup_timeout_in_days": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "auth_required": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "caution_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "country": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "display_time_unit": {
+        "Type": "String",
+        "Computed": true
+      },
+      "dn_bandwidth": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "idle_time_in_minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "ip_addresses": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ips_control": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ofw_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "parent_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "ports": {
+        "Type": "String",
+        "Computed": true
+      },
+      "profile": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ssl_scan_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "surrogate_ip": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "surrogate_ip_enforced_for_known_browsers": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "surrogate_refresh_time_in_minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "surrogate_refresh_time_unit": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tz": {
+        "Type": "String",
+        "Computed": true
+      },
+      "up_bandwidth": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "vpn_credentials": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Computed": true
+            },
+            "fqdn": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "location": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "managed_by": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "pre_shared_key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "xff_forward_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "zapp_ssl_scan_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      }
+    },
+    "zia_rule_labels": {
+      "created_by": {
+        "Type": "List",
+        "Description": "The admin that created the rule label. This is a read-only field. Ignored by PUT requests.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The configured name of the entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Description": "The rule label description.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The unique identifier for the rule label.",
+        "Computed": true
+      },
+      "last_modified_by": {
+        "Type": "List",
+        "Description": "The admin that modified the rule label last. This is a read-only field. Ignored by PUT requests.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Description": "Identifier that uniquely identifies an entity",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The configured name of the entity",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Description": "Timestamp when the rule lable was last modified. This is a read-only field. Ignored by PUT and DELETE requests.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The rule label name.",
+        "Computed": true
+      },
+      "referenced_rule_count": {
+        "Type": "Int",
+        "Description": "The number of rules that reference the label.",
+        "Computed": true
+      }
+    },
+    "zia_security_settings": {
+      "blacklist_urls": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "whitelist_urls": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_traffic_forwarding_gre_tunnel": {
+      "comment": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "internal_ip_range": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ip_unnumbered": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "last_modification_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_modified_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "managed_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "primary_dest_vip": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "city": {
+              "Type": "String",
+              "Computed": true
+            },
+            "country_code": {
+              "Type": "String",
+              "Computed": true
+            },
+            "datacenter": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "latitude": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "longitude": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "private_service_edge": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Computed": true
+            },
+            "virtual_ip": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "secondary_dest_vip": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "city": {
+              "Type": "String",
+              "Computed": true
+            },
+            "country_code": {
+              "Type": "String",
+              "Computed": true
+            },
+            "datacenter": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "latitude": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "longitude": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "private_service_edge": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Computed": true
+            },
+            "virtual_ip": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "source_ip": {
+        "Type": "String",
+        "Optional": true
+      },
+      "within_country": {
+        "Type": "Bool",
+        "Computed": true
+      }
+    },
+    "zia_traffic_forwarding_gre_tunnel_info": {
+      "gre_enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "gre_range_primary": {
+        "Type": "String",
+        "Computed": true
+      },
+      "gre_range_secondary": {
+        "Type": "String",
+        "Computed": true
+      },
+      "gre_tunnel_ip": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Optional": true
+      },
+      "primary_gw": {
+        "Type": "String",
+        "Computed": true
+      },
+      "secondary_gw": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tun_id": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "zia_traffic_forwarding_gre_vip_recommended_list": {
+      "geo_override": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "list": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "datacenter": {
+              "Type": "String",
+              "Optional": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "private_service_edge": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "virtual_ip": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "required_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "routable_ip": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "source_ip": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "zia_traffic_forwarding_public_node_vips": {
+      "city": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cloud_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "datacenter": {
+        "Type": "String",
+        "Optional": true
+      },
+      "gre_domain_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "gre_ips": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "pac_domain_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "pac_ips": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "region": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vpn_domain_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vpn_ips": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zia_traffic_forwarding_static_ip": {
+      "comment": {
+        "Type": "String",
+        "Computed": true
+      },
+      "geo_override": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "last_modification_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_modified_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "latitude": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "longitude": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "managed_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "routable_ip": {
+        "Type": "Bool",
+        "Computed": true
+      }
+    },
+    "zia_traffic_forwarding_vpn_credentials": {
+      "comments": {
+        "Type": "String",
+        "Computed": true
+      },
+      "fqdn": {
+        "Type": "String",
+        "Optional": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Optional": true
+      },
+      "location": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "managed_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "pre_shared_key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "zia_url_categories": {
+      "configured_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "custom_category": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "custom_urls_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "db_categorized_urls": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "editable": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "keywords": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "keywords_retaining_parent_category": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "scopes": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope_entities": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "scope_group_member_entities": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "extensions": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "super_category": {
+        "Type": "String",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url_keyword_counts": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "retain_parent_keyword_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "retain_parent_url_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "total_keyword_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "total_url_count": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "urls": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "urls_retaining_parent_category_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "val": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "zia_url_filtering_rules": {
+      "action": {
+        "Type": "String",
+        "Computed": true
+      },
+      "block_override": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "cbi_profile_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "ciparule": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "departments": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "device_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "devices": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "end_user_notification_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "enforce_time_validity": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "labels": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_by": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_modified_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "location_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "locations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "order": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "override_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "override_users": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "protocols": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "rank": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "request_methods": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "size_quota": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "time_quota": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "time_windows": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "url_categories": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "user_agent_types": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "users": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "extensions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "validity_end_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "validity_start_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "validity_time_zone_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "zia_user_management": {
+      "admin_user": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Computed": true
+      },
+      "department": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Computed": true
+            },
+            "deleted": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "idp_id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "email": {
+        "Type": "String",
+        "Computed": true
+      },
+      "groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "idp_id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "is_auditor": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "temp_auth_email": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    }
+  }
+}

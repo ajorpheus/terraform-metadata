@@ -3,14 +3,27 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "okta",
   "type": "provider",
-  "version": "v3.20.3",
+  "version": "v3.36.0",
   "provider": {
+    "access_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Bearer token granting privileges to Okta API.",
+      "DefaultFunc": "ENV(OKTA_ACCESS_TOKEN)",
+      "ConflictsWith": [
+        "api_token",
+        "client_id",
+        "scopes",
+        "private_key"
+      ]
+    },
     "api_token": {
       "Type": "String",
       "Optional": true,
       "Description": "API Token granting privileges to Okta API.",
       "DefaultFunc": "ENV(OKTA_API_TOKEN)",
       "ConflictsWith": [
+        "access_token",
         "client_id",
         "scopes",
         "private_key"
@@ -37,8 +50,15 @@
       "Description": "API Token granting privileges to Okta API.",
       "DefaultFunc": "ENV(OKTA_API_CLIENT_ID)",
       "ConflictsWith": [
+        "access_token",
         "api_token"
       ]
+    },
+    "http_proxy": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Alternate HTTP proxy of scheme://hostname or scheme://hostname:port format",
+      "DefaultFunc": "ENV(OKTA_HTTP_PROXY)"
     },
     "log_level": {
       "Type": "Int",
@@ -103,6 +123,16 @@
       "Description": "API Token granting privileges to Okta API.",
       "DefaultFunc": "ENV(OKTA_API_PRIVATE_KEY)",
       "ConflictsWith": [
+        "access_token",
+        "api_token"
+      ]
+    },
+    "private_key_id": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "API Token Id granting privileges to Okta API.",
+      "DefaultFunc": "ENV(OKTA_API_PRIVATE_KEY_ID)",
+      "ConflictsWith": [
         "api_token"
       ]
     },
@@ -121,6 +151,7 @@
       "Description": "API Token granting privileges to Okta API.",
       "DefaultFunc": "UNKNOWN",
       "ConflictsWith": [
+        "access_token",
         "api_token"
       ],
       "ConfigImplicitMode": "Attr",
@@ -219,6 +250,11 @@
       }
     },
     "okta_app_auto_login": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -454,6 +490,11 @@
       }
     },
     "okta_app_basic_auth": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -623,6 +664,11 @@
       }
     },
     "okta_app_bookmark": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -794,6 +840,11 @@
       }
     },
     "okta_app_group_assignment": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "app_id": {
         "Type": "String",
         "Required": true,
@@ -856,6 +907,11 @@
       }
     },
     "okta_app_oauth": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -889,6 +945,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "Application settings in JSON format"
+      },
+      "authentication_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Id of this apps authentication policy"
       },
       "auto_key_rotation": {
         "Type": "Bool",
@@ -987,6 +1048,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "Groups claim filter. Can only be set if type is FILTER."
+            },
+            "issuer_mode": {
+              "Type": "String",
+              "Description": "Issuer mode inherited from OAuth App",
+              "Computed": true
             },
             "name": {
               "Type": "String",
@@ -1131,6 +1197,11 @@
           "Value": "false"
         }
       },
+      "pkce_required": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. `true` for `browser` and `native` application types."
+      },
       "policy_uri": {
         "Type": "String",
         "Optional": true,
@@ -1139,7 +1210,7 @@
       "post_logout_redirect_uris": {
         "Type": "Set",
         "Optional": true,
-        "Description": "List of URIs for redirection after logout",
+        "Description": "List of URIs for redirection after logout. Note: see okta_app_oauth_post_logout_redirect_uri for appending to this list in a decentralized way.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1152,7 +1223,7 @@
         "Description": "Custom JSON that represents an OAuth application's profile"
       },
       "redirect_uris": {
-        "Type": "Set",
+        "Type": "List",
         "Optional": true,
         "Description": "List of URIs for use in the redirect-based flow. This is required for all application types except service. Note: see okta_app_oauth_redirect_uri for appending to this list in a decentralized way.",
         "ConfigImplicitMode": "Attr",
@@ -1327,6 +1398,17 @@
         }
       }
     },
+    "okta_app_oauth_post_logout_redirect_uri": {
+      "app_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "uri": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Post Logout Redirect URI to append to Okta OIDC application."
+      }
+    },
     "okta_app_oauth_redirect_uri": {
       "app_id": {
         "Type": "String",
@@ -1339,6 +1421,11 @@
       }
     },
     "okta_app_saml": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -1446,6 +1533,11 @@
         "Optional": true,
         "Description": "Audience Restriction"
       },
+      "authentication_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Id of this apps authentication policy"
+      },
       "authn_context_class_ref": {
         "Type": "String",
         "Optional": true,
@@ -1480,6 +1572,11 @@
         "Optional": true,
         "Description": "Determines the digest algorithm used to digitally sign the SAML assertion and response"
       },
+      "embed_url": {
+        "Type": "String",
+        "Description": "The url that can be used to embed this application in other portals.",
+        "Computed": true
+      },
       "enduser_note": {
         "Type": "String",
         "Optional": true,
@@ -1497,8 +1594,8 @@
       },
       "features": {
         "Type": "Set",
-        "Optional": true,
         "Description": "features to enable",
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1586,6 +1683,73 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Number of years the certificate is valid."
+      },
+      "keys": {
+        "Type": "List",
+        "Description": "Application keys",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created": {
+              "Type": "String",
+              "Description": "Created date",
+              "Computed": true
+            },
+            "e": {
+              "Type": "String",
+              "Description": "RSA exponent",
+              "Computed": true
+            },
+            "expires_at": {
+              "Type": "String",
+              "Description": "Expiration date",
+              "Computed": true
+            },
+            "kid": {
+              "Type": "String",
+              "Description": "Key ID",
+              "Computed": true
+            },
+            "kty": {
+              "Type": "String",
+              "Description": "Key type",
+              "Computed": true
+            },
+            "last_updated": {
+              "Type": "String",
+              "Description": "Last updated date",
+              "Computed": true
+            },
+            "n": {
+              "Type": "String",
+              "Description": "RSA modulus",
+              "Computed": true
+            },
+            "use": {
+              "Type": "String",
+              "Description": "Acceptable usage of the certificate",
+              "Computed": true
+            },
+            "x5c": {
+              "Type": "List",
+              "Description": "X.509 Certificate Chain",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "x5t_s256": {
+              "Type": "String",
+              "Description": "X.509 certificate SHA-256 thumbprint",
+              "Computed": true
+            }
+          }
+        }
       },
       "label": {
         "Type": "String",
@@ -1793,6 +1957,11 @@
       }
     },
     "okta_app_secure_password_store": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -2053,6 +2222,11 @@
       }
     },
     "okta_app_shared_credentials": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -2289,6 +2463,18 @@
         }
       }
     },
+    "okta_app_signon_policy": {
+      "description": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy Description"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy Name"
+      }
+    },
     "okta_app_signon_policy_rule": {
       "access": {
         "Type": "String",
@@ -2351,6 +2537,15 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "inactivity_period": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The inactivity duration after which the end user must re-authenticate. Use the ISO 8601 Period format for recurring time intervals.",
+        "Default": {
+          "Type": "string",
+          "Value": "PT1H"
         }
       },
       "name": {
@@ -2503,6 +2698,11 @@
       }
     },
     "okta_app_swa": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -2730,6 +2930,11 @@
       }
     },
     "okta_app_three_field": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -3942,6 +4147,11 @@
         "Type": "String",
         "Required": true,
         "Description": "Auth server scope name"
+      },
+      "system": {
+        "Type": "Bool",
+        "Description": "Whether Okta created the Scope",
+        "Computed": true
       }
     },
     "okta_authenticator": {
@@ -4016,6 +4226,11 @@
       }
     },
     "okta_auto_login_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -4297,6 +4512,11 @@
       }
     },
     "okta_bookmark_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -4467,6 +4687,42 @@
         }
       }
     },
+    "okta_brand": {
+      "agree_to_custom_privacy_policy": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Consent for updating the custom privacy policy URL."
+      },
+      "brand_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Brand ID - Note: Okta API for brands only reads and updates therefore the okta_brand resource needs to act as a quasi data source. Do this by setting brand_id."
+      },
+      "custom_privacy_policy_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Custom privacy policy URL"
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Brand ID",
+        "Computed": true
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the brand",
+        "Computed": true
+      },
+      "remove_powered_by_okta": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Removes \"Powered by Okta\" from the Okta-hosted sign-in page and \"© 2021 Okta, Inc.\" from the Okta End-User Dashboard",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
     "okta_captcha": {
       "name": {
         "Type": "String",
@@ -4607,6 +4863,48 @@
         "Type": "String",
         "Required": true,
         "Description": "Domain's ID"
+      }
+    },
+    "okta_email_customization": {
+      "body": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The body of the customization"
+      },
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of the customization",
+        "Computed": true
+      },
+      "is_default": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the customization is the default"
+      },
+      "language": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The language supported by the customization"
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+        "Computed": true
+      },
+      "subject": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The subject of the customization"
+      },
+      "template_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template Name"
       }
     },
     "okta_email_sender": {
@@ -4854,6 +5152,15 @@
         "Type": "String",
         "Required": true,
         "Description": "ID of a Okta group."
+      },
+      "track_all_users": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The resource concerns itself with all users added/deleted to the group; even those managed outside of the resource.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "users": {
         "Type": "Set",
@@ -5230,7 +5537,7 @@
       "issuer_mode": {
         "Type": "String",
         "Optional": true,
-        "Description": "Indicates whether Okta uses the original Okta org domain URL, or a custom domain URL",
+        "Description": "Indicates whether Okta uses the original Okta org domain URL, custom domain URL, or dynamic. See Identity Provider attributes - issuerMode - https://developer.okta.com/docs/reference/api/idps/#identity-provider-attributes",
         "Default": {
           "Type": "string",
           "Value": "ORG_URL"
@@ -5280,30 +5587,20 @@
       "request_signature_algorithm": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "The HMAC Signature Algorithm used when signing an authorization request",
         "Default": {
           "Type": "string",
-          "Value": "SHA-256"
+          "Value": "HS256"
         }
       },
       "request_signature_scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign response"
-      },
-      "response_signature_algorithm": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "Specifies whether to digitally sign an authorization request to the IdP",
         "Default": {
           "Type": "string",
-          "Value": "SHA-256"
+          "Value": "REQUEST"
         }
-      },
-      "response_signature_scope": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign response"
       },
       "scopes": {
         "Type": "Set",
@@ -5361,6 +5658,10 @@
       "user_info_url": {
         "Type": "String",
         "Optional": true
+      },
+      "user_type_id": {
+        "Type": "String",
+        "Computed": true
       },
       "username_template": {
         "Type": "String",
@@ -5446,7 +5747,7 @@
       "issuer_mode": {
         "Type": "String",
         "Optional": true,
-        "Description": "Indicates whether Okta uses the original Okta org domain URL, or a custom domain URL",
+        "Description": "Indicates whether Okta uses the original Okta org domain URL, custom domain URL, or dynamic. See Identity Provider attributes - issuerMode - https://developer.okta.com/docs/reference/api/idps/#identity-provider-attributes",
         "Default": {
           "Type": "string",
           "Value": "ORG_URL"
@@ -5496,30 +5797,20 @@
       "request_signature_algorithm": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "The HMAC Signature Algorithm used when signing an authorization request",
         "Default": {
           "Type": "string",
-          "Value": "SHA-256"
+          "Value": "HS256"
         }
       },
       "request_signature_scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign response"
-      },
-      "response_signature_algorithm": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "Specifies whether to digitally sign an authorization request to the IdP",
         "Default": {
           "Type": "string",
-          "Value": "SHA-256"
+          "Value": "REQUEST"
         }
-      },
-      "response_signature_scope": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign response"
       },
       "scopes": {
         "Type": "Set",
@@ -5577,6 +5868,10 @@
       "user_info_url": {
         "Type": "String",
         "Optional": true
+      },
+      "user_type_id": {
+        "Type": "String",
+        "Computed": true
       },
       "username_template": {
         "Type": "String",
@@ -5709,7 +6004,7 @@
       "request_signature_algorithm": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "The XML digital Signature Algorithm used when signing an \u003cAuthnRequest\u003e message",
         "Default": {
           "Type": "string",
           "Value": "SHA-256"
@@ -5718,12 +6013,16 @@
       "request_signature_scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign response"
+        "Description": "Specifies whether to digitally sign \u003cAuthnRequest\u003e messages to the IdP",
+        "Default": {
+          "Type": "string",
+          "Value": "REQUEST"
+        }
       },
       "response_signature_algorithm": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "The minimum XML digital Signature Algorithm allowed when verifying a \u003cSAMLResponse\u003e message or \u003cAssertion\u003e element",
         "Default": {
           "Type": "string",
           "Value": "SHA-256"
@@ -5732,7 +6031,11 @@
       "response_signature_scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign response"
+        "Description": "Specifies whether to verify a \u003cSAMLResponse\u003e message or \u003cAssertion\u003e element XML digital signature",
+        "Default": {
+          "Type": "string",
+          "Value": "ANY"
+        }
       },
       "sso_binding": {
         "Type": "String",
@@ -5792,6 +6095,10 @@
         }
       },
       "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_type_id": {
         "Type": "String",
         "Computed": true
       },
@@ -5975,34 +6282,6 @@
           "Value": "AUTO"
         }
       },
-      "request_signature_algorithm": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign requests",
-        "Default": {
-          "Type": "string",
-          "Value": "SHA-256"
-        }
-      },
-      "request_signature_scope": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign response"
-      },
-      "response_signature_algorithm": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign requests",
-        "Default": {
-          "Type": "string",
-          "Value": "SHA-256"
-        }
-      },
-      "response_signature_scope": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign response"
-      },
       "scopes": {
         "Type": "Set",
         "Required": true,
@@ -6050,7 +6329,8 @@
       },
       "type": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "Identity Provider Types: https://developer.okta.com/docs/reference/api/idps/#identity-provider-type"
       },
       "username_template": {
         "Type": "String",
@@ -6189,6 +6469,15 @@
           "ElementsType": "String"
         }
       },
+      "external_idp": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "fido_u2f": {
         "Type": "Map",
         "Optional": true,
@@ -6233,6 +6522,15 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "is_oie": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the policy using Okta Identity Engine (OIE) with authenticators instead of factors?",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "name": {
@@ -6303,12 +6601,48 @@
           "ElementsType": "String"
         }
       },
+      "okta_verify": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "onprem_mfa": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "phone_number": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "priority": {
         "Type": "Int",
         "Optional": true,
         "Description": "Policy Priority, this attribute can be set to a valid priority. To avoid endless diff situation we error if an invalid priority is provided. API defaults it to the last (lowest) if not there."
       },
       "rsa_token": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "security_question": {
         "Type": "Map",
         "Optional": true,
         "ConfigImplicitMode": "Attr",
@@ -6327,6 +6661,15 @@
         }
       },
       "symantec_vip": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "webauthn": {
         "Type": "Map",
         "Optional": true,
         "ConfigImplicitMode": "Attr",
@@ -6546,6 +6889,11 @@
       }
     },
     "okta_oauth_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -6579,6 +6927,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "Application settings in JSON format"
+      },
+      "authentication_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Id of this apps authentication policy"
       },
       "auto_key_rotation": {
         "Type": "Bool",
@@ -6677,6 +7030,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "Groups claim filter. Can only be set if type is FILTER."
+            },
+            "issuer_mode": {
+              "Type": "String",
+              "Description": "Issuer mode inherited from OAuth App",
+              "Computed": true
             },
             "name": {
               "Type": "String",
@@ -6821,6 +7179,11 @@
           "Value": "false"
         }
       },
+      "pkce_required": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. `true` for `browser` and `native` application types."
+      },
       "policy_uri": {
         "Type": "String",
         "Optional": true,
@@ -6829,7 +7192,7 @@
       "post_logout_redirect_uris": {
         "Type": "Set",
         "Optional": true,
-        "Description": "List of URIs for redirection after logout",
+        "Description": "List of URIs for redirection after logout. Note: see okta_app_oauth_post_logout_redirect_uri for appending to this list in a decentralized way.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -6842,7 +7205,7 @@
         "Description": "Custom JSON that represents an OAuth application's profile"
       },
       "redirect_uris": {
-        "Type": "Set",
+        "Type": "List",
         "Optional": true,
         "Description": "List of URIs for use in the redirect-based flow. This is required for all application types except service. Note: see okta_app_oauth_redirect_uri for appending to this list in a decentralized way.",
         "ConfigImplicitMode": "Attr",
@@ -7114,7 +7477,7 @@
       "auth_provider": {
         "Type": "String",
         "Optional": true,
-        "Description": "Authentication Provider: OKTA or ACTIVE_DIRECTORY.",
+        "Description": "Authentication Provider: OKTA, ACTIVE_DIRECTORY or LDAP",
         "Default": {
           "Type": "string",
           "Value": "OKTA"
@@ -7483,6 +7846,15 @@
           "ElementsType": "String"
         }
       },
+      "external_idp": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "fido_u2f": {
         "Type": "Map",
         "Optional": true,
@@ -7527,6 +7899,15 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "is_oie": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the policy using Okta Identity Engine (OIE) with authenticators instead of factors?",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "name": {
@@ -7597,12 +7978,48 @@
           "ElementsType": "String"
         }
       },
+      "okta_verify": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "onprem_mfa": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "phone_number": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "priority": {
         "Type": "Int",
         "Optional": true,
         "Description": "Policy Priority, this attribute can be set to a valid priority. To avoid endless diff situation we error if an invalid priority is provided. API defaults it to the last (lowest) if not there."
       },
       "rsa_token": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "security_question": {
         "Type": "Map",
         "Optional": true,
         "ConfigImplicitMode": "Attr",
@@ -7621,6 +8038,15 @@
         }
       },
       "symantec_vip": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "webauthn": {
         "Type": "Map",
         "Optional": true,
         "ConfigImplicitMode": "Attr",
@@ -7651,6 +8077,15 @@
         "Computed": true
       },
       "duo": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "external_idp": {
         "Type": "Map",
         "Optional": true,
         "ConfigImplicitMode": "Attr",
@@ -7693,6 +8128,15 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "is_oie": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is the policy using Okta Identity Engine (OIE) with authenticators instead of factors?",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "name": {
@@ -7763,12 +8207,48 @@
           "ElementsType": "String"
         }
       },
+      "okta_verify": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "onprem_mfa": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "phone_number": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "priority": {
         "Type": "Int",
         "Description": "Default policy priority",
         "Computed": true
       },
       "rsa_token": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "security_question": {
         "Type": "Map",
         "Optional": true,
         "ConfigImplicitMode": "Attr",
@@ -7791,6 +8271,15 @@
           "ElementsType": "String"
         }
       },
+      "webauthn": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "yubikey_token": {
         "Type": "Map",
         "Optional": true,
@@ -7805,7 +8294,7 @@
       "auth_provider": {
         "Type": "String",
         "Optional": true,
-        "Description": "Authentication Provider: OKTA or ACTIVE_DIRECTORY.",
+        "Description": "Authentication Provider: OKTA, ACTIVE_DIRECTORY or LDAP",
         "Default": {
           "Type": "string",
           "Value": "OKTA"
@@ -8146,7 +8635,7 @@
         "Description": "Number of distinct passwords that must be created before they can be reused: 0 = none.",
         "Default": {
           "Type": "int",
-          "Value": "0"
+          "Value": "4"
         }
       },
       "password_lockout_notification_channels": {
@@ -8310,6 +8799,28 @@
           "Type": "string",
           "Value": "ACTIVE"
         }
+      }
+    },
+    "okta_policy_profile_enrollment_apps": {
+      "apps": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of app IDs to be added to this policy",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "default_policy_id": {
+        "Type": "String",
+        "Description": "ID of the Default Enrollment Policy. This policy is used as a policy to re-assign apps to when they are unassigned from this one",
+        "Computed": true
+      },
+      "policy_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the enrollment policy."
       }
     },
     "okta_policy_rule_idp_discovery": {
@@ -8888,6 +9399,25 @@
           }
         }
       },
+      "identity_provider": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Apply rule based on the IdP used: ANY, OKTA or SPECIFIC_IDP.",
+        "Default": {
+          "Type": "string",
+          "Value": "ANY"
+        }
+      },
+      "identity_provider_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "When identity_provider is SPECIFIC_IDP then this is the list of IdP IDs to apply the rule on",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "mfa_lifetime": {
         "Type": "Int",
         "Optional": true,
@@ -9201,6 +9731,11 @@
       }
     },
     "okta_saml_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -9308,6 +9843,11 @@
         "Optional": true,
         "Description": "Audience Restriction"
       },
+      "authentication_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Id of this apps authentication policy"
+      },
       "authn_context_class_ref": {
         "Type": "String",
         "Optional": true,
@@ -9342,6 +9882,11 @@
         "Optional": true,
         "Description": "Determines the digest algorithm used to digitally sign the SAML assertion and response"
       },
+      "embed_url": {
+        "Type": "String",
+        "Description": "The url that can be used to embed this application in other portals.",
+        "Computed": true
+      },
       "enduser_note": {
         "Type": "String",
         "Optional": true,
@@ -9359,8 +9904,8 @@
       },
       "features": {
         "Type": "Set",
-        "Optional": true,
         "Description": "features to enable",
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -9448,6 +9993,73 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Number of years the certificate is valid."
+      },
+      "keys": {
+        "Type": "List",
+        "Description": "Application keys",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created": {
+              "Type": "String",
+              "Description": "Created date",
+              "Computed": true
+            },
+            "e": {
+              "Type": "String",
+              "Description": "RSA exponent",
+              "Computed": true
+            },
+            "expires_at": {
+              "Type": "String",
+              "Description": "Expiration date",
+              "Computed": true
+            },
+            "kid": {
+              "Type": "String",
+              "Description": "Key ID",
+              "Computed": true
+            },
+            "kty": {
+              "Type": "String",
+              "Description": "Key type",
+              "Computed": true
+            },
+            "last_updated": {
+              "Type": "String",
+              "Description": "Last updated date",
+              "Computed": true
+            },
+            "n": {
+              "Type": "String",
+              "Description": "RSA modulus",
+              "Computed": true
+            },
+            "use": {
+              "Type": "String",
+              "Description": "Acceptable usage of the certificate",
+              "Computed": true
+            },
+            "x5c": {
+              "Type": "List",
+              "Description": "X.509 Certificate Chain",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "x5t_s256": {
+              "Type": "String",
+              "Description": "X.509 certificate SHA-256 thumbprint",
+              "Computed": true
+            }
+          }
+        }
       },
       "label": {
         "Type": "String",
@@ -9764,7 +10376,7 @@
       "request_signature_algorithm": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "The XML digital Signature Algorithm used when signing an \u003cAuthnRequest\u003e message",
         "Default": {
           "Type": "string",
           "Value": "SHA-256"
@@ -9773,12 +10385,16 @@
       "request_signature_scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign response"
+        "Description": "Specifies whether to digitally sign \u003cAuthnRequest\u003e messages to the IdP",
+        "Default": {
+          "Type": "string",
+          "Value": "REQUEST"
+        }
       },
       "response_signature_algorithm": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign requests",
+        "Description": "The minimum XML digital Signature Algorithm allowed when verifying a \u003cSAMLResponse\u003e message or \u003cAssertion\u003e element",
         "Default": {
           "Type": "string",
           "Value": "SHA-256"
@@ -9787,7 +10403,11 @@
       "response_signature_scope": {
         "Type": "String",
         "Optional": true,
-        "Description": "algorithm to use to sign response"
+        "Description": "Specifies whether to verify a \u003cSAMLResponse\u003e message or \u003cAssertion\u003e element XML digital signature",
+        "Default": {
+          "Type": "string",
+          "Value": "ANY"
+        }
       },
       "sso_binding": {
         "Type": "String",
@@ -9850,6 +10470,10 @@
         "Type": "String",
         "Computed": true
       },
+      "user_type_id": {
+        "Type": "String",
+        "Computed": true
+      },
       "username_template": {
         "Type": "String",
         "Optional": true,
@@ -9896,6 +10520,11 @@
       }
     },
     "okta_secure_password_store_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -10309,6 +10938,25 @@
           }
         }
       },
+      "identity_provider": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Apply rule based on the IdP used: ANY, OKTA or SPECIFIC_IDP.",
+        "Default": {
+          "Type": "string",
+          "Value": "ANY"
+        }
+      },
+      "identity_provider_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "When identity_provider is SPECIFIC_IDP then this is the list of IdP IDs to apply the rule on",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "mfa_lifetime": {
         "Type": "Int",
         "Optional": true,
@@ -10590,34 +11238,6 @@
           "Value": "AUTO"
         }
       },
-      "request_signature_algorithm": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign requests",
-        "Default": {
-          "Type": "string",
-          "Value": "SHA-256"
-        }
-      },
-      "request_signature_scope": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign response"
-      },
-      "response_signature_algorithm": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign requests",
-        "Default": {
-          "Type": "string",
-          "Value": "SHA-256"
-        }
-      },
-      "response_signature_scope": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "algorithm to use to sign response"
-      },
       "scopes": {
         "Type": "Set",
         "Required": true,
@@ -10665,7 +11285,8 @@
       },
       "type": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "Identity Provider Types: https://developer.okta.com/docs/reference/api/idps/#identity-provider-type"
       },
       "username_template": {
         "Type": "String",
@@ -10677,6 +11298,11 @@
       }
     },
     "okta_swa_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -10972,6 +11598,98 @@
         "Description": "SMS template type"
       }
     },
+    "okta_theme": {
+      "background_image": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path to local file"
+      },
+      "background_image_url": {
+        "Type": "String",
+        "Description": "Background image URL",
+        "Computed": true
+      },
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "email_template_touch_point_variant": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Variant for email templates (`OKTA_DEFAULT`, `FULL_THEME`)"
+      },
+      "end_user_dashboard_touch_point_variant": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Variant for the Okta End-User Dashboard (`OKTA_DEFAULT`, `WHITE_LOGO_BACKGROUND`, `FULL_THEME`, `LOGO_ON_FULL_WHITE_BACKGROUND`)"
+      },
+      "error_page_touch_point_variant": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Variant for the error page (`OKTA_DEFAULT`, `BACKGROUND_SECONDARY_COLOR`, `BACKGROUND_IMAGE`)"
+      },
+      "favicon": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path to local file"
+      },
+      "favicon_url": {
+        "Type": "String",
+        "Description": "Favicon URL",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Brand ID",
+        "Computed": true
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+        "Computed": true
+      },
+      "logo": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path to local file"
+      },
+      "logo_url": {
+        "Type": "String",
+        "Description": "Logo URL",
+        "Computed": true
+      },
+      "primary_color_contrast_hex": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Primary color contrast hex code"
+      },
+      "primary_color_hex": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Primary color hex code"
+      },
+      "secondary_color_contrast_hex": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Secondary color contrast hex code"
+      },
+      "secondary_color_hex": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Secondary color hex code"
+      },
+      "sign_in_page_touch_point_variant": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Variant for the Okta Sign-In Page (`OKTA_DEFAULT`, `BACKGROUND_SECONDARY_COLOR`, `BACKGROUND_IMAGE`)"
+      },
+      "theme_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Theme ID - Note: Okta API for theme only reads and updates therefore the okta_theme resource needs to act as a quasi data source. Do this by setting theme_id."
+      }
+    },
     "okta_threat_insight_settings": {
       "action": {
         "Type": "String",
@@ -10990,6 +11708,11 @@
       }
     },
     "okta_three_field_app": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update"
+      ],
       "accessibility_error_redirect_url": {
         "Type": "String",
         "Optional": true,
@@ -11326,6 +12049,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "User employee number"
+      },
+      "expire_password_on_create": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to `true`, the user will have to change the password at the next login. This property will be used when user is being created and works only when `password` field is set",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "first_name": {
         "Type": "String",
@@ -12284,6 +13016,11 @@
         "Description": "OAuth client ID",
         "Computed": true
       },
+      "client_secret": {
+        "Type": "String",
+        "Description": "OAuth client secret",
+        "Computed": true
+      },
       "client_uri": {
         "Type": "String",
         "Description": "URI to a web page providing information about the client.",
@@ -12974,6 +13711,11 @@
         "Type": "String",
         "Required": true,
         "Description": "Name of the policy"
+      },
+      "priority": {
+        "Type": "Int",
+        "Description": "Priority of the auth server policy",
+        "Computed": true
       }
     },
     "okta_auth_server_scopes": {
@@ -13162,6 +13904,67 @@
         "Description": "Searches the name property of behaviors for matching value"
       }
     },
+    "okta_brand": {
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "custom_privacy_policy_url": {
+        "Type": "String",
+        "Description": "Custom privacy policy URL",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of the Brand",
+        "Computed": true
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the brand",
+        "Computed": true
+      },
+      "remove_powered_by_okta": {
+        "Type": "Bool",
+        "Description": "Removes \"Powered by Okta\" from the Okta-hosted sign-in page and \"© 2021 Okta, Inc.\" from the Okta End-User Dashboard",
+        "Computed": true
+      }
+    },
+    "okta_brands": {
+      "brands": {
+        "Type": "Set",
+        "Description": "List of `okta_brand` belonging to the organization",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "custom_privacy_policy_url": {
+              "Type": "String",
+              "Description": "Custom privacy policy URL",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The ID of the Brand",
+              "Computed": true
+            },
+            "links": {
+              "Type": "String",
+              "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the brand",
+              "Computed": true
+            },
+            "remove_powered_by_okta": {
+              "Type": "Bool",
+              "Description": "Removes \"Powered by Okta\" from the Okta-hosted sign-in page and \"© 2021 Okta, Inc.\" from the Okta End-User Dashboard",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "okta_default_policies": {
       "type": {
         "Type": "String",
@@ -13174,6 +13977,153 @@
         "Type": "String",
         "Required": true,
         "Description": "Policy type: OKTA_SIGN_ON, PASSWORD, MFA_ENROLL, or IDP_DISCOVERY"
+      }
+    },
+    "okta_email_customization": {
+      "body": {
+        "Type": "String",
+        "Description": "The body of the customization",
+        "Computed": true
+      },
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "customization_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of the customization"
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of the customization",
+        "Computed": true
+      },
+      "is_default": {
+        "Type": "Bool",
+        "Description": "Whether the customization is the default",
+        "Computed": true
+      },
+      "language": {
+        "Type": "String",
+        "Description": "The language supported by the customization",
+        "Computed": true
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+        "Computed": true
+      },
+      "subject": {
+        "Type": "String",
+        "Description": "The subject of the customization",
+        "Computed": true
+      },
+      "template_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template Name"
+      }
+    },
+    "okta_email_customizations": {
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "email_customizations": {
+        "Type": "Set",
+        "Description": "List of `okta_email_customization` belonging to the named email template of the brand in the organization",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body": {
+              "Type": "String",
+              "Description": "The body of the customization",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The ID of the customization",
+              "Computed": true
+            },
+            "is_default": {
+              "Type": "Bool",
+              "Description": "Whether the customization is the default",
+              "Computed": true
+            },
+            "language": {
+              "Type": "String",
+              "Description": "The language supported by the customization",
+              "Computed": true
+            },
+            "links": {
+              "Type": "String",
+              "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+              "Computed": true
+            },
+            "subject": {
+              "Type": "String",
+              "Description": "The subject of the customization",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "template_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Template Name"
+      }
+    },
+    "okta_email_template": {
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the email template"
+      }
+    },
+    "okta_email_templates": {
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "email_templates": {
+        "Type": "Set",
+        "Description": "List of `okta_email_template` belonging to a brand in the organization",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "links": {
+              "Type": "String",
+              "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the email template"
+            }
+          }
+        }
       }
     },
     "okta_everyone_group": {
@@ -13192,6 +14142,11 @@
       }
     },
     "okta_group": {
+      "delay_read_seconds": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Force delay of the group read by N seconds. Useful when eventual consistency of group information needs to be allowed for; for instance, when group rules are known to have been applied."
+      },
       "description": {
         "Type": "String",
         "Computed": true
@@ -13242,6 +14197,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "custom_profile_attributes": {
+              "Type": "String",
+              "Computed": true
+            },
             "description": {
               "Type": "String",
               "Computed": true
@@ -13714,6 +14673,167 @@
         "Computed": true
       }
     },
+    "okta_theme": {
+      "background_image_url": {
+        "Type": "String",
+        "Description": "Background image URL",
+        "Computed": true
+      },
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "email_template_touch_point_variant": {
+        "Type": "String",
+        "Description": "Variant for email templates (`OKTA_DEFAULT`, `FULL_THEME`)",
+        "Computed": true
+      },
+      "end_user_dashboard_touch_point_variant": {
+        "Type": "String",
+        "Description": "Variant for the Okta End-User Dashboard (`OKTA_DEFAULT`, `WHITE_LOGO_BACKGROUND`, `FULL_THEME`, `LOGO_ON_FULL_WHITE_BACKGROUND`)",
+        "Computed": true
+      },
+      "error_page_touch_point_variant": {
+        "Type": "String",
+        "Description": "Variant for the error page (`OKTA_DEFAULT`, `BACKGROUND_SECONDARY_COLOR`, `BACKGROUND_IMAGE`)",
+        "Computed": true
+      },
+      "favicon_url": {
+        "Type": "String",
+        "Description": "Favicon URL",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of the theme",
+        "Computed": true
+      },
+      "links": {
+        "Type": "String",
+        "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+        "Computed": true
+      },
+      "logo_url": {
+        "Type": "String",
+        "Description": "Logo URL",
+        "Computed": true
+      },
+      "primary_color_contrast_hex": {
+        "Type": "String",
+        "Description": "Primary color contrast hex code",
+        "Computed": true
+      },
+      "primary_color_hex": {
+        "Type": "String",
+        "Description": "Primary color hex code",
+        "Computed": true
+      },
+      "secondary_color_contrast_hex": {
+        "Type": "String",
+        "Description": "Secondary color contrast hex code",
+        "Computed": true
+      },
+      "secondary_color_hex": {
+        "Type": "String",
+        "Description": "Secondary color hex code",
+        "Computed": true
+      },
+      "sign_in_page_touch_point_variant": {
+        "Type": "String",
+        "Description": "Variant for the Okta Sign-In Page (`OKTA_DEFAULT`, `BACKGROUND_SECONDARY_COLOR`, `BACKGROUND_IMAGE`)",
+        "Computed": true
+      },
+      "theme_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Theme ID"
+      }
+    },
+    "okta_themes": {
+      "brand_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Brand ID"
+      },
+      "themes": {
+        "Type": "Set",
+        "Description": "List of `okta_them` belonging to the brand in the organization",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "background_image_url": {
+              "Type": "String",
+              "Description": "Background image URL",
+              "Computed": true
+            },
+            "email_template_touch_point_variant": {
+              "Type": "String",
+              "Description": "Variant for email templates (`OKTA_DEFAULT`, `FULL_THEME`)",
+              "Computed": true
+            },
+            "end_user_dashboard_touch_point_variant": {
+              "Type": "String",
+              "Description": "Variant for the Okta End-User Dashboard (`OKTA_DEFAULT`, `WHITE_LOGO_BACKGROUND`, `FULL_THEME`, `LOGO_ON_FULL_WHITE_BACKGROUND`)",
+              "Computed": true
+            },
+            "error_page_touch_point_variant": {
+              "Type": "String",
+              "Description": "Variant for the error page (`OKTA_DEFAULT`, `BACKGROUND_SECONDARY_COLOR`, `BACKGROUND_IMAGE`)",
+              "Computed": true
+            },
+            "favicon_url": {
+              "Type": "String",
+              "Description": "Favicon URL",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The ID of the theme",
+              "Computed": true
+            },
+            "links": {
+              "Type": "String",
+              "Description": "Link relations for this object - JSON HAL - Discoverable resources related to the email template",
+              "Computed": true
+            },
+            "logo_url": {
+              "Type": "String",
+              "Description": "Logo URL",
+              "Computed": true
+            },
+            "primary_color_contrast_hex": {
+              "Type": "String",
+              "Description": "Primary color contrast hex code",
+              "Computed": true
+            },
+            "primary_color_hex": {
+              "Type": "String",
+              "Description": "Primary color hex code",
+              "Computed": true
+            },
+            "secondary_color_contrast_hex": {
+              "Type": "String",
+              "Description": "Secondary color contrast hex code",
+              "Computed": true
+            },
+            "secondary_color_hex": {
+              "Type": "String",
+              "Description": "Secondary color hex code",
+              "Computed": true
+            },
+            "sign_in_page_touch_point_variant": {
+              "Type": "String",
+              "Description": "Variant for the Okta Sign-In Page (`OKTA_DEFAULT`, `BACKGROUND_SECONDARY_COLOR`, `BACKGROUND_IMAGE`)",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "okta_trusted_origins": {
       "filter": {
         "Type": "String",
@@ -13776,6 +14896,15 @@
         "Type": "String",
         "Computed": true
       },
+      "compound_search_operator": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Search operator used when joining mulitple search clauses",
+        "Default": {
+          "Type": "string",
+          "Value": "and"
+        }
+      },
       "cost_center": {
         "Type": "String",
         "Computed": true
@@ -13787,6 +14916,11 @@
       "custom_profile_attributes": {
         "Type": "String",
         "Computed": true
+      },
+      "delay_read_seconds": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Force delay of the user read by N seconds. Useful when eventual consistency of user information needs to be allowed for."
       },
       "department": {
         "Type": "String",
@@ -13884,7 +15018,7 @@
       "search": {
         "Type": "Set",
         "Optional": true,
-        "Description": "Filter to find a user, each filter will be concatenated with an AND clause. Please be aware profile properties must match what is in Okta, which is likely camel case",
+        "Description": "Filter to find user/users. Each filter will be concatenated with the compound search operator. Please be aware profile properties must match what is in Okta, which is likely camel case. Expression is a free form expression filter https://developer.okta.com/docs/reference/core-okta-api/#filter . The set name/value/comparison properties will be ignored if expression is present",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -13898,14 +15032,19 @@
                 "Value": "eq"
               }
             },
+            "expression": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A raw search expression string. This requires the search feature be on. Please see Okta documentation on their filter API for users. https://developer.okta.com/docs/api/resources/users#list-users-with-search"
+            },
             "name": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Property name to search for. This requires the search feature be on. Please see Okta documentation on their filter API for users. https://developer.okta.com/docs/api/resources/users#list-users-with-search"
             },
             "value": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             }
           }
         }
@@ -13913,6 +15052,24 @@
       "second_email": {
         "Type": "String",
         "Computed": true
+      },
+      "skip_groups": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Do not populate user groups information (prevents additional API call)",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "skip_roles": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Do not populate user roles information (prevents additional API call)",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "state": {
         "Type": "String",
@@ -14004,10 +15161,53 @@
       }
     },
     "okta_users": {
+      "compound_search_operator": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Search operator used when joining mulitple search clauses",
+        "Default": {
+          "Type": "string",
+          "Value": "and"
+        }
+      },
+      "delay_read_seconds": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Force delay of the users read by N seconds. Useful when eventual consistency of users information needs to be allowed for."
+      },
+      "group_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Find users based on group membership using the id of the group.",
+        "ConflictsWith": [
+          "search"
+        ]
+      },
+      "include_groups": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Fetch group memberships for each user",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "include_roles": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Fetch user roles for each user",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "search": {
         "Type": "Set",
-        "Required": true,
-        "Description": "Filter to find a user, each filter will be concatenated with an AND clause. Please be aware profile properties must match what is in Okta, which is likely camel case",
+        "Optional": true,
+        "Description": "Filter to find user/users. Each filter will be concatenated with the compound search operator. Please be aware profile properties must match what is in Okta, which is likely camel case. Expression is a free form expression filter https://developer.okta.com/docs/reference/core-okta-api/#filter . The set name/value/comparison properties will be ignored if expression is present",
+        "ConflictsWith": [
+          "group_id"
+        ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -14021,14 +15221,19 @@
                 "Value": "eq"
               }
             },
+            "expression": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A raw search expression string. This requires the search feature be on. Please see Okta documentation on their filter API for users. https://developer.okta.com/docs/api/resources/users#list-users-with-search"
+            },
             "name": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Property name to search for. This requires the search feature be on. Please see Okta documentation on their filter API for users. https://developer.okta.com/docs/api/resources/users#list-users-with-search"
             },
             "value": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             }
           }
         }

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "launchdarkly",
   "type": "provider",
-  "version": "v2.4.1",
+  "version": "v2.9.2",
   "provider": {
     "access_token": {
       "Type": "String",
@@ -304,6 +304,15 @@
       }
     },
     "launchdarkly_custom_role": {
+      "base_permissions": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The base permission level - either reader or no_access. Defaults to reader",
+        "Default": {
+          "Type": "string",
+          "Value": "reader"
+        }
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -1593,6 +1602,53 @@
         }
       }
     },
+    "launchdarkly_team": {
+      "custom_role_keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of custom role keys for the team",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The team's description"
+      },
+      "key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The team's unique key"
+      },
+      "maintainers": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of team maintainer IDs as strings",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "member_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of team member IDs as strings",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The team's human-readable name"
+      }
+    },
     "launchdarkly_team_member": {
       "custom_roles": {
         "Type": "Set",
@@ -1622,7 +1678,7 @@
       "role": {
         "Type": "String",
         "Optional": true,
-        "Description": "The team member's role. This must be reader, writer, admin, or owner. Team members must have either a role or custom role",
+        "Description": "The team member's role. This must be reader, writer, admin, or no_access. Team members must have either a role or custom role",
         "Computed": true
       }
     },
@@ -2795,6 +2851,76 @@
         "Type": "Set",
         "Optional": true,
         "Description": "Tags associated with your resource",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "launchdarkly_team": {
+      "custom_role_keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of keys for custom roles the team has",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The team's description"
+      },
+      "key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The team's unique key"
+      },
+      "maintainers": {
+        "Type": "Set",
+        "Description": "A list of maintainers as 'member' objects",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "email": {
+              "Type": "String",
+              "Required": true
+            },
+            "first_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "last_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "role": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The team's human-readable name"
+      },
+      "project_keys": {
+        "Type": "Set",
+        "Description": "A list of keys of projects that this team owns",
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",

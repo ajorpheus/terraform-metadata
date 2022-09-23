@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vcd",
   "type": "provider",
-  "version": "v3.5.1",
+  "version": "v3.7.0",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
@@ -98,6 +98,20 @@
   },
   "resources": {
     "vcd_catalog": {
+      "cache_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "True enables early catalog export to optimize synchronization",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "catalog_version": {
+        "Type": "Int",
+        "Description": "Catalog version number.",
+        "Computed": true
+      },
       "created": {
         "Type": "String",
         "Description": "Time stamp of when the catalog was created",
@@ -117,14 +131,73 @@
         "Type": "String",
         "Optional": true
       },
+      "is_published": {
+        "Type": "Bool",
+        "Description": "True if this catalog is shared to all organizations.",
+        "Computed": true
+      },
+      "is_shared": {
+        "Type": "Bool",
+        "Description": "True if this catalog is shared.",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key and value pairs for catalog metadata."
+      },
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "number_of_media": {
+        "Type": "Int",
+        "Description": "Number of Medias this catalog contains.",
+        "Computed": true
+      },
+      "number_of_vapp_templates": {
+        "Type": "Int",
+        "Description": "Number of vApps templates this catalog contains.",
+        "Computed": true
       },
       "org": {
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "owner_name": {
+        "Type": "String",
+        "Description": "Owner name from the catalog.",
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "An optional password to access the catalog. Only ASCII characters are allowed in a valid password.",
+        "Computed": true
+      },
+      "preserve_identity_information": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Include BIOS UUIDs and MAC addresses in the downloaded OVF package. Preserving the identity information limits the portability of the package and you should use it only when necessary.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "publish_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "True allows to publish a catalog externally to make its vApp templates and media files available for subscription by organizations outside the Cloud Director installation.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "publish_subscription_type": {
+        "Type": "String",
+        "Description": "PUBLISHED if published externally, SUBSCRIBED if subscribed to an external catalog, UNPUBLISHED otherwise.",
+        "Computed": true
       },
       "storage_profile_id": {
         "Type": "String",
@@ -138,6 +211,11 @@
         "Required": true,
         "Description": "catalog name where upload the OVA file"
       },
+      "catalog_item_metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key and value pairs for catalog item metadata"
+      },
       "created": {
         "Type": "String",
         "Description": "Time stamp of when the item was created",
@@ -150,7 +228,7 @@
       "metadata": {
         "Type": "Map",
         "Optional": true,
-        "Description": "Key and value pairs for catalog item metadata"
+        "Description": "Key and value pairs for the metadata of the vApp template associated to this catalog item"
       },
       "name": {
         "Type": "String",
@@ -164,8 +242,13 @@
       },
       "ova_path": {
         "Type": "String",
-        "Required": true,
-        "Description": "absolute or relative path to OVA"
+        "Optional": true,
+        "Description": "Absolute or relative path to OVA"
+      },
+      "ovf_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "URL of OVF file"
       },
       "show_upload_progress": {
         "Type": "Bool",
@@ -977,6 +1060,16 @@
       }
     },
     "vcd_independent_disk": {
+      "attached_vm_ids": {
+        "Type": "Set",
+        "Description": "Set of VM IDs which are using the disk",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "bus_sub_type": {
         "Type": "String",
         "Optional": true,
@@ -997,6 +1090,11 @@
         "Optional": true,
         "Description": "independent disk description"
       },
+      "encrypted": {
+        "Type": "Bool",
+        "Description": "True if disk is encrypted",
+        "Computed": true
+      },
       "iops": {
         "Type": "Int",
         "Description": "IOPS request for the created disk",
@@ -1006,6 +1104,11 @@
         "Type": "Bool",
         "Description": "True if the disk is already attached",
         "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this disk. Key and value can be any string."
       },
       "name": {
         "Type": "String",
@@ -1021,6 +1124,12 @@
         "Description": "The owner name of the disk",
         "Computed": true
       },
+      "sharing_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "This is the sharing type. This attribute can only have values defined one of: `DiskSharing`,`ControllerSharing`, `None`",
+        "Computed": true
+      },
       "size_in_mb": {
         "Type": "Int",
         "Required": true,
@@ -1029,6 +1138,11 @@
       "storage_profile": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "The UUID of this named disk's device backing",
         "Computed": true
       },
       "vdc": {
@@ -1481,12 +1595,12 @@
       "private_key": {
         "Type": "String",
         "Optional": true,
-        "Description": "Certificate content"
+        "Description": "Certificate private key"
       },
       "private_key_passphrase": {
         "Type": "String",
         "Optional": true,
-        "Description": "Certificate content"
+        "Description": "Certificate private pass phrase"
       }
     },
     "vcd_network_direct": {
@@ -1529,6 +1643,11 @@
         "Type": "String",
         "Description": "Network Hypertext Reference",
         "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this network. Key and value can be any string"
       },
       "name": {
         "Type": "String",
@@ -1626,6 +1745,11 @@
         "Description": "Network Hyper Reference",
         "Computed": true
       },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this network. Key and value can be any string"
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -1711,7 +1835,13 @@
       "is_shared": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "NSX-V only - share this network with other VDCs in this organization. Default - false"
+        "Description": "NSX-V only - share this network with other VDCs in this organization. Default - false",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this network. Key and value can be any string"
       },
       "name": {
         "Type": "String",
@@ -1722,6 +1852,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
       },
       "prefix_length": {
         "Type": "Int",
@@ -1753,7 +1892,12 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "ConflictsWith": [
+          "owner_id"
+        ],
+        "Deprecated": "This field is deprecated in favor of 'owner_id' which supports both - VDC and VDC Group IDs"
       }
     },
     "vcd_network_routed": {
@@ -1836,6 +1980,11 @@
           "Type": "string",
           "Value": "internal"
         }
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this network. Key and value can be any string"
       },
       "name": {
         "Type": "String",
@@ -1933,6 +2082,11 @@
           "Value": "internal"
         }
       },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this network. Key and value can be any string"
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -1942,6 +2096,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "owner_id": {
+        "Type": "String",
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true
       },
       "prefix_length": {
         "Type": "Int",
@@ -1973,7 +2132,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "'vdc' is deprecated and ineffective. Routed networks will inherit VDC setting from parent Edge Gateway"
       }
     },
     "vcd_nsxt_alb_cloud": {
@@ -2026,8 +2187,8 @@
       },
       "license_type": {
         "Type": "String",
-        "Required": true,
-        "Description": "NSX-T ALB License type. One of 'BASIC', 'ENTERPRISE'"
+        "Optional": true,
+        "Description": "NSX-T ALB License type. One of 'BASIC', 'ENTERPRISE'. Must not be used from VCD 10.4.0 onwards"
       },
       "name": {
         "Type": "String",
@@ -2096,7 +2257,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_alb_pool": {
@@ -2348,7 +2511,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_alb_service_engine_group": {
@@ -2402,6 +2567,12 @@
         "Description": "NSX-T ALB Service Engine Group reserved virtual services",
         "Computed": true
       },
+      "supported_feature_set": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Feature set for this ALB Service Engine Group. One of 'STANDARD', 'PREMIUM'.",
+        "Computed": true
+      },
       "sync_on_refresh": {
         "Type": "Bool",
         "Optional": true,
@@ -2434,10 +2605,18 @@
         "Description": "Optional custom network CIDR definition for ALB Service Engine placement (VCD default is 192.168.255.1/25)",
         "Computed": true
       },
+      "supported_feature_set": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Feature set for ALB in this Edge Gateway. One of 'STANDARD', 'PREMIUM'.",
+        "Computed": true
+      },
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_alb_virtual_service": {
@@ -2528,7 +2707,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       },
       "virtual_ip_address": {
         "Type": "String",
@@ -2563,6 +2744,16 @@
           }
         }
       },
+      "context_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC, VDC Group, or NSX-T Manager",
+        "Computed": true,
+        "ConflictsWith": [
+          "nsxt_manager_id",
+          "vdc"
+        ]
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -2576,7 +2767,12 @@
       "nsxt_manager_id": {
         "Type": "String",
         "Optional": true,
-        "Description": "ID of NSX-T manager. Only required for 'PROVIDER' scope"
+        "Description": "ID of NSX-T manager. Only required for 'PROVIDER' scope",
+        "Computed": true,
+        "ConflictsWith": [
+          "context_id"
+        ],
+        "Deprecated": "Deprecated in favor of 'context_id'"
       },
       "org": {
         "Type": "String",
@@ -2591,7 +2787,249 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "ConflictsWith": [
+          "context_id"
+        ],
+        "Deprecated": "Deprecated in favor of 'context_id'"
+      }
+    },
+    "vcd_nsxt_distributed_firewall": {
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "rule": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Ordered list of firewall rules",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Defines if the rule should 'ALLOW', 'DROP', 'REJECT' matching traffic"
+            },
+            "app_port_profile_ids": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A set of Application Port Profile IDs. Leaving it empty means 'Any'",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "comment": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Comment that is shown next to rule in UI (VCD 10.3.2+)"
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Description is not shown in UI"
+            },
+            "destination_groups_excluded": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Reverses firewall matching for to match all except Destinations Groups specified in 'destination_ids' (VCD 10.3.2+)",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "destination_ids": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A set of Destination Firewall Group IDs (IP Sets or Security Groups). Leaving it empty means 'Any'",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "direction": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Direction on which Firewall Rule applies (One of 'IN', 'OUT', 'IN_OUT')",
+              "Default": {
+                "Type": "string",
+                "Value": "IN_OUT"
+              }
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Defined if Firewall Rule is active",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Description": "Firewall Rule ID",
+              "Computed": true
+            },
+            "ip_protocol": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Firewall Rule Protocol (One of 'IPV4', 'IPV6', 'IPV4_IPV6')",
+              "Default": {
+                "Type": "string",
+                "Value": "IPV4_IPV6"
+              }
+            },
+            "logging": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Defines if matching traffic should be logged",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Firewall Rule name"
+            },
+            "network_context_profile_ids": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A set of Network Context Profile IDs. Leaving it empty means 'Any'",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "source_groups_excluded": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Reverses firewall matching for to match all except Source Groups specified in 'source_ids' (VCD 10.3.2+)",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "source_ids": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A set of Source Firewall Group IDs (IP Sets or Security Groups). Leaving it empty means 'Any'",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "vdc_group_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of VDC Group for Distributed Firewall"
+      }
+    },
+    "vcd_nsxt_dynamic_security_group": {
+      "criteria": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Up to 3 criteria to be used to define the Dynamic Security Group (VCD 10.2, 10.3)",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "rule": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Up to 4 rules can be used to define single criteria (VCD 10.2, 10.3)",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "operator": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Operator can be one of 'EQUALS', 'CONTAINS', 'STARTS_WITH', 'ENDS_WITH'"
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Type of object matching 'VM_TAG' or 'VM_NAME'"
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Filter value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Dynamic Security Group description"
+      },
+      "member_vms": {
+        "Type": "Set",
+        "Description": "Set of VM IDs",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "vapp_id": {
+              "Type": "String",
+              "Description": "Parent vApp name (if exists) for member VM",
+              "Computed": true
+            },
+            "vapp_name": {
+              "Type": "String",
+              "Description": "Parent vApp ID (if exists) for member VM",
+              "Computed": true
+            },
+            "vm_id": {
+              "Type": "String",
+              "Description": "Member VM ID",
+              "Computed": true
+            },
+            "vm_name": {
+              "Type": "String",
+              "Description": "Member VM Name",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Dynamic Security Group name"
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "vdc_group_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "VDC Group ID in which Dynamic Security Group is located"
       }
     },
     "vcd_nsxt_edgegateway": {
@@ -2626,10 +3064,27 @@
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
+      },
       "primary_ip": {
         "Type": "String",
         "Description": "Primary IP address of edge gateway. Read-only (can be specified in specific subnet)",
         "Computed": true
+      },
+      "starting_vdc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optional ID of starting VDC if the 'owner_id' is a VDC Group",
+        "ConflictsWith": [
+          "vdc"
+        ]
       },
       "subnet": {
         "Type": "Set",
@@ -2682,7 +3137,201 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "ConflictsWith": [
+          "owner_id",
+          "starting_vdc_id"
+        ],
+        "Deprecated": "This field is deprecated in favor of 'owner_id' which supports both - VDC and VDC Group IDs"
+      }
+    },
+    "vcd_nsxt_edgegateway_bgp_configuration": {
+      "ecmp_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Defines if ECMP (Equal-cost multi-path routing) is enabled"
+      },
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway ID for BGP Configuration"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Required": true,
+        "Description": "Defines if BGP service is enabled"
+      },
+      "graceful_restart_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Graceful restart configuration on Edge Gateway. One of 'DISABLE', 'HELPER_ONLY', 'GRACEFUL_AND_HELPER'",
+        "Computed": true
+      },
+      "graceful_restart_timer": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum time taken (in seconds) for a BGP session to be established after a restart",
+        "Computed": true
+      },
+      "local_as_number": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Autonomous system number",
+        "Computed": true
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "stale_route_timer": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum time (in seconds) before stale routes are removed when BGP restarts",
+        "Computed": true
+      }
+    },
+    "vcd_nsxt_edgegateway_bgp_ip_prefix_list": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "BGP IP Prefix List description"
+      },
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway ID for BGP IP Prefix List Configuration"
+      },
+      "ip_prefix": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "BGP IP Prefix List entry",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Action 'PERMIT' or 'DENY'"
+            },
+            "greater_than_or_equal_to": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Greater than or equal to subnet mask"
+            },
+            "less_than_or_equal_to": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Less than or equal to subnet mask"
+            },
+            "network": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Network in CIDR notation (e.g. '192.168.100.0/24', '2001:db8::/48')"
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP IP Prefix List name"
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      }
+    },
+    "vcd_nsxt_edgegateway_bgp_neighbor": {
+      "allow_as_in": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "A flag indicating whether BGP neighbors can receive routes with same Autonomous System (AS) (default 'false')",
+        "Computed": true
+      },
+      "bfd_dead_multiple": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of times a heartbeat packet is missed before BFD declares that the neighbor is down",
+        "Computed": true
+      },
+      "bfd_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "BFD configuration for failure detection",
+        "Computed": true
+      },
+      "bfd_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Time interval (in milliseconds) between heartbeat packets",
+        "Computed": true
+      },
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway ID for BGP Neighbor Configuration"
+      },
+      "graceful_restart_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "One of 'DISABLE', 'HELPER_ONLY', 'GRACEFUL_AND_HELPER'",
+        "Computed": true
+      },
+      "hold_down_timer": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Time interval (in seconds) before declaring a peer dead",
+        "Computed": true
+      },
+      "in_filter_ip_prefix_list_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "An optional IP Prefix List ID for filtering 'IN' direction.",
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP Neighbor IP address (IPv4 or IPv6)"
+      },
+      "keep_alive_timer": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Time interval (in seconds) between sending keep alive messages to a peer",
+        "Computed": true
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "out_filter_ip_prefix_list_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "An optional IP Prefix List ID for filtering 'OUT' direction.",
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Neighbor password"
+      },
+      "remote_as_number": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Remote Autonomous System (AS) number"
+      },
+      "route_filtering": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "One of 'DISABLED', 'IPV4', 'IPV6'",
+        "Computed": true
       }
     },
     "vcd_nsxt_firewall": {
@@ -2785,19 +3434,21 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_ip_set": {
       "description": {
         "Type": "String",
         "Optional": true,
-        "Description": "IP set description"
+        "Description": "IP Set description"
       },
       "edge_gateway_id": {
         "Type": "String",
         "Required": true,
-        "Description": "Edge Gateway ID in which IP Set is located"
+        "Description": "Edge Gateway name in which IP Set is located"
       },
       "ip_addresses": {
         "Type": "Set",
@@ -2812,17 +3463,24 @@
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "IP set name"
+        "Description": "IP Set name"
       },
       "org": {
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true
+      },
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Deprecated in favor of `edge_gateway_id`. IP Sets will inherit VDC from parent Edge Gateway."
       }
     },
     "vcd_nsxt_ipsec_vpn_tunnel": {
@@ -3034,7 +3692,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_nat_rule": {
@@ -3121,10 +3781,23 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_network_dhcp": {
+      "dns_servers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The DNS server IPs to be assigned by this DHCP service. 2 values maximum.",
+        "MaxItems": 2,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "org": {
         "Type": "String",
         "Optional": true,
@@ -3160,7 +3833,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Org network will be looked up based on 'org_network_id' field"
       }
     },
     "vcd_nsxt_network_imported": {
@@ -3209,6 +3884,15 @@
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
+      },
       "prefix_length": {
         "Type": "Int",
         "Required": true,
@@ -3239,7 +3923,43 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "ConflictsWith": [
+          "owner_id"
+        ],
+        "Deprecated": "This field is deprecated in favor of 'owner_id' which supports both - VDC and VDC Group IDs"
+      }
+    },
+    "vcd_nsxt_route_advertisement": {
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "NSX-T Edge Gateway ID in which route advertisement is located"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Defines if route advertisement is active",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "subnets": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of subnets that will be advertised to Tier-0 gateway. Empty means none",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vcd_nsxt_security_group": {
@@ -3305,10 +4025,17 @@
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true
+      },
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Deprecated in favor of `edge_gateway_id`. Security Group will inherit VDC from parent Edge Gateway."
       }
     },
     "vcd_nsxv_dhcp_relay": {
@@ -3832,6 +4559,24 @@
           "Value": "true"
         }
       },
+      "can_publish_external_catalogs": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "True if this organization is allowed to publish external catalogs.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "can_subscribe_external_catalogs": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "True if this organization is allowed to subscribe to external catalogs.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "delay_after_power_on_seconds": {
         "Type": "Int",
         "Optional": true,
@@ -3872,6 +4617,11 @@
           "Type": "bool",
           "Value": "true"
         }
+      },
+      "metadata": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Key value map of metadata to assign to this organization. Key and value can be any string."
       },
       "name": {
         "Type": "String",
@@ -3970,6 +4720,16 @@
         "Type": "String",
         "Required": true,
         "Description": "Existing role name to assign"
+      },
+      "user_names": {
+        "Type": "Set",
+        "Description": "Read only. Set of user names that belong to the group",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vcd_org_user": {
@@ -3977,10 +4737,7 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Quota of vApps that this user can deploy. A value of 0 specifies an unlimited quota.",
-        "Default": {
-          "Type": "int",
-          "Value": "10"
-        }
+        "Computed": true
       },
       "description": {
         "Type": "String",
@@ -3990,7 +4747,8 @@
       "email_address": {
         "Type": "String",
         "Optional": true,
-        "Description": "The user's email address"
+        "Description": "The user's email address",
+        "Computed": true
       },
       "enabled": {
         "Type": "Bool",
@@ -4004,12 +4762,33 @@
       "full_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The user's full name"
+        "Description": "The user's full name",
+        "Computed": true
+      },
+      "group_names": {
+        "Type": "Set",
+        "Description": "Read only. Set of group names that this user belongs to",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "instant_messaging": {
         "Type": "String",
         "Optional": true,
-        "Description": "The user's telephone"
+        "Description": "The user's telephone",
+        "Computed": true
+      },
+      "is_external": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "True if this user is imported from an external resource, like an LDAP.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "is_group_role": {
         "Type": "Bool",
@@ -4038,7 +4817,7 @@
       "password": {
         "Type": "String",
         "Optional": true,
-        "Description": "The user's password. This value is never returned on read. Either \"password\" or \"password_file\" must be included on creation.",
+        "Description": "The user's password. This value is never returned on read. Either \"password\" or \"password_file\" must be included on creation unless is_external is true.",
         "ConflictsWith": [
           "password_file"
         ]
@@ -4046,7 +4825,7 @@
       "password_file": {
         "Type": "String",
         "Optional": true,
-        "Description": "Name of a file containing the user's password. Either \"password_file\" or \"password\" must be included on creation.",
+        "Description": "Name of a file containing the user's password. Either \"password_file\" or \"password\" must be included on creation unless is_external is true.",
         "ConflictsWith": [
           "password"
         ]
@@ -4069,10 +4848,7 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Quota of vApps that this user can store. A value of 0 specifies an unlimited quota.",
-        "Default": {
-          "Type": "int",
-          "Value": "10"
-        }
+        "Computed": true
       },
       "take_ownership": {
         "Type": "Bool",
@@ -4086,7 +4862,8 @@
       "telephone": {
         "Type": "String",
         "Optional": true,
-        "Description": "The user's telephone"
+        "Description": "The user's telephone",
+        "Computed": true
       }
     },
     "vcd_org_vdc": {
@@ -4348,6 +5125,66 @@
         }
       }
     },
+    "vcd_org_vdc_access_control": {
+      "everyone_access_level": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Access level when the VDC is shared with everyone (only ReadOnly is available). Required when shared_with_everyone is set",
+        "ConflictsWith": [
+          "shared_with"
+        ]
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "shared_with": {
+        "Type": "Set",
+        "Optional": true,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "everyone_access_level"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "access_level": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The access level for the user or group to which we are sharing. (Only ReadOnly is available)"
+            },
+            "group_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "ID of the group to which we are sharing. Required if user_id is not set"
+            },
+            "subject_name": {
+              "Type": "String",
+              "Description": "Name of the subject (group or user) with which we are sharing",
+              "Computed": true
+            },
+            "user_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "ID of the user to which we are sharing. Required if group_id is not set"
+            }
+          }
+        }
+      },
+      "shared_with_everyone": {
+        "Type": "Bool",
+        "Required": true,
+        "Description": "Whether the VDC is shared with everyone"
+      },
+      "vdc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of VDC to use, optional if defined at provider level"
+      }
+    },
     "vcd_rights_bundle": {
       "bundle_key": {
         "Type": "String",
@@ -4377,7 +5214,7 @@
       "rights": {
         "Type": "Set",
         "Optional": true,
-        "Description": "list of rights assigned to this rights bundle",
+        "Description": "Set of rights assigned to this rights bundle",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -4387,7 +5224,7 @@
       "tenants": {
         "Type": "Set",
         "Optional": true,
-        "Description": "list of tenants to which this rights bundle is published",
+        "Description": "Set of tenants to which this rights bundle is published",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -4424,7 +5261,30 @@
       "rights": {
         "Type": "Set",
         "Optional": true,
-        "Description": "list of rights assigned to this role",
+        "Description": "Set of rights assigned to this role",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "vcd_security_tag": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Security tag name to be created"
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "vm_ids": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of VM IDs that the security tags is going to be tied to",
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -5088,6 +5948,30 @@
           "Value": "false"
         }
       },
+      "cpu_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The limit for how much of CPU can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited.",
+        "Computed": true
+      },
+      "cpu_priority": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "cpu_reservation": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The amount of MHz reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "cpu_shares": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom priority for the resource. This is a read-only, unless the `cpu_priority` is CUSTOM",
+        "Computed": true
+      },
       "cpus": {
         "Type": "Int",
         "Optional": true,
@@ -5331,6 +6215,30 @@
           "Type": "bool",
           "Value": "false"
         }
+      },
+      "memory_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The limit for how much of memory can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited.",
+        "Computed": true
+      },
+      "memory_priority": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "memory_reservation": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The amount of RAM (in MB) reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "memory_shares": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom priority for the resource. This is a read-only, unless the `memory_priority` is CUSTOM",
+        "Computed": true
       },
       "metadata": {
         "Type": "Map",
@@ -5703,6 +6611,30 @@
           "Value": "false"
         }
       },
+      "cpu_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The limit for how much of CPU can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited.",
+        "Computed": true
+      },
+      "cpu_priority": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "cpu_reservation": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The amount of MHz reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "cpu_shares": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom priority for the resource. This is a read-only, unless the `cpu_priority` is CUSTOM",
+        "Computed": true
+      },
       "cpus": {
         "Type": "Int",
         "Optional": true,
@@ -5946,6 +6878,30 @@
           "Type": "bool",
           "Value": "false"
         }
+      },
+      "memory_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The limit for how much of memory can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited.",
+        "Computed": true
+      },
+      "memory_priority": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "memory_reservation": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The amount of RAM (in MB) reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "memory_shares": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom priority for the resource. This is a read-only, unless the `memory_priority` is CUSTOM",
+        "Computed": true
       },
       "metadata": {
         "Type": "Map",
@@ -6337,12 +7293,23 @@
       "org": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+        "Description": "The name of organization to use - Deprecated and unneeded: will be ignored if used ",
+        "Deprecated": "Unneeded property, which was included by mistake"
       }
     }
   },
   "data-sources": {
     "vcd_catalog": {
+      "cache_enabled": {
+        "Type": "Bool",
+        "Description": "True enables early catalog export to optimize synchronization",
+        "Computed": true
+      },
+      "catalog_version": {
+        "Type": "Int",
+        "Description": "Catalog version number.",
+        "Computed": true
+      },
       "created": {
         "Type": "String",
         "Description": "Time stamp of when the catalog was created",
@@ -6428,15 +7395,60 @@
           }
         }
       },
+      "is_published": {
+        "Type": "Bool",
+        "Description": "True if this catalog is shared to all organizations.",
+        "Computed": true
+      },
+      "is_shared": {
+        "Type": "Bool",
+        "Description": "True if this catalog is shared.",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key and value pairs for catalog metadata",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
         "Description": "Name of the catalog. (Optional if 'filter' is used)"
       },
+      "number_of_media": {
+        "Type": "Int",
+        "Description": "Number of Medias this catalog contains.",
+        "Computed": true
+      },
+      "number_of_vapp_templates": {
+        "Type": "Int",
+        "Description": "Number of vApps this catalog contains.",
+        "Computed": true
+      },
       "org": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "owner_name": {
+        "Type": "String",
+        "Description": "Owner name from the catalog.",
+        "Computed": true
+      },
+      "preserve_identity_information": {
+        "Type": "Bool",
+        "Description": "Include BIOS UUIDs and MAC addresses in the downloaded OVF package. Preserving the identity information limits the portability of the package and you should use it only when necessary.",
+        "Computed": true
+      },
+      "publish_enabled": {
+        "Type": "Bool",
+        "Description": "True allows to publish a catalog externally to make its vApp templates and media files available for subscription by organizations outside the Cloud Director installation. Default is `false`.",
+        "Computed": true
+      },
+      "publish_subscription_type": {
+        "Type": "String",
+        "Description": "PUBLISHED if published externally, SUBSCRIBED if subscribed to an external catalog, UNPUBLISHED otherwise.",
+        "Computed": true
       },
       "storage_profile_id": {
         "Type": "String",
@@ -6449,6 +7461,11 @@
         "Type": "String",
         "Required": true,
         "Description": "catalog containing the item"
+      },
+      "catalog_item_metadata": {
+        "Type": "Map",
+        "Description": "Key and value pairs of the catalog item metadata",
+        "Computed": true
       },
       "created": {
         "Type": "String",
@@ -6536,7 +7553,7 @@
       },
       "metadata": {
         "Type": "Map",
-        "Description": "Key and value pairs for catalog item metadata",
+        "Description": "Key and value pairs from the metadata of the vApp template associated to this catalog item",
         "Computed": true
       },
       "name": {
@@ -7166,6 +8183,16 @@
       }
     },
     "vcd_independent_disk": {
+      "attached_vm_ids": {
+        "Type": "Set",
+        "Description": "Set of VM IDs which are using the disk",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "bus_sub_type": {
         "Type": "String",
         "Computed": true
@@ -7184,6 +8211,11 @@
         "Description": "independent disk description",
         "Computed": true
       },
+      "encrypted": {
+        "Type": "Bool",
+        "Description": "True if disk is encrypted",
+        "Computed": true
+      },
       "id": {
         "Type": "String",
         "Optional": true
@@ -7196,6 +8228,11 @@
       "is_attached": {
         "Type": "Bool",
         "Description": "True if the disk is already attached",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key and value pairs for disk metadata",
         "Computed": true
       },
       "name": {
@@ -7212,6 +8249,11 @@
         "Description": "The owner name of the disk",
         "Computed": true
       },
+      "sharing_type": {
+        "Type": "String",
+        "Description": "This is the sharing type. This attribute can only have values defined one of: `DiskSharing`,`ControllerSharing`, `None`",
+        "Computed": true
+      },
       "size_in_mb": {
         "Type": "Int",
         "Description": "size in MB",
@@ -7219,6 +8261,11 @@
       },
       "storage_profile": {
         "Type": "String",
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "The UUID of this named disk's device backing",
         "Computed": true
       },
       "vdc": {
@@ -7715,6 +8762,11 @@
         "Description": "Network Hypertext Reference",
         "Computed": true
       },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key value map of metadata assigned to this network. Key and value can be any string",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -7864,6 +8916,11 @@
         "Description": "Network Hyper Reference",
         "Computed": true
       },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key value map of metadata assigned to this network. Key and value can be any string",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -7967,6 +9024,11 @@
         "Description": "NSX-V only - share this network with other VDCs in this organization",
         "Computed": true
       },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key value map of metadata assigned to this network. Key and value can be any string",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -7976,6 +9038,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
       },
       "prefix_length": {
         "Type": "Int",
@@ -8007,7 +9078,12 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "ConflictsWith": [
+          "owner_id"
+        ],
+        "Deprecated": "This field is deprecated in favor of 'owner_id' which supports both - VDC and VDC Group IDs"
       }
     },
     "vcd_network_routed": {
@@ -8148,6 +9224,11 @@
         "Description": "Which interface to use (one of `internal`, `subinterface`, `distributed`)",
         "Computed": true
       },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key value map of metadata assigned to this network. Key and value can be any string",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -8219,8 +9300,12 @@
       },
       "edge_gateway_id": {
         "Type": "String",
+        "Optional": true,
         "Description": "Edge gateway name in which Routed network is located",
-        "Computed": true
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
       },
       "filter": {
         "Type": "List",
@@ -8256,6 +9341,11 @@
         "Description": "Interface type (only for NSX-V networks). One of 'INTERNAL' (default), 'DISTRIBUTED', 'SUBINTERFACE'",
         "Computed": true
       },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key value map of metadata assigned to this network. Key and value can be any string",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -8265,6 +9355,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "owner_id": {
+        "Type": "String",
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true
       },
       "prefix_length": {
         "Type": "Int",
@@ -8296,7 +9391,11 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "ConflictsWith": [
+          "edge_gateway_id"
+        ],
+        "Deprecated": "Deprecated in favor of `edge_gateway_id`. Routed networks will inherit VDC from parent Edge Gateway."
       }
     },
     "vcd_nsxt_alb_cloud": {
@@ -8349,7 +9448,7 @@
       },
       "license_type": {
         "Type": "String",
-        "Description": "NSX-T ALB License type. One of 'BASIC', 'ENTERPRISE'",
+        "Description": "NSX-T ALB License type. One of 'BASIC', 'ENTERPRISE'. Must not be referenced from VCD 10.4.0 onwards",
         "Computed": true
       },
       "name": {
@@ -8414,7 +9513,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_alb_importable_cloud": {
@@ -8669,7 +9770,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_alb_service_engine_group": {
@@ -8718,6 +9821,11 @@
         "Description": "NSX-T ALB Service Engine Group reserved virtual services",
         "Computed": true
       },
+      "supported_feature_set": {
+        "Type": "String",
+        "Description": "Feature set for this ALB Service Engine Group. One of 'STANDARD', 'PREMIUM'.",
+        "Computed": true
+      },
       "sync_on_refresh": {
         "Type": "Bool",
         "Optional": true,
@@ -8750,10 +9858,16 @@
         "Description": "Optional custom network CIDR definition for ALB Service Engine placement (VCD default is 192.168.255.1/25)",
         "Computed": true
       },
+      "supported_feature_set": {
+        "Type": "String",
+        "Description": "Feature set for ALB in this Edge Gateway. One of 'STANDARD', 'PREMIUM'.",
+        "Computed": true
+      },
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_alb_virtual_service": {
@@ -8836,7 +9950,9 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       },
       "virtual_ip_address": {
         "Type": "String",
@@ -8870,6 +9986,16 @@
           }
         }
       },
+      "context_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC, VDC Group, or NSX-T Manager",
+        "Computed": true,
+        "ConflictsWith": [
+          "nsxt_manager_id",
+          "vdc"
+        ]
+      },
       "description": {
         "Type": "String",
         "Description": "Application Port Profile description",
@@ -8883,7 +10009,11 @@
       "nsxt_manager_id": {
         "Type": "String",
         "Optional": true,
-        "Description": "ID of NSX-T manager. Only required for 'PROVIDER' scope"
+        "Description": "ID of NSX-T manager. Only required for 'PROVIDER' scope",
+        "ConflictsWith": [
+          "context_id"
+        ],
+        "Deprecated": "Deprecated in favor of 'context_id'"
       },
       "org": {
         "Type": "String",
@@ -8898,7 +10028,223 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "ConflictsWith": [
+          "context_id"
+        ],
+        "Deprecated": "Deprecated in favor of 'context_id'"
+      }
+    },
+    "vcd_nsxt_distributed_firewall": {
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "rule": {
+        "Type": "List",
+        "Description": "Ordered list of firewall rules",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Description": "Defines if the rule should 'ALLOW', 'DROP', 'REJECT' matching traffic",
+              "Computed": true
+            },
+            "app_port_profile_ids": {
+              "Type": "Set",
+              "Description": "A set of Application Port Profile IDs.'",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "comment": {
+              "Type": "String",
+              "Description": "Comment that is shown next to rule in UI (VCD 10.3.2+)",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "Description (not shown in UI)",
+              "Computed": true
+            },
+            "destination_groups_excluded": {
+              "Type": "Bool",
+              "Description": "Reverses firewall matching for to match all except Destinations Groups specified in 'destination_ids' (VCD 10.3.2+)",
+              "Computed": true
+            },
+            "destination_ids": {
+              "Type": "Set",
+              "Description": "A set of Destination Firewall Group IDs (IP Sets or Security Groups). Empty means 'Any'",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "direction": {
+              "Type": "String",
+              "Description": "Direction on which Firewall Rule applies (One of 'IN', 'OUT', 'IN_OUT')",
+              "Computed": true
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Description": "Defines if Firewall Rule is active",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "Firewall Rule ID",
+              "Computed": true
+            },
+            "ip_protocol": {
+              "Type": "String",
+              "Description": "Firewall Rule Protocol (One of 'IPV4', 'IPV6', 'IPV4_IPV6')",
+              "Computed": true
+            },
+            "logging": {
+              "Type": "Bool",
+              "Description": "Defines if matching traffic should be logged",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Firewall Rule name",
+              "Computed": true
+            },
+            "network_context_profile_ids": {
+              "Type": "Set",
+              "Description": "A set of Network Context Profile IDs.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "source_groups_excluded": {
+              "Type": "Bool",
+              "Description": "Reverses firewall matching for to match all except Source Groups specified in 'source_ids' (VCD 10.3.2+)",
+              "Computed": true
+            },
+            "source_ids": {
+              "Type": "Set",
+              "Description": "A set of Source Firewall Group IDs (IP Sets or Security Groups). Empty means 'Any'",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "vdc_group_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of VDC Group"
+      }
+    },
+    "vcd_nsxt_dynamic_security_group": {
+      "criteria": {
+        "Type": "Set",
+        "Description": "Criteria to be used to define the Dynamic Security Group",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "rule": {
+              "Type": "Set",
+              "Description": "Up to 4 rules can be used to define single criteria",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "operator": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Operator can be one of 'EQUALS', 'CONTAINS', 'STARTS_WITH', 'ENDS_WITH'"
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Type of object matching 'VM_TAG' or 'VM_NAME'"
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Filter value"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Dynamic Security Group description"
+      },
+      "member_vms": {
+        "Type": "Set",
+        "Description": "Set of VM IDs",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "vapp_id": {
+              "Type": "String",
+              "Description": "Parent vApp name (if exists) for member VM",
+              "Computed": true
+            },
+            "vapp_name": {
+              "Type": "String",
+              "Description": "Parent vApp ID (if exists) for member VM",
+              "Computed": true
+            },
+            "vm_id": {
+              "Type": "String",
+              "Description": "Member VM ID",
+              "Computed": true
+            },
+            "vm_name": {
+              "Type": "String",
+              "Description": "Member VM Name",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Dynamic Security Group name"
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "vdc_group_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "VDC Group ID in which Dynamic Security Group is located"
       }
     },
     "vcd_nsxt_edge_cluster": {
@@ -8969,6 +10315,15 @@
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
+      },
       "primary_ip": {
         "Type": "String",
         "Description": "Primary IP address of edge gateway",
@@ -9015,7 +10370,7 @@
             },
             "primary_ip": {
               "Type": "String",
-              "Description": "IP address on the edge gateway ",
+              "Description": "IP address on the edge gateway",
               "Computed": true
             }
           }
@@ -9024,7 +10379,185 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Computed": true,
+        "ConflictsWith": [
+          "owner_id"
+        ],
+        "Deprecated": "This field is deprecated in favor of 'owner_id' which supports both - VDC and VDC Group IDs"
+      }
+    },
+    "vcd_nsxt_edgegateway_bgp_configuration": {
+      "ecmp_enabled": {
+        "Type": "Bool",
+        "Description": "Defines if ECMP (Equal-cost multi-path routing) is enabled",
+        "Computed": true
+      },
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway name in which BGP Configuration is located"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Description": "Defines if BGP service is enabled",
+        "Computed": true
+      },
+      "graceful_restart_mode": {
+        "Type": "String",
+        "Description": "Graceful restart configuration on Edge Gateway",
+        "Computed": true
+      },
+      "graceful_restart_timer": {
+        "Type": "Int",
+        "Description": "Maximum time taken (in seconds) for a BGP session to be established after a restart",
+        "Computed": true
+      },
+      "local_as_number": {
+        "Type": "String",
+        "Description": "Autonomous system number",
+        "Computed": true
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "stale_route_timer": {
+        "Type": "Int",
+        "Description": "Maximum time (in seconds) before stale routes are removed when BGP restarts",
+        "Computed": true
+      }
+    },
+    "vcd_nsxt_edgegateway_bgp_ip_prefix_list": {
+      "description": {
+        "Type": "String",
+        "Description": "BGP IP Prefix List description",
+        "Computed": true
+      },
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway ID for BGP IP Prefix List Configuration"
+      },
+      "ip_prefix": {
+        "Type": "Set",
+        "Description": "BGP IP Prefix List entry",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Description": "Action 'PERMIT' or 'DENY'",
+              "Computed": true
+            },
+            "greater_than_or_equal_to": {
+              "Type": "Int",
+              "Description": "Greater than or equal to (ge) subnet mask",
+              "Computed": true
+            },
+            "less_than_or_equal_to": {
+              "Type": "Int",
+              "Description": "Less than or equal to (le) subnet mask",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Description": "Network in CIDR notation (e.g. '192.168.100.0/24', '2001:db8::/48')",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP IP Prefix List name"
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      }
+    },
+    "vcd_nsxt_edgegateway_bgp_neighbor": {
+      "allow_as_in": {
+        "Type": "Bool",
+        "Description": "A flag indicating whether BGP neighbors can receive routes with same Autonomous System (AS)",
+        "Computed": true
+      },
+      "bfd_dead_multiple": {
+        "Type": "Int",
+        "Description": "Number of times a heartbeat packet is missed before BFD declares that the neighbor is down",
+        "Computed": true
+      },
+      "bfd_enabled": {
+        "Type": "Bool",
+        "Description": "BFD configuration for failure detection",
+        "Computed": true
+      },
+      "bfd_interval": {
+        "Type": "Int",
+        "Description": "Time interval (in milliseconds) between heartbeat packets",
+        "Computed": true
+      },
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway ID for BGP Neighbor Configuration"
+      },
+      "graceful_restart_mode": {
+        "Type": "String",
+        "Description": "One of 'DISABLE', 'HELPER_ONLY', 'GRACEFUL_AND_HELPER'",
+        "Computed": true
+      },
+      "hold_down_timer": {
+        "Type": "Int",
+        "Description": "Time interval (in seconds) before declaring a peer dead",
+        "Computed": true
+      },
+      "in_filter_ip_prefix_list_id": {
+        "Type": "String",
+        "Description": "An optional IP Prefix List ID for filtering 'IN' direction.",
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP Neighbor IP address (IPv4 or IPv6)"
+      },
+      "keep_alive_timer": {
+        "Type": "Int",
+        "Description": "Time interval (in seconds) between sending keep alive messages to a peer",
+        "Computed": true
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "out_filter_ip_prefix_list_id": {
+        "Type": "String",
+        "Description": "An optional IP Prefix List ID for filtering 'OUT' direction.",
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Neighbor password",
+        "Computed": true
+      },
+      "remote_as_number": {
+        "Type": "String",
+        "Description": "Remote Autonomous System (AS) number",
+        "Computed": true
+      },
+      "route_filtering": {
+        "Type": "String",
+        "Description": "One of 'DISABLED', 'IPV4', 'IPV6'",
+        "Computed": true
       }
     },
     "vcd_nsxt_firewall": {
@@ -9117,13 +10650,14 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_ip_set": {
       "description": {
         "Type": "String",
-        "Description": "IP set description",
+        "Description": "IP Set description",
         "Computed": true
       },
       "edge_gateway_id": {
@@ -9144,17 +10678,23 @@
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "IP set name"
+        "Description": "IP Set name"
       },
       "org": {
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true
+      },
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Deprecated in favor of `edge_gateway_id`. IP Set will inherit VDC from parent Edge Gateway."
       }
     },
     "vcd_nsxt_ipsec_vpn_tunnel": {
@@ -9348,7 +10888,8 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
       }
     },
     "vcd_nsxt_manager": {
@@ -9432,10 +10973,43 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Edge Gateway will be looked up based on 'edge_gateway_id' field"
+      }
+    },
+    "vcd_nsxt_network_context_profile": {
+      "context_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Context ID can be one of VDC, VDC Group, or NSX-T Manager ID"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Edge gateway name in which NAT Rule is located"
+      },
+      "scope": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "'SYSTEM', 'PROVIDER', 'TENANT'",
+        "Default": {
+          "Type": "string",
+          "Value": "SYSTEM"
+        }
       }
     },
     "vcd_nsxt_network_dhcp": {
+      "dns_servers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The DNS server IPs to be assigned by this DHCP service. 2 values maximum.",
+        "MaxItems": 2,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "org": {
         "Type": "String",
         "Optional": true,
@@ -9471,7 +11045,8 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Org network will be looked up based on 'org_network_id' field"
       }
     },
     "vcd_nsxt_network_imported": {
@@ -9539,6 +11114,15 @@
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true,
+        "ConflictsWith": [
+          "vdc"
+        ]
+      },
       "prefix_length": {
         "Type": "Int",
         "Description": "Network prefix",
@@ -9569,7 +11153,38 @@
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "ConflictsWith": [
+          "owner_id"
+        ],
+        "Deprecated": "This field is deprecated in favor of 'owner_id' which supports both - VDC and VDC Group IDs"
+      }
+    },
+    "vcd_nsxt_route_advertisement": {
+      "edge_gateway_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "NSX-T Edge Gateway ID in which route advertisement is located"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Description": "Defines if route advertisement is active",
+        "Computed": true
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "subnets": {
+        "Type": "Set",
+        "Description": "Set of subnets that will be advertised to Tier-0 gateway. Empty means none",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vcd_nsxt_security_group": {
@@ -9635,10 +11250,16 @@
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
       },
+      "owner_id": {
+        "Type": "String",
+        "Description": "ID of VDC or VDC Group",
+        "Computed": true
+      },
       "vdc": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of VDC to use, optional if defined at provider level"
+        "Description": "The name of VDC to use, optional if defined at provider level",
+        "Deprecated": "Deprecated in favor of `edge_gateway_id`. Security Group will inherit VDC from parent Edge Gateway."
       }
     },
     "vcd_nsxt_tier0_router": {
@@ -10130,6 +11751,16 @@
         "Description": "True if this organization is allowed to share catalogs.",
         "Computed": true
       },
+      "can_publish_external_catalogs": {
+        "Type": "Bool",
+        "Description": "True if this organization is allowed to publish external catalogs.",
+        "Computed": true
+      },
+      "can_subscribe_external_catalogs": {
+        "Type": "Bool",
+        "Description": "True if this organization is allowed to subscribe to external catalogs.",
+        "Computed": true
+      },
       "delay_after_power_on_seconds": {
         "Type": "Int",
         "Description": "Specifies this organization's default for virtual machine boot delay after power on.",
@@ -10151,6 +11782,11 @@
       "is_enabled": {
         "Type": "Bool",
         "Description": "True if this organization is enabled (allows login and all other operations).",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key and value pairs for organization metadata",
         "Computed": true
       },
       "name": {
@@ -10216,6 +11852,41 @@
         }
       }
     },
+    "vcd_org_group": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the group to lookup"
+      },
+      "org": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of organization to use, optional if defined at provider level"
+      },
+      "provider_type": {
+        "Type": "String",
+        "Description": "Identity provider type - 'SAML' or 'INTEGRATED' for local or LDAP",
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_names": {
+        "Type": "Set",
+        "Description": "Set of user names that belong to the group",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "vcd_org_user": {
       "deployed_vm_quota": {
         "Type": "Int",
@@ -10242,9 +11913,24 @@
         "Description": "The user's full name",
         "Computed": true
       },
+      "group_names": {
+        "Type": "Set",
+        "Description": "List of group names that this user belongs to",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "instant_messaging": {
         "Type": "String",
         "Description": "The user's telephone",
+        "Computed": true
+      },
+      "is_external": {
+        "Type": "Bool",
+        "Description": "If the user account was imported from an external resource, like an LDAP",
         "Computed": true
       },
       "is_group_role": {
@@ -10787,7 +12473,7 @@
       },
       "rights": {
         "Type": "Set",
-        "Description": "list of rights assigned to this rights bundle",
+        "Description": "Set of rights assigned to this rights bundle",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -10797,7 +12483,7 @@
       },
       "tenants": {
         "Type": "Set",
-        "Description": "list of tenants to which this rights bundle is published",
+        "Description": "Set of tenants to which this rights bundle is published",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -10834,7 +12520,7 @@
       },
       "rights": {
         "Type": "Set",
-        "Description": "list of rights assigned to this role",
+        "Description": "Set of rights assigned to this role",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -10844,6 +12530,68 @@
       }
     },
     "vcd_storage_profile": {
+      "default": {
+        "Type": "Bool",
+        "Description": "True if this is default storage profile for this VDC. The default storage profile is used when an object that can specify a storage profile is created with no storage profile specified",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Description": "True if this storage profile is enabled for use in the VDC",
+        "Computed": true
+      },
+      "iops_allocated": {
+        "Type": "Int",
+        "Description": "Total IOPS currently allocated to this storage profile",
+        "Computed": true
+      },
+      "iops_settings": {
+        "Type": "List",
+        "Description": "IOPs related settings",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_disk_iops": {
+              "Type": "Int",
+              "Description": "Value of 0 for disk IOPS means that no IOPS would be reserved or provisioned for that virtual disk",
+              "Computed": true
+            },
+            "disk_iops_per_gb_max": {
+              "Type": "Int",
+              "Description": "The maximum disk IOPs per GB value that this storage profile is permitted to deliver. A value of 0 means there is no per GB IOPS restriction",
+              "Computed": true
+            },
+            "iops_limit": {
+              "Type": "Int",
+              "Description": "Maximum number of IOPs that can be allocated for this profile. `0` means `maximum possible`",
+              "Computed": true
+            },
+            "iops_limiting_enabled": {
+              "Type": "Bool",
+              "Description": "True if this storage profile is IOPS-based placement enabled",
+              "Computed": true
+            },
+            "maximum_disk_iops": {
+              "Type": "Int",
+              "Description": "The maximum IOPS value that this storage profile is permitted to deliver. Value of 0 means this max setting is disabled and there is no max disk IOPS restriction",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "limit": {
+        "Type": "Int",
+        "Description": "Maximum number of storage bytes (scaled by 'units' field) allocated for this profile. `0` means `maximum possible`",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "Map",
+        "Description": "Key value map of metadata retrieved from this storage profile. Key and value can be any string.",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -10853,6 +12601,16 @@
         "Type": "String",
         "Optional": true,
         "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+      },
+      "units": {
+        "Type": "String",
+        "Description": "Scale used to define Limit",
+        "Computed": true
+      },
+      "used_storage": {
+        "Type": "Int",
+        "Description": "Storage used, in Megabytes, by the storage profile",
+        "Computed": true
       },
       "vdc": {
         "Type": "String",
@@ -11096,6 +12854,26 @@
         "Description": "True if the virtual machine supports addition of virtual CPUs while powered on.",
         "Computed": true
       },
+      "cpu_limit": {
+        "Type": "Int",
+        "Description": "The limit for how much of CPU can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited",
+        "Computed": true
+      },
+      "cpu_priority": {
+        "Type": "String",
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "cpu_reservation": {
+        "Type": "Int",
+        "Description": "The amount of MHz reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "cpu_shares": {
+        "Type": "Int",
+        "Description": "Custom priority for the resource",
+        "Computed": true
+      },
       "cpus": {
         "Type": "Int",
         "Description": "The number of virtual CPUs to allocate to the VM",
@@ -11304,6 +13082,26 @@
       "memory_hot_add_enabled": {
         "Type": "Bool",
         "Description": "True if the virtual machine supports addition of memory while powered on.",
+        "Computed": true
+      },
+      "memory_limit": {
+        "Type": "Int",
+        "Description": "The limit for how much of memory can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited",
+        "Computed": true
+      },
+      "memory_priority": {
+        "Type": "String",
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "memory_reservation": {
+        "Type": "Int",
+        "Description": "The amount of RAM (in MB) reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "memory_shares": {
+        "Type": "Int",
+        "Description": "Custom priority for the resource",
         "Computed": true
       },
       "metadata": {
@@ -11603,6 +13401,26 @@
         "Description": "True if the virtual machine supports addition of virtual CPUs while powered on.",
         "Computed": true
       },
+      "cpu_limit": {
+        "Type": "Int",
+        "Description": "The limit for how much of CPU can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited",
+        "Computed": true
+      },
+      "cpu_priority": {
+        "Type": "String",
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "cpu_reservation": {
+        "Type": "Int",
+        "Description": "The amount of MHz reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "cpu_shares": {
+        "Type": "Int",
+        "Description": "Custom priority for the resource",
+        "Computed": true
+      },
       "cpus": {
         "Type": "Int",
         "Description": "The number of virtual CPUs to allocate to the VM",
@@ -11811,6 +13629,26 @@
       "memory_hot_add_enabled": {
         "Type": "Bool",
         "Description": "True if the virtual machine supports addition of memory while powered on.",
+        "Computed": true
+      },
+      "memory_limit": {
+        "Type": "Int",
+        "Description": "The limit for how much of memory can be consumed on the underlying virtualization infrastructure. This is only valid when the resource allocation is not unlimited",
+        "Computed": true
+      },
+      "memory_priority": {
+        "Type": "String",
+        "Description": "Pre-determined relative priorities according to which the non-reserved portion of this resource is made available to the virtualized workload",
+        "Computed": true
+      },
+      "memory_reservation": {
+        "Type": "Int",
+        "Description": "The amount of RAM (in MB) reservation on the underlying virtualization infrastructure",
+        "Computed": true
+      },
+      "memory_shares": {
+        "Type": "Int",
+        "Description": "Custom priority for the resource",
         "Computed": true
       },
       "metadata": {
@@ -12048,7 +13886,8 @@
       "org": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of organization to use, optional if defined at provider level. Useful when connected as sysadmin working across different organizations"
+        "Description": "The name of organization to use - Deprecated and unneeded: will be ignored if used ",
+        "Deprecated": "Unneeded property, which was included by mistake"
       }
     }
   }

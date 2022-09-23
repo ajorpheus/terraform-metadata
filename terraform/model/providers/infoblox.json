@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "infoblox",
   "type": "provider",
-  "version": "v2.0.17",
+  "version": "v2.1.6",
   "provider": {
     "connect_timeout": {
       "Type": "Int",
@@ -13,7 +13,7 @@
     },
     "password": {
       "Type": "String",
-      "Required": true,
+      "Optional": true,
       "Description": "Password to authenticate with Infoblox server.",
       "DefaultFunc": "ENV(INFOBLOX_PASSWORD)"
     },
@@ -247,7 +247,7 @@
       "dns_view": {
         "Type": "String",
         "Optional": true,
-        "Description": "Dns View under which the zone has been created.",
+        "Description": "DNS view under which the zone has been created.",
         "Default": {
           "Type": "string",
           "Value": "default"
@@ -256,7 +256,7 @@
       "enable_dns": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "flag that defines if the host record is to be used for DNS Purposes.",
+        "Description": "flag that defines if the host record is to be used for DNS purposes.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -310,7 +310,7 @@
       "network_view": {
         "Type": "String",
         "Optional": true,
-        "Description": "Network view name of NIOS server.",
+        "Description": "network view name on NIOS server.",
         "Default": {
           "Type": "string",
           "Value": "default"
@@ -995,6 +995,47 @@
         "Computed": true
       }
     },
+    "infoblox_aaaa_record": {
+      "comment": {
+        "Type": "String",
+        "Description": "The content of 'comment' field at the AAAA-record.",
+        "Computed": true
+      },
+      "dns_view": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "DNS view which the record's zone belongs to.",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "ext_attrs": {
+        "Type": "String",
+        "Description": "The Extensible attributes of the AAAA-record",
+        "Computed": true
+      },
+      "fqdn": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the AAAA-record in FQDN format."
+      },
+      "ipv6_addr": {
+        "Type": "String",
+        "Required": true,
+        "Description": "IPv6 address of the AAAA-record."
+      },
+      "ttl": {
+        "Type": "Int",
+        "Description": "TTL attribute value for the record.",
+        "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Description": "Zone which the record belongs to.",
+        "Computed": true
+      }
+    },
     "infoblox_cname_record": {
       "alias": {
         "Type": "String",
@@ -1058,6 +1099,98 @@
       "network_view": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "infoblox_ipv4_network_container": {
+      "cidr": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The CIDR value of the network container."
+      },
+      "comment": {
+        "Type": "String",
+        "Description": "Network container's description.",
+        "Computed": true
+      },
+      "ext_attrs": {
+        "Type": "String",
+        "Description": "The Extensible attributes for the network container.",
+        "Computed": true
+      },
+      "network_view": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Newtwork view's name the network container belongs to."
+      }
+    },
+    "infoblox_network_view": {
+      "comment": {
+        "Type": "String",
+        "Description": "Network view's description",
+        "Computed": true
+      },
+      "ext_attrs": {
+        "Type": "String",
+        "Description": "The Extensible attributes of the network view.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the view shown in NIOS's UI."
+      }
+    },
+    "infoblox_ptr_record": {
+      "comment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "PTR-record's description.",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "dns_view": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "DNS view which the record's zone belongs to.",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "ext_attrs": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Extensible attributes of the PTR-record.",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "ip_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IPv4/IPv6 address the PTR-record points from.",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "ptrdname": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The domain name in FQDN which the record points to."
+      },
+      "record_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the DNS PTR record in FQDN format",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "ttl": {
+        "Type": "Int",
+        "Description": "TTL attribute value for the record.",
+        "Computed": true
       }
     }
   }

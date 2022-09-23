@@ -1,9 +1,9 @@
 {
   ".schema_version": "2",
-  ".sdk_type": "terraform-plugin-sdk-v1",
+  ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "prismacloud",
   "type": "provider",
-  "version": "v1.2.1",
+  "version": "v1.2.8",
   "provider": {
     "customer_name": {
       "Type": "String",
@@ -1260,15 +1260,19 @@
       }
     },
     "prismacloud_enterprise_settings": {
-      "anomaly_alert_disposition": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Anomaly alert disposition"
+      "access_key_max_validity": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Access Keys maximum validity in days"
       },
-      "anomaly_training_model_threshold": {
-        "Type": "String",
+      "alarm_enabled": {
+        "Type": "Bool",
         "Optional": true,
-        "Description": "Anomaly training model threshold"
+        "Description": "Alarms enabled",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       },
       "apply_default_policies_enabled": {
         "Type": "Bool",
@@ -1320,7 +1324,11 @@
       "enabled": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Enabled"
+        "Description": "Enabled",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       },
       "integration_config": {
         "Type": "List",
@@ -1424,6 +1432,11 @@
               "Type": "String",
               "Optional": true,
               "Description": "(Qualys/ServiceNow) Login"
+            },
+            "more_info": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "true = specific IAM credentials are specified for SQS queue access"
             },
             "org_id": {
               "Type": "String",
@@ -1548,8 +1561,13 @@
             },
             "version": {
               "Type": "String",
+              "Description": "ServiceNow release version",
+              "Computed": true
+            },
+            "webhook_url": {
+              "Type": "String",
               "Optional": true,
-              "Description": "ServiceNow release version"
+              "Description": "Webhook url for slack integration "
             }
           }
         }
@@ -1703,6 +1721,38 @@
                 "ElementsType": "String"
               }
             },
+            "hierarchy_selection": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "List of hierarchy selection. Each item has resource id, display name, node type and selection type",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "display_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Display name for AWS OU, AWS account, or AWS organization"
+                  },
+                  "node_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Valid values: OU, ACCOUNT, ORG"
+                  },
+                  "resource_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Resource ID. Valid values are AWS OU ID, AWS account ID, or AWS Organization ID. Note you must escape any double quotes in the resource ID with a backslash."
+                  },
+                  "selection_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Selection type. Valid values: INCLUDE to include the specified resource to onboard, EXCLUDE to exclude the specified resource and onboard the rest, ALL to onboard all resources in the organization."
+                  }
+                }
+              }
+            },
             "member_external_id": {
               "Type": "String",
               "Required": true,
@@ -1797,6 +1847,38 @@
                 "ElementsType": "String"
               }
             },
+            "hierarchy_selection": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "List of subscriptions and/or management groups to onboard",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "display_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Display name for management group or subscription"
+                  },
+                  "node_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Node type. Valid values: SUBSCRIPTION, TENANT, MANAGEMENT_GROUP"
+                  },
+                  "resource_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Resource ID. Management group ID or subscription ID.\nNote you must escape any double quotes in the resource ID with a backslash."
+                  },
+                  "selection_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Selection type. Valid values: INCLUDE to include the specified resource to onboard, EXCLUDE to exclude the specified resource and onboard the rest, ALL to onboard all resources in the tenant."
+                  }
+                }
+              }
+            },
             "key": {
               "Type": "String",
               "Required": true,
@@ -1820,6 +1902,11 @@
                 "Type": "string",
                 "Value": "MONITOR"
               }
+            },
+            "root_sync_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Azure tenant has children. Must be set to true when azure tenant is onboarded with children"
             },
             "service_principal_id": {
               "Type": "String",
@@ -2609,7 +2696,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "An absolute time range",
-                    "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -2632,7 +2718,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "Relative time range",
-                    "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -2655,7 +2740,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "From some time in the past to now",
-                    "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -3050,7 +3134,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "An absolute time range",
-              "MaxItems": 1,
               "ConflictsWith": [
                 "time_range.relative",
                 "time_range.to_now"
@@ -3077,7 +3160,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "Relative time range",
-              "MaxItems": 1,
               "ConflictsWith": [
                 "time_range.absolute",
                 "time_range.to_now"
@@ -3104,7 +3186,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "From some time in the past to now",
-              "MaxItems": 1,
               "ConflictsWith": [
                 "time_range.absolute",
                 "time_range.relative"
@@ -4213,7 +4294,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "An absolute time range",
-              "MaxItems": 1,
               "ConflictsWith": [
                 "time_range.relative",
                 "time_range.to_now"
@@ -4240,7 +4320,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "Relative time range",
-              "MaxItems": 1,
               "ConflictsWith": [
                 "time_range.absolute",
                 "time_range.to_now"
@@ -4267,7 +4346,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "From some time in the past to now",
-              "MaxItems": 1,
               "ConflictsWith": [
                 "time_range.absolute",
                 "time_range.relative"
@@ -4305,7 +4383,6 @@
         "Type": "List",
         "Description": "Alibaba account type",
         "Computed": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -4348,7 +4425,6 @@
         "Type": "List",
         "Description": "AWS account type",
         "Computed": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -4406,7 +4482,6 @@
         "Type": "List",
         "Description": "Azure account type",
         "Computed": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -4484,7 +4559,6 @@
         "Type": "List",
         "Description": "GCP account type",
         "Computed": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -5426,14 +5500,14 @@
       }
     },
     "prismacloud_enterprise_settings": {
-      "anomaly_alert_disposition": {
-        "Type": "String",
-        "Description": "Anomaly alert disposition",
+      "access_key_max_validity": {
+        "Type": "Int",
+        "Description": "Access Keys maximum validity in days",
         "Computed": true
       },
-      "anomaly_training_model_threshold": {
-        "Type": "String",
-        "Description": "Anomaly training model threshold",
+      "alarm_enabled": {
+        "Type": "Bool",
+        "Description": "Alarms enabled",
         "Computed": true
       },
       "apply_default_policies_enabled": {
@@ -5589,6 +5663,11 @@
               "Description": "(Qualys/ServiceNow) Login",
               "Computed": true
             },
+            "more_info": {
+              "Type": "Bool",
+              "Description": "true = specific IAM credentials are specified for SQS queue access",
+              "Computed": true
+            },
             "org_id": {
               "Type": "String",
               "Description": "GCP Organization ID for Google CSCC integration",
@@ -5710,6 +5789,11 @@
               "Type": "String",
               "Description": "ServiceNow release version",
               "Computed": true
+            },
+            "webhook_url": {
+              "Type": "String",
+              "Description": "Webhook url for slack integration ",
+              "Computed": true
             }
           }
         }
@@ -5722,8 +5806,8 @@
       },
       "integration_type": {
         "Type": "String",
-        "Description": "Integration type",
-        "Computed": true
+        "Required": true,
+        "Description": "Integration type"
       },
       "last_modified_by": {
         "Type": "String",
@@ -5871,12 +5955,6 @@
         "Type": "List",
         "Description": "AWS account type",
         "Computed": true,
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "gcp",
-          "azure",
-          "oci"
-        ],
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -5910,6 +5988,38 @@
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "String"
+              }
+            },
+            "hierarchy_selection": {
+              "Type": "List",
+              "Description": "List of hierarchy selection. Each item has resource id, display name, node type and selection type",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "display_name": {
+                    "Type": "String",
+                    "Description": "Display name for AWS OU, AWS account, or AWS organization",
+                    "Computed": true
+                  },
+                  "node_type": {
+                    "Type": "String",
+                    "Description": "Valid values: OU, ACCOUNT, ORG",
+                    "Computed": true
+                  },
+                  "resource_id": {
+                    "Type": "String",
+                    "Description": "Resource ID. Valid values are AWS OU ID, AWS account ID, or AWS Organization ID. Note you must escape any double quotes in the resource ID with a backslash.",
+                    "Computed": true
+                  },
+                  "selection_type": {
+                    "Type": "String",
+                    "Description": "Selection type. Valid values: INCLUDE to include the specified resource to onboard, EXCLUDE to exclude the specified resource and onboard the rest, ALL to onboard all resources in the organization.",
+                    "Computed": true
+                  }
+                }
               }
             },
             "member_external_id": {
@@ -5949,12 +6059,6 @@
         "Type": "List",
         "Description": "Azure account type",
         "Computed": true,
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "gcp",
-          "aws",
-          "oci"
-        ],
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -5990,6 +6094,38 @@
                 "ElementsType": "String"
               }
             },
+            "hierarchy_selection": {
+              "Type": "List",
+              "Description": "List of subscriptions and/or management groups to onboard",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "display_name": {
+                    "Type": "String",
+                    "Description": "Display name for management group or subscription",
+                    "Computed": true
+                  },
+                  "node_type": {
+                    "Type": "String",
+                    "Description": "Node type. Valid values: SUBSCRIPTION, TENANT, MANAGEMENT_GROUP",
+                    "Computed": true
+                  },
+                  "resource_id": {
+                    "Type": "String",
+                    "Description": "Resource ID. Management group ID or subscription ID.\nNote you must escape any double quotes in the resource ID with a backslash.",
+                    "Computed": true
+                  },
+                  "selection_type": {
+                    "Type": "String",
+                    "Description": "Selection type. Valid values: INCLUDE to include the specified resource to onboard, EXCLUDE to exclude the specified resource and onboard the rest, ALL to onboard all resources in the tenant.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "key": {
               "Type": "String",
               "Description": "Application ID key",
@@ -6008,6 +6144,11 @@
             "protection_mode": {
               "Type": "String",
               "Description": "Monitor or Monitor and Protect",
+              "Computed": true
+            },
+            "root_sync_enabled": {
+              "Type": "Bool",
+              "Description": "Azure tenant has children. Must be set to true when azure tenant is onboarded with children",
               "Computed": true
             },
             "service_principal_id": {
@@ -6032,12 +6173,6 @@
         "Type": "List",
         "Description": "GCP account type",
         "Computed": true,
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "aws",
-          "azure",
-          "oci"
-        ],
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -6153,12 +6288,6 @@
         "Type": "List",
         "Optional": true,
         "Description": "Oci account type",
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "aws",
-          "azure",
-          "gcp"
-        ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -6907,7 +7036,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "An absolute time range",
-                    "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -6930,7 +7058,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "Relative time range",
-                    "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -6953,7 +7080,6 @@
                     "Type": "List",
                     "Optional": true,
                     "Description": "From some time in the past to now",
-                    "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
                     "Elem": {
@@ -7065,7 +7191,6 @@
         "Type": "List",
         "Description": "The time range spec",
         "Computed": true,
-        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
         "Elem": {
@@ -7075,11 +7200,6 @@
               "Type": "List",
               "Description": "An absolute time range",
               "Computed": true,
-              "MaxItems": 1,
-              "ConflictsWith": [
-                "time_range.relative",
-                "time_range.to_now"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
               "Elem": {
@@ -7102,11 +7222,6 @@
               "Type": "List",
               "Description": "Relative time range",
               "Computed": true,
-              "MaxItems": 1,
-              "ConflictsWith": [
-                "time_range.absolute",
-                "time_range.to_now"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
               "Elem": {
@@ -7134,11 +7249,6 @@
               "Type": "List",
               "Description": "From some time in the past to now",
               "Computed": true,
-              "MaxItems": 1,
-              "ConflictsWith": [
-                "time_range.absolute",
-                "time_range.relative"
-              ],
               "IsBlock": true,
               "ConfigImplicitMode": "ComputedBlock",
               "Elem": {

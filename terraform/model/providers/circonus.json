@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "circonus",
   "type": "provider",
-  "version": "v0.12.5",
+  "version": "v0.12.12",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -1340,6 +1340,101 @@
           }
         }
       },
+      "ssh2": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "SSH2 check configuration",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "method_comp_cs": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The compress algorithm used from client to server",
+              "Default": {
+                "Type": "string",
+                "Value": "none"
+              }
+            },
+            "method_comp_sc": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The compress algorithm used from server to client",
+              "Default": {
+                "Type": "string",
+                "Value": "none"
+              }
+            },
+            "method_crypt_cs": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The encryption algorithm used from client to server"
+            },
+            "method_crypt_sc": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The encryption algorithm used from server to client"
+            },
+            "method_hostkey": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The host key algorithm supported",
+              "Default": {
+                "Type": "string",
+                "Value": "ssh-rsa"
+              }
+            },
+            "method_kex": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The key exchange method to use",
+              "Default": {
+                "Type": "string",
+                "Value": "diffie-hellman-group14-sha1"
+              }
+            },
+            "method_land_sc": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The language used from server to client",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "method_lang_cs": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The language used from client to server",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "method_mac_cs": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The message authentication code algorithm used from client to server"
+            },
+            "method_mac_sc": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The message authentication code algorithm used from server to client"
+            },
+            "port": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The TCP port on which the remote server's ssh service is running",
+              "Default": {
+                "Type": "string",
+                "Value": "22"
+              }
+            }
+          }
+        }
+      },
       "statsd": {
         "Type": "Set",
         "Optional": true,
@@ -1724,43 +1819,9 @@
             }
           }
         }
-      },
-      "xmpp": {
-        "Type": "List",
-        "Optional": true,
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "address": {
-              "Type": "String",
-              "Optional": true,
-              "ConflictsWith": [
-                "xmpp.user"
-              ]
-            },
-            "user": {
-              "Type": "String",
-              "Optional": true,
-              "ConflictsWith": [
-                "xmpp.address"
-              ]
-            }
-          }
-        }
       }
     },
     "circonus_dashboard": {
-      "account_default": {
-        "Type": "Bool",
-        "Optional": true,
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
       "grid_layout": {
         "Type": "Map",
         "Required": true,
@@ -3186,6 +3247,16 @@
         "ConflictsWith": [
           "id"
         ]
+      },
+      "default_dashboard_type": {
+        "Type": "String",
+        "Description": "The type of dashboard used as a default dashboard by this account",
+        "Computed": true
+      },
+      "default_dashboard_uuid": {
+        "Type": "String",
+        "Description": "The UUID of the dashboard resource used as a default dashboard by this account",
+        "Computed": true
       },
       "description": {
         "Type": "String",

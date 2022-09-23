@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "digitalocean",
   "type": "provider",
-  "version": "v2.17.1",
+  "version": "v2.22.3",
   "provider": {
     "api_endpoint": {
       "Type": "String",
@@ -70,6 +70,29 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "alert": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "rule": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
             "database": {
               "Type": "List",
               "Optional": true,
@@ -200,6 +223,357 @@
                 }
               }
             },
+            "function": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "cors": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "allow_credentials": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is `include`. This configures the Access-Control-Allow-Credentials header."
+                        },
+                        "allow_headers": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "allow_methods": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "allow_origins": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The set of allowed CORS origins. This configures the Access-Control-Allow-Origin header.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "exact": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Exact string match."
+                              },
+                              "prefix": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Prefix-based match. "
+                              },
+                              "regex": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "RE2 style regex-based match."
+                              }
+                            }
+                          }
+                        },
+                        "expose_headers": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "max_age": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: `5h30m`."
+                        }
+                      }
+                    }
+                  },
+                  "env": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "key": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the environment variable."
+                        },
+                        "scope": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The visibility scope of the environment variable.",
+                          "Default": {
+                            "Type": "string",
+                            "Value": "RUN_AND_BUILD_TIME"
+                          }
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The type of the environment variable.",
+                          "Computed": true
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The value of the environment variable."
+                        }
+                      }
+                    }
+                  },
+                  "git": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the branch to use."
+                        },
+                        "repo_clone_url": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The clone URL of the repo."
+                        }
+                      }
+                    }
+                  },
+                  "github": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the branch to use."
+                        },
+                        "deploy_on_push": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to automatically deploy new commits made to the repo"
+                        },
+                        "repo": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the repo in the format `owner/repo`."
+                        }
+                      }
+                    }
+                  },
+                  "gitlab": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the branch to use."
+                        },
+                        "deploy_on_push": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to automatically deploy new commits made to the repo"
+                        },
+                        "repo": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the repo in the format `owner/repo`."
+                        }
+                      }
+                    }
+                  },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the component"
+                  },
+                  "routes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "path": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app."
+                        },
+                        "preserve_path_prefix": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": " An optional flag to preserve the path that is forwarded to the backend service."
+                        }
+                      }
+                    }
+                  },
+                  "source_dir": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An optional path to the working directory to use for the build."
+                  }
+                }
+              }
+            },
             "job": {
               "Type": "List",
               "Optional": true,
@@ -208,6 +582,42 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "build_command": {
                     "Type": "String",
                     "Optional": true,
@@ -390,6 +800,86 @@
                       "Value": "UNSPECIFIED"
                     }
                   },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "name": {
                     "Type": "String",
                     "Required": true,
@@ -427,6 +917,42 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "build_command": {
                     "Type": "String",
                     "Optional": true,
@@ -735,6 +1261,86 @@
                     "Elem": {
                       "Type": "SchemaElements",
                       "ElementsType": "Int"
+                    }
+                  },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   },
                   "name": {
@@ -1056,6 +1662,42 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "build_command": {
                     "Type": "String",
                     "Optional": true,
@@ -1229,6 +1871,86 @@
                     "Optional": true,
                     "Description": "The instance size to use for this component."
                   },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "name": {
                     "Type": "String",
                     "Required": true,
@@ -1253,6 +1975,11 @@
       "updated_at": {
         "Type": "String",
         "Description": "The date and time of when the App was last updated",
+        "Computed": true
+      },
+      "urn": {
+        "Type": "String",
+        "Description": "The uniform resource identifier for the app",
         "Computed": true
       }
     },
@@ -1353,6 +2080,10 @@
       }
     },
     "digitalocean_container_registry": {
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
       "endpoint": {
         "Type": "String",
         "Computed": true
@@ -1361,8 +2092,17 @@
         "Type": "String",
         "Required": true
       },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "server_url": {
         "Type": "String",
+        "Computed": true
+      },
+      "storage_usage_bytes": {
+        "Type": "Int",
         "Computed": true
       },
       "subscription_tier_slug": {
@@ -1626,7 +2366,7 @@
       },
       "user": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       }
     },
     "digitalocean_database_db": {
@@ -1777,6 +2517,11 @@
       }
     },
     "digitalocean_droplet": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
       "backups": {
         "Type": "Bool",
         "Optional": true,
@@ -2910,15 +3655,16 @@
       "environment": {
         "Type": "String",
         "Optional": true,
-        "Description": "the environment of the project's resources",
-        "Default": {
-          "Type": "string",
-          "Value": "Development"
-        }
+        "Description": "the environment of the project's resources"
       },
       "is_default": {
         "Type": "Bool",
-        "Computed": true
+        "Optional": true,
+        "Description": "determine if the project is the default or not.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "name": {
         "Type": "String",
@@ -3023,6 +3769,36 @@
       "weight": {
         "Type": "Int",
         "Optional": true
+      }
+    },
+    "digitalocean_reserved_ip": {
+      "droplet_id": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "urn": {
+        "Type": "String",
+        "Description": "the uniform resource name for the reserved ip",
+        "Computed": true
+      }
+    },
+    "digitalocean_reserved_ip_assignment": {
+      "droplet_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Required": true
       }
     },
     "digitalocean_spaces_bucket": {
@@ -3300,6 +4076,20 @@
         "Optional": true
       }
     },
+    "digitalocean_spaces_bucket_policy": {
+      "bucket": {
+        "Type": "String",
+        "Required": true
+      },
+      "policy": {
+        "Type": "String",
+        "Required": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "digitalocean_ssh_key": {
       "fingerprint": {
         "Type": "String",
@@ -3573,6 +4363,29 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "alert": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "disabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "rule": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
             "database": {
               "Type": "List",
               "Optional": true,
@@ -3700,6 +4513,357 @@
                 }
               }
             },
+            "function": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "cors": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "allow_credentials": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether browsers should expose the response to the client-side JavaScript code when the request’s credentials mode is `include`. This configures the Access-Control-Allow-Credentials header."
+                        },
+                        "allow_headers": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The set of allowed HTTP request headers. This configures the Access-Control-Allow-Headers header.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "allow_methods": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The set of allowed HTTP methods. This configures the Access-Control-Allow-Methods header.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "allow_origins": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The set of allowed CORS origins. This configures the Access-Control-Allow-Origin header.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "exact": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Exact string match."
+                              },
+                              "prefix": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Prefix-based match. "
+                              },
+                              "regex": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "RE2 style regex-based match."
+                              }
+                            }
+                          }
+                        },
+                        "expose_headers": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "Description": "The set of HTTP response headers that browsers are allowed to access. This configures the Access-Control-Expose-Headers header.",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "max_age": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "An optional duration specifying how long browsers can cache the results of a preflight request. This configures the Access-Control-Max-Age header. Example: `5h30m`."
+                        }
+                      }
+                    }
+                  },
+                  "env": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "key": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the environment variable."
+                        },
+                        "scope": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The visibility scope of the environment variable.",
+                          "Default": {
+                            "Type": "string",
+                            "Value": "RUN_AND_BUILD_TIME"
+                          }
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The type of the environment variable.",
+                          "Computed": true
+                        },
+                        "value": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The value of the environment variable."
+                        }
+                      }
+                    }
+                  },
+                  "git": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the branch to use."
+                        },
+                        "repo_clone_url": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The clone URL of the repo."
+                        }
+                      }
+                    }
+                  },
+                  "github": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the branch to use."
+                        },
+                        "deploy_on_push": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to automatically deploy new commits made to the repo"
+                        },
+                        "repo": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the repo in the format `owner/repo`."
+                        }
+                      }
+                    }
+                  },
+                  "gitlab": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the branch to use."
+                        },
+                        "deploy_on_push": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to automatically deploy new commits made to the repo"
+                        },
+                        "repo": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The name of the repo in the format `owner/repo`."
+                        }
+                      }
+                    }
+                  },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the component"
+                  },
+                  "routes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "path": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Path specifies an route by HTTP path prefix. Paths must start with / and must be unique within the app."
+                        },
+                        "preserve_path_prefix": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": " An optional flag to preserve the path that is forwarded to the backend service."
+                        }
+                      }
+                    }
+                  },
+                  "source_dir": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An optional path to the working directory to use for the build."
+                  }
+                }
+              }
+            },
             "job": {
               "Type": "List",
               "Optional": true,
@@ -3708,6 +4872,42 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "build_command": {
                     "Type": "String",
                     "Optional": true,
@@ -3890,6 +5090,86 @@
                       "Value": "UNSPECIFIED"
                     }
                   },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "name": {
                     "Type": "String",
                     "Required": true,
@@ -3927,6 +5207,42 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "build_command": {
                     "Type": "String",
                     "Optional": true,
@@ -4235,6 +5551,86 @@
                     "Elem": {
                       "Type": "SchemaElements",
                       "ElementsType": "Int"
+                    }
+                  },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
                     }
                   },
                   "name": {
@@ -4556,6 +5952,42 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Alert policies for the app component",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "operator": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "rule": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "value": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "window": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "build_command": {
                     "Type": "String",
                     "Optional": true,
@@ -4729,6 +6161,86 @@
                     "Optional": true,
                     "Description": "The instance size to use for this component."
                   },
+                  "log_destination": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Logs",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "datadog": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Datadog configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "api_key": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Datadog API key."
+                              },
+                              "endpoint": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Datadog HTTP log intake endpoint.",
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "https://http-intake.logs.datadoghq.com"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "logtail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Logtail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "token": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Logtail token."
+                              }
+                            }
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Name of the log destination"
+                        },
+                        "papertrail": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Papertrail configuration.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "endpoint": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Papertrail syslog endpoint."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
                   "name": {
                     "Type": "String",
                     "Required": true,
@@ -4753,6 +6265,11 @@
       "updated_at": {
         "Type": "String",
         "Description": "The date and time of when the App was last updated",
+        "Computed": true
+      },
+      "urn": {
+        "Type": "String",
+        "Description": "The uniform resource identifier for the app",
         "Computed": true
       }
     },
@@ -4799,6 +6316,10 @@
       }
     },
     "digitalocean_container_registry": {
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
       "endpoint": {
         "Type": "String",
         "Computed": true
@@ -4808,8 +6329,16 @@
         "Required": true,
         "Description": "name of the container registry"
       },
+      "region": {
+        "Type": "String",
+        "Computed": true
+      },
       "server_url": {
         "Type": "String",
+        "Computed": true
+      },
+      "storage_usage_bytes": {
+        "Type": "Int",
         "Computed": true
       },
       "subscription_tier_slug": {
@@ -6955,6 +8484,28 @@
             }
           }
         }
+      }
+    },
+    "digitalocean_reserved_ip": {
+      "droplet_id": {
+        "Type": "Int",
+        "Description": "the droplet id that the reserved ip has been assigned to.",
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "reserved ip address"
+      },
+      "region": {
+        "Type": "String",
+        "Description": "the region that the reserved ip is reserved to",
+        "Computed": true
+      },
+      "urn": {
+        "Type": "String",
+        "Description": "the uniform resource name for the reserved ip",
+        "Computed": true
       }
     },
     "digitalocean_sizes": {

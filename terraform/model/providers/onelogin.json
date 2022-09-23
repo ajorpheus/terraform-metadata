@@ -1,9 +1,9 @@
 {
   ".schema_version": "2",
-  ".sdk_type": "terraform-plugin-sdk-v1",
+  ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "onelogin",
   "type": "provider",
-  "version": "v0.1.25",
+  "version": "v0.2.0",
   "provider": {
     "client_id": {
       "Type": "String",
@@ -825,11 +825,38 @@
         "Required": true
       },
       "options": {
-        "Type": "Map",
+        "Type": "Set",
         "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
         "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
+          "Type": "SchemaInfo",
+          "Info": {
+            "location_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "mfa_device_info_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "risk_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
         }
       },
       "packages": {
@@ -932,7 +959,8 @@
       },
       "position": {
         "Type": "Int",
-        "Required": true
+        "Optional": true,
+        "Computed": true
       }
     },
     "onelogin_users": {

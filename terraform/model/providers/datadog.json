@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "datadog",
   "type": "provider",
-  "version": "v3.8.1",
+  "version": "v3.15.1",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -26,13 +26,13 @@
     "http_client_retry_enabled": {
       "Type": "Bool",
       "Optional": true,
-      "Description": "Enables request retries on HTTP status codes 429 and 5xx.",
+      "Description": "Enables request retries on HTTP status codes 429 and 5xx. Defaults to `true`.",
       "DefaultFunc": "ENV(DD_HTTP_CLIENT_RETRY_ENABLED)"
     },
     "http_client_retry_timeout": {
       "Type": "Int",
       "Optional": true,
-      "Description": "The HTTP request retry timeout period.",
+      "Description": "The HTTP request retry timeout period. Defaults to 60 seconds.",
       "DefaultFunc": "ENV(DD_HTTP_CLIENT_RETRY_TIMEOUT)"
     },
     "validate": {
@@ -68,6 +68,23 @@
         "Type": "String",
         "Required": true,
         "Description": "Name for Application Key."
+      }
+    },
+    "datadog_authn_mapping": {
+      "key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Identity provider key."
+      },
+      "role": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ID of a role to attach to all users with the corresponding key and value."
+      },
+      "value": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Identity provider value."
       }
     },
     "datadog_child_organization": {
@@ -281,6 +298,35 @@
             }
           }
         }
+      }
+    },
+    "datadog_cloud_workload_security_agent_rule": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of the Agent rule.",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether the Agent rule is enabled.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "expression": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The SECL expression of the Agent rule."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Agent rule."
       }
     },
     "datadog_dashboard": {
@@ -1909,6 +1955,80 @@
                                 "Type": "String",
                                 "Optional": true,
                                 "Description": "The search query to use."
+                              }
+                            }
+                          }
+                        },
+                        "apm_stats_query": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "columns": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "Column properties used by the front end for display.",
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "alias": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "A user-assigned alias for the column."
+                                    },
+                                    "cell_display_mode": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "A list of display modes for each table cell."
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The column name."
+                                    },
+                                    "order": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Widget sorting methods."
+                                    }
+                                  }
+                                }
+                              },
+                              "env": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The environment name."
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The operation name associated with the service."
+                              },
+                              "primary_tag": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The organization's host group name and value."
+                              },
+                              "resource": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The resource name."
+                              },
+                              "row_type": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The level of detail for the request."
+                              },
+                              "service": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The service name."
                               }
                             }
                           }
@@ -4877,6 +4997,80 @@
                                             "Type": "String",
                                             "Optional": true,
                                             "Description": "The search query to use."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "apm_stats_query": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "columns": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "Column properties used by the front end for display.",
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "alias": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "A user-assigned alias for the column."
+                                                },
+                                                "cell_display_mode": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "A list of display modes for each table cell."
+                                                },
+                                                "name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The column name."
+                                                },
+                                                "order": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Widget sorting methods."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "env": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The environment name."
+                                          },
+                                          "name": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The operation name associated with the service."
+                                          },
+                                          "primary_tag": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The organization's host group name and value."
+                                          },
+                                          "resource": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "The resource name."
+                                          },
+                                          "row_type": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The level of detail for the request."
+                                          },
+                                          "service": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The service name."
                                           }
                                         }
                                       }
@@ -8419,6 +8613,107 @@
                             }
                           }
                         },
+                        "list_stream_definition": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The definition for a List Stream widget.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "request": {
+                                "Type": "List",
+                                "Required": true,
+                                "Description": "Nested block describing the requests to use when displaying the widget. Multiple `request` blocks are allowed with the structure below.",
+                                "MinItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "columns": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Widget columns.",
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "field": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Widget column field."
+                                          },
+                                          "width": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Widget column width."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "query": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Updated list stream widget.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "data_source": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Source from which to query items to display in the stream."
+                                          },
+                                          "indexes": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "List of indexes.",
+                                            "ConfigImplicitMode": "Attr",
+                                            "Elem": {
+                                              "Type": "SchemaElements",
+                                              "ElementsType": "String"
+                                            }
+                                          },
+                                          "query_string": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "Widget query."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "response_format": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Widget response format."
+                                    }
+                                  }
+                                }
+                              },
+                              "title": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The title of the widget."
+                              },
+                              "title_align": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The alignment of the widget's title."
+                              },
+                              "title_size": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The size of the widget's title. Default is 16."
+                              }
+                            }
+                          }
+                        },
                         "log_stream_definition": {
                           "Type": "List",
                           "Optional": true,
@@ -8549,6 +8844,11 @@
                                 "Type": "Bool",
                                 "Optional": true,
                                 "Description": "A Boolean indicating whether to show when monitors/groups last triggered."
+                              },
+                              "show_priority": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to show the priorities column."
                               },
                               "sort": {
                                 "Type": "String",
@@ -11229,6 +11529,62 @@
                                 "Type": "String",
                                 "Optional": true,
                                 "Description": "The alignment of the widget's text."
+                              },
+                              "timeseries_background": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "Set a timeseries on the widget background.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "type": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Whether the Timeseries is made using an area or bars."
+                                    },
+                                    "yaxis": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "A nested block describing the Y-Axis Controls. Exactly one nested block is allowed using the structure below.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "include_zero": {
+                                            "Type": "Bool",
+                                            "Optional": true,
+                                            "Description": "Always include zero or fit the axis to the data range."
+                                          },
+                                          "label": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "The label of the axis to display on the graph."
+                                          },
+                                          "max": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "Specify the maximum value to show on the Y-axis."
+                                          },
+                                          "min": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "Specify the minimum value to show on the Y-axis."
+                                          },
+                                          "scale": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "Specify the scale type, options: `linear`, `log`, `pow`, `sqrt`."
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                               },
                               "title": {
                                 "Type": "String",
@@ -17519,6 +17875,520 @@
                             }
                           }
                         },
+                        "treemap_definition": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The definition for a Treemap widget.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "request": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "Nested block describing the request to use when displaying the widget.",
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "formula": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "alias": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "An expression alias."
+                                          },
+                                          "cell_display_mode": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "A list of display modes for each table cell."
+                                          },
+                                          "conditional_formats": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "Conditional formats allow you to set the color of your widget content or background depending on the rule applied to your data. Multiple `conditional_formats` blocks are allowed using the structure below.",
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "comparator": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The comparator to use."
+                                                },
+                                                "custom_bg_color": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The color palette to apply to the background, same values available as palette."
+                                                },
+                                                "custom_fg_color": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The color palette to apply to the foreground, same values available as palette."
+                                                },
+                                                "hide_value": {
+                                                  "Type": "Bool",
+                                                  "Optional": true,
+                                                  "Description": "Setting this to True hides values."
+                                                },
+                                                "image_url": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Displays an image as the background."
+                                                },
+                                                "metric": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The metric from the request to correlate with this conditional format."
+                                                },
+                                                "palette": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The color palette to apply."
+                                                },
+                                                "timeframe": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Defines the displayed timeframe."
+                                                },
+                                                "value": {
+                                                  "Type": "Float",
+                                                  "Required": true,
+                                                  "Description": "A value for the comparator."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "formula_expression": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "A string expression built from queries, formulas, and functions."
+                                          },
+                                          "limit": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "The options for limiting results returned.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "count": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "The number of results to return"
+                                                },
+                                                "order": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The direction of the sort.",
+                                                  "Default": {
+                                                    "Type": "string",
+                                                    "Value": "desc"
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "query": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "apm_dependency_stats_query": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "The APM Dependency Stats query using formulas and functions.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "data_source": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The data source for APM Dependency Stats queries."
+                                                },
+                                                "env": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM Environment."
+                                                },
+                                                "is_upstream": {
+                                                  "Type": "Bool",
+                                                  "Optional": true,
+                                                  "Description": "Determines whether stats for upstream or downstream dependencies should be queried."
+                                                },
+                                                "name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The name of query for use in formulas."
+                                                },
+                                                "operation_name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "Name of operation on service."
+                                                },
+                                                "primary_tag_name": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The name of the second primary tag used within APM; required when `primary_tag_value` is specified. See https://docs.datadoghq.com/tracing/guide/setting_primary_tags_to_scope/#add-a-second-primary-tag-in-datadog."
+                                                },
+                                                "primary_tag_value": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Filter APM data by the second primary tag. `primary_tag_name` must also be specified."
+                                                },
+                                                "resource_name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM resource."
+                                                },
+                                                "service": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM service."
+                                                },
+                                                "stat": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM statistic."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "apm_resource_stats_query": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "The APM Resource Stats query using formulas and functions.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "data_source": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The data source for APM Resource Stats queries."
+                                                },
+                                                "env": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM Environment."
+                                                },
+                                                "group_by": {
+                                                  "Type": "List",
+                                                  "Optional": true,
+                                                  "Description": "Array of fields to group results by.",
+                                                  "ConfigImplicitMode": "Attr",
+                                                  "Elem": {
+                                                    "Type": "SchemaElements",
+                                                    "ElementsType": "String"
+                                                  }
+                                                },
+                                                "name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The name of query for use in formulas."
+                                                },
+                                                "operation_name": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Name of operation on service."
+                                                },
+                                                "primary_tag_name": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The name of the second primary tag used within APM; required when `primary_tag_value` is specified. See https://docs.datadoghq.com/tracing/guide/setting_primary_tags_to_scope/#add-a-second-primary-tag-in-datadog."
+                                                },
+                                                "primary_tag_value": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Filter APM data by the second primary tag. `primary_tag_name` must also be specified."
+                                                },
+                                                "resource_name": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "APM resource."
+                                                },
+                                                "service": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM service."
+                                                },
+                                                "stat": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "APM statistic."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "event_query": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A timeseries formula and functions events query.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "compute": {
+                                                  "Type": "List",
+                                                  "Required": true,
+                                                  "Description": "The compute options.",
+                                                  "IsBlock": true,
+                                                  "ConfigImplicitMode": "Block",
+                                                  "Elem": {
+                                                    "Type": "SchemaInfo",
+                                                    "Info": {
+                                                      "aggregation": {
+                                                        "Type": "String",
+                                                        "Required": true,
+                                                        "Description": "The aggregation methods for event platform queries."
+                                                      },
+                                                      "interval": {
+                                                        "Type": "Int",
+                                                        "Optional": true,
+                                                        "Description": "A time interval in milliseconds."
+                                                      },
+                                                      "metric": {
+                                                        "Type": "String",
+                                                        "Optional": true,
+                                                        "Description": "The measurable attribute to compute."
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "data_source": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The data source for event platform-based queries."
+                                                },
+                                                "group_by": {
+                                                  "Type": "List",
+                                                  "Optional": true,
+                                                  "Description": "Group by options.",
+                                                  "IsBlock": true,
+                                                  "ConfigImplicitMode": "Block",
+                                                  "Elem": {
+                                                    "Type": "SchemaInfo",
+                                                    "Info": {
+                                                      "facet": {
+                                                        "Type": "String",
+                                                        "Required": true,
+                                                        "Description": "The event facet."
+                                                      },
+                                                      "limit": {
+                                                        "Type": "Int",
+                                                        "Optional": true,
+                                                        "Description": "The number of groups to return."
+                                                      },
+                                                      "sort": {
+                                                        "Type": "List",
+                                                        "Optional": true,
+                                                        "Description": "The options for sorting group by results.",
+                                                        "MaxItems": 1,
+                                                        "IsBlock": true,
+                                                        "ConfigImplicitMode": "Block",
+                                                        "Elem": {
+                                                          "Type": "SchemaInfo",
+                                                          "Info": {
+                                                            "aggregation": {
+                                                              "Type": "String",
+                                                              "Required": true,
+                                                              "Description": "The aggregation methods for the event platform queries."
+                                                            },
+                                                            "metric": {
+                                                              "Type": "String",
+                                                              "Optional": true,
+                                                              "Description": "The metric used for sorting group by results."
+                                                            },
+                                                            "order": {
+                                                              "Type": "String",
+                                                              "Optional": true,
+                                                              "Description": "Direction of sort."
+                                                            }
+                                                          }
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                "indexes": {
+                                                  "Type": "List",
+                                                  "Optional": true,
+                                                  "Description": "An array of index names to query in the stream.",
+                                                  "ConfigImplicitMode": "Attr",
+                                                  "Elem": {
+                                                    "Type": "SchemaElements",
+                                                    "ElementsType": "String"
+                                                  }
+                                                },
+                                                "name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The name of query for use in formulas."
+                                                },
+                                                "search": {
+                                                  "Type": "List",
+                                                  "Optional": true,
+                                                  "Description": "The search options.",
+                                                  "MaxItems": 1,
+                                                  "IsBlock": true,
+                                                  "ConfigImplicitMode": "Block",
+                                                  "Elem": {
+                                                    "Type": "SchemaInfo",
+                                                    "Info": {
+                                                      "query": {
+                                                        "Type": "String",
+                                                        "Required": true,
+                                                        "Description": "The events search string."
+                                                      }
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "metric_query": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "A timeseries formula and functions metrics query.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "aggregator": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The aggregation methods available for metrics queries."
+                                                },
+                                                "data_source": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The data source for metrics queries.",
+                                                  "Default": {
+                                                    "Type": "string",
+                                                    "Value": "metrics"
+                                                  }
+                                                },
+                                                "name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The name of the query for use in formulas."
+                                                },
+                                                "query": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The metrics query definition."
+                                                }
+                                              }
+                                            }
+                                          },
+                                          "process_query": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "The process query using formulas and functions.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "aggregator": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The aggregation methods available for metrics queries."
+                                                },
+                                                "data_source": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The data source for process queries."
+                                                },
+                                                "is_normalized_cpu": {
+                                                  "Type": "Bool",
+                                                  "Optional": true,
+                                                  "Description": "Whether to normalize the CPU percentages."
+                                                },
+                                                "limit": {
+                                                  "Type": "Int",
+                                                  "Optional": true,
+                                                  "Description": "The number of hits to return."
+                                                },
+                                                "metric": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The process metric name."
+                                                },
+                                                "name": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The name of query for use in formulas."
+                                                },
+                                                "sort": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The direction of the sort.",
+                                                  "Default": {
+                                                    "Type": "string",
+                                                    "Value": "desc"
+                                                  }
+                                                },
+                                                "tag_filters": {
+                                                  "Type": "List",
+                                                  "Optional": true,
+                                                  "Description": "An array of tags to filter by.",
+                                                  "ConfigImplicitMode": "Attr",
+                                                  "Elem": {
+                                                    "Type": "SchemaElements",
+                                                    "ElementsType": "String"
+                                                  }
+                                                },
+                                                "text_filter": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The text to use as a filter."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "title": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The title of the widget."
+                              }
+                            }
+                          }
+                        },
                         "widget_layout": {
                           "Type": "List",
                           "Optional": true,
@@ -19643,6 +20513,107 @@
                 }
               }
             },
+            "list_stream_definition": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The definition for a List Stream widget.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "request": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "Nested block describing the requests to use when displaying the widget. Multiple `request` blocks are allowed with the structure below.",
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "columns": {
+                          "Type": "List",
+                          "Required": true,
+                          "Description": "Widget columns.",
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "field": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Widget column field."
+                              },
+                              "width": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Widget column width."
+                              }
+                            }
+                          }
+                        },
+                        "query": {
+                          "Type": "List",
+                          "Required": true,
+                          "Description": "Updated list stream widget.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "data_source": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Source from which to query items to display in the stream."
+                              },
+                              "indexes": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "List of indexes.",
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "query_string": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Widget query."
+                              }
+                            }
+                          }
+                        },
+                        "response_format": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Widget response format."
+                        }
+                      }
+                    }
+                  },
+                  "title": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The title of the widget."
+                  },
+                  "title_align": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The alignment of the widget's title."
+                  },
+                  "title_size": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The size of the widget's title. Default is 16."
+                  }
+                }
+              }
+            },
             "log_stream_definition": {
               "Type": "List",
               "Optional": true,
@@ -19773,6 +20744,11 @@
                     "Type": "Bool",
                     "Optional": true,
                     "Description": "A Boolean indicating whether to show when monitors/groups last triggered."
+                  },
+                  "show_priority": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Whether to show the priorities column."
                   },
                   "sort": {
                     "Type": "String",
@@ -22453,6 +23429,62 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "The alignment of the widget's text."
+                  },
+                  "timeseries_background": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Set a timeseries on the widget background.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Whether the Timeseries is made using an area or bars."
+                        },
+                        "yaxis": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "A nested block describing the Y-Axis Controls. Exactly one nested block is allowed using the structure below.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "include_zero": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Always include zero or fit the axis to the data range."
+                              },
+                              "label": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The label of the axis to display on the graph."
+                              },
+                              "max": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Specify the maximum value to show on the Y-axis."
+                              },
+                              "min": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Specify the minimum value to show on the Y-axis."
+                              },
+                              "scale": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Specify the scale type, options: `linear`, `log`, `pow`, `sqrt`."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   },
                   "title": {
                     "Type": "String",
@@ -28743,6 +29775,520 @@
                 }
               }
             },
+            "treemap_definition": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The definition for a Treemap widget.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "request": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Nested block describing the request to use when displaying the widget.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "formula": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "alias": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "An expression alias."
+                              },
+                              "cell_display_mode": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "A list of display modes for each table cell."
+                              },
+                              "conditional_formats": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "Conditional formats allow you to set the color of your widget content or background depending on the rule applied to your data. Multiple `conditional_formats` blocks are allowed using the structure below.",
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "comparator": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The comparator to use."
+                                    },
+                                    "custom_bg_color": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The color palette to apply to the background, same values available as palette."
+                                    },
+                                    "custom_fg_color": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The color palette to apply to the foreground, same values available as palette."
+                                    },
+                                    "hide_value": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Setting this to True hides values."
+                                    },
+                                    "image_url": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Displays an image as the background."
+                                    },
+                                    "metric": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The metric from the request to correlate with this conditional format."
+                                    },
+                                    "palette": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The color palette to apply."
+                                    },
+                                    "timeframe": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Defines the displayed timeframe."
+                                    },
+                                    "value": {
+                                      "Type": "Float",
+                                      "Required": true,
+                                      "Description": "A value for the comparator."
+                                    }
+                                  }
+                                }
+                              },
+                              "formula_expression": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "A string expression built from queries, formulas, and functions."
+                              },
+                              "limit": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "The options for limiting results returned.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "count": {
+                                      "Type": "Int",
+                                      "Optional": true,
+                                      "Description": "The number of results to return"
+                                    },
+                                    "order": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The direction of the sort.",
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "desc"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "query": {
+                          "Type": "List",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "apm_dependency_stats_query": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "The APM Dependency Stats query using formulas and functions.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "data_source": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The data source for APM Dependency Stats queries."
+                                    },
+                                    "env": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM Environment."
+                                    },
+                                    "is_upstream": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Determines whether stats for upstream or downstream dependencies should be queried."
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The name of query for use in formulas."
+                                    },
+                                    "operation_name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "Name of operation on service."
+                                    },
+                                    "primary_tag_name": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The name of the second primary tag used within APM; required when `primary_tag_value` is specified. See https://docs.datadoghq.com/tracing/guide/setting_primary_tags_to_scope/#add-a-second-primary-tag-in-datadog."
+                                    },
+                                    "primary_tag_value": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Filter APM data by the second primary tag. `primary_tag_name` must also be specified."
+                                    },
+                                    "resource_name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM resource."
+                                    },
+                                    "service": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM service."
+                                    },
+                                    "stat": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM statistic."
+                                    }
+                                  }
+                                }
+                              },
+                              "apm_resource_stats_query": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "The APM Resource Stats query using formulas and functions.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "data_source": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The data source for APM Resource Stats queries."
+                                    },
+                                    "env": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM Environment."
+                                    },
+                                    "group_by": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "Array of fields to group results by.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The name of query for use in formulas."
+                                    },
+                                    "operation_name": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Name of operation on service."
+                                    },
+                                    "primary_tag_name": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The name of the second primary tag used within APM; required when `primary_tag_value` is specified. See https://docs.datadoghq.com/tracing/guide/setting_primary_tags_to_scope/#add-a-second-primary-tag-in-datadog."
+                                    },
+                                    "primary_tag_value": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Filter APM data by the second primary tag. `primary_tag_name` must also be specified."
+                                    },
+                                    "resource_name": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "APM resource."
+                                    },
+                                    "service": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM service."
+                                    },
+                                    "stat": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "APM statistic."
+                                    }
+                                  }
+                                }
+                              },
+                              "event_query": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A timeseries formula and functions events query.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "compute": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "The compute options.",
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "aggregation": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The aggregation methods for event platform queries."
+                                          },
+                                          "interval": {
+                                            "Type": "Int",
+                                            "Optional": true,
+                                            "Description": "A time interval in milliseconds."
+                                          },
+                                          "metric": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "The measurable attribute to compute."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "data_source": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The data source for event platform-based queries."
+                                    },
+                                    "group_by": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "Group by options.",
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "facet": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The event facet."
+                                          },
+                                          "limit": {
+                                            "Type": "Int",
+                                            "Optional": true,
+                                            "Description": "The number of groups to return."
+                                          },
+                                          "sort": {
+                                            "Type": "List",
+                                            "Optional": true,
+                                            "Description": "The options for sorting group by results.",
+                                            "MaxItems": 1,
+                                            "IsBlock": true,
+                                            "ConfigImplicitMode": "Block",
+                                            "Elem": {
+                                              "Type": "SchemaInfo",
+                                              "Info": {
+                                                "aggregation": {
+                                                  "Type": "String",
+                                                  "Required": true,
+                                                  "Description": "The aggregation methods for the event platform queries."
+                                                },
+                                                "metric": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "The metric used for sorting group by results."
+                                                },
+                                                "order": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Direction of sort."
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "indexes": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "An array of index names to query in the stream.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The name of query for use in formulas."
+                                    },
+                                    "search": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "The search options.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "query": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The events search string."
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              "metric_query": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A timeseries formula and functions metrics query.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "aggregator": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The aggregation methods available for metrics queries."
+                                    },
+                                    "data_source": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The data source for metrics queries.",
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "metrics"
+                                      }
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The name of the query for use in formulas."
+                                    },
+                                    "query": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The metrics query definition."
+                                    }
+                                  }
+                                }
+                              },
+                              "process_query": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "The process query using formulas and functions.",
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "aggregator": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The aggregation methods available for metrics queries."
+                                    },
+                                    "data_source": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The data source for process queries."
+                                    },
+                                    "is_normalized_cpu": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "Whether to normalize the CPU percentages."
+                                    },
+                                    "limit": {
+                                      "Type": "Int",
+                                      "Optional": true,
+                                      "Description": "The number of hits to return."
+                                    },
+                                    "metric": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The process metric name."
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The name of query for use in formulas."
+                                    },
+                                    "sort": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The direction of the sort.",
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "desc"
+                                      }
+                                    },
+                                    "tag_filters": {
+                                      "Type": "List",
+                                      "Optional": true,
+                                      "Description": "An array of tags to filter by.",
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "text_filter": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The text to use as a filter."
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "title": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The title of the widget."
+                  }
+                }
+              }
+            },
             "widget_layout": {
               "Type": "List",
               "Optional": true,
@@ -28902,6 +30448,15 @@
           "ElementsType": "String"
         }
       },
+      "mute_first_recovery_notification": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "When true the first recovery notification during the downtime will be muted",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "recurrence": {
         "Type": "List",
         "Optional": true,
@@ -28920,7 +30475,7 @@
             "rrule": {
               "Type": "String",
               "Optional": true,
-              "Description": "The RRULE standard for defining recurring events. For example, to have a recurring event on the first day of each month, use `FREQ=MONTHLY;INTERVAL=1`. Most common rrule options from the iCalendar Spec are supported. Attributes specifying the duration in RRULE are not supported (for example, `DTSTART`, `DTEND`, `DURATION`).",
+              "Description": "The RRULE standard for defining recurring events. For example, to have a recurring event on the first day of each month, use `FREQ=MONTHLY;INTERVAL=1`. Most common rrule options from the iCalendar Spec are supported. Attributes specifying the duration in RRULE are not supported (for example, `DTSTART`, `DTEND`, `DURATION`). Only applicable when `type` is `rrule`.",
               "ConflictsWith": [
                 "recurrence.period",
                 "recurrence.until_date",
@@ -28931,7 +30486,7 @@
             "type": {
               "Type": "String",
               "Required": true,
-              "Description": "One of `days`, `weeks`, `months`, or `years`"
+              "Description": "One of `days`, `weeks`, `months`, `years`, or `rrule`."
             },
             "until_date": {
               "Type": "Int",
@@ -29023,6 +30578,12 @@
           "Value": "Bool"
         }
       },
+      "cspm_resource_collection_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Whether Datadog collects cloud security posture management resources from your AWS account. This includes additional resources not covered under the general resource_collection.",
+        "Computed": true
+      },
       "excluded_regions": {
         "Type": "List",
         "Optional": true,
@@ -29057,6 +30618,18 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "metrics_collection_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Whether Datadog collects metrics for this AWS account.",
+        "Computed": true
+      },
+      "resource_collection_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Whether Datadog collects a standard set of resources from your AWS account.",
+        "Computed": true
       },
       "role_name": {
         "Type": "String",
@@ -29193,6 +30766,28 @@
         "Type": "String",
         "Required": true,
         "Description": "Your Google Cloud project ID found in your JSON service account key."
+      }
+    },
+    "datadog_integration_opsgenie_service_object": {
+      "custom_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The custom url for a custom region."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name for the Opsgenie service."
+      },
+      "opsgenie_api_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The Opsgenie API key for the Opsgenie service. Note: Since the Datadog API never returns Opsgenie API keys, it is impossible to detect [drifts](https://www.hashicorp.com/blog/detecting-and-managing-drift-with-terraform). The best way to solve a drift is to manually mark the Service Object resource with [terraform taint](https://www.terraform.io/docs/commands/taint.html) to have it destroyed and recreated."
+      },
+      "region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The region for the Opsgenie service."
       }
     },
     "datadog_integration_pagerduty": {
@@ -29380,6 +30975,11 @@
         "Type": "String",
         "Required": true,
         "Description": "The archive query/filter. Logs matching this query are included in the archive."
+      },
+      "rehydration_max_scan_size_in_gb": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "To limit the rehydration scan size for the archive, set a value in GB."
       },
       "rehydration_tags": {
         "Type": "List",
@@ -30941,7 +32541,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
-        "Description": "Type of the metric."
+        "Description": "Metric type such as `gauge` or `rate`."
       },
       "unit": {
         "Type": "String",
@@ -31021,6 +32621,11 @@
         "Optional": true,
         "Description": "A boolean indicating whether this monitor can be deleted even if it’s referenced by other resources (e.g. SLO, composite monitor)."
       },
+      "group_retention_duration": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The time span after which groups with missing data are dropped from the monitor state. The minimum value is one hour, and the maximum value is 72 hours. Example values are: 60m, 1h, and 2d. This option is only available for APM Trace Analytics, Audit Trail, CI, Error Tracking, Event, Logs, and RUM monitors."
+      },
       "groupby_simple_monitor": {
         "Type": "Bool",
         "Optional": true,
@@ -31041,7 +32646,8 @@
         "Description": "A boolean indicating whether changes to this monitor should be restricted to the creator or admins. Defaults to `false`.",
         "ConflictsWith": [
           "restricted_roles"
-        ]
+        ],
+        "Deprecated": "Use `restricted_roles`."
       },
       "message": {
         "Type": "String",
@@ -31094,12 +32700,12 @@
             "ok": {
               "Type": "String",
               "Optional": true,
-              "Description": "The monitor `OK` threshold. Must be a number."
+              "Description": "The monitor `OK` threshold. Only supported in monitor type `service check`. Must be a number."
             },
             "unknown": {
               "Type": "String",
               "Optional": true,
-              "Description": "The monitor `UNKNOWN` threshold. Must be a number."
+              "Description": "The monitor `UNKNOWN` threshold. Only supported in monitor type `service check`. Must be a number."
             },
             "warning": {
               "Type": "String",
@@ -31138,6 +32744,9 @@
         "Type": "Int",
         "Optional": true,
         "Description": "The number of minutes before a monitor will notify when data stops reporting. Provider defaults to 10 minutes.\n\nWe recommend at least 2x the monitor timeframe for metric alerts or 2 minutes for service checks.",
+        "ConflictsWith": [
+          "on_missing_data"
+        ],
         "Default": {
           "Type": "int",
           "Value": "10"
@@ -31152,10 +32761,22 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "A boolean indicating whether this monitor will notify when data stops reporting. Defaults to `false`.",
+        "ConflictsWith": [
+          "on_missing_data"
+        ],
         "Default": {
           "Type": "bool",
           "Value": "false"
         }
+      },
+      "on_missing_data": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controls how groups or monitors are treated if an evaluation does not return any data points. The default option results in different behavior depending on the monitor query type. For monitors using `Count` queries, an empty monitor evaluation is treated as 0 and is compared to the threshold conditions. For monitors using any query type other than `Count`, for example `Gauge`, `Measure`, or `Rate`, the monitor shows the last known status. This option is only available for APM Trace Analytics, Audit Trail, CI, Error Tracking, Event, Logs, and RUM monitors. Valid values are: `show_no_data`, `show_and_notify_no_data`, `resolve`, and `default`.",
+        "ConflictsWith": [
+          "notify_no_data",
+          "no_data_timeframe"
+        ]
       },
       "priority": {
         "Type": "Int",
@@ -31199,6 +32820,7 @@
       "restricted_roles": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A list of unique role identifiers to define which roles are allowed to edit the monitor. Editing a monitor includes any updates to the monitor configuration, monitor deletion, and muting of the monitor for any amount of time. Roles unique identifiers can be pulled from the [Roles API](https://docs.datadoghq.com/api/latest/roles/#list-roles) in the `data.id` field.",
         "ConflictsWith": [
           "locked"
         ],
@@ -31221,7 +32843,7 @@
       "timeout_h": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The number of hours of the monitor not reporting data before it will automatically resolve from a triggered state."
+        "Description": "The number of hours of the monitor not reporting data before it automatically resolves from a triggered state. The minimum allowed value is 0 hours. The maximum allowed value is 24 hours."
       },
       "type": {
         "Type": "String",
@@ -31232,6 +32854,145 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "If set to `false`, skip the validation call done during plan."
+      },
+      "variables": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "event_query": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A timeseries formula and functions events query.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "compute": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "The compute options.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "aggregation": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The aggregation methods for event platform queries."
+                        },
+                        "interval": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "A time interval in milliseconds."
+                        },
+                        "metric": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The measurable attribute to compute."
+                        }
+                      }
+                    }
+                  },
+                  "data_source": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The data source for event platform-based queries."
+                  },
+                  "group_by": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Group by options.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "facet": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The event facet."
+                        },
+                        "limit": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "The number of groups to return."
+                        },
+                        "sort": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The options for sorting group by results.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "aggregation": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The aggregation methods for the event platform queries."
+                              },
+                              "metric": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The metric used for sorting group by results."
+                              },
+                              "order": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Direction of sort."
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "indexes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "An array of index names to query in the stream.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of query for use in formulas."
+                  },
+                  "search": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "The search options.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The events search string."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "datadog_monitor_json": {
@@ -31448,6 +33209,27 @@
         "Computed": true
       }
     },
+    "datadog_rum_application": {
+      "client_token": {
+        "Type": "String",
+        "Description": "The client token",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the RUM application"
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The RUM application type. Supported values are `browser`, `ios`, `android`, `react-native`, `flutter`",
+        "Default": {
+          "Type": "string",
+          "Value": "browser"
+        }
+      }
+    },
     "datadog_security_monitoring_default_rule": {
       "case": {
         "Type": "List",
@@ -31504,6 +33286,28 @@
               "Type": "String",
               "Required": true,
               "Description": "Query for selecting logs to apply the filtering action."
+            }
+          }
+        }
+      },
+      "options": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Options on default rules. Note that only a subset of fields can be updated on default rule options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "decrease_criticality_based_on_env": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If true, signals in non-production environments have a lower severity than what is defined by the rule case, which can reduce noise. The decrement is applied when the environment tag of the signal starts with `staging`, `test`, or `dev`. Only available when the rule type is `log_detection`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
             }
           }
         }
@@ -31661,6 +33465,15 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "decrease_criticality_based_on_env": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If true, signals in non-production environments have a lower severity than what is defined by the rule case, which can reduce noise. The decrement is applied when the environment tag of the signal starts with `staging`, `test`, or `dev`. Only available when the rule type is `log_detection`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
             "detection_method": {
               "Type": "String",
               "Optional": true,
@@ -31672,8 +33485,30 @@
             },
             "evaluation_window": {
               "Type": "Int",
-              "Required": true,
+              "Optional": true,
               "Description": "A time window is specified to match when at least one of the cases matches true. This is a sliding window and evaluates in real time."
+            },
+            "impossible_travel_options": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Options for rules using the impossible travel detection method.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "baseline_user_locations": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "If true, signals are suppressed for the first 24 hours. In that time, Datadog learns the user's regular access locations. This can be helpful to reduce noise and infer VPN usage or credentialed API access.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  }
+                }
+              }
             },
             "keep_alive": {
               "Type": "Int",
@@ -31702,8 +33537,30 @@
                   },
                   "learning_duration": {
                     "Type": "Int",
-                    "Required": true,
-                    "Description": "The duration in days during which values are learned, and after which signals will be generated for values that weren't learned. If set to 0, a signal will be generated for all new values after the first value is learned."
+                    "Optional": true,
+                    "Description": "The duration in days during which values are learned, and after which signals will be generated for values that weren't learned. If set to 0, a signal will be generated for all new values after the first value is learned.",
+                    "Default": {
+                      "Type": "int",
+                      "Value": "1"
+                    }
+                  },
+                  "learning_method": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The learning method used to determine when signals should be generated for values that weren't learned.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "duration"
+                    }
+                  },
+                  "learning_threshold": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "A number of occurrences after which signals are generated for values that weren't learned.",
+                    "Default": {
+                      "Type": "int",
+                      "Value": "0"
+                    }
                   }
                 }
               }
@@ -31746,7 +33603,11 @@
             "aggregation": {
               "Type": "String",
               "Optional": true,
-              "Description": "The aggregation type."
+              "Description": "The aggregation type.",
+              "Default": {
+                "Type": "datadogV2.SecurityMonitoringRuleQueryAggregation",
+                "Value": "count"
+              }
             },
             "distinct_fields": {
               "Type": "List",
@@ -31771,12 +33632,23 @@
             "metric": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target field to aggregate over when using the sum or max aggregations."
+              "Description": "The target field to aggregate over when using the `sum`, `max`, or `new_value` aggregations."
+            },
+            "metrics": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Group of target fields to aggregate over when using the new value aggregations.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "name": {
               "Type": "String",
               "Optional": true,
-              "Description": "Name of the query."
+              "Description": "Name of the query. Not compatible with `new_value` aggregations."
             },
             "query": {
               "Type": "String",
@@ -32086,6 +33958,29 @@
         "Optional": true,
         "Description": "Description of the private location."
       },
+      "metadata": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The private location metadata",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "restricted_roles": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A list of role identifiers pulled from the Roles API to restrict read and write access.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -32245,15 +34140,59 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "access_key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Access key for `SIGV4` authentication."
+                  },
+                  "domain": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Domain for `ntlm` authentication."
+                  },
                   "password": {
                     "Type": "String",
-                    "Required": true,
+                    "Optional": true,
                     "Description": "Password for authentication."
+                  },
+                  "region": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Region for `SIGV4` authentication."
+                  },
+                  "secret_key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Secret key for `SIGV4` authentication."
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Service name for `SIGV4` authentication."
+                  },
+                  "session_token": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Session token for `SIGV4` authentication."
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Type of basic authentication to use when performing the test.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "web"
+                    }
                   },
                   "username": {
                     "Type": "String",
-                    "Required": true,
+                    "Optional": true,
                     "Description": "Username for authentication."
+                  },
+                  "workstation": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Workstation for `ntlm` authentication."
                   }
                 }
               }
@@ -32393,6 +34332,11 @@
                     "Optional": true,
                     "Description": "For SSL tests, it specifies on which server you want to initiate the TLS handshake, allowing the server to present one of multiple possible certificates on the same IP address and TCP port number."
                   },
+                  "service": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "For gRPC tests, service to target for healthcheck."
+                  },
                   "should_track_hops": {
                     "Type": "Bool",
                     "Optional": true,
@@ -32401,7 +34345,11 @@
                   "timeout": {
                     "Type": "Int",
                     "Optional": true,
-                    "Description": "Timeout in seconds for the test. Defaults to `60`."
+                    "Description": "Timeout in seconds for the test. Defaults to `60`.",
+                    "Default": {
+                      "Type": "int",
+                      "Value": "60"
+                    }
                   },
                   "url": {
                     "Type": "String",
@@ -32415,6 +34363,29 @@
               "Type": "Map",
               "Optional": true,
               "Description": "Header name and value map."
+            },
+            "request_proxy": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The proxy to perform the test.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "headers": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "Header name and value map."
+                  },
+                  "url": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "URL of the proxy to perform the test."
+                  }
+                }
+              }
             },
             "request_query": {
               "Type": "Map",
@@ -32542,6 +34513,11 @@
               "Optional": true,
               "Description": "Force update of the \"element\" parameter for the step"
             },
+            "is_critical": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determines whether or not to consider the entire test as failed if this step fails. Can be used only if `allow_failure` is `true`."
+            },
             "name": {
               "Type": "String",
               "Required": true,
@@ -32586,6 +34562,51 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Element to use for the step, json encoded string."
+                  },
+                  "element_user_locator": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Custom user selector to use for the step.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "fail_test_on_cannot_locate": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "value": {
+                          "Type": "List",
+                          "Required": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "type": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Default": {
+                                  "Type": "string",
+                                  "Value": "css"
+                                }
+                              },
+                              "value": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   },
                   "email": {
                     "Type": "String",
@@ -32779,7 +34800,7 @@
       "locations": {
         "Type": "Set",
         "Required": true,
-        "Description": "Array of locations used to run the test. Refer to [Datadog documentation](https://docs.datadoghq.com/synthetics/api_test/#request) for available locations (e.g. `aws:eu-central-1`).",
+        "Description": "Array of locations used to run the test. Refer to [the Datadog Synthetics location data source](https://registry.terraform.io/providers/DataDog/datadog/latest/docs/data-sources/synthetics_locations) to retrieve the list of locations.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -32822,6 +34843,29 @@
               "Type": "Bool",
               "Optional": true,
               "Description": "Allows loading insecure content for an HTTP test."
+            },
+            "check_certificate_revocation": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "For SSL test, whether or not the test should fail on revoked certificate in stapled OCSP."
+            },
+            "ci": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "CI/CD options for a Synthetic test.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "execution_rule": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Execution rule for a Synthetics test."
+                  }
+                }
+              }
             },
             "follow_redirects": {
               "Type": "Bool",
@@ -32877,6 +34921,16 @@
               "Optional": true,
               "Description": "Prevents saving screenshots of the steps."
             },
+            "restricted_roles": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A list of role identifiers pulled from the Roles API to restrict read and write access.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "retry": {
               "Type": "List",
               "Optional": true,
@@ -32907,6 +34961,34 @@
                 }
               }
             },
+            "rum_settings": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The RUM data collection settings for the Synthetic browser test.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "application_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "RUM application ID used to collect RUM data for the browser test."
+                  },
+                  "client_token_id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "RUM application API key ID used to collect RUM data for the browser test."
+                  },
+                  "is_enabled": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Determines whether RUM data is collected during test runs."
+                  }
+                }
+              }
+            },
             "tick_every": {
               "Type": "Int",
               "Required": true,
@@ -32925,15 +35007,59 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "access_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Access key for `SIGV4` authentication."
+            },
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Domain for `ntlm` authentication."
+            },
             "password": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Password for authentication."
+            },
+            "region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Region for `SIGV4` authentication."
+            },
+            "secret_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Secret key for `SIGV4` authentication."
+            },
+            "service_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Service name for `SIGV4` authentication."
+            },
+            "session_token": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Session token for `SIGV4` authentication."
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Type of basic authentication to use when performing the test.",
+              "Default": {
+                "Type": "string",
+                "Value": "web"
+              }
             },
             "username": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Username for authentication."
+            },
+            "workstation": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Workstation for `ntlm` authentication."
             }
           }
         }
@@ -33063,6 +35189,11 @@
               "Optional": true,
               "Description": "For SSL tests, it specifies on which server you want to initiate the TLS handshake, allowing the server to present one of multiple possible certificates on the same IP address and TCP port number."
             },
+            "service": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "For gRPC tests, service to target for healthcheck."
+            },
             "should_track_hops": {
               "Type": "Bool",
               "Optional": true,
@@ -33071,7 +35202,11 @@
             "timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "Timeout in seconds for the test. Defaults to `60`."
+              "Description": "Timeout in seconds for the test. Defaults to `60`.",
+              "Default": {
+                "Type": "int",
+                "Value": "60"
+              }
             },
             "url": {
               "Type": "String",
@@ -33085,6 +35220,29 @@
         "Type": "Map",
         "Optional": true,
         "Description": "Header name and value map."
+      },
+      "request_proxy": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The proxy to perform the test.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "headers": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Header name and value map."
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "URL of the proxy to perform the test."
+            }
+          }
+        }
       },
       "request_query": {
         "Type": "Map",
@@ -33252,6 +35410,45 @@
         "Type": "String",
         "Optional": true,
         "Description": "Name for Application Key."
+      }
+    },
+    "datadog_cloud_workload_security_agent_rules": {
+      "agent_rules": {
+        "Type": "List",
+        "Description": "List of Agent rules.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "The description of the Agent rule.",
+              "Computed": true
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Description": "Whether the Agent rule is enabled.",
+              "Computed": true
+            },
+            "expression": {
+              "Type": "String",
+              "Description": "The SECL expression of the Agent rule.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The id of the Agent rule.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the Agent rule.",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "datadog_dashboard": {
@@ -33430,6 +35627,95 @@
         }
       }
     },
+    "datadog_logs_indexes": {
+      "logs_indexes": {
+        "Type": "List",
+        "Description": "List of logs indexes",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "daily_limit": {
+              "Type": "Int",
+              "Description": "The number of log events you can send in this index per day before you are rate-limited.",
+              "Computed": true
+            },
+            "exclusion_filter": {
+              "Type": "List",
+              "Description": "List of exclusion filters.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "filter": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query": {
+                          "Type": "String",
+                          "Description": "Only logs matching the filter criteria and the query of the parent index will be considered for this exclusion filter.",
+                          "Computed": true
+                        },
+                        "sample_rate": {
+                          "Type": "Float",
+                          "Description": "The fraction of logs excluded by the exclusion filter, when active.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "is_enabled": {
+                    "Type": "Bool",
+                    "Description": "A boolean stating if the exclusion is active or not.",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Description": "The name of the exclusion filter.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "filter": {
+              "Type": "List",
+              "Description": "Logs filter",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "query": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Logs filter criteria. Only logs matching this filter criteria are considered for this index."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the index.",
+              "Computed": true
+            },
+            "retention_days": {
+              "Type": "Int",
+              "Description": "The number of days before logs are deleted from this index.",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "datadog_logs_indexes_order": {
       "index_names": {
         "Type": "List",
@@ -33456,6 +35742,11 @@
       "evaluation_delay": {
         "Type": "Int",
         "Description": "Time (in seconds) for which evaluation is delayed. This is only used by metric monitors.",
+        "Computed": true
+      },
+      "group_retention_duration": {
+        "Type": "String",
+        "Description": "The time span after which groups with missing data are dropped from the monitor state. The minimum value is one hour, and the maximum value is 72 hours. Example values are: 60m, 1h, and 2d. This option is only available for APM Trace Analytics, Audit Trail, CI, Error Tracking, Event, Logs, and RUM monitors.",
         "Computed": true
       },
       "groupby_simple_monitor": {
@@ -33577,6 +35868,11 @@
       "notify_no_data": {
         "Type": "Bool",
         "Description": "Whether or not this monitor notifies when data stops reporting.",
+        "Computed": true
+      },
+      "on_missing_data": {
+        "Type": "String",
+        "Description": "Controls how groups or monitors are treated if an evaluation does not return any data points. The default option results in different behavior depending on the monitor query type. For monitors using `Count` queries, an empty monitor evaluation is treated as 0 and is compared to the threshold conditions. For monitors using any query type other than `Count`, for example `Gauge`, `Measure`, or `Rate`, the monitor shows the last known status. This option is only available for APM Trace Analytics, Audit Trail, CI, Error Tracking, Event, Logs, and RUM monitors. Valid values are: `show_no_data`, `show_and_notify_no_data`, `resolve`, and `default`.",
         "Computed": true
       },
       "query": {
@@ -33969,6 +36265,15 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "decrease_criticality_based_on_env": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "If true, signals in non-production environments have a lower severity than what is defined by the rule case, which can reduce noise. The decrement is applied when the environment tag of the signal starts with `staging`, `test`, or `dev`. Only available when the rule type is `log_detection`.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
                   "detection_method": {
                     "Type": "String",
                     "Optional": true,
@@ -33980,8 +36285,30 @@
                   },
                   "evaluation_window": {
                     "Type": "Int",
-                    "Required": true,
+                    "Optional": true,
                     "Description": "A time window is specified to match when at least one of the cases matches true. This is a sliding window and evaluates in real time."
+                  },
+                  "impossible_travel_options": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Options for rules using the impossible travel detection method.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "baseline_user_locations": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, signals are suppressed for the first 24 hours. In that time, Datadog learns the user's regular access locations. This can be helpful to reduce noise and infer VPN usage or credentialed API access.",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        }
+                      }
+                    }
                   },
                   "keep_alive": {
                     "Type": "Int",
@@ -34010,8 +36337,30 @@
                         },
                         "learning_duration": {
                           "Type": "Int",
-                          "Required": true,
-                          "Description": "The duration in days during which values are learned, and after which signals will be generated for values that weren't learned. If set to 0, a signal will be generated for all new values after the first value is learned."
+                          "Optional": true,
+                          "Description": "The duration in days during which values are learned, and after which signals will be generated for values that weren't learned. If set to 0, a signal will be generated for all new values after the first value is learned.",
+                          "Default": {
+                            "Type": "int",
+                            "Value": "1"
+                          }
+                        },
+                        "learning_method": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The learning method used to determine when signals should be generated for values that weren't learned.",
+                          "Default": {
+                            "Type": "string",
+                            "Value": "duration"
+                          }
+                        },
+                        "learning_threshold": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "A number of occurrences after which signals are generated for values that weren't learned.",
+                          "Default": {
+                            "Type": "int",
+                            "Value": "0"
+                          }
                         }
                       }
                     }
@@ -34054,7 +36403,11 @@
                   "aggregation": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The aggregation type."
+                    "Description": "The aggregation type.",
+                    "Default": {
+                      "Type": "datadogV2.SecurityMonitoringRuleQueryAggregation",
+                      "Value": "count"
+                    }
                   },
                   "distinct_fields": {
                     "Type": "List",
@@ -34079,12 +36432,23 @@
                   "metric": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The target field to aggregate over when using the sum or max aggregations."
+                    "Description": "The target field to aggregate over when using the `sum`, `max`, or `new_value` aggregations."
+                  },
+                  "metrics": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Group of target fields to aggregate over when using the new value aggregations.",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "name": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "Name of the query."
+                    "Description": "Name of the query. Not compatible with `new_value` aggregations."
                   },
                   "query": {
                     "Type": "String",
@@ -34240,6 +36604,43 @@
         "Type": "Map",
         "Description": "A map of available Synthetics location IDs to names for Synthetics tests.",
         "Computed": true
+      }
+    },
+    "datadog_synthetics_test": {
+      "name": {
+        "Type": "String",
+        "Description": "The name of the synthetic test.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Description": "A list of tags assigned to the synthetic test.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "test_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The synthetic test id to search for"
+      },
+      "url": {
+        "Type": "String",
+        "Description": "The start URL of the synthetic test.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "datadog_user": {

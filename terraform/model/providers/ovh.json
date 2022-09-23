@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ovh",
   "type": "provider",
-  "version": "v0.16.0",
+  "version": "v0.21.0",
   "provider": {
     "application_key": {
       "Type": "String",
@@ -399,10 +399,685 @@
         "Computed": true
       }
     },
+    "ovh_cloud_project_database": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "backup_time": {
+        "Type": "String",
+        "Description": "Time on which backups start every day",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the cluster",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the cluster"
+      },
+      "endpoints": {
+        "Type": "List",
+        "Description": "List of all endpoints of the service",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "component": {
+              "Type": "String",
+              "Description": "Type of component the URI relates to",
+              "Computed": true
+            },
+            "domain": {
+              "Type": "String",
+              "Description": "Domain of the cluster",
+              "Computed": true
+            },
+            "path": {
+              "Type": "String",
+              "Description": "Path of the endpoint",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "Connection port for the endpoint",
+              "Computed": true
+            },
+            "scheme": {
+              "Type": "String",
+              "Description": "Scheme used to generate the URI",
+              "Computed": true
+            },
+            "ssl": {
+              "Type": "Bool",
+              "Description": "Defines whether the endpoint uses SSL",
+              "Computed": true
+            },
+            "ssl_mode": {
+              "Type": "String",
+              "Description": "SSL mode used to connect to the service if the SSL is enabled",
+              "Computed": true
+            },
+            "uri": {
+              "Type": "String",
+              "Description": "URI of the endpoint",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "flavor": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The node flavor used for this cluster"
+      },
+      "maintenance_time": {
+        "Type": "String",
+        "Description": "Time on which maintenances can start every day",
+        "Computed": true
+      },
+      "network_type": {
+        "Type": "String",
+        "Description": "Type of network of the cluster",
+        "Computed": true
+      },
+      "nodes": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of nodes composing the service",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "network_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Private network ID in which the node is"
+            },
+            "region": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Region of the node"
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Private subnet ID in which the node is"
+            }
+          }
+        }
+      },
+      "plan": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Plan of the cluster"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the cluster",
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Version of the engine deployed on the cluster"
+      }
+    },
+    "ovh_cloud_project_database_ip_restriction": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the IP restriction"
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Authorized IP"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the IP restriction",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_kafka_acl": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "permission": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Permission to give to this username on this topic"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "topic": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Topic affected by this acl"
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Username affected by this acl"
+      }
+    },
+    "ovh_cloud_project_database_kafka_topic": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "min_insync_replicas": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Minimum insync replica accepted for this topic",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the topic"
+      },
+      "partitions": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of partitions for this topic",
+        "Computed": true
+      },
+      "replication": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of replication for this topic",
+        "Computed": true
+      },
+      "retention_bytes": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of bytes for the retention of the data for this topic",
+        "Computed": true
+      },
+      "retention_hours": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of hours for the retention of the data for this topic",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_mongodb_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Password of the user",
+        "Computed": true
+      },
+      "roles": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Roles the user belongs to (without authentication database)",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_opensearch_pattern": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "max_index_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum number of index for this pattern"
+      },
+      "pattern": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Pattern format"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_opensearch_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "acls": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Acls of the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "pattern": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Pattern of the ACL"
+            },
+            "permission": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Permission of the ACL"
+            }
+          }
+        }
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Password of the user",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_postgresql_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Password of the user",
+        "Computed": true
+      },
+      "roles": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Roles the user belongs to",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_redis_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "categories": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Categories of the user",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "channels": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Channels of the user",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "commands": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Commands of the user",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Keys of the user",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Password of the user",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_user": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Password of the user",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_failover_ip_attach": {
+      "block": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP block",
+        "Computed": true
+      },
+      "continent_code": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ip continent",
+        "Computed": true
+      },
+      "geo_loc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ip location",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Ip id",
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ip",
+        "Computed": true
+      },
+      "progress": {
+        "Type": "Int",
+        "Description": "Current operation progress in percent",
+        "Computed": true
+      },
+      "routed_to": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Instance where ip is routed to",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The service name"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Ip status",
+        "Computed": true
+      },
+      "sub_type": {
+        "Type": "String",
+        "Description": "IP sub type",
+        "Computed": true
+      }
+    },
     "ovh_cloud_project_kube": {
       "control_plane_is_up_to_date": {
         "Type": "Bool",
         "Computed": true
+      },
+      "customization": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "apiserver": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "admissionplugins": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "enabled": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "is_up_to_date": {
         "Type": "Bool",
@@ -429,6 +1104,28 @@
         "Type": "String",
         "Computed": true
       },
+      "private_network_configuration": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_vrack_gateway": {
+              "Type": "String",
+              "Required": true,
+              "Description": "If defined, all egress traffic will be routed towards this IP address, which should belong to the private network. Empty string means disabled."
+            },
+            "private_network_routing_as_default": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Defines whether routing should default to using the nodes' private interface, instead of their public interface. Default is false."
+            }
+          }
+        }
+      },
       "private_network_id": {
         "Type": "String",
         "Optional": true
@@ -448,6 +1145,7 @@
       },
       "update_policy": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "url": {
@@ -458,6 +1156,29 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "ovh_cloud_project_kube_iprestrictions": {
+      "ips": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of IP restrictions for the cluster",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "kube_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Kube ID"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
       }
     },
     "ovh_cloud_project_kube_nodepool": {
@@ -563,6 +1284,90 @@
         "Description": "Current status",
         "Computed": true
       },
+      "template": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Node pool template",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metadata": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "metadata",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "annotations": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "annotations",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "finalizers": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "finalizers",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "labels": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "labels",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "spec": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "spec",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "taints": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "taints",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "Map"
+                    }
+                  },
+                  "unschedulable": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "unschedulable"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "up_to_date_nodes": {
         "Type": "Int",
         "Description": "Number of nodes with latest version installed in the pool",
@@ -574,6 +1379,25 @@
         "Computed": true
       }
     },
+    "ovh_cloud_project_kube_oidc": {
+      "client_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "issuer_url": {
+        "Type": "String",
+        "Required": true
+      },
+      "kube_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
     "ovh_cloud_project_network_private": {
       "name": {
         "Type": "String",
@@ -583,7 +1407,6 @@
         "Type": "Set",
         "Optional": true,
         "Computed": true,
-        "Deprecated": "use the regions_attributes field instead",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -591,7 +1414,7 @@
         }
       },
       "regions_attributes": {
-        "Type": "List",
+        "Type": "Set",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -815,6 +1638,49 @@
       "username": {
         "Type": "String",
         "Computed": true
+      }
+    },
+    "ovh_cloud_project_user_s3_credential": {
+      "access_key_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "internal_user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "secret_access_key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the ID of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user ID"
+      }
+    },
+    "ovh_cloud_project_user_s3_policy": {
+      "policy": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The policy document. This is a JSON formatted string."
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the ID of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user ID"
       }
     },
     "ovh_dbaas_logs_input": {
@@ -3439,7 +4305,7 @@
       "service_name": {
         "Type": "String",
         "Required": true,
-        "Description": "Service name of the resource representing the id of the cloud project.",
+        "Description": "Service name of the vrack resource.",
         "DefaultFunc": "ENV(OVH_VRACK_SERVICE)"
       }
     },
@@ -3463,7 +4329,7 @@
       "service_name": {
         "Type": "String",
         "Required": true,
-        "Description": "Service name of the resource representing the id of the cloud project.",
+        "Description": "Service name of the vrack resource.",
         "DefaultFunc": "ENV(OVH_VRACK_SERVICE)"
       }
     },
@@ -3848,10 +4714,781 @@
         "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
       }
     },
+    "ovh_cloud_project_database": {
+      "backup_time": {
+        "Type": "String",
+        "Description": "Time on which backups start every day",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the cluster",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "Description of the cluster",
+        "Computed": true
+      },
+      "endpoints": {
+        "Type": "List",
+        "Description": "List of all endpoints of the service",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "component": {
+              "Type": "String",
+              "Description": "Type of component the URI relates to",
+              "Computed": true
+            },
+            "domain": {
+              "Type": "String",
+              "Description": "Domain of the cluster",
+              "Computed": true
+            },
+            "path": {
+              "Type": "String",
+              "Description": "Path of the endpoint",
+              "Computed": true
+            },
+            "port": {
+              "Type": "Int",
+              "Description": "Connection port for the endpoint",
+              "Computed": true
+            },
+            "scheme": {
+              "Type": "String",
+              "Description": "Scheme used to generate the URI",
+              "Computed": true
+            },
+            "ssl": {
+              "Type": "Bool",
+              "Description": "Defines whether the endpoint uses SSL",
+              "Computed": true
+            },
+            "ssl_mode": {
+              "Type": "String",
+              "Description": "SSL mode used to connect to the service if the SSL is enabled",
+              "Computed": true
+            },
+            "uri": {
+              "Type": "String",
+              "Description": "URI of the endpoint",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "flavor": {
+        "Type": "String",
+        "Description": "The node flavor used for this cluster",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "maintenance_time": {
+        "Type": "String",
+        "Description": "Time on which maintenances can start every day",
+        "Computed": true
+      },
+      "network_type": {
+        "Type": "String",
+        "Description": "Type of network of the cluster",
+        "Computed": true
+      },
+      "nodes": {
+        "Type": "List",
+        "Description": "List of nodes composing the service",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "network_id": {
+              "Type": "String",
+              "Description": "Private network ID in which the node is",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Description": "Region of the node",
+              "Computed": true
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Description": "Private subnet ID in which the node is",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "plan": {
+        "Type": "String",
+        "Description": "Plan of the cluster",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the cluster",
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Description": "Version of the engine deployed on the cluster",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_ip_restrictions": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "ips": {
+        "Type": "List",
+        "Description": "List of IP restriction",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_kafka_acl": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Acl ID"
+      },
+      "permission": {
+        "Type": "String",
+        "Description": "Permission to give to this username on this topic",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "topic": {
+        "Type": "String",
+        "Description": "Topic affected by this acl",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Description": "Username affected by this acl",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_kafka_acls": {
+      "acl_ids": {
+        "Type": "List",
+        "Description": "List of acl ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_kafka_certificates": {
+      "ca": {
+        "Type": "String",
+        "Description": "CA certificate used for the service",
+        "Computed": true
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_kafka_topic": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Topic ID"
+      },
+      "min_insync_replicas": {
+        "Type": "Int",
+        "Description": "Minimum insync replica accepted for this topic",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Name of the topic",
+        "Computed": true
+      },
+      "partitions": {
+        "Type": "Int",
+        "Description": "Number of partitions for this topic",
+        "Computed": true
+      },
+      "replication": {
+        "Type": "Int",
+        "Description": "Number of replication for this topic",
+        "Computed": true
+      },
+      "retention_bytes": {
+        "Type": "Int",
+        "Description": "Number of bytes for the retention of the data for this topic",
+        "Computed": true
+      },
+      "retention_hours": {
+        "Type": "Int",
+        "Description": "Number of hours for the retention of the data for this topic",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_kafka_topics": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "topic_ids": {
+        "Type": "List",
+        "Description": "List of topic ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "ovh_cloud_project_database_kafka_user_access": {
+      "cert": {
+        "Type": "String",
+        "Description": "User cert",
+        "Computed": true
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "key": {
+        "Type": "String",
+        "Description": "User key for the cert",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the user"
+      }
+    },
+    "ovh_cloud_project_database_mongodb_user": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user with the authentication database in the format name@authDB"
+      },
+      "roles": {
+        "Type": "List",
+        "Description": "Roles the user belongs to",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_opensearch_pattern": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Pattern ID"
+      },
+      "max_index_count": {
+        "Type": "Int",
+        "Description": "Maximum number of index for this pattern",
+        "Computed": true
+      },
+      "pattern": {
+        "Type": "String",
+        "Description": "Pattern format",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_opensearch_patterns": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "pattern_ids": {
+        "Type": "List",
+        "Description": "List of pattern ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_opensearch_user": {
+      "acls": {
+        "Type": "Set",
+        "Description": "Acls of the user",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "pattern": {
+              "Type": "String",
+              "Description": "Pattern of the ACL",
+              "Computed": true
+            },
+            "permission": {
+              "Type": "String",
+              "Description": "Permission of the ACL",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_postgresql_user": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "roles": {
+        "Type": "Set",
+        "Description": "Roles the user belongs to",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_redis_user": {
+      "categories": {
+        "Type": "Set",
+        "Description": "Categories of the user",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "channels": {
+        "Type": "Set",
+        "Description": "Channels of the user",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "commands": {
+        "Type": "Set",
+        "Description": "Commands of the user",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "keys": {
+        "Type": "Set",
+        "Description": "Keys of the user",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_user": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_users": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_ids": {
+        "Type": "List",
+        "Description": "List of users ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "ovh_cloud_project_databases": {
+      "cluster_ids": {
+        "Type": "List",
+        "Description": "List of database clusters uuids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_failover_ip_attach": {
+      "block": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP block",
+        "Computed": true
+      },
+      "continent_code": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ip continent",
+        "Computed": true
+      },
+      "geo_loc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ip location",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "Ip id",
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ip",
+        "Computed": true
+      },
+      "progress": {
+        "Type": "Int",
+        "Description": "Current operation progress in percent",
+        "Computed": true
+      },
+      "routed_to": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Instance where ip is routed to",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The service name"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Ip status",
+        "Computed": true
+      },
+      "sub_type": {
+        "Type": "String",
+        "Description": "IP sub type",
+        "Computed": true
+      }
+    },
     "ovh_cloud_project_kube": {
       "control_plane_is_up_to_date": {
         "Type": "Bool",
         "Computed": true
+      },
+      "customization": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "apiserver": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "admissionplugins": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "disabled": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "enabled": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "is_up_to_date": {
         "Type": "Bool",
@@ -3906,6 +5543,129 @@
       "version": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "ovh_cloud_project_kube_iprestrictions": {
+      "ips": {
+        "Type": "Set",
+        "Description": "List of IP restrictions for the cluster",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "kube_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Kube ID"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_kube_nodepool": {
+      "anti_affinity": {
+        "Type": "Bool",
+        "Description": "Enable anti affinity groups for nodes in the pool",
+        "Computed": true
+      },
+      "autoscale": {
+        "Type": "Bool",
+        "Description": "Enable auto-scaling for the pool",
+        "Computed": true
+      },
+      "available_nodes": {
+        "Type": "Int",
+        "Description": "Number of nodes which are actually ready in the pool",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Creation date",
+        "Computed": true
+      },
+      "current_nodes": {
+        "Type": "Int",
+        "Description": "Number of nodes present in the pool",
+        "Computed": true
+      },
+      "desired_nodes": {
+        "Type": "Int",
+        "Description": "Number of nodes you desire in the pool",
+        "Computed": true
+      },
+      "flavor": {
+        "Type": "String",
+        "Description": "Flavor name",
+        "Computed": true
+      },
+      "flavor_name": {
+        "Type": "String",
+        "Description": "Flavor name",
+        "Computed": true
+      },
+      "kube_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Kube ID"
+      },
+      "max_nodes": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of nodes you desire in the pool",
+        "Computed": true
+      },
+      "min_nodes": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of nodes you desire in the pool",
+        "Computed": true
+      },
+      "monthly_billed": {
+        "Type": "Bool",
+        "Description": "Enable monthly billing on all nodes in the pool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "NodePool resource name"
+      },
+      "project_id": {
+        "Type": "String",
+        "Description": "Project id",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "size_status": {
+        "Type": "String",
+        "Description": "Status describing the state between number of nodes wanted and available ones",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status",
+        "Computed": true
+      },
+      "up_to_date_nodes": {
+        "Type": "Int",
+        "Description": "Number of nodes with latest version installed in the pool",
+        "Computed": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Description": "Last update date",
+        "Computed": true
       }
     },
     "ovh_cloud_project_region": {
@@ -3971,6 +5731,200 @@
         "Required": true,
         "Description": "Service name of the resource representing the id of the cloud project.",
         "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_user": {
+      "creation_date": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "roles": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "permissions": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the id of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user ID"
+      },
+      "username": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_user_s3_credential": {
+      "access_key_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The access key"
+      },
+      "secret_access_key": {
+        "Type": "String",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the ID of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user ID"
+      }
+    },
+    "ovh_cloud_project_user_s3_credentials": {
+      "access_key_ids": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the ID of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user ID"
+      }
+    },
+    "ovh_cloud_project_user_s3_policy": {
+      "policy": {
+        "Type": "String",
+        "Description": "The policy document. This is a JSON formatted string.",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the ID of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "user_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user ID"
+      }
+    },
+    "ovh_cloud_project_users": {
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Service name of the resource representing the id of the cloud project.",
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "users": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "creation_date": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "roles": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "permissions": {
+                    "Type": "Set",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "username": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "ovh_dbaas_logs_input_engine": {
@@ -4597,6 +6551,170 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Filters on vlan id"
+      }
+    },
+    "ovh_me": {
+      "address": {
+        "Type": "String",
+        "Description": "Address of nichandle",
+        "Computed": true
+      },
+      "area": {
+        "Type": "String",
+        "Description": "Area of nichandle",
+        "Computed": true
+      },
+      "birth_city": {
+        "Type": "String",
+        "Description": "City of birth",
+        "Computed": true
+      },
+      "birth_day": {
+        "Type": "String",
+        "Description": "Birth date",
+        "Computed": true
+      },
+      "city": {
+        "Type": "String",
+        "Description": "City of nichandle",
+        "Computed": true
+      },
+      "company_national_identification_number": {
+        "Type": "String",
+        "Description": "Company National Identification Number",
+        "Computed": true
+      },
+      "corporation_type": {
+        "Type": "String",
+        "Description": "Corporation type",
+        "Computed": true
+      },
+      "country": {
+        "Type": "String",
+        "Description": "Customer country",
+        "Computed": true
+      },
+      "currency": {
+        "Type": "List",
+        "Description": "Customer currency",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "code": {
+              "Type": "String",
+              "Description": "Currency code",
+              "Computed": true
+            },
+            "symbol": {
+              "Type": "String",
+              "Description": "Currency symbol",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "customer_code": {
+        "Type": "String",
+        "Description": "Your customer code (a numerical value used for identification when contacting support via phone call)",
+        "Computed": true
+      },
+      "email": {
+        "Type": "String",
+        "Description": "Email address",
+        "Computed": true
+      },
+      "fax": {
+        "Type": "String",
+        "Description": "Fax number",
+        "Computed": true
+      },
+      "firstname": {
+        "Type": "String",
+        "Description": "First name",
+        "Computed": true
+      },
+      "italian_sdi": {
+        "Type": "String",
+        "Description": "Italian SDI",
+        "Computed": true
+      },
+      "language": {
+        "Type": "String",
+        "Description": "Language",
+        "Computed": true
+      },
+      "legalform": {
+        "Type": "String",
+        "Description": "Customer legal form",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Customer name",
+        "Computed": true
+      },
+      "national_identification_number": {
+        "Type": "String",
+        "Description": "National Identification Number",
+        "Computed": true
+      },
+      "nichandle": {
+        "Type": "String",
+        "Description": "Customer identifier",
+        "Computed": true
+      },
+      "organisation": {
+        "Type": "String",
+        "Description": "Name of organisation",
+        "Computed": true
+      },
+      "ovh_company": {
+        "Type": "String",
+        "Description": "OVH subsidiary",
+        "Computed": true
+      },
+      "ovh_subsidiary": {
+        "Type": "String",
+        "Description": "OVH subsidiary",
+        "Computed": true
+      },
+      "phone": {
+        "Type": "String",
+        "Description": "Phone number",
+        "Computed": true
+      },
+      "phone_country": {
+        "Type": "String",
+        "Description": "Phone number's country code",
+        "Computed": true
+      },
+      "sex": {
+        "Type": "String",
+        "Description": "Gender",
+        "Computed": true
+      },
+      "spare_email": {
+        "Type": "String",
+        "Description": "Spare email",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "Nichandle state",
+        "Computed": true
+      },
+      "vat": {
+        "Type": "String",
+        "Description": "VAT number",
+        "Computed": true
+      },
+      "zip": {
+        "Type": "String",
+        "Description": "Zipcode",
+        "Computed": true
       }
     },
     "ovh_me_identity_user": {

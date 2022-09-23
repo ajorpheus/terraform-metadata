@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "openstack",
   "type": "provider",
-  "version": "v1.46.0",
+  "version": "v1.48.0",
   "provider": {
     "allow_reauth": {
       "Type": "Bool",
@@ -85,6 +85,15 @@
       "Optional": true,
       "Description": "The name of the Domain to scope to (Identity v3).",
       "DefaultFunc": "ENV(OS_DOMAIN_NAME)"
+    },
+    "enable_logging": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Outputs very verbose logs with all calls made to and responses from OpenStack",
+      "Default": {
+        "Type": "bool",
+        "Value": "false"
+      }
     },
     "endpoint_overrides": {
       "Type": "Map",
@@ -1472,6 +1481,11 @@
         "Optional": true,
         "Computed": true
       },
+      "user_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "value_specs": {
         "Type": "Map",
         "Optional": true
@@ -1828,7 +1842,10 @@
       "node_count": {
         "Type": "Int",
         "Optional": true,
-        "Computed": true
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
       },
       "project_id": {
         "Type": "String",
@@ -1991,6 +2008,84 @@
       "volume_driver": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "openstack_containerinfra_nodegroup_v1": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "docker_volume_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "flavor_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "image_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
+      "max_node_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "merge_labels": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "min_node_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "node_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "project_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "openstack_db_configuration_v1": {
@@ -3105,7 +3200,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "/home/runner/.terraform/image_cache"
+          "Value": "/Users/b132ka/.terraform/image_cache"
         }
       },
       "image_id": {
@@ -3955,6 +4050,18 @@
           "Value": "true"
         }
       },
+      "backup": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "monitor_address": {
+        "Type": "String",
+        "Optional": true
+      },
+      "monitor_port": {
+        "Type": "Int",
+        "Optional": true
+      },
       "name": {
         "Type": "String",
         "Optional": true
@@ -4020,6 +4127,14 @@
             "id": {
               "Type": "String",
               "Computed": true
+            },
+            "monitor_address": {
+              "Type": "String",
+              "Optional": true
+            },
+            "monitor_port": {
+              "Type": "Int",
+              "Optional": true
             },
             "name": {
               "Type": "String",
@@ -5943,6 +6058,11 @@
         "Optional": true,
         "Computed": true
       },
+      "storage_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "versioning": {
         "Type": "Set",
         "Optional": true,
@@ -7060,6 +7180,11 @@
         "Optional": true,
         "Computed": true
       },
+      "host": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "metadata": {
         "Type": "Map",
         "Optional": true,
@@ -7384,6 +7509,93 @@
         "Computed": true
       }
     },
+    "openstack_compute_limits_v2": {
+      "max_image_meta": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_personality": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_personality_size": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_security_group_rules": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_security_groups": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_server_group_members": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_server_groups": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_server_meta": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_total_cores": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_total_floating_ips": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_total_instances": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_total_keypairs": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "max_total_ram_size": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "total_cores_used": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "total_floating_ips_used": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "total_instances_used": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "total_ram_used": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "total_security_groups_used": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "total_server_groups_used": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
     "openstack_compute_quotaset_v2": {
       "cores": {
         "Type": "Int",
@@ -7691,6 +7903,66 @@
         "Computed": true
       },
       "volume_driver": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "openstack_containerinfra_nodegroup_v1": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "docker_volume_size": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "flavor": {
+        "Type": "String",
+        "Computed": true
+      },
+      "image": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "max_node_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "min_node_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_count": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "role": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_at": {
         "Type": "String",
         "Computed": true
       }
@@ -9201,6 +9473,7 @@
       },
       "region": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "router": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vultr",
   "type": "provider",
-  "version": "v2.9.0",
+  "version": "v2.11.4",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -145,8 +145,18 @@
       "tag": {
         "Type": "String",
         "Optional": true,
+        "Deprecated": "tag has been deprecated and should no longer be used. Instead, use tags",
         "Default": {
           "Type": "string"
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "user_data": {
@@ -171,6 +181,11 @@
       "attached_to_instance": {
         "Type": "String",
         "Optional": true
+      },
+      "block_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "cost": {
         "Type": "Float",
@@ -417,15 +432,6 @@
         "Type": "Bool",
         "Optional": true
       },
-      "enable_private_network": {
-        "Type": "Bool",
-        "Optional": true,
-        "Deprecated": "In the next release of this provider we will be removing `enable_private_network` due to issues that may cause drift and having to maintain private network ip state. Please switch to using private_network_ids to manage your private network fields.",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
       "features": {
         "Type": "List",
         "Computed": true,
@@ -447,6 +453,7 @@
       "hostname": {
         "Type": "String",
         "Optional": true,
+        "Description": "The hostname of the instance. Updating the hostname will cause a force new. This behavior is in place to prevent accidental reinstalls. Issuing an update to the hostname on UI or API issues a reinstall of the OS.",
         "Computed": true
       },
       "image_id": {
@@ -500,8 +507,10 @@
         "Computed": true
       },
       "private_network_ids": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
+        "Computed": true,
+        "Deprecated": "private_network_ids has been deprecated and should no longer be used. Instead, use vpc_ids",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -551,7 +560,16 @@
       "tag": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Deprecated": "tag has been deprecated and should no longer be used. Instead, use tags"
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "user_data": {
         "Type": "String",
@@ -573,6 +591,16 @@
       "vcpu_count": {
         "Type": "Int",
         "Computed": true
+      },
+      "vpc_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vultr_instance_ipv4": {
@@ -663,14 +691,21 @@
       },
       "node_pools": {
         "Type": "List",
-        "Required": true,
+        "Optional": true,
         "MaxItems": 1,
-        "MinItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "auto_scaler": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
             "date_created": {
               "Type": "String",
               "Computed": true
@@ -686,6 +721,22 @@
             "label": {
               "Type": "String",
               "Required": true
+            },
+            "max_nodes": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "1"
+              }
+            },
+            "min_nodes": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "1"
+              }
             },
             "node_quantity": {
               "Type": "Int",
@@ -751,6 +802,14 @@
       }
     },
     "vultr_kubernetes_node_pools": {
+      "auto_scaler": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "cluster_id": {
         "Type": "String",
         "Required": true
@@ -770,6 +829,22 @@
       "label": {
         "Type": "String",
         "Required": true
+      },
+      "max_nodes": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "min_nodes": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
       },
       "node_quantity": {
         "Type": "Int",
@@ -812,14 +887,14 @@
       },
       "tag": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       }
     },
     "vultr_load_balancer": {
       "attached_instances": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -956,7 +1031,8 @@
       },
       "private_network": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "private_network is deprecated and should no longer be used. Instead, use vpc"
       },
       "proxy_protocol": {
         "Type": "Bool",
@@ -1005,6 +1081,10 @@
       "status": {
         "Type": "String",
         "Computed": true
+      },
+      "vpc": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "vultr_object_storage": {
@@ -1277,6 +1357,33 @@
       "password": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "vultr_vpc": {
+      "date_created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "v4_subnet": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "v4_subnet_mask": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
       }
     }
   },
@@ -1574,6 +1681,15 @@
         "Type": "String",
         "Computed": true
       },
+      "tags": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "v6_main_ip": {
         "Type": "String",
         "Computed": true
@@ -1589,6 +1705,10 @@
     },
     "vultr_block_storage": {
       "attached_to_instance": {
+        "Type": "String",
+        "Computed": true
+      },
+      "block_type": {
         "Type": "String",
         "Computed": true
       },
@@ -1853,6 +1973,15 @@
         "Type": "String",
         "Computed": true
       },
+      "tags": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "v6_main_ip": {
         "Type": "String",
         "Computed": true
@@ -1868,6 +1997,15 @@
       "vcpu_count": {
         "Type": "Int",
         "Computed": true
+      },
+      "vpc_ids": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "vultr_instance_ipv4": {
@@ -2065,6 +2203,14 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "auto_scaler": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
             "date_created": {
               "Type": "String",
               "Computed": true
@@ -2080,6 +2226,22 @@
             "label": {
               "Type": "String",
               "Required": true
+            },
+            "max_nodes": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "1"
+              }
+            },
+            "min_nodes": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "1"
+              }
             },
             "node_quantity": {
               "Type": "Int",
@@ -2319,6 +2481,48 @@
         "Computed": true
       }
     },
+    "vultr_object_storage_cluster": {
+      "deploy": {
+        "Type": "String",
+        "Computed": true
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "hostname": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "vultr_os": {
       "arch": {
         "Type": "String",
@@ -2393,6 +2597,14 @@
             }
           }
         }
+      },
+      "gpu_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "gpu_vram": {
+        "Type": "Int",
+        "Computed": true
       },
       "locations": {
         "Type": "List",
@@ -2825,6 +3037,52 @@
       },
       "name": {
         "Type": "String",
+        "Computed": true
+      }
+    },
+    "vultr_vpc": {
+      "date_created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "region": {
+        "Type": "String",
+        "Computed": true
+      },
+      "v4_subnet": {
+        "Type": "String",
+        "Computed": true
+      },
+      "v4_subnet_mask": {
+        "Type": "Int",
         "Computed": true
       }
     }

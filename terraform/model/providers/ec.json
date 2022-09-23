@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ec",
   "type": "provider",
-  "version": "v0.3.0",
+  "version": "v0.4.1",
   "provider": {
     "apikey": {
       "Type": "String",
@@ -786,6 +786,134 @@
           }
         }
       },
+      "integrations_server": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Optional Integrations Server resource definition",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Optionally define the IntegrationsServer configuration options for the IntegrationsServer Server",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "debug_enabled": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Optionally enable debug mode for IntegrationsServer servers - defaults to false",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "false"
+                    }
+                  },
+                  "docker_image": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Optionally override the docker image the IntegrationsServer nodes will use. Note that this field will only work for internal users only."
+                  },
+                  "user_settings_json": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An arbitrary JSON object allowing (non-admin) cluster owners to set their parameters (only one of this and 'user_settings_yaml' is allowed), provided they are on the whitelist ('user_settings_whitelist') and not on the blacklist ('user_settings_blacklist'). (This field together with 'user_settings_override*' and 'system_settings' defines the total set of resource settings)"
+                  },
+                  "user_settings_override_json": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An arbitrary JSON object allowing ECE admins owners to set clusters' parameters (only one of this and 'user_settings_override_yaml' is allowed), ie in addition to the documented 'system_settings'. (This field together with 'system_settings' and 'user_settings*' defines the total set of resource settings)"
+                  },
+                  "user_settings_override_yaml": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An arbitrary YAML object allowing (non-admin) cluster owners to set their parameters (only one of this and 'user_settings_json' is allowed), provided they are on the whitelist ('user_settings_whitelist') and not on the blacklist ('user_settings_blacklist'). (These field together with 'user_settings_override*' and 'system_settings' defines the total set of resource settings)"
+                  },
+                  "user_settings_yaml": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "An arbitrary YAML object allowing ECE admins owners to set clusters' parameters (only one of this and 'user_settings_override_json' is allowed), ie in addition to the documented 'system_settings'. (This field together with 'system_settings' and 'user_settings*' defines the total set of resource settings)"
+                  }
+                }
+              }
+            },
+            "elasticsearch_cluster_ref_id": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "main-elasticsearch"
+              }
+            },
+            "http_endpoint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "https_endpoint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ref_id": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "main-integrations_server"
+              }
+            },
+            "region": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "topology": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "instance_configuration_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "size": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "size_resource": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Optional size type, defaults to \"memory\".",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "memory"
+                    }
+                  },
+                  "zone_count": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "kibana": {
         "Type": "List",
         "Optional": true,
@@ -1459,6 +1587,76 @@
         "Type": "String",
         "Required": true
       },
+      "integrations_server": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "elasticsearch_cluster_ref_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "healthy": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "http_endpoint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "https_endpoint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ref_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "topology": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "instance_configuration_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "size": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "size_resource": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "zone_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "version": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "kibana": {
         "Type": "List",
         "Computed": true,
@@ -1655,6 +1853,14 @@
               "Type": "String",
               "Computed": true
             },
+            "integrations_server_ref_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "integrations_server_resource_id": {
+              "Type": "String",
+              "Computed": true
+            },
             "kibana_ref_id": {
               "Type": "String",
               "Computed": true
@@ -1721,6 +1927,30 @@
       "healthy": {
         "Type": "String",
         "Optional": true
+      },
+      "integrations_server": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "healthy": {
+              "Type": "String",
+              "Optional": true
+            },
+            "status": {
+              "Type": "String",
+              "Optional": true
+            },
+            "version": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
       },
       "kibana": {
         "Type": "List",

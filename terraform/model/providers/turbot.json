@@ -3,7 +3,7 @@
   ".sdk_type": "terraform",
   "name": "turbot",
   "type": "provider",
-  "version": "v1.8.2",
+  "version": "v1.9.1",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -930,6 +930,40 @@
         "Optional": true
       },
       "title": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "turbot_watch": {
+      "action": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "favorite": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "filters": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "handler": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true
+      },
+      "resource": {
         "Type": "String",
         "Required": true
       }

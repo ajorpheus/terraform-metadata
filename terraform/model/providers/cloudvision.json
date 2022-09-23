@@ -1,0 +1,267 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "cloudvision",
+  "type": "provider",
+  "version": "v0.1.3",
+  "provider": {
+    "cvp": {
+      "Type": "String",
+      "Required": true
+    },
+    "port": {
+      "Type": "Int",
+      "Required": true
+    },
+    "token": {
+      "Type": "String",
+      "Required": true
+    }
+  },
+  "resources": {
+    "cvprovider_cv_configlet": {
+      "__timeouts__": [
+        "create"
+      ],
+      "configletdata": {
+        "Type": "String",
+        "Required": true
+      },
+      "configletkey": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "configletname": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "cvprovider_cv_container": {
+      "__timeouts__": [
+        "create"
+      ],
+      "container_configlets": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "containerkey": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "containername": {
+        "Type": "String",
+        "Required": true
+      },
+      "parentcontainerkey": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "parentcontainername": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "cvprovider_device_cv_configlet": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "default"
+      ],
+      "additional_configlets": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "device_add_configlettaskid": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_configlet_base": {
+        "Type": "String",
+        "Optional": true
+      },
+      "device_configlet_base_key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_configlet_base_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_configlettaskid": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_fqdn": {
+        "Type": "String",
+        "Optional": true
+      },
+      "device_serial": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "overwrite_compliant": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      }
+    },
+    "cvprovider_device_cv_container": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "default"
+      ],
+      "device_containerkey": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_containername": {
+        "Type": "String",
+        "Required": true
+      },
+      "device_containertaskid": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_fqdn": {
+        "Type": "String",
+        "Optional": true
+      },
+      "device_taskstatus": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_taskstatus2": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "cvprovider_onboard_inventory": {
+      "__timeouts__": [
+        "create"
+      ],
+      "decomid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fqdn": {
+        "Type": "String",
+        "Required": true
+      },
+      "ipaddress": {
+        "Type": "String",
+        "Required": true
+      },
+      "requestid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "serial": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "typeofdev": {
+        "Type": "String",
+        "Required": true
+      }
+    }
+  },
+  "data-sources": {
+    "cvprovider_data_inventory": {
+      "inventory": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "deviceinfo": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "devicestatus": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fqdn": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "hostname": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ipaddress": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "modelname": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "parentcontainerkey": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "serialnumber": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "systemmacaddress": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

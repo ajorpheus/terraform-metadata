@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "rke",
   "type": "provider",
-  "version": "v1.3.0",
+  "version": "v1.3.3",
   "provider": {
     "debug": {
       "Type": "Bool",
@@ -1781,6 +1781,15 @@
               }
             }
           }
+        }
+      },
+      "enable_cri_dockerd": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable/Disable CRI dockerd for kubelet",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "etcd_hosts": {

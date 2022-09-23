@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "checkly",
   "type": "provider",
-  "version": "v1.4.0-rc2",
+  "version": "v1.6.2",
   "provider": {
     "account_id": {
       "Type": "String",
@@ -34,7 +34,8 @@
           "Info": {
             "address": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The email address of this email alert channel."
             }
           }
         }
@@ -94,6 +95,7 @@
       "send_degraded": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "(Default `false`)",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -102,6 +104,7 @@
       "send_failure": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "(Default `true`)",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -110,6 +113,7 @@
       "send_recovery": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "(Default `true`)",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -126,11 +130,13 @@
           "Info": {
             "channel": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The name of the alert's Slack channel"
             },
             "url": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The Slack webhook URL"
             }
           }
         }
@@ -146,11 +152,13 @@
           "Info": {
             "name": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The name of this alert channel"
             },
             "number": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The mobile number to receive the alerts"
             }
           }
         }
@@ -158,6 +166,7 @@
       "ssl_expiry": {
         "Type": "Bool",
         "Optional": true,
+        "Description": "(Default `false`)",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -166,6 +175,7 @@
       "ssl_expiry_threshold": {
         "Type": "Int",
         "Optional": true,
+        "Description": "Value must be between 1 and 30 (Default `30`)",
         "Default": {
           "Type": "int",
           "Value": "30"
@@ -188,7 +198,12 @@
             },
             "method": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "(Default `POST`)",
+              "Default": {
+                "Type": "string",
+                "Value": "POST"
+              }
             },
             "name": {
               "Type": "String",
@@ -219,7 +234,8 @@
     "checkly_check": {
       "activated": {
         "Type": "Bool",
-        "Required": true
+        "Required": true,
+        "Description": "Determines if the check is running or not. Possible values `true`, and `false`."
       },
       "alert_channel_subscription": {
         "Type": "List",
@@ -252,7 +268,8 @@
           "Info": {
             "escalation_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Determines what type of escalation to use. Possible values are `RUN_BASED` or `TIME_BASED`."
             },
             "reminders": {
               "Type": "Set",
@@ -264,11 +281,13 @@
                 "Info": {
                   "amount": {
                     "Type": "Int",
-                    "Optional": true
+                    "Optional": true,
+                    "Description": "How many reminders to send out after the initial alert notification. Possible values are `0`, `1`, `2`, `3`, `4`, `5`, and `100000`"
                   },
                   "interval": {
                     "Type": "Int",
                     "Optional": true,
+                    "Description": "Possible values are `5`, `10`, `15`, and `30`. (Default `5`).",
                     "Default": {
                       "Type": "int",
                       "Value": "5"
@@ -288,6 +307,7 @@
                   "failed_run_threshold": {
                     "Type": "Int",
                     "Optional": true,
+                    "Description": "After how many failed consecutive check runs an alert notification should be sent. Possible values are between 1 and 5. (Default `1`).",
                     "Default": {
                       "Type": "int",
                       "Value": "1"
@@ -299,6 +319,7 @@
             "ssl_certificates": {
               "Type": "Set",
               "Optional": true,
+              "Deprecated": "The property `ssl_certificates` is deprecated and it's ignored by the Checkly Public API. It will be removed in a future version.",
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -307,14 +328,12 @@
                   "alert_threshold": {
                     "Type": "Int",
                     "Optional": true,
-                    "Default": {
-                      "Type": "int",
-                      "Value": "3"
-                    }
+                    "Description": "How long before SSL certificate expiry to send alerts. Possible values `3`, `7`, `14`, `30`. (Default `3`)."
                   },
                   "enabled": {
                     "Type": "Bool",
                     "Optional": true,
+                    "Description": "Determines if alert notifications should be sent for expiring SSL certificates. Possible values `true`, and `false`. (Default `false`).",
                     "Default": {
                       "Type": "bool",
                       "Value": "false"
@@ -334,6 +353,7 @@
                   "minutes_failing_threshold": {
                     "Type": "Int",
                     "Optional": true,
+                    "Description": "After how many minutes after a check starts failing an alert should be sent. Possible values are `5`, `10`, `15`, and `30`. (Default `5`).",
                     "Default": {
                       "Type": "int",
                       "Value": "5"
@@ -348,6 +368,7 @@
       "degraded_response_time": {
         "Type": "Int",
         "Optional": true,
+        "Description": "The response time in milliseconds starting from which a check should be considered degraded. Possible values are between 0 and 30000. (Default `15000`).",
         "Default": {
           "Type": "int",
           "Value": "15000"
@@ -355,39 +376,48 @@
       },
       "double_check": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Setting this to `true` will trigger a retry when a check fails from the failing region and another, randomly selected region before marking the check as failed."
       },
       "environment_variables": {
         "Type": "Map",
-        "Optional": true
+        "Optional": true,
+        "Description": "Key/value pairs for setting environment variables during check execution. These are only relevant for browser checks. Use global environment variables whenever possible."
       },
       "frequency": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The frequency in minutes to run the check. Possible values are `0`, `1`, `2`, `5`, `10`, `15`, `30`, `60`, `120`, `180`, `360`, `720`, and `1440`."
       },
       "frequency_offset": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "This property only valid for API high frequency checks. To create a hight frequency check, the property `frequency` must be `0` and `frequency_offset` could be `10`, `20` or `30`."
       },
       "group_id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "The id of the check group this check is part of."
       },
       "group_order": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "The position of this check in a check group. It determines in what order checks are run when a group is triggered from the API or from CI/CD."
       },
       "local_setup_script": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A valid piece of Node.js code to run in the setup phase."
       },
       "local_teardown_script": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A valid piece of Node.js code to run in the teardown phase."
       },
       "locations": {
         "Type": "Set",
         "Optional": true,
+        "Description": "An array of one or more data center locations where to run the this check. (Default [\"us-east-1\"])",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -397,6 +427,7 @@
       "max_response_time": {
         "Type": "Int",
         "Optional": true,
+        "Description": "The response time in milliseconds starting from which a check should be considered failing. Possible values are between 0 and 30000. (Default `30000`).",
         "Default": {
           "Type": "int",
           "Value": "30000"
@@ -404,15 +435,29 @@
       },
       "muted": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Determines if any notifications will be sent out when a check fails/degrades/recovers."
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the check."
+      },
+      "private_locations": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "An array of one or more private locations slugs.",
+        "DefaultFunc": "UNKNOWN",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "request": {
         "Type": "Set",
         "Optional": true,
+        "Description": "An API check might have one request config.",
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -422,6 +467,7 @@
             "assertion": {
               "Type": "Set",
               "Optional": true,
+              "Description": "A request can have multiple assertions.",
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -429,7 +475,8 @@
                 "Info": {
                   "comparison": {
                     "Type": "String",
-                    "Required": true
+                    "Required": true,
+                    "Description": "The type of comparison to be executed between expected and actual value of the assertion. Possible values `EQUALS`, `NOT_EQUALS`, `HAS_KEY`, `NOT_HAS_KEY`, `HAS_VALUE`, `NOT_HAS_VALUE`, `IS_EMPTY`, `NOT_EMPTY`, `GREATER_THAN`, `LESS_THAN`, `CONTAINS`, `NOT_CONTAINS`, `IS_NULL`, and `NOT_NULL`."
                   },
                   "property": {
                     "Type": "String",
@@ -437,7 +484,8 @@
                   },
                   "source": {
                     "Type": "String",
-                    "Required": true
+                    "Required": true,
+                    "Description": "The source of the asserted value. Possible values `STATUS_CODE`, `JSON_BODY`, `HEADERS`, `TEXT_BODY`, and `RESPONSE_TIME`."
                   },
                   "target": {
                     "Type": "String",
@@ -449,6 +497,7 @@
             "basic_auth": {
               "Type": "Set",
               "Optional": true,
+              "Description": "Set up HTTP basic authentication (username \u0026 password).",
               "Computed": true,
               "MaxItems": 1,
               "DefaultFunc": "UNKNOWN",
@@ -470,7 +519,8 @@
             },
             "body": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Possible values `NONE`, `JSON`, `FORM`, `RAW`, and `GRAPHQL`."
             },
             "body_type": {
               "Type": "String",
@@ -493,6 +543,7 @@
             "method": {
               "Type": "String",
               "Optional": true,
+              "Description": "The HTTP method to use for this API check. Possible values are `GET`, `POST`, `PUT`, `HEAD`, `DELETE`, `PATCH`. (Default `GET`).",
               "Default": {
                 "Type": "string",
                 "Value": "GET"
@@ -504,6 +555,10 @@
               "Computed": true,
               "DefaultFunc": "UNKNOWN"
             },
+            "skip_ssl": {
+              "Type": "Bool",
+              "Optional": true
+            },
             "url": {
               "Type": "String",
               "Required": true
@@ -513,30 +568,37 @@
       },
       "runtime_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The id of the runtime to use for this check."
       },
       "script": {
         "Type": "String",
         "Optional": true,
+        "Description": "A valid piece of Node.js JavaScript code describing a browser interaction with the Puppeteer/Playwright framework or a reference to an external JavaScript file.",
         "Default": {
           "Type": "string"
         }
       },
       "setup_snippet_id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "An ID reference to a snippet to use in the setup phase of an API check."
       },
       "should_fail": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Allows to invert the behaviour of when a check is considered to fail. Allows for validating error status like 404."
       },
       "ssl_check": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Determines if the SSL certificate should be validated for expiry.",
+        "Deprecated": "The property `ssl_check` is deprecated and it's ignored by the Checkly Public API. It will be removed in a future version."
       },
       "tags": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A list of tags for organizing and filtering checks.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -545,21 +607,25 @@
       },
       "teardown_snippet_id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "An ID reference to a snippet to use in the teardown phase of an API check."
       },
       "type": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The type of the check. Possible values are `API`, and `BROWSER`."
       },
       "use_global_alert_settings": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "When true, the account level alert settings will be used, not the alert setting defined on this check."
       }
     },
     "checkly_check_group": {
       "activated": {
         "Type": "Bool",
-        "Required": true
+        "Required": true,
+        "Description": "Determines if the checks in the group are running or not."
       },
       "alert_channel_subscription": {
         "Type": "List",
@@ -592,7 +658,8 @@
           "Info": {
             "escalation_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Determines what type of escalation to use. Possible values are `RUN_BASED` or `TIME_BASED`."
             },
             "reminders": {
               "Type": "Set",
@@ -604,11 +671,13 @@
                 "Info": {
                   "amount": {
                     "Type": "Int",
-                    "Optional": true
+                    "Optional": true,
+                    "Description": "How many reminders to send out after the initial alert notification. Possible values are `0`, `1`, `2`, `3`, `4`, `5`, and `100000`"
                   },
                   "interval": {
                     "Type": "Int",
                     "Optional": true,
+                    "Description": "Possible values are `5`, `10`, `15`, and `30`. (Default `5`).",
                     "Default": {
                       "Type": "int",
                       "Value": "5"
@@ -628,6 +697,7 @@
                   "failed_run_threshold": {
                     "Type": "Int",
                     "Optional": true,
+                    "Description": "After how many failed consecutive check runs an alert notification should be sent. Possible values are between 1 and 5. (Default `1`).",
                     "Default": {
                       "Type": "int",
                       "Value": "1"
@@ -639,6 +709,7 @@
             "ssl_certificates": {
               "Type": "Set",
               "Optional": true,
+              "Deprecated": "The property `ssl_certificates` is deprecated and it's ignored by the Checkly Public API. It will be removed in a future version.",
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -647,14 +718,12 @@
                   "alert_threshold": {
                     "Type": "Int",
                     "Optional": true,
-                    "Default": {
-                      "Type": "int",
-                      "Value": "3"
-                    }
+                    "Description": "At what moment in time to start alerting on SSL certificates. Possible values `3`, `7`, `14`, `30`. (Default `3`)."
                   },
                   "enabled": {
                     "Type": "Bool",
                     "Optional": true,
+                    "Description": "Determines if alert notifications should be sent for expiring SSL certificates.",
                     "Default": {
                       "Type": "bool",
                       "Value": "false"
@@ -674,6 +743,7 @@
                   "minutes_failing_threshold": {
                     "Type": "Int",
                     "Optional": true,
+                    "Description": "After how many minutes after a check starts failing an alert should be sent. Possible values are `5`, `10`, `15`, and `30`. (Default `5`).",
                     "Default": {
                       "Type": "int",
                       "Value": "5"
@@ -706,7 +776,8 @@
                 "Info": {
                   "comparison": {
                     "Type": "String",
-                    "Required": true
+                    "Required": true,
+                    "Description": "The type of comparison to be executed between expected and actual value of the assertion. Possible values `EQUALS`, `NOT_EQUALS`, `HAS_KEY`, `NOT_HAS_KEY`, `HAS_VALUE`, `NOT_HAS_VALUE`, `IS_EMPTY`, `NOT_EMPTY`, `GREATER_THAN`, `LESS_THAN`, `CONTAINS`, `NOT_CONTAINS`, `IS_NULL`, and `NOT_NULL`."
                   },
                   "property": {
                     "Type": "String",
@@ -714,7 +785,8 @@
                   },
                   "source": {
                     "Type": "String",
-                    "Required": true
+                    "Required": true,
+                    "Description": "The source of the asserted value. Possible values `STATUS_CODE`, `JSON_BODY`, `HEADERS`, `TEXT_BODY`, and `RESPONSE_TIME`."
                   },
                   "target": {
                     "Type": "String",
@@ -759,34 +831,41 @@
             },
             "url": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The base url for this group which you can reference with the `GROUP_BASE_URL` variable in all group checks."
             }
           }
         }
       },
       "concurrency": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "Determines how many checks are run concurrently when triggering a check group from CI/CD or through the API."
       },
       "double_check": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Setting this to `true` will trigger a retry when a check fails from the failing region and another, randomly selected region before marking the check as failed."
       },
       "environment_variables": {
         "Type": "Map",
-        "Optional": true
+        "Optional": true,
+        "Description": "Key/value pairs for setting environment variables during check execution. These are only relevant for browser checks. Use global environment variables whenever possible."
       },
       "local_setup_script": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A valid piece of Node.js code to run in the setup phase of an API check in this group."
       },
       "local_teardown_script": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A valid piece of Node.js code to run in the teardown phase of an API check in this group."
       },
       "locations": {
         "Type": "Set",
-        "Required": true,
+        "Optional": true,
+        "Description": "An array of one or more data center locations where to run the checks.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -795,23 +874,39 @@
       },
       "muted": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Determines if any notifications will be sent out when a check in this group fails and/or recovers."
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the check group."
+      },
+      "private_locations": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "An array of one or more private locations slugs.",
+        "DefaultFunc": "UNKNOWN",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "runtime_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The id of the runtime to use for this group."
       },
       "setup_snippet_id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "An ID reference to a snippet to use in the setup phase of an API check."
       },
       "tags": {
         "Type": "Set",
         "Optional": true,
+        "Description": "Tags for organizing and filtering checks.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -820,49 +915,82 @@
       },
       "teardown_snippet_id": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "An ID reference to a snippet to use in the teardown phase of an API check."
       },
       "use_global_alert_settings": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "When true, the account level alert settings will be used, not the alert setting defined on this check group."
       }
     },
     "checkly_dashboard": {
       "custom_domain": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Description": "A custom user domain, e.g. 'status.example.com'. See the docs on updating your DNS and SSL usage."
       },
       "custom_url": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "A subdomain name under 'checklyhq.com'. Needs to be unique across all users."
       },
       "header": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Description": "A piece of text displayed at the top of your dashboard.",
+        "Default": {
+          "Type": "string"
+        }
       },
       "hide_tags": {
         "Type": "Bool",
-        "Required": true
+        "Optional": true,
+        "Description": "Show or hide the tags on the dashboard.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "logo": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Description": "A URL pointing to an image file.",
+        "Default": {
+          "Type": "string"
+        }
       },
       "paginate": {
         "Type": "Bool",
-        "Required": true
+        "Optional": true,
+        "Description": "Determines if pagination is on or off.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       },
       "pagination_rate": {
         "Type": "Int",
-        "Required": true
+        "Optional": true,
+        "Description": "How often to trigger pagination in seconds. Possible values `30`, `60` and `300`.",
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
       },
       "refresh_rate": {
         "Type": "Int",
-        "Required": true
+        "Optional": true,
+        "Description": "How often to refresh the dashboard in seconds. Possible values `60`, '300' and `600`.",
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
       },
       "tags": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A list of one or more tags that filter which checks to display on the dashboard.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -871,37 +999,68 @@
       },
       "width": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "Determines whether to use the full screen or focus in the center. Possible values `FULL` and `960PX`.",
+        "Default": {
+          "Type": "string",
+          "Value": "FULL"
+        }
+      }
+    },
+    "checkly_environment_variable": {
+      "key": {
+        "Type": "String",
+        "Required": true
+      },
+      "locked": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "value": {
+        "Type": "String",
+        "Required": true
       }
     },
     "checkly_maintenance_windows": {
       "ends_at": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The end date of the maintenance window."
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The maintenance window name."
       },
       "repeat_ends_at": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Description": "The date on which the maintenance window should stop repeating."
       },
       "repeat_interval": {
         "Type": "Int",
-        "Required": true
+        "Optional": true,
+        "Description": "The repeat interval of the maintenance window from the first occurrence."
       },
       "repeat_unit": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Description": "The repeat cadence for the maintenance window. Possible values `DAY`, `WEEK` and `MONTH`."
       },
       "starts_at": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The start date of the maintenance window."
       },
       "tags": {
         "Type": "Set",
         "Optional": true,
+        "Description": "The names of the checks and groups maintenance window should apply to.",
+        "DefaultFunc": "UNKNOWN",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -909,45 +1068,80 @@
         }
       }
     },
+    "checkly_private_location": {
+      "icon": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Icon assigned to the private location."
+      },
+      "keys": {
+        "Type": "Set",
+        "Description": "Private location API keys.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The private location name."
+      },
+      "slug_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Valid slug name."
+      }
+    },
     "checkly_snippet": {
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the snippet"
       },
       "script": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "Your Node.js code that interacts with the API check lifecycle, or functions as a partial for browser checks."
       }
     },
     "checkly_trigger_check": {
       "check_id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The id of the check that you want to attach the trigger to."
       },
       "token": {
         "Type": "String",
         "Optional": true,
+        "Description": "The token value created to trigger the check",
         "Computed": true
       },
       "url": {
         "Type": "String",
         "Optional": true,
+        "Description": "The request URL to trigger the check run.",
         "Computed": true
       }
     },
     "checkly_trigger_group": {
       "group_id": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The id of the group that you want to attach the trigger to."
       },
       "token": {
         "Type": "String",
         "Optional": true,
+        "Description": "The token value created to trigger the group",
         "Computed": true
       },
       "url": {
         "Type": "String",
         "Optional": true,
+        "Description": "The request URL to trigger the group run.",
         "Computed": true
       }
     }

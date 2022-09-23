@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "pnap",
   "type": "provider",
-  "version": "v0.9.1",
+  "version": "v0.14.3",
   "provider": {
     "client_id": {
       "Type": "String",
@@ -24,6 +24,93 @@
     }
   },
   "resources": {
+    "pnap_ip_block": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "assigned_resource_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "assigned_resource_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cidr": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cidr_block_size": {
+        "Type": "String",
+        "Required": true
+      },
+      "created_on": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "is_bring_your_own": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "tag_assignment": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "created_by": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_billing_tag": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "pnap_private_network": {
       "__timeouts__": [
         "create",
@@ -33,6 +120,10 @@
       "cidr": {
         "Type": "String",
         "Required": true
+      },
+      "created_on": {
+        "Type": "String",
+        "Computed": true
       },
       "description": {
         "Type": "String",
@@ -84,6 +175,382 @@
       },
       "vlan_id": {
         "Type": "Int",
+        "Computed": true
+      }
+    },
+    "pnap_public_network": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "created_on": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ip_blocks": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "public_network_ip_block": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "memberships": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ips": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "resource_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "vlan_id": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "pnap_rancher_cluster": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "configuration": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "certificates": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "ca_certificate": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "certificate": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "certificate_key": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "cluster_domain": {
+              "Type": "String",
+              "Optional": true
+            },
+            "etcd_snapshot_retention": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "5"
+              }
+            },
+            "etcd_snapshot_schedule_cron": {
+              "Type": "String",
+              "Optional": true
+            },
+            "node_taint": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tls_san": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "initial_cluster_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "metadata": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Computed": true
+            },
+            "username": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_pools": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "node_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "nodes": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "server_id": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "server_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ssh_config": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "install_default_keys": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "key_ids": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "keys": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "status_description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "workload_configuration": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "location": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "server_count": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "1"
+              }
+            },
+            "server_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      }
+    },
+    "pnap_reservation": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "assigned_resource_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "auto_renew": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "auto_renew_disable_reason": {
+        "Type": "String",
+        "Optional": true
+      },
+      "end_date_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "initial_invoice_model": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_renewal_date_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "next_renewal_date_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "price": {
+        "Type": "Float",
+        "Computed": true
+      },
+      "price_unit": {
+        "Type": "String",
+        "Computed": true
+      },
+      "product_category": {
+        "Type": "String",
+        "Computed": true
+      },
+      "product_code": {
+        "Type": "String",
+        "Computed": true
+      },
+      "reservation_model": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sku": {
+        "Type": "String",
+        "Required": true
+      },
+      "start_date_time": {
+        "Type": "String",
         "Computed": true
       }
     },
@@ -161,6 +628,63 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "gateway_address": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ip_blocks_configuration": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "configuration_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "ip_blocks": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "server_ip_block": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "id": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "vlan_id": {
+                                "Type": "Int",
+                                "Optional": true,
+                                "Computed": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
             "private_network_configuration": {
               "Type": "List",
               "Optional": true,
@@ -218,6 +742,65 @@
                                   "Type": "SchemaElements",
                                   "ElementsType": "String"
                                 }
+                              },
+                              "status_description": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "public_network_configuration": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "public_networks": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "server_public_network": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Computed": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "id": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "ips": {
+                                "Type": "Set",
+                                "Required": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "status_description": {
+                                "Type": "String",
+                                "Computed": true
                               }
                             }
                           }
@@ -320,6 +903,50 @@
         "Type": "String",
         "Computed": true
       },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "tag_assignment": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "created_by": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_billing_tag": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "type": {
         "Type": "String",
         "Required": true
@@ -355,17 +982,205 @@
         "Type": "String",
         "Required": true
       }
+    },
+    "pnap_tag": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "created_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "is_billing_tag": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "resource_assignments": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "resource_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "values": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
     }
   },
   "data-sources": {
-    "pnap_private_network": {
+    "pnap_events": {
+      "events": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "timestamp": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_info": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "account_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "client_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "username": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "pnap_ip_block": {
+      "assigned_resource_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "assigned_resource_type": {
+        "Type": "String",
+        "Computed": true
+      },
       "cidr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "cidr_block_size": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_on": {
         "Type": "String",
         "Computed": true
       },
       "description": {
         "Type": "String",
         "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "cidr"
+        ]
+      },
+      "is_bring_your_own": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_by": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_billing_tag": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "pnap_private_network": {
+      "cidr": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_on": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
       },
       "location": {
         "Type": "String",
@@ -377,7 +1192,11 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
       },
       "servers": {
         "Type": "List",
@@ -409,6 +1228,456 @@
       },
       "vlan_id": {
         "Type": "Int",
+        "Computed": true
+      }
+    },
+    "pnap_product_availability": {
+      "location": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "min_quantity": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "product_availabilities": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "location_availability_details": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "available_quantity": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "location": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "min_quantity_available": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "min_quantity_requested": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "solutions": {
+                    "Type": "Set",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "product_category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "product_code": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "product_category": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "product_code": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "show_only_min_quantity_available": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "solution": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "pnap_products": {
+      "location": {
+        "Type": "String",
+        "Optional": true
+      },
+      "product_category": {
+        "Type": "String",
+        "Optional": true
+      },
+      "product_code": {
+        "Type": "String",
+        "Optional": true
+      },
+      "products": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metadata": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cores_per_cpu": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "cpu": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "cpu_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "cpu_frequency": {
+                    "Type": "Float",
+                    "Computed": true
+                  },
+                  "network": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "ram_in_gb": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "storage": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "plans": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "correlated_product_code": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "location": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "package_quantity": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "package_unit": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "price": {
+                    "Type": "Float",
+                    "Computed": true
+                  },
+                  "price_unit": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "pricing_model": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "sku": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "sku_description": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "product_category": {
+              "Type": "String",
+              "Computed": true
+            },
+            "product_code": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "sku_code": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "pnap_public_network": {
+      "created_on": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "ip_blocks": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "memberships": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ips": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "resource_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "vlan_id": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "pnap_rancher_cluster": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "initial_cluster_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "url": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "node_pools": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "node_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "nodes": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "server_id": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "server_type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "status_description": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "pnap_reservation": {
+      "assigned_resource_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "auto_renew": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "end_date_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "initial_invoice_model": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_renewal_date_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Computed": true
+      },
+      "next_renewal_date_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "price": {
+        "Type": "Float",
+        "Computed": true
+      },
+      "price_unit": {
+        "Type": "String",
+        "Computed": true
+      },
+      "product_category": {
+        "Type": "String",
+        "Computed": true
+      },
+      "product_code": {
+        "Type": "String",
+        "Computed": true
+      },
+      "reservation_model": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sku": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "start_date_time": {
+        "Type": "String",
         "Computed": true
       }
     },
@@ -463,6 +1732,37 @@
         "Type": "String",
         "Computed": true
       },
+      "tags": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_by": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_billing_tag": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "type": {
         "Type": "String",
         "Computed": true
@@ -473,13 +1773,83 @@
         "Type": "Bool",
         "Computed": true
       },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
       "key": {
         "Type": "String",
         "Computed": true
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      }
+    },
+    "pnap_tag": {
+      "created_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
+      },
+      "is_billing_tag": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "resource_assignments": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "resource_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "values": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     }
   }

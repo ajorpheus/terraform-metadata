@@ -3,13 +3,19 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "checkpoint",
   "type": "provider",
-  "version": "v1.6.0",
+  "version": "v2.0.0",
   "provider": {
     "api_key": {
       "Type": "String",
       "Optional": true,
       "Description": "Administrator API key.",
       "DefaultFunc": "ENV(CHECKPOINT_API_KEY)"
+    },
+    "cloud_mgmt_id": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Smart-1 Cloud management UID",
+      "DefaultFunc": "ENV(CHECKPOINT_CLOUD_MGMT_ID)"
     },
     "context": {
       "Type": "String",
@@ -58,6 +64,12 @@
       "Optional": true,
       "Description": "File name used to store the current session id.",
       "DefaultFunc": "ENV(CHECKPOINT_SESSION_FILE_NAME)"
+    },
+    "session_name": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Session unique name.",
+      "DefaultFunc": "ENV(CHECKPOINT_SESSION_NAME)"
     },
     "timeout": {
       "Type": "Int",
@@ -543,7 +555,7 @@
       },
       "name": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "Rule name."
       },
       "position": {
@@ -882,6 +894,28 @@
         "Type": "String",
         "Optional": true,
         "Description": "URI of the object in the Data Center Server."
+      }
+    },
+    "checkpoint_management_add_repository_package": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the repository package."
+      },
+      "path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The path of the repository package.\u003cbr\u003e\u003cfont color=\"red\"\u003eRequired only for\u003c/font\u003e adding package from local."
+      },
+      "source": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The source of the repository package."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
       }
     },
     "checkpoint_management_add_threat_protections": {
@@ -1354,7 +1388,7 @@
         "Description": "The Application ID of the Service Principal, in UUID format.\nRequired for authentication-method: service-principal-authentication."
       },
       "application_key": {
-        "Type": "Bool",
+        "Type": "String",
         "Optional": true,
         "Description": "The key created for the Service Principal.\nRequired for authentication-method: service-principal-authentication.",
         "Default": {
@@ -1454,6 +1488,58 @@
         "Type": "String",
         "Optional": true,
         "Description": "Path in which the backup domain data will be saved. \u003cbr\u003eShould be the directory path or the full file path with \".tgz\" \u003cbr\u003eIf no path was inserted the default will be: \"/var/log/\u0026lt;domain name\u0026gt;_\u0026lt;date\u0026gt;.tgz\"."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_check_network_feed": {
+      "network_feed": {
+        "Type": "Map",
+        "Required": true,
+        "Description": "network feed parameters.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "targets": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "On what targets to execute this command. Targets may be identified by their name, or object unique identifier.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_check_threat_ioc_feed": {
+      "ioc_feed": {
+        "Type": "Map",
+        "Required": true,
+        "Description": "threat ioc feed parameters.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "targets": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "On what targets to execute this command. Targets may be identified by their name, or object unique identifier.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "task_id": {
         "Type": "String",
@@ -1698,6 +1784,32 @@
         }
       }
     },
+    "checkpoint_management_connect_cloud_services": {
+      "auth_token": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Copy the authentication token from the Smart-1 cloud service hosted in the Infinity Portal."
+      },
+      "connected_at": {
+        "Type": "Map",
+        "Description": "The time of the connection between the Management Server and the Infinity Portal.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "management_url": {
+        "Type": "String",
+        "Description": "The Management Server's public URL.",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the connection to the Infinity Portal.",
+        "Computed": true
+      }
+    },
     "checkpoint_management_data_center_query": {
       "color": {
         "Type": "String",
@@ -1823,6 +1935,18 @@
         "Description": "Object name."
       }
     },
+    "checkpoint_management_delete_repository_package": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the software package."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      }
+    },
     "checkpoint_management_delete_threat_protections": {
       "package_format": {
         "Type": "String",
@@ -1858,6 +1982,13 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "Discard all changes committed during the session."
+      }
+    },
+    "checkpoint_management_disconnect_cloud_services": {
+      "force": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Disconnect the Management Server from Check Point Infinity Portal, and reset the connection locally, regardless of the result in the Infinity Portal. This flag can be used if the disconnect-cloud-services command failed. Since with this flag this command affects only the local configuration, make sure to disconnect the Management Server in the Infinity Portal as well."
       }
     },
     "checkpoint_management_dns_domain": {
@@ -1908,6 +2039,309 @@
         "Optional": true,
         "Description": "Collection of tag identifiers.",
         "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "checkpoint_management_domain": {
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "servers": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Domain servers.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "active": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Activate domain server. Only one domain server is allowed to be active."
+            },
+            "ipv4_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv4 address."
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv6 address."
+            },
+            "multi_domain_server": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Multi Domain server name or UID."
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Object name. Must be unique in the domain."
+            },
+            "skip_start_domain_server": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Set this value to be true to prevent starting the new created domain."
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Domain server type."
+            }
+          }
+        }
+      }
+    },
+    "checkpoint_management_domain_permissions_profile": {
+      "access_control": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Access Control permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "access_control_objects_and_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Allow editing of the following objet types: VPN Community, Access Role, Custom application group,Custom application, Custom category, Limit, Application - Match Settings, Application Category - Match Settings,Override Categorization, Application and URL filtering blade - Advanced Settings, Content Awareness blade - Advanced Settings."
+            },
+            "app_control_and_url_filtering_update": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Install Application and URL Filtering updates."
+            },
+            "dlp_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Configure DLP rules and Policies."
+            },
+            "geo_control_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Work with Access Control rules that control traffic to and from specified countries."
+            },
+            "install_policy": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Install Access Control Policies."
+            },
+            "nat_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Work with NAT in Access Control rules."
+            },
+            "policy_layers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Layer editing permissions.\u003cbr\u003eAvailable only if show-policy is set to true.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "app_control_and_url_filtering": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Use Application and URL Filtering in Access Control rules.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\"."
+                  },
+                  "content_awareness": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Use specified data types in Access Control rules.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\"."
+                  },
+                  "edit_layers": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "\"By Software Blades\" - Edit Access Control layers that contain the blades enabled in the Permissions Profile.\u003cbr\u003e\"By Selected Profile In A Layer Editor\" - Administrators can only edit the layer if the Access Control layer editor gives editing permission to their profiles."
+                  },
+                  "firewall": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Work with Access Control and other Software Blades that do not have their own Policies.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\"."
+                  },
+                  "mobile_access": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Work with Mobile Access rules.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\"."
+                  }
+                }
+              }
+            },
+            "qos_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Work with QoS Policies and rules."
+            },
+            "show_policy": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Select to let administrators work with Access Control rules and NAT rules. If not selected, administrators cannot see these rules."
+            }
+          }
+        }
+      },
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "edit_common_objects": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Define and manage objects in the Check Point database: Network Objects, Services, Custom Application Site, VPN Community, Users, Servers, Resources, Time, UserCheck, and Limit.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit this permission."
+      },
+      "endpoint": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Endpoint permissions. Not supported for Multi-Domain Servers.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "events_and_reports": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Events and Reports permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "gateways": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Gateways permissions. \u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "management": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Management permissions.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "monitoring_and_logging": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Monitoring and Logging permissions.\u003cbr\u003e'Customized' permission-type profile can edit all these permissions. \"Read Write All\" permission-type can edit only dlp-logs-including-confidential-fields and manage-dlp-messages permissions.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "others": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Additional permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "permission_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The type of the Permissions Profile.",
+        "Default": {
+          "Type": "string",
+          "Value": "customized"
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "threat_prevention": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Threat Prevention permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
@@ -2262,6 +2696,18 @@
         "Type": "String",
         "Optional": true,
         "Description": "Log uid from a log record."
+      }
+    },
+    "checkpoint_management_get_platform": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Gateway, cluster or Check Point host name."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
       }
     },
     "checkpoint_management_group": {
@@ -2996,6 +3442,87 @@
         }
       }
     },
+    "checkpoint_management_idp_administrator_group": {
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "group_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Group ID or Name should be set base on the source attribute of 'groups' in the Saml Assertion."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "multi_domain_profile": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Administrator multi-domain profile."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "permissions_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Administrator permissions profile. Permissions profile should not be provided when multi-domain-profile is set to \"Multi-Domain Super User\" or \"Domain Super User\".",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "N/A"
+            },
+            "profile": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Permission profile."
+            }
+          }
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "checkpoint_management_install_database": {
       "targets": {
         "Type": "Set",
@@ -3016,6 +3543,40 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "checkpoint_management_install_lsm_policy": {
+      "targets": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "On what targets to execute this command. Targets may be identified by their name, or object unique identifier.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_install_lsm_settings": {
+      "targets": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "On what targets to execute this command. Targets may be identified by their name, or object unique identifier.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
       }
     },
     "checkpoint_management_install_policy": {
@@ -3127,6 +3688,252 @@
         "Type": "String",
         "Description": "Command asynchronous task unique identifier.",
         "Computed": true
+      }
+    },
+    "checkpoint_management_interoperable_device": {
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "groups": {
+        "Type": "List",
+        "Description": "Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Object type.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Object unique identifier.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "interfaces": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Network interfaces.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Default": {
+                "Type": "string",
+                "Value": "black"
+              }
+            },
+            "comments": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Comments string."
+            },
+            "domains_to_process": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ignore_errors": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "ignore_warnings": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Apply changes ignoring warnings.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "ipv4_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv4 address."
+            },
+            "ipv4_mask_length": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv4 network mask length."
+            },
+            "ipv4_network_mask": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv4 network address."
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv6 address."
+            },
+            "ipv6_mask_length": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv6 network mask length."
+            },
+            "ipv6_network_mask": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IPv6 network address."
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Object name. Must be unique in the domain."
+            },
+            "tags": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Collection of tag identifiers.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "topology": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Topology configuration.",
+              "Default": {
+                "Type": "string",
+                "Value": "internal"
+              }
+            },
+            "topology_settings": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Internal topology settings.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "interface_leads_to_dmz": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Whether this interface leads to demilitarized zone (perimeter network)."
+                  },
+                  "ip_address_behind_this_interface": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Network settings behind this interface."
+                  },
+                  "specific_network": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Network behind this interface."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ipv4_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IPv4 address of the Interoperable Device."
+      },
+      "ipv6_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IPv6 address of the Interoperable Device."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "vpn_settings": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "VPN domain properties for the Interoperable Device.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "checkpoint_management_ise_data_center_server": {
@@ -3352,6 +4159,185 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      }
+    },
+    "checkpoint_management_lsm_run_script": {
+      "script": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The entire content of the script."
+      },
+      "script_base64": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The entire content of the script encoded in Base64."
+      },
+      "targets": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "On what targets to execute this command. Targets may be identified by their name, or object unique identifier.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_md_permissions_profile": {
+      "cme_operations": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Permission to read / edit the Cloud Management Extension (CME) configuration.",
+        "Default": {
+          "Type": "string",
+          "Value": "disabled"
+        }
+      },
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "default_profile_global_domains": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name or UID of the required default profile for all global domains.",
+        "Default": {
+          "Type": "string",
+          "Value": "Read Only All"
+        }
+      },
+      "default_profile_local_domains": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name or UID of the required default profile for all local domains."
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "enable_default_profile_for_global_domains": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable the option to specify a default profile for all global domains.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enable_default_profile_for_local_domains": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable the option to specify a default profile for all local domains."
+      },
+      "global_vpn_management": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Lets the administrator select Enable global use for a Security Gateway shown in the MDS Gateways \u0026 Servers view.\u003cbr\u003eOnly a 'Manager' permission-level profile can edit this permission."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "manage_admins": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Create and manage Multi-Domain Security Management administrators with the same or lower permission level. For example, a Domain manager cannot create Superusers or global managers.\u003cbr\u003eOnly a 'Manager' permission-level profile can edit this permission.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "manage_global_assignments": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Controls the ability to create, edit and delete global assignment and not the ability to reassign, which is set according to the specific Domain's permission profile."
+      },
+      "manage_sessions": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Connect/disconnect Domain sessions, publish changes, and delete other administrator sessions.\u003cbr\u003eOnly a 'Manager' permission-level profile can edit this permission."
+      },
+      "management_api_login": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Permission to log in to the Security Management Server and run API commands using these tools: mgmt_cli (Linux and Windows binaries), Gaia CLI (clish) and Web Services (REST). Useful if you want to prevent administrators from running automatic scripts on the Management.\u003cbr\u003eNote: This permission is not required to run commands from within the API terminal in SmartConsole.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "mds_provisioning": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Create and manage Multi-Domain Servers and Multi-Domain Log Servers.\u003cbr\u003eOnly a \"Super User\" permission-level profile can select this option."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "permission_level": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The level of the Multi Domain Permissions Profile.\u003cbr\u003eThe level cannot be changed after creation.",
+        "Default": {
+          "Type": "string",
+          "Value": "manager"
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "view_global_objects_in_domain": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Lets an administrator with no global objects permissions view the global objects in the domain. This option is required for valid domain management.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
         }
       }
     },
@@ -3877,6 +4863,175 @@
         }
       }
     },
+    "checkpoint_management_network_feed": {
+      "certificate_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Certificate SHA-1 fingerprint to access the feed."
+      },
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "custom_header": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Headers to allow different authentication methods with the URL.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "header_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of the HTTP header we wish to add."
+            },
+            "header_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of the HTTP value we wish to add."
+            }
+          }
+        }
+      },
+      "data_column": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of the column that contains the feed's data.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "feed_format": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Feed file format.",
+        "Default": {
+          "Type": "string",
+          "Value": "Flat List"
+        }
+      },
+      "feed_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Feed type to be enforced.",
+        "Default": {
+          "Type": "string",
+          "Value": "IP Address"
+        }
+      },
+      "feed_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "URL of the feed. URL should be written as http or https."
+      },
+      "fields_delimiter": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The delimiter that separates between the columns in the feed. For feed format 'Flat List' default is '\n'(new line).",
+        "Default": {
+          "Type": "string",
+          "Value": "Depends on the feed format"
+        }
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_lines_that_start_with": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A prefix that will determine which lines to ignore.",
+        "Default": {
+          "Type": "string",
+          "Value": "#"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "json_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "JQ query to be parsed."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "password for authenticating with the URL."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "update_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Interval in minutes for updating the feed on the Security Gateway.",
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
+      },
+      "use_gateway_proxy": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Use the gateway's proxy for retrieving the feed.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "username for authenticating with the URL."
+      }
+    },
     "checkpoint_management_nuage_data_center_server": {
       "certificate_fingerprint": {
         "Type": "String",
@@ -4300,6 +5455,87 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "checkpoint_management_repository_script": {
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "script_body": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The entire content of the script."
+      },
+      "script_body_base64": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The entire content of the script encoded in Base64."
+      },
+      "script_body_base64_return": {
+        "Type": "String",
+        "Description": "The entire content of the script encoded in Base64.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "checkpoint_management_reset_sic": {
+      "message": {
+        "Type": "String",
+        "Description": "Operation status.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Gateway, cluster member or Check Point host name."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
       }
     },
     "checkpoint_management_restore_domain": {
@@ -5509,6 +6745,60 @@
         "Computed": true
       }
     },
+    "checkpoint_management_set_idp_default_assignment": {
+      "identity_provider": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Represents the Identity Provider to be used for Login by this assignment identified by the name or UID, to cancel existing assignment should set to 'none'."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored."
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_set_idp_to_domain_assignment": {
+      "assigned_domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Represents the Domain assigned by 'idp-to-domain-assignment', need to be domain name or UID."
+      },
+      "identity_provider": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Represents the Identity Provider to be used for Login by this assignment. Must be set when \"using-default\" was set to be false."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored."
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      },
+      "using_default": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Is this assignment override by 'idp-default-assignment'."
+      }
+    },
     "checkpoint_management_set_ips_update_schedule": {
       "enabled": {
         "Type": "Bool",
@@ -6046,6 +7336,33 @@
         "Optional": true,
         "Description": "Application Control blade enabled."
       },
+      "application_control_and_url_filtering_settings": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Gateway Application Control and URL filtering settings.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "global_settings_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether to override global settings or not."
+            },
+            "override_global_settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "override global settings object.",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "color": {
         "Type": "String",
         "Optional": true,
@@ -6358,6 +7675,130 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "checkpoint_management_smtp_server": {
+      "authentication": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Does the mail server requires authentication.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "encryption": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Encryption type.",
+        "Default": {
+          "Type": "string",
+          "Value": "none"
+        }
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A password for the SMTP server.\u003cbr\u003e\u003cfont color=\"red\"\u003eRequired only if\u003c/font\u003e authentication is set to true."
+      },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The SMTP port to use."
+      },
+      "server": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The SMTP server address."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A username for the SMTP server.\u003cbr\u003e\u003cfont color=\"red\"\u003eRequired only if\u003c/font\u003e authentication is set to true."
+      }
+    },
+    "checkpoint_management_test_sic_status": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Gateway, cluster member or Check Point host name."
+      },
+      "sic_message": {
+        "Type": "String",
+        "Description": "SIC message from the gateway.",
+        "Computed": true
+      },
+      "sic_name": {
+        "Type": "String",
+        "Description": "SIC (Secure Internal Communication) name.",
+        "Computed": true
+      },
+      "sic_status": {
+        "Type": "String",
+        "Description": "SIC Status reflects the state of the gateway after it has received the certificate issued by the ICA.",
+        "Computed": true
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
       }
     },
     "checkpoint_management_threat_exception": {
@@ -6717,6 +8158,178 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "checkpoint_management_threat_ioc_feed": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The feed indicator's action.",
+        "Default": {
+          "Type": "string",
+          "Value": "Prevent"
+        }
+      },
+      "certificate_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Certificate SHA-1 fingerprint to access the feed."
+      },
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "custom_comment": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IOC feed - the column number of comment."
+      },
+      "custom_confidence": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IOC feed - the column number of confidence."
+      },
+      "custom_header": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Custom HTTP headers.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "header_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of the HTTP header we wish to add."
+            },
+            "header_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The name of the HTTP value we wish to add."
+            }
+          }
+        }
+      },
+      "custom_name": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IOC feed - the column number of name."
+      },
+      "custom_severity": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IOC feed - the column number of severity."
+      },
+      "custom_type": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IOC feed - the column number of type in case a specific type is not chosen."
+      },
+      "custom_value": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IOC feed - the column number of value in case a specific type is chosen."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Sets whether this indicator feed is enabled.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "feed_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Feed type to be enforced.",
+        "Default": {
+          "Type": "string",
+          "Value": "domain"
+        }
+      },
+      "feed_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "URL of the feed. URL should be written as http or https."
+      },
+      "fields_delimiter": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The delimiter that separates between the columns in the feed."
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_lines_that_start_with": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A prefix that will determine which lines to ignore."
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "password for authenticating with the URL."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "use_custom_feed_settings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Set in order to configure a custom indicator feed."
+      },
+      "use_gateway_proxy": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Use the gateway's proxy for retrieving the feed.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "username for authenticating with the URL."
       }
     },
     "checkpoint_management_threat_profile": {
@@ -7243,6 +8856,166 @@
         }
       }
     },
+    "checkpoint_management_time": {
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "end": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "End time. Note: Each gateway may interpret this time differently according to its time zone.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "end_never": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "End never.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "hours_ranges": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Hours recurrence. Note: Each gateway may interpret this time differently according to its time zone.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Is hour range enabled."
+            },
+            "from": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Time in format HH:MM."
+            },
+            "index": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Hour range index."
+            },
+            "to": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Time in format HH:MM."
+            }
+          }
+        }
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "recurrence": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Days recurrence.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "days": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Valid on specific days. Multiple options, support range of days in months. Example:[\"1\",\"3\",\"9-20\"].",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "month": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Valid on month. Example: \"1\", \"2\",\"12\",\"Any\"."
+            },
+            "pattern": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Valid on \"Interval\", \"Daily\", \"Weekly\", \"Monthly\" base."
+            },
+            "weekdays": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Valid on weekdays. Example: \"Sun\", \"Mon\"...\"Sat\".",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "start": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Starting time. Note: Each gateway may interpret this time differently according to its time zone.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "start_now": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Start immediately.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "checkpoint_management_time_group": {
       "color": {
         "Type": "String",
@@ -7302,6 +9075,128 @@
         }
       }
     },
+    "checkpoint_management_trusted_client": {
+      "color": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Default": {
+          "Type": "string",
+          "Value": "black"
+        }
+      },
+      "comments": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Comments string."
+      },
+      "domains_assignment": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Domains to be added to this profile. Use domain name only. See example below: \"add-trusted-client (with domain)\".",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ignore_errors": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ignore_warnings": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Apply changes ignoring warnings.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ipv4_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IPv4 address."
+      },
+      "ipv4_address_first": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "First IPv4 address in the range."
+      },
+      "ipv4_address_last": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Last IPv4 address in the range."
+      },
+      "ipv6_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IPv6 address."
+      },
+      "ipv6_address_first": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "First IPv6 address in the range."
+      },
+      "ipv6_address_last": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Last IPv6 address in the range."
+      },
+      "mask_length4": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "IPv4 mask length."
+      },
+      "mask_length6": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "IPv6 mask length."
+      },
+      "multi_domain_server_trusted_client": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Let this trusted client connect to all Multi-Domain Servers in the deployment.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object name."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Collection of tag identifiers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Trusted client type.",
+        "Default": {
+          "Type": "string",
+          "Value": "ipv4 address"
+        }
+      },
+      "wild_card": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP wild card (e.g. 192.0.2.*)."
+      }
+    },
     "checkpoint_management_uninstall_software_package": {
       "cluster_installation_settings": {
         "Type": "Map",
@@ -7343,6 +9238,23 @@
         "Type": "String",
         "Required": true,
         "Description": "Object name."
+      }
+    },
+    "checkpoint_management_update_provisioned_satellites": {
+      "task_id": {
+        "Type": "String",
+        "Description": "Command asynchronous task unique identifier.",
+        "Computed": true
+      },
+      "vpn_center_gateways": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "On what targets to execute this command. Targets may be identified by their name, or object unique identifier. The targets should be a corporate gateways.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "checkpoint_management_update_updatable_objects_repository_content": {
@@ -7859,6 +9771,56 @@
           "ElementsType": "String"
         }
       },
+      "granular_encryptions": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "VPN granular encryption settings.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "encryption_method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The encryption method to be used."
+            },
+            "encryption_suite": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The encryption suite to be used."
+            },
+            "external_gateway": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Externally managed or 3rd party gateway identified by name or UID."
+            },
+            "ike_phase_1": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Ike Phase 1 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ike_phase_2": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Ike Phase 2 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "internal_gateway": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Internally managed Check Point gateway identified by name or UID, or 'Any' for all internal-gateways participants in this community."
+            }
+          }
+        }
+      },
       "ignore_errors": {
         "Type": "Bool",
         "Optional": true,
@@ -7953,6 +9915,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "tunnel_granularity": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPN tunnel sharing option to be used."
       },
       "use_shared_secret": {
         "Type": "Bool",
@@ -8059,6 +10026,56 @@
         "Type": "String",
         "Optional": true,
         "Description": "The encryption suite to be used."
+      },
+      "granular_encryptions": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "VPN granular encryption settings.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "encryption_method": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The encryption method to be used."
+            },
+            "encryption_suite": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The encryption suite to be used."
+            },
+            "external_gateway": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Externally managed or 3rd party gateway identified by name or UID."
+            },
+            "ike_phase_1": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Ike Phase 1 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ike_phase_2": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Ike Phase 2 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "internal_gateway": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Internally managed Check Point gateway identified by name or UID, or 'Any' for all internal-gateways participants in this community."
+            }
+          }
+        }
       },
       "ignore_errors": {
         "Type": "Bool",
@@ -8173,6 +10190,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "tunnel_granularity": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPN tunnel sharing option to be used."
       },
       "use_shared_secret": {
         "Type": "Bool",
@@ -9343,6 +11365,144 @@
         "Type": "String",
         "Description": "Checkpoint host platform version.",
         "Computed": true
+      }
+    },
+    "checkpoint_management_cloud_services": {
+      "connected_at": {
+        "Type": "Map",
+        "Description": "The time of the connection between the Management Server and the Infinity Portal.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "management_url": {
+        "Type": "String",
+        "Description": "The Management Server's public URL.",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the connection to the Infinity Portal.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_cluster_member": {
+      "cluster_uid": {
+        "Type": "String",
+        "Description": "Cluster object (the owner of this member) uid.",
+        "Computed": true
+      },
+      "interfaces": {
+        "Type": "List",
+        "Description": "Cluster member network interfaces.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ipv4_address": {
+              "Type": "String",
+              "Description": "IPv4 address.",
+              "Computed": true
+            },
+            "ipv4_mask_length": {
+              "Type": "Int",
+              "Description": "IPv4 network mask length.",
+              "Computed": true
+            },
+            "ipv4_network_mask": {
+              "Type": "String",
+              "Description": "IPv4 network mask.",
+              "Computed": true
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Description": "IPv6 address.",
+              "Computed": true
+            },
+            "ipv6_mask_length": {
+              "Type": "Int",
+              "Description": "IPv6 network mask length.",
+              "Computed": true
+            },
+            "ipv6_network_mask": {
+              "Type": "String",
+              "Description": "IPv6 network mask.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Cluster member interface name.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Cluster member interface object UID.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ip_address": {
+        "Type": "String",
+        "Description": "Cluster member IP address.",
+        "Computed": true
+      },
+      "ipv6_address": {
+        "Type": "String",
+        "Description": "Cluster member IPv6 address.",
+        "Computed": true
+      },
+      "limit_interfaces": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Limit number of cluster member interfaces to show.",
+        "Default": {
+          "Type": "int",
+          "Value": "50"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Description": "N/A",
+        "Computed": true
+      },
+      "nat_settings": {
+        "Type": "Map",
+        "Description": "NAT settings.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "priority": {
+        "Type": "Int",
+        "Description": "In a High Availability New mode cluster each machine is given a priority. The highest priority machine serves as the gateway in normal circumstances. If this machine fails, control is passed to the next highest priority machine. If that machine fails, control is passed to the next machine, and so on. In Load Sharing Unicast mode cluster, the highest priority is the pivot machine. The values must be in a range from 1 to N, where N is number of cluster members.",
+        "Computed": true
+      },
+      "sic_message": {
+        "Type": "String",
+        "Description": "Secure Internal Communication message.",
+        "Computed": true
+      },
+      "sic_state": {
+        "Type": "String",
+        "Description": "Secure Internal Communication state.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Object type.",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster member unique identifier."
       }
     },
     "checkpoint_management_data_access_layer": {
@@ -11890,6 +14050,56 @@
           "ElementsType": "String"
         }
       },
+      "granular_encryptions": {
+        "Type": "List",
+        "Description": "VPN granular encryption settings.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "encryption_method": {
+              "Type": "String",
+              "Description": "The encryption method to be used.",
+              "Computed": true
+            },
+            "encryption_suite": {
+              "Type": "String",
+              "Description": "The encryption suite to be used.",
+              "Computed": true
+            },
+            "external_gateway": {
+              "Type": "String",
+              "Description": "Externally managed or 3rd party gateway identified by name or UID.",
+              "Computed": true
+            },
+            "ike_phase_1": {
+              "Type": "Map",
+              "Description": "Ike Phase 1 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ike_phase_2": {
+              "Type": "Map",
+              "Description": "Ike Phase 2 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "internal_gateway": {
+              "Type": "String",
+              "Description": "Internally managed Check Point gateway identified by name or UID, or 'Any' for all internal-gateways participants in this community.",
+              "Computed": true
+            }
+          }
+        }
+      },
       "ike_phase_1": {
         "Type": "Map",
         "Description": "Ike Phase 1 settings. Only applicable when the encryption-suite is set to [custom].",
@@ -11967,6 +14177,11 @@
           "ElementsType": "String"
         }
       },
+      "tunnel_granularity": {
+        "Type": "String",
+        "Description": "VPN tunnel sharing option to be used.",
+        "Computed": true
+      },
       "uid": {
         "Type": "String",
         "Optional": true,
@@ -12008,6 +14223,56 @@
         "Type": "String",
         "Description": "The encryption suite to be used.",
         "Computed": true
+      },
+      "granular_encryptions": {
+        "Type": "List",
+        "Description": "VPN granular encryption settings.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "encryption_method": {
+              "Type": "String",
+              "Description": "The encryption method to be used.",
+              "Computed": true
+            },
+            "encryption_suite": {
+              "Type": "String",
+              "Description": "The encryption suite to be used.",
+              "Computed": true
+            },
+            "external_gateway": {
+              "Type": "String",
+              "Description": "Externally managed or 3rd party gateway identified by name or UID.",
+              "Computed": true
+            },
+            "ike_phase_1": {
+              "Type": "Map",
+              "Description": "Ike Phase 1 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ike_phase_2": {
+              "Type": "Map",
+              "Description": "Ike Phase 2 settings. Only applicable when the encryption-suite is set to [custom].",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "internal_gateway": {
+              "Type": "String",
+              "Description": "Internally managed Check Point gateway identified by name or UID, or 'Any' for all internal-gateways participants in this community.",
+              "Computed": true
+            }
+          }
+        }
       },
       "ike_phase_1": {
         "Type": "Map",
@@ -12101,6 +14366,11 @@
           "ElementsType": "String"
         }
       },
+      "tunnel_granularity": {
+        "Type": "String",
+        "Description": "VPN tunnel sharing option to be used.",
+        "Computed": true
+      },
       "uid": {
         "Type": "String",
         "Optional": true,
@@ -12172,6 +14442,271 @@
         "Type": "String",
         "Optional": true,
         "Description": "Object unique identifier."
+      }
+    },
+    "checkpoint_management_domain": {
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "servers": {
+        "Type": "List",
+        "Description": "Domain servers.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "active": {
+              "Type": "Bool",
+              "Description": "Activate domain server. Only one domain server is allowed to be active.",
+              "Computed": true
+            },
+            "ipv4_address": {
+              "Type": "String",
+              "Description": "IPv4 address.",
+              "Computed": true
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Description": "IPv6 address.",
+              "Computed": true
+            },
+            "multi_domain_server": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Multi Domain server name or UID."
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "skip_start_domain_server": {
+              "Type": "Bool",
+              "Description": "Set this value to be true to prevent starting the new created domain.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Domain server type.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Description": "Object unique identifier.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_domain_permissions_profile": {
+      "access_control": {
+        "Type": "List",
+        "Description": "Access Control permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "access_control_objects_and_settings": {
+              "Type": "String",
+              "Description": "Allow editing of the following objet types: VPN Community, Access Role, Custom application group,Custom application, Custom category, Limit, Application - Match Settings, Application Category - Match Settings,Override Categorization, Application and URL filtering blade - Advanced Settings, Content Awareness blade - Advanced Settings.",
+              "Computed": true
+            },
+            "app_control_and_url_filtering_update": {
+              "Type": "Bool",
+              "Description": "Install Application and URL Filtering updates.",
+              "Computed": true
+            },
+            "dlp_policy": {
+              "Type": "String",
+              "Description": "Configure DLP rules and Policies.",
+              "Computed": true
+            },
+            "geo_control_policy": {
+              "Type": "String",
+              "Description": "Work with Access Control rules that control traffic to and from specified countries.",
+              "Computed": true
+            },
+            "install_policy": {
+              "Type": "Bool",
+              "Description": "Install Access Control Policies.",
+              "Computed": true
+            },
+            "nat_policy": {
+              "Type": "String",
+              "Description": "Work with NAT in Access Control rules.",
+              "Computed": true
+            },
+            "policy_layers": {
+              "Type": "List",
+              "Description": "Layer editing permissions.\u003cbr\u003eAvailable only if show-policy is set to true.",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "app_control_and_url_filtering": {
+                    "Type": "Bool",
+                    "Description": "Use Application and URL Filtering in Access Control rules.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\".",
+                    "Computed": true
+                  },
+                  "content_awareness": {
+                    "Type": "Bool",
+                    "Description": "Use specified data types in Access Control rules.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\".",
+                    "Computed": true
+                  },
+                  "edit_layers": {
+                    "Type": "String",
+                    "Description": "\"By Software Blades\" - Edit Access Control layers that contain the blades enabled in the Permissions Profile.\u003cbr\u003e\"By Selected Profile In A Layer Editor\" - Administrators can only edit the layer if the Access Control layer editor gives editing permission to their profiles.",
+                    "Computed": true
+                  },
+                  "firewall": {
+                    "Type": "Bool",
+                    "Description": "Work with Access Control and other Software Blades that do not have their own Policies.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\".",
+                    "Computed": true
+                  },
+                  "mobile_access": {
+                    "Type": "Bool",
+                    "Description": "Work with Mobile Access rules.\u003cbr\u003eAvailable only if edit-layers is set to \"By Software Blades\".",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "qos_policy": {
+              "Type": "String",
+              "Description": "Work with QoS Policies and rules.",
+              "Computed": true
+            },
+            "show_policy": {
+              "Type": "Bool",
+              "Description": "Select to let administrators work with Access Control rules and NAT rules. If not selected, administrators cannot see these rules.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "edit_common_objects": {
+        "Type": "Bool",
+        "Description": "Define and manage objects in the Check Point database: Network Objects, Services, Custom Application Site, VPN Community, Users, Servers, Resources, Time, UserCheck, and Limit.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit this permission.",
+        "Computed": true
+      },
+      "endpoint": {
+        "Type": "Map",
+        "Description": "Endpoint permissions. Not supported for Multi-Domain Servers.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "events_and_reports": {
+        "Type": "Map",
+        "Description": "Events and Reports permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "gateways": {
+        "Type": "Map",
+        "Description": "Gateways permissions. \u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "management": {
+        "Type": "Map",
+        "Description": "Management permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "monitoring_and_logging": {
+        "Type": "Map",
+        "Description": "Monitoring and Logging permissions.\u003cbr\u003e'Customized' permission-type profile can edit all these permissions. \"Read Write All\" permission-type can edit only dlp-logs-including-confidential-fields and manage-dlp-messages permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "others": {
+        "Type": "Map",
+        "Description": "Additional permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "permission_type": {
+        "Type": "String",
+        "Description": "The type of the Permissions Profile.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "threat_prevention": {
+        "Type": "Map",
+        "Description": "Threat Prevention permissions.\u003cbr\u003eOnly a 'Customized' permission-type profile can edit these permissions.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
       }
     },
     "checkpoint_management_gcp_data_center_server": {
@@ -12781,6 +15316,347 @@
         "Description": "Object unique identifier."
       }
     },
+    "checkpoint_management_idp_administrator_group": {
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "group_id": {
+        "Type": "String",
+        "Description": "Group ID or Name should be set base on the source attribute of 'groups' in the Saml Assertion.",
+        "Computed": true
+      },
+      "multi_domain_profile": {
+        "Type": "String",
+        "Description": "Administrator multi-domain profile.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "permissions_profile": {
+        "Type": "List",
+        "Description": "Administrator permissions profile. Permissions profile should not be provided when multi-domain-profile is set to \"Multi-Domain Super User\" or \"Domain Super User\".",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain": {
+              "Type": "String",
+              "Description": "N/A",
+              "Computed": true
+            },
+            "profile": {
+              "Type": "String",
+              "Description": "Permission profile.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      }
+    },
+    "checkpoint_management_idp_default_assignment": {
+      "identity_provider": {
+        "Type": "String",
+        "Description": "Represents the Identity Provider to be used for Login by this assignment identified by the name or UID, to cancel existing assignment should set to 'none'.",
+        "Computed": true
+      },
+      "identity_provider_set": {
+        "Type": "Bool",
+        "Description": "True if 'identity-provider' value is set.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      }
+    },
+    "checkpoint_management_idp_to_domain_assignment": {
+      "assigned_domain": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Represents the Domain assigned by 'idp-to-domain-assignment', need to be domain name or UID."
+      },
+      "identity_provider": {
+        "Type": "String",
+        "Description": "Represents the Identity Provider to be used for Login by this assignment. Must be set when \"using-default\" was set to be false.",
+        "Computed": true
+      },
+      "identity_provider_set": {
+        "Type": "Bool",
+        "Description": "True if 'identity-provider' value is set.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object unique identifier."
+      },
+      "using_default": {
+        "Type": "Bool",
+        "Description": "Is this assignment override by 'idp-default-assignment'.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_interoperable_device": {
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "groups": {
+        "Type": "List",
+        "Description": "Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Object type.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Object unique identifier.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "interfaces": {
+        "Type": "List",
+        "Description": "Network interfaces.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Computed": true
+            },
+            "comments": {
+              "Type": "String",
+              "Description": "Comments string.",
+              "Computed": true
+            },
+            "domains_to_process": {
+              "Type": "Set",
+              "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ignore_errors": {
+              "Type": "Bool",
+              "Description": "Apply changes ignoring errors. You won't be able to publish such a changes. If ignore-warnings flag was omitted - warnings will also be ignored.",
+              "Computed": true
+            },
+            "ignore_warnings": {
+              "Type": "Bool",
+              "Description": "Apply changes ignoring warnings.",
+              "Computed": true
+            },
+            "ipv4_address": {
+              "Type": "String",
+              "Description": "IPv4 address.",
+              "Computed": true
+            },
+            "ipv4_mask_length": {
+              "Type": "String",
+              "Description": "IPv4 network mask length.",
+              "Computed": true
+            },
+            "ipv4_network_mask": {
+              "Type": "String",
+              "Description": "IPv4 network address.",
+              "Computed": true
+            },
+            "ipv6_address": {
+              "Type": "String",
+              "Description": "IPv6 address.",
+              "Computed": true
+            },
+            "ipv6_mask_length": {
+              "Type": "String",
+              "Description": "IPv6 network mask length.",
+              "Computed": true
+            },
+            "ipv6_network_mask": {
+              "Type": "String",
+              "Description": "IPv6 network address.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "Set",
+              "Description": "Collection of tag identifiers.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "topology": {
+              "Type": "String",
+              "Description": "Topology configuration.",
+              "Computed": true
+            },
+            "topology_settings": {
+              "Type": "List",
+              "Description": "Internal topology settings.",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "interface_leads_to_dmz": {
+                    "Type": "Bool",
+                    "Description": "Whether this interface leads to demilitarized zone (perimeter network).",
+                    "Computed": true
+                  },
+                  "ip_address_behind_this_interface": {
+                    "Type": "String",
+                    "Description": "Network settings behind this interface.",
+                    "Computed": true
+                  },
+                  "specific_network": {
+                    "Type": "String",
+                    "Description": "Network behind this interface.",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ipv4_address": {
+        "Type": "String",
+        "Description": "IPv4 address of the Interoperable Device.",
+        "Computed": true
+      },
+      "ipv6_address": {
+        "Type": "String",
+        "Description": "IPv6 address of the Interoperable Device.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "vpn_settings": {
+        "Type": "Map",
+        "Description": "VPN domain properties for the Interoperable Device.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "checkpoint_management_ise_data_center_server": {
       "certificate_fingerprint": {
         "Type": "String",
@@ -12885,6 +15761,938 @@
       "unsafe_auto_accept": {
         "Type": "Bool",
         "Description": "When set to false, the current Data Center Server's certificate should be trusted, either by providing the certificate-fingerprint argument or by relying on a previously trusted certificate of this hostname.\n\nWhen set to true, trust the current Data Center Server's certificate as-is.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_lsm_cluster_profile": {
+      "advanced_settings": {
+        "Type": "List",
+        "Description": "N/A",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_persistence": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Handling established connections when installing a new policy."
+            },
+            "sam": {
+              "Type": "List",
+              "Description": "SAM.",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "forward_to_other_sam_servers": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Forward SAM clients' requests to other SAM servers."
+                  },
+                  "purge_sam_file": {
+                    "Type": "Map",
+                    "Description": "Purge SAM File.",
+                    "Computed": true,
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "use_early_versions": {
+                    "Type": "Map",
+                    "Description": "N/A",
+                    "Computed": true,
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "anti_bot": {
+        "Type": "Bool",
+        "Description": "Anti-Bot blade enabled.",
+        "Computed": true
+      },
+      "anti_virus": {
+        "Type": "Bool",
+        "Description": "Anti-Virus blade enabled.",
+        "Computed": true
+      },
+      "application_control": {
+        "Type": "Bool",
+        "Description": "Application Control blade enabled.",
+        "Computed": true
+      },
+      "application_control_and_url_filtering_settings": {
+        "Type": "List",
+        "Description": "Gateway Application Control and URL filtering settings.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "global_settings_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether to override global settings or not."
+            },
+            "override_global_settings": {
+              "Type": "Map",
+              "Description": "override global settings object.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "cluster_interfaces": {
+        "Type": "List",
+        "Description": "N/A",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "network_address": {
+              "Type": "String",
+              "Description": "N/A",
+              "Computed": true
+            },
+            "network_mask": {
+              "Type": "String",
+              "Description": "N/A",
+              "Computed": true
+            },
+            "network_type": {
+              "Type": "String",
+              "Description": "N/A",
+              "Computed": true
+            },
+            "topology": {
+              "Type": "Map",
+              "Description": "N/A",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "cluster_members": {
+        "Type": "List",
+        "Description": "N/A",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "comments": {
+              "Type": "String",
+              "Description": "Comments string.",
+              "Computed": true
+            },
+            "ip_address": {
+              "Type": "String",
+              "Description": "N/A",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Object unique identifier.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "content_awareness": {
+        "Type": "Bool",
+        "Description": "Content Awareness blade enabled.",
+        "Computed": true
+      },
+      "data_loss_prevention": {
+        "Type": "Bool",
+        "Description": "Data Loss Prevention.",
+        "Computed": true
+      },
+      "dynamic_ip": {
+        "Type": "Bool",
+        "Description": "Dynamic IP address.",
+        "Computed": true
+      },
+      "enable_https_inspection": {
+        "Type": "Bool",
+        "Description": "Enable HTTPS Inspection after defining an outbound inspection certificate.\nTo define the outbound certificate use \"set outbound-inspection-certificate\".",
+        "Computed": true
+      },
+      "firewall": {
+        "Type": "Bool",
+        "Description": "Firewall blade enabled.",
+        "Computed": true
+      },
+      "groups": {
+        "Type": "List",
+        "Description": "Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Object type.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Object unique identifier.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "hit_count": {
+        "Type": "Bool",
+        "Description": "Hit count tracks the number of connections each rule matches.",
+        "Computed": true
+      },
+      "https_inspection": {
+        "Type": "List",
+        "Description": "HTTPS inspection.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bypass_on_failure": {
+              "Type": "Map",
+              "Description": "Set to be true in order to bypass all requests (Fail-open) in case of internal system error.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deny_expired_server_cert": {
+              "Type": "Map",
+              "Description": "Action settings.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deny_revoked_server_cert": {
+              "Type": "Map",
+              "Description": "Action settings.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deny_untrusted_server_cert": {
+              "Type": "Map",
+              "Description": "Action settings.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "site_categorization_allow_mode": {
+              "Type": "Map",
+              "Description": "Set to 'background' in order to allowed requests until categorization is complete.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "interfaces": {
+        "Type": "List",
+        "Description": "Cluster network interfaces.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ips": {
+        "Type": "Bool",
+        "Description": "Intrusion Prevention System blade enabled.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "nat_hide_internal_interfaces": {
+        "Type": "Bool",
+        "Description": "Hide internal networks behind the Gateway's external IP.",
+        "Computed": true
+      },
+      "nat_settings": {
+        "Type": "Map",
+        "Description": "NAT settings.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "os_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Gateway platform operating system."
+      },
+      "proxy_settings": {
+        "Type": "Map",
+        "Description": "N/A",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "qos": {
+        "Type": "Bool",
+        "Description": "QoS.",
+        "Computed": true
+      },
+      "save_logs_locally": {
+        "Type": "Bool",
+        "Description": "Save logs locally on the gateway.",
+        "Computed": true
+      },
+      "send_alerts_to_server": {
+        "Type": "List",
+        "Description": "Server(s) to send alerts to.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "send_logs_to_backup_server": {
+        "Type": "List",
+        "Description": "Backup server(s) to send logs to.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "send_logs_to_server": {
+        "Type": "List",
+        "Description": "Servers(s) to send logs to.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag objects identified by the name or UID. Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "threat_emulation": {
+        "Type": "Bool",
+        "Description": "Threat Emulation blade enabled.",
+        "Computed": true
+      },
+      "threat_extraction": {
+        "Type": "Bool",
+        "Description": "Threat Extraction blade enabled.",
+        "Computed": true
+      },
+      "threat_prevention_mode": {
+        "Type": "String",
+        "Description": "The mode of Threat Prevention to use. When using Autonomous Threat Prevention, disabling the Threat Prevention blades is not allowed.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Object type.",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object unique identifier."
+      },
+      "url_filtering": {
+        "Type": "Bool",
+        "Description": "URL Filtering blade enabled.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Description": "Gateway platform version.",
+        "Computed": true
+      },
+      "vpn": {
+        "Type": "Bool",
+        "Description": "VPN blade enabled.",
+        "Computed": true
+      },
+      "zero_phishing": {
+        "Type": "Bool",
+        "Description": "Zero Phishing blade enabled.",
+        "Computed": true
+      },
+      "zero_phishing_fqdn": {
+        "Type": "String",
+        "Description": "Zero Phishing gateway FQDN.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_lsm_gateway_profile": {
+      "advanced_settings": {
+        "Type": "List",
+        "Description": "N/A",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_persistence": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Handling established connections when installing a new policy."
+            },
+            "sam": {
+              "Type": "List",
+              "Description": "SAM.",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "forward_to_other_sam_servers": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Forward SAM clients' requests to other SAM servers."
+                  },
+                  "purge_sam_file": {
+                    "Type": "Map",
+                    "Description": "Purge SAM File.",
+                    "Computed": true,
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "use_early_versions": {
+                    "Type": "Map",
+                    "Description": "N/A",
+                    "Computed": true,
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "anti_bot": {
+        "Type": "Bool",
+        "Description": "Anti-Bot blade enabled.",
+        "Computed": true
+      },
+      "anti_virus": {
+        "Type": "Bool",
+        "Description": "Anti-Virus blade enabled.",
+        "Computed": true
+      },
+      "application_control": {
+        "Type": "Bool",
+        "Description": "Application Control blade enabled.",
+        "Computed": true
+      },
+      "application_control_and_url_filtering_settings": {
+        "Type": "List",
+        "Description": "Gateway Application Control and URL filtering settings.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "global_settings_mode": {
+              "Type": "String",
+              "Description": "Whether to override global settings or not.",
+              "Computed": true
+            },
+            "override_global_settings": {
+              "Type": "Map",
+              "Description": "override global settings object.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "content_awareness": {
+        "Type": "Bool",
+        "Description": "Content Awareness blade enabled.",
+        "Computed": true
+      },
+      "data_loss_prevention": {
+        "Type": "Bool",
+        "Description": "Data Loss Prevention.",
+        "Computed": true
+      },
+      "dynamic_ip": {
+        "Type": "Bool",
+        "Description": "Dynamic IP address.",
+        "Computed": true
+      },
+      "enable_https_inspection": {
+        "Type": "Bool",
+        "Description": "Enable HTTPS Inspection after defining an outbound inspection certificate.\nTo define the outbound certificate use \"set outbound-inspection-certificate\".",
+        "Computed": true
+      },
+      "firewall": {
+        "Type": "Bool",
+        "Description": "Firewall blade enabled.",
+        "Computed": true
+      },
+      "groups": {
+        "Type": "List",
+        "Description": "Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Object type.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Object unique identifier.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "hit_count": {
+        "Type": "Bool",
+        "Description": "Hit count tracks the number of connections each rule matches.",
+        "Computed": true
+      },
+      "https_inspection": {
+        "Type": "List",
+        "Description": "HTTPS inspection.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bypass_on_failure": {
+              "Type": "Map",
+              "Description": "Set to be true in order to bypass all requests (Fail-open) in case of internal system error.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deny_expired_server_cert": {
+              "Type": "Map",
+              "Description": "Action settings.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deny_revoked_server_cert": {
+              "Type": "Map",
+              "Description": "Action settings.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "deny_untrusted_server_cert": {
+              "Type": "Map",
+              "Description": "Action settings.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "site_categorization_allow_mode": {
+              "Type": "Map",
+              "Description": "Set to 'background' in order to allowed requests until categorization is complete.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "interfaces": {
+        "Type": "List",
+        "Description": "Cluster network interfaces.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ips": {
+        "Type": "Bool",
+        "Description": "Intrusion Prevention System blade enabled.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "nat_hide_internal_interfaces": {
+        "Type": "Bool",
+        "Description": "Hide internal networks behind the Gateway's external IP.",
+        "Computed": true
+      },
+      "nat_settings": {
+        "Type": "Map",
+        "Description": "NAT settings.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "os_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Gateway platform operating system."
+      },
+      "proxy_settings": {
+        "Type": "Map",
+        "Description": "N/A",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "qos": {
+        "Type": "Bool",
+        "Description": "QoS.",
+        "Computed": true
+      },
+      "save_logs_locally": {
+        "Type": "Bool",
+        "Description": "Save logs locally on the gateway.",
+        "Computed": true
+      },
+      "send_alerts_to_server": {
+        "Type": "List",
+        "Description": "Server(s) to send alerts to.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "send_logs_to_backup_server": {
+        "Type": "List",
+        "Description": "Backup server(s) to send logs to.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "send_logs_to_server": {
+        "Type": "List",
+        "Description": "Servers(s) to send logs to.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag objects identified by the name or UID. Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "threat_emulation": {
+        "Type": "Bool",
+        "Description": "Threat Emulation blade enabled.",
+        "Computed": true
+      },
+      "threat_extraction": {
+        "Type": "Bool",
+        "Description": "Threat Extraction blade enabled.",
+        "Computed": true
+      },
+      "threat_prevention_mode": {
+        "Type": "String",
+        "Description": "The mode of Threat Prevention to use. When using Autonomous Threat Prevention, disabling the Threat Prevention blades is not allowed.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Object type.",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object unique identifier."
+      },
+      "url_filtering": {
+        "Type": "Bool",
+        "Description": "URL Filtering blade enabled.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Description": "Gateway platform version.",
+        "Computed": true
+      },
+      "vpn": {
+        "Type": "Bool",
+        "Description": "VPN blade enabled.",
+        "Computed": true
+      },
+      "zero_phishing": {
+        "Type": "Bool",
+        "Description": "Zero Phishing blade enabled.",
+        "Computed": true
+      },
+      "zero_phishing_fqdn": {
+        "Type": "String",
+        "Description": "Zero Phishing gateway FQDN.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_md_permissions_profile": {
+      "cme_operations": {
+        "Type": "String",
+        "Description": "Permission to read / edit the Cloud Management Extension (CME) configuration.",
+        "Computed": true
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "default_profile_global_domains": {
+        "Type": "String",
+        "Description": "Name or UID of the required default profile for all global domains.",
+        "Computed": true
+      },
+      "default_profile_local_domains": {
+        "Type": "String",
+        "Description": "Name or UID of the required default profile for all local domains.",
+        "Computed": true
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "enable_default_profile_for_global_domains": {
+        "Type": "Bool",
+        "Description": "Enable the option to specify a default profile for all global domains.",
+        "Computed": true
+      },
+      "enable_default_profile_for_local_domains": {
+        "Type": "Bool",
+        "Description": "Enable the option to specify a default profile for all local domains.",
+        "Computed": true
+      },
+      "global_vpn_management": {
+        "Type": "Bool",
+        "Description": "Lets the administrator select Enable global use for a Security Gateway shown in the MDS Gateways \u0026 Servers view.\u003cbr\u003eOnly a 'Manager' permission-level profile can edit this permission.",
+        "Computed": true
+      },
+      "manage_admins": {
+        "Type": "Bool",
+        "Description": "Create and manage Multi-Domain Security Management administrators with the same or lower permission level. For example, a Domain manager cannot create Superusers or global managers.\u003cbr\u003eOnly a 'Manager' permission-level profile can edit this permission.",
+        "Computed": true
+      },
+      "manage_global_assignments": {
+        "Type": "Bool",
+        "Description": "Controls the ability to create, edit and delete global assignment and not the ability to reassign, which is set according to the specific Domain's permission profile.",
+        "Computed": true
+      },
+      "manage_sessions": {
+        "Type": "Bool",
+        "Description": "Connect/disconnect Domain sessions, publish changes, and delete other administrator sessions.\u003cbr\u003eOnly a 'Manager' permission-level profile can edit this permission.",
+        "Computed": true
+      },
+      "management_api_login": {
+        "Type": "Bool",
+        "Description": "Permission to log in to the Security Management Server and run API commands using these tools: mgmt_cli (Linux and Windows binaries), Gaia CLI (clish) and Web Services (REST). Useful if you want to prevent administrators from running automatic scripts on the Management.\u003cbr\u003eNote: This permission is not required to run commands from within the API terminal in SmartConsole.",
+        "Computed": true
+      },
+      "mds_provisioning": {
+        "Type": "Bool",
+        "Description": "Create and manage Multi-Domain Servers and Multi-Domain Log Servers.\u003cbr\u003eOnly a \"Super User\" permission-level profile can select this option.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "permission_level": {
+        "Type": "String",
+        "Description": "The level of the Multi Domain Permissions Profile.\u003cbr\u003eThe level cannot be changed after creation.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "view_global_objects_in_domain": {
+        "Type": "Bool",
+        "Description": "Lets an administrator with no global objects permissions view the global objects in the domain. This option is required for valid domain management.",
         "Computed": true
       }
     },
@@ -13405,6 +17213,125 @@
         "Description": "Object unique identifier."
       }
     },
+    "checkpoint_management_network_feed": {
+      "certificate_id": {
+        "Type": "String",
+        "Description": "Certificate SHA-1 fingerprint to access the feed.",
+        "Computed": true
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "custom_header": {
+        "Type": "List",
+        "Description": "Headers to allow different authentication methods with the URL.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "header_name": {
+              "Type": "String",
+              "Description": "The name of the HTTP header we wish to add.",
+              "Computed": true
+            },
+            "header_value": {
+              "Type": "String",
+              "Description": "The name of the HTTP value we wish to add.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "data_column": {
+        "Type": "Int",
+        "Description": "Number of the column that contains the feed's data.",
+        "Computed": true
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "feed_format": {
+        "Type": "String",
+        "Description": "Feed file format.",
+        "Computed": true
+      },
+      "feed_type": {
+        "Type": "String",
+        "Description": "Feed type to be enforced.",
+        "Computed": true
+      },
+      "feed_url": {
+        "Type": "String",
+        "Description": "URL of the feed. URL should be written as http or https.",
+        "Computed": true
+      },
+      "fields_delimiter": {
+        "Type": "String",
+        "Description": "The delimiter that separates between the columns in the feed. For feed format 'Flat List' default is '\n'(new line).",
+        "Computed": true
+      },
+      "ignore_lines_that_start_with": {
+        "Type": "String",
+        "Description": "A prefix that will determine which lines to ignore.",
+        "Computed": true
+      },
+      "json_query": {
+        "Type": "String",
+        "Description": "JQ query to be parsed.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "update_interval": {
+        "Type": "Int",
+        "Description": "Interval in minutes for updating the feed on the Security Gateway.",
+        "Computed": true
+      },
+      "use_gateway_proxy": {
+        "Type": "Bool",
+        "Description": "Use the gateway's proxy for retrieving the feed.",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Description": "username for authenticating with the URL.",
+        "Computed": true
+      }
+    },
     "checkpoint_management_nuage_data_center_server": {
       "certificate_fingerprint": {
         "Type": "String",
@@ -13510,6 +17437,319 @@
         "Type": "String",
         "Description": "Username of the OpenStack server.\nTo login to specific domain insert domain name before username.\nExample: \u003cdomain\u003e/\u003cusername\u003e",
         "Computed": true
+      }
+    },
+    "checkpoint_management_provisioning_profile": {
+      "configuration_script": {
+        "Type": "Map",
+        "Description": "NAT settings.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "dns": {
+        "Type": "Map",
+        "Description": "DNS Settings.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "domain_name": {
+        "Type": "Map",
+        "Description": "Domain Name Settings.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "groups": {
+        "Type": "List",
+        "Description": "Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "color": {
+              "Type": "String",
+              "Description": "Color of the object. Should be one of existing colors.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Object name. Must be unique in the domain.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Object type.",
+              "Computed": true
+            },
+            "uid": {
+              "Type": "String",
+              "Description": "Object unique identifier.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "hosts": {
+        "Type": "List",
+        "Description": "Hosts Settings.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "hosts": {
+              "Type": "List",
+              "Description": "Hosts Settings.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "host_ip_address": {
+                    "Type": "String",
+                    "Description": "Host IP-Address.",
+                    "Computed": true
+                  },
+                  "host_name": {
+                    "Type": "String",
+                    "Description": "Host Name.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "manage_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Manage settings mode: locally on the device or centrally from this application."
+            },
+            "override_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Override settings mode: allowed, mandatory or denied. Relevant only when settings are managed centrally."
+            }
+          }
+        }
+      },
+      "hotspot": {
+        "Type": "List",
+        "Description": "Hotspot Settings. Relevant only for Gaia Embedded (SMB) profile.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_users_from_specific_group": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow users from specific group."
+            },
+            "allowed_users_groups": {
+              "Type": "List",
+              "Description": "Allowed users groups.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "display_terms_of_use": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Use terms of use."
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Hotspot enabled on device."
+            },
+            "manage_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Manage settings mode: locally on the device or centrally from this application."
+            },
+            "override_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Override settings mode: allowed, mandatory or denied. Relevant only when settings are managed centrally."
+            },
+            "portal_message": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Portal message."
+            },
+            "portal_title": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Portal title."
+            },
+            "require_authentication": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Require authentication."
+            },
+            "terms_of_use": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Terms of use."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "N/A"
+      },
+      "radius": {
+        "Type": "List",
+        "Description": "RADIUS Servers Settings. Relevant only for Gaia Embedded (SMB) profile.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_administrators_from_specific_radius_group_only": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow administrators from specific radius group only."
+            },
+            "allowed_radius_groups": {
+              "Type": "List",
+              "Description": "Allowed radius groups.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Hotspot enabled on device."
+            },
+            "manage_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Manage settings mode: locally on the device or centrally from this application."
+            },
+            "override_settings": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Override settings mode: allowed, mandatory or denied. Relevant only when settings are managed centrally."
+            },
+            "radius_servers": {
+              "Type": "List",
+              "Description": "RADIUS Servers.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "radius_server_name": {
+                    "Type": "String",
+                    "Description": "Radius server Name.",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag objects identified by the name or UID. Level of details in the output corresponds to the number of details for search. This table shows the level of details in the Standard level.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Object type.",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Cluster member unique identifier."
+      }
+    },
+    "checkpoint_management_repository_package": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the repository package."
+      },
+      "task_id": {
+        "Type": "String",
+        "Description": "Unique identifier of the 'show-repository-package' task. Use the 'show-task' command to check the progress of the task.",
+        "Computed": true
+      }
+    },
+    "checkpoint_management_repository_script": {
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "script_body": {
+        "Type": "String",
+        "Description": "The entire content of the script.",
+        "Computed": true
+      },
+      "script_body_base64": {
+        "Type": "String",
+        "Description": "The entire content of the script encoded in Base64.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
       }
     },
     "checkpoint_management_service_citrix_tcp": {
@@ -14201,6 +18441,33 @@
         "Description": "Application Control blade enabled.",
         "Computed": true
       },
+      "application_control_and_url_filtering_settings": {
+        "Type": "List",
+        "Description": "Gateway Application Control and URL filtering settings.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "global_settings_mode": {
+              "Type": "String",
+              "Description": "Whether to override global settings or not.",
+              "Computed": true
+            },
+            "override_global_settings": {
+              "Type": "Map",
+              "Description": "override global settings object.",
+              "Computed": true,
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "color": {
         "Type": "String",
         "Description": "Color of the object. Should be one of existing colors.",
@@ -14378,6 +18645,11 @@
         "Optional": true,
         "Description": "Object name. Should be unique in the domain."
       },
+      "one_time_password": {
+        "Type": "String",
+        "Description": "SIC one time password.",
+        "Computed": true
+      },
       "os_name": {
         "Type": "String",
         "Description": "OS name.",
@@ -14476,6 +18748,78 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "checkpoint_management_smtp_server": {
+      "authentication": {
+        "Type": "Bool",
+        "Description": "Does the mail server requires authentication.",
+        "Computed": true
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "domains_to_process": {
+        "Type": "Set",
+        "Description": "Indicates which domains to process the commands on. It cannot be used with the details-level full, must be run from the System Domain only and with ignore-warnings true. Valid values are: CURRENT_DOMAIN, ALL_DOMAINS_ON_THIS_SERVER.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "encryption": {
+        "Type": "String",
+        "Description": "Encryption type.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "password": {
+        "Type": "String",
+        "Description": "A password for the SMTP server.\u003cbr\u003e\u003cfont color=\"red\"\u003eRequired only if\u003c/font\u003e authentication is set to true.",
+        "Computed": true
+      },
+      "port": {
+        "Type": "Int",
+        "Description": "The SMTP port to use.",
+        "Computed": true
+      },
+      "server": {
+        "Type": "String",
+        "Description": "The SMTP server address.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "username": {
+        "Type": "String",
+        "Description": "A username for the SMTP server.\u003cbr\u003e\u003cfont color=\"red\"\u003eRequired only if\u003c/font\u003e authentication is set to true.",
+        "Computed": true
       }
     },
     "checkpoint_management_threat_exception": {
@@ -14618,6 +18962,145 @@
         "Type": "String",
         "Optional": true,
         "Description": "Object unique identifier."
+      }
+    },
+    "checkpoint_management_threat_ioc_feed": {
+      "action": {
+        "Type": "String",
+        "Description": "The feed indicator's action.",
+        "Computed": true
+      },
+      "certificate_id": {
+        "Type": "String",
+        "Description": "Certificate SHA-1 fingerprint to access the feed.",
+        "Computed": true
+      },
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "custom_comment": {
+        "Type": "Int",
+        "Description": "Custom IOC feed - the column number of comment.",
+        "Computed": true
+      },
+      "custom_confidence": {
+        "Type": "Int",
+        "Description": "Custom IOC feed - the column number of confidence.",
+        "Computed": true
+      },
+      "custom_headers": {
+        "Type": "List",
+        "Description": "Custom HTTP headers.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "header_name": {
+              "Type": "String",
+              "Description": "The name of the HTTP header we wish to add.",
+              "Computed": true
+            },
+            "header_value": {
+              "Type": "String",
+              "Description": "The name of the HTTP value we wish to add.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "custom_name": {
+        "Type": "Int",
+        "Description": "Custom IOC feed - the column number of name.",
+        "Computed": true
+      },
+      "custom_severity": {
+        "Type": "Int",
+        "Description": "Custom IOC feed - the column number of severity.",
+        "Computed": true
+      },
+      "custom_type": {
+        "Type": "Int",
+        "Description": "Custom IOC feed - the column number of type in case a specific type is not chosen.",
+        "Computed": true
+      },
+      "custom_value": {
+        "Type": "Int",
+        "Description": "Custom IOC feed - the column number of value in case a specific type is chosen.",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Description": "Sets whether this indicator feed is enabled.",
+        "Computed": true
+      },
+      "feed_type": {
+        "Type": "String",
+        "Description": "Feed type to be enforced.",
+        "Computed": true
+      },
+      "feed_url": {
+        "Type": "String",
+        "Description": "URL of the feed. URL should be written as http or https.",
+        "Computed": true
+      },
+      "fields_delimiter": {
+        "Type": "String",
+        "Description": "The delimiter that separates between the columns in the feed.",
+        "Computed": true
+      },
+      "ignore_lines_that_start_with": {
+        "Type": "String",
+        "Description": "A prefix that will determine which lines to ignore.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "password": {
+        "Type": "String",
+        "Description": "password for authenticating with the URL.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "use_custom_feed_settings": {
+        "Type": "Bool",
+        "Description": "Set in order to configure a custom indicator feed.",
+        "Computed": true
+      },
+      "use_gateway_proxy": {
+        "Type": "Bool",
+        "Description": "Use the gateway's proxy for retrieving the feed.",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Description": "username for authenticating with the URL.",
+        "Computed": true
       }
     },
     "checkpoint_management_threat_profile": {
@@ -15350,6 +19833,238 @@
         "Type": "String",
         "Optional": true,
         "Description": "Object unique identifier."
+      }
+    },
+    "checkpoint_management_time": {
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "end": {
+        "Type": "Map",
+        "Description": "End time. Note: Each gateway may interpret this time differently according to its time zone.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "end_never": {
+        "Type": "Bool",
+        "Description": "End never.",
+        "Computed": true
+      },
+      "hour_ranges": {
+        "Type": "List",
+        "Description": "Hours recurrence. Note: Each gateway may interpret this time differently according to its time zone.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Description": "Is hour range enabled.",
+              "Computed": true
+            },
+            "from": {
+              "Type": "String",
+              "Description": "Time in format HH:MM.",
+              "Computed": true
+            },
+            "index": {
+              "Type": "Int",
+              "Description": "Hour range index.",
+              "Computed": true
+            },
+            "to": {
+              "Type": "String",
+              "Description": "Time in format HH:MM.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "recurrence": {
+        "Type": "List",
+        "Description": "Days recurrence.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "days": {
+              "Type": "Set",
+              "Description": "Valid on specific days. Multiple options, support range of days in months. Example:[\"1\",\"3\",\"9-20\"].",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "month": {
+              "Type": "String",
+              "Description": "Valid on month. Example: \"1\", \"2\",\"12\",\"Any\".",
+              "Computed": true
+            },
+            "pattern": {
+              "Type": "String",
+              "Description": "Valid on \"Interval\", \"Daily\", \"Weekly\", \"Monthly\" base.",
+              "Computed": true
+            },
+            "weekdays": {
+              "Type": "Set",
+              "Description": "Valid on weekdays. Example: \"Sun\", \"Mon\"...\"Sat\".",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "start": {
+        "Type": "Map",
+        "Description": "Starting time. Note: Each gateway may interpret this time differently according to its time zone.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "start_now": {
+        "Type": "Bool",
+        "Description": "Start immediately.",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object unique identifier."
+      }
+    },
+    "checkpoint_management_trusted_client": {
+      "color": {
+        "Type": "String",
+        "Description": "Color of the object. Should be one of existing colors.",
+        "Computed": true
+      },
+      "comments": {
+        "Type": "String",
+        "Description": "Comments string.",
+        "Computed": true
+      },
+      "domains_assignment": {
+        "Type": "Set",
+        "Description": "Domains to be added to this profile. Use domain name only. See example below: \"add-trusted-client (with domain)\".",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ipv4_address": {
+        "Type": "String",
+        "Description": "IPv4 address.",
+        "Computed": true
+      },
+      "ipv4_address_first": {
+        "Type": "String",
+        "Description": "First IPv4 address in the range.",
+        "Computed": true
+      },
+      "ipv4_address_last": {
+        "Type": "String",
+        "Description": "Last IPv4 address in the range.",
+        "Computed": true
+      },
+      "ipv6_address": {
+        "Type": "String",
+        "Description": "IPv6 address.",
+        "Computed": true
+      },
+      "ipv6_address_first": {
+        "Type": "String",
+        "Description": "First IPv6 address in the range.",
+        "Computed": true
+      },
+      "ipv6_address_last": {
+        "Type": "String",
+        "Description": "Last IPv6 address in the range.",
+        "Computed": true
+      },
+      "mask_length4": {
+        "Type": "Int",
+        "Description": "IPv4 mask length.",
+        "Computed": true
+      },
+      "mask_length6": {
+        "Type": "Int",
+        "Description": "IPv6 mask length.",
+        "Computed": true
+      },
+      "multi_domain_server_trusted_client": {
+        "Type": "Bool",
+        "Description": "Let this trusted client connect to all Multi-Domain Servers in the deployment.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object name."
+      },
+      "tags": {
+        "Type": "Set",
+        "Description": "Collection of tag identifiers.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Trusted client type.",
+        "Computed": true
+      },
+      "uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Object unique identifier."
+      },
+      "wild_card": {
+        "Type": "String",
+        "Description": "IP wild card (e.g. 192.0.2.*).",
+        "Computed": true
       }
     },
     "checkpoint_management_user": {

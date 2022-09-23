@@ -3,8 +3,17 @@
   ".sdk_type": "builtin",
   "name": "cos",
   "type": "backend",
-  "version": "v1.1.4",
+  "version": "v1.3.0-rc1",
   "schema": {
+    "accelerate": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Whether to enable global Acceleration",
+      "Default": {
+        "Type": "bool",
+        "Value": "false"
+      }
+    },
     "acl": {
       "Type": "String",
       "Optional": true,

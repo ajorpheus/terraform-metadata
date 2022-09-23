@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ilert",
   "type": "provider",
-  "version": "v1.4.5",
+  "version": "v1.8.0",
   "provider": {
     "api_token": {
       "Type": "String",
@@ -32,13 +32,826 @@
     }
   },
   "resources": {
+    "ilert_alert_action": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "alert_source": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "autotask": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "company_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "issue_type": {
+              "Type": "String",
+              "Optional": true
+            },
+            "queue_id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "ticket_category": {
+              "Type": "String",
+              "Optional": true
+            },
+            "ticket_type": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "aws_lambda": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_template": {
+              "Type": "String",
+              "Optional": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "azure_faas": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_template": {
+              "Type": "String",
+              "Optional": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "connector": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "datadog": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "priority": {
+              "Type": "String",
+              "Optional": true
+            },
+            "site": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "EU"
+              }
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "email": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_template": {
+              "Type": "String",
+              "Optional": true
+            },
+            "recipients": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subject": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "github": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "labels": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "owner": {
+              "Type": "String",
+              "Required": true
+            },
+            "repository": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "google_faas": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_template": {
+              "Type": "String",
+              "Optional": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "jira": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_template": {
+              "Type": "String",
+              "Optional": true
+            },
+            "issue_type": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "Task"
+              }
+            },
+            "project": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "servicenow": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "caller_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "impact": {
+              "Type": "String",
+              "Optional": true
+            },
+            "urgency": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "slack": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "channel_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "channel_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "team_domain": {
+              "Type": "String",
+              "Optional": true
+            },
+            "team_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "status_page_io": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "page_id": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "sysdig": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "event_filter": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "topdesk": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "status": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "firstLine"
+              }
+            }
+          }
+        }
+      },
+      "trigger_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "AUTOMATIC"
+        }
+      },
+      "trigger_types": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "webhook": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "body_template": {
+              "Type": "String",
+              "Optional": true
+            },
+            "url": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "zammad": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "zendesk",
+          "autotask",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "email": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "zapier": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zendesk",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "url": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "zendesk": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "aws_lambda",
+          "azure_faas",
+          "datadog",
+          "email",
+          "github",
+          "google_faas",
+          "jira",
+          "servicenow",
+          "slack",
+          "sysdig",
+          "topdesk",
+          "webhook",
+          "zapier",
+          "autotask",
+          "zammad",
+          "status_page_io"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "priority": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
     "ilert_alert_source": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "active": {
         "Type": "Bool",
         "Optional": true,
         "Default": {
           "Type": "bool",
           "Value": "true"
+        }
+      },
+      "alert_creation": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "ONE_ALERT_PER_EMAIL"
+        }
+      },
+      "alert_priority_rule": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "HIGH"
         }
       },
       "auto_resolution_timeout": {
@@ -190,18 +1003,12 @@
       "incident_creation": {
         "Type": "String",
         "Optional": true,
-        "Default": {
-          "Type": "string",
-          "Value": "ONE_INCIDENT_PER_EMAIL"
-        }
+        "Deprecated": "The field incident_creation is deprecated! Please use alert_creation instead."
       },
       "incident_priority_rule": {
         "Type": "String",
         "Optional": true,
-        "Default": {
-          "Type": "string",
-          "Value": "HIGH"
-        }
+        "Deprecated": "The field incident_priority_rule is deprecated! Please use alert_priority_rule instead."
       },
       "integration_key": {
         "Type": "String",
@@ -267,9 +1074,14 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "auto_raise_incidents": {
+            "auto_raise_alerts": {
               "Type": "Bool",
               "Optional": true
+            },
+            "auto_raise_incidents": {
+              "Type": "Bool",
+              "Optional": true,
+              "Deprecated": "The field auto_raise_incidents is deprecated! Please use auto_raise_alerts instead."
             },
             "support_days": {
               "Type": "List",
@@ -494,9 +1306,30 @@
           }
         }
       },
+      "team": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
       "teams": {
         "Type": "List",
         "Optional": true,
+        "Deprecated": "The field teams is deprecated! Please use team instead.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -504,7 +1337,116 @@
         }
       }
     },
+    "ilert_automation_rule": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "alert_source": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "alert_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "resolve_incident": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "resolve_service": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "send_notification": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "service": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "service_status": {
+        "Type": "String",
+        "Required": true
+      },
+      "template": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
     "ilert_connection": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "alert_source": {
         "Type": "List",
         "Required": true,
@@ -1132,6 +2074,7 @@
       "trigger_types": {
         "Type": "List",
         "Optional": true,
+        "MinItems": 1,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1288,24 +2231,29 @@
       }
     },
     "ilert_connector": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "autotask": {
         "Type": "List",
         "Optional": true,
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "mattermost",
           "zammad",
           "status_page_io"
@@ -1336,17 +2284,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
+          "azure_faas",
           "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
           "discord",
           "github",
-          "topdesk",
-          "azure_faas",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1370,17 +2317,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
+          "aws_lambda",
           "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
           "discord",
           "github",
-          "topdesk",
-          "aws_lambda",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1408,17 +2354,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "jira",
-          "microsoft_teams",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1442,17 +2387,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "jira",
-          "microsoft_teams",
-          "servicenow",
-          "zendesk",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1476,16 +2420,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1509,17 +2453,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1543,17 +2486,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1585,18 +2527,17 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "zammad",
           "status_page_io"
@@ -1619,17 +2560,17 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1657,17 +2598,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1699,18 +2639,17 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad"
@@ -1733,17 +2672,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1767,17 +2705,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "zendesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1817,18 +2754,17 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "zendesk",
-          "discord",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
+          "zendesk",
           "autotask",
           "mattermost",
           "status_page_io"
@@ -1855,16 +2791,16 @@
         "MaxItems": 1,
         "MinItems": 1,
         "ConflictsWith": [
-          "datadog",
-          "microsoft_teams",
-          "jira",
-          "servicenow",
-          "github",
-          "topdesk",
           "aws_lambda",
           "azure_faas",
+          "datadog",
+          "discord",
+          "github",
           "google_faas",
+          "jira",
+          "servicenow",
           "sysdig",
+          "topdesk",
           "autotask",
           "mattermost",
           "zammad",
@@ -1892,6 +2828,12 @@
       }
     },
     "ilert_escalation_policy": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "escalation_rule": {
         "Type": "List",
         "Optional": true,
@@ -1913,9 +2855,53 @@
               "Type": "String",
               "Optional": true
             },
+            "schedules": {
+              "Type": "List",
+              "Optional": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "user": {
               "Type": "String",
               "Optional": true
+            },
+            "users": {
+              "Type": "List",
+              "Optional": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "first_name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "last_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
             }
           }
         }
@@ -1936,9 +2922,30 @@
         "Type": "Bool",
         "Optional": true
       },
+      "team": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
       "teams": {
         "Type": "List",
         "Optional": true,
+        "Deprecated": "The field teams is deprecated! Please use team instead.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1946,7 +2953,461 @@
         }
       }
     },
+    "ilert_incident_template": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "message": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "send_notification": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Required": true
+      },
+      "summary": {
+        "Type": "String",
+        "Required": true
+      },
+      "team": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "ilert_schedule": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "current_shift": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "String",
+              "Required": true
+            },
+            "start": {
+              "Type": "String",
+              "Required": true
+            },
+            "user": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "default_shift_duration": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "next_shift": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "String",
+              "Required": true
+            },
+            "start": {
+              "Type": "String",
+              "Required": true
+            },
+            "user": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "schedule_layer": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ends_on": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "restriction": {
+              "Type": "List",
+              "Optional": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "from": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "day_of_week": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "time": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "to": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "day_of_week": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "time": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "restriction_type": {
+              "Type": "String",
+              "Optional": true
+            },
+            "rotation": {
+              "Type": "String",
+              "Required": true
+            },
+            "starts_on": {
+              "Type": "String",
+              "Required": true
+            },
+            "user": {
+              "Type": "List",
+              "Required": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "first_name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "last_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "shift": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "end": {
+              "Type": "String",
+              "Required": true
+            },
+            "start": {
+              "Type": "String",
+              "Required": true
+            },
+            "user": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "show_gaps": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "team": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "timezone": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "ilert_service": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "one_open_incident_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "show_uptime_history": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "OPERATIONAL"
+        }
+      },
+      "team": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "ilert_status_page": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "custom_css": {
+        "Type": "String",
+        "Optional": true
+      },
+      "domain": {
+        "Type": "String",
+        "Optional": true
+      },
+      "favicon_url": {
+        "Type": "String",
+        "Optional": true
+      },
+      "hidden_from_search": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "logo_redirect_url": {
+        "Type": "String",
+        "Optional": true
+      },
+      "logo_url": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "page_description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "page_title": {
+        "Type": "String",
+        "Optional": true
+      },
+      "service": {
+        "Type": "List",
+        "Required": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "show_incident_history_option": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "show_subscribe_action": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "subdomain": {
+        "Type": "String",
+        "Required": true
+      },
+      "team": {
+        "Type": "List",
+        "Optional": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true
+      },
+      "visibility": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "ilert_team": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "member": {
         "Type": "List",
         "Optional": true,
@@ -1985,6 +3446,12 @@
       }
     },
     "ilert_uptime_monitor": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "check_params": {
         "Type": "List",
         "Required": true,
@@ -2040,12 +3507,21 @@
         "Type": "String",
         "Required": true
       },
-      "create_incident_after_failed_checks": {
+      "create_alert_after_failed_checks": {
         "Type": "Int",
         "Optional": true,
         "Default": {
           "Type": "int",
           "Value": "1"
+        }
+      },
+      "create_incident_after_failed_checks": {
+        "Type": "Int",
+        "Optional": true,
+        "Deprecated": "The field create_incident_after_failed_checks is deprecated! Please use create_alert_after_failed_checks instead.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
         }
       },
       "embed_url": {
@@ -2102,6 +3578,12 @@
       }
     },
     "ilert_user": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "department": {
         "Type": "String",
         "Optional": true
@@ -2252,9 +3734,28 @@
           "Value": "USER"
         }
       },
+      "subscribed_alert_update_notification_types": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "subscribed_alert_update_states": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "subscribed_incident_update_notification_types": {
         "Type": "List",
         "Optional": true,
+        "Deprecated": "The field subscribed_incident_update_notification_types is deprecated! Please use subscribed_alert_update_notification_types instead.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2264,6 +3765,7 @@
       "subscribed_incident_update_states": {
         "Type": "List",
         "Optional": true,
+        "Deprecated": "The field subscribed_incident_update_states is deprecated! Please use subscribed_alert_update_states instead.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2285,6 +3787,16 @@
     }
   },
   "data-sources": {
+    "ilert_alert_action": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "trigger_mode": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "ilert_alert_source": {
       "integration_key": {
         "Type": "String",
@@ -2329,10 +3841,48 @@
         "Required": true
       }
     },
+    "ilert_incident_template": {
+      "message": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "summary": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "ilert_schedule": {
       "name": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "ilert_service": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "ilert_status_page": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "status": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "ilert_team": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "docker",
   "type": "provider",
-  "version": "v2.16.0",
+  "version": "v2.21.0",
   "provider": {
     "ca_material": {
       "Type": "String",
@@ -27,7 +27,7 @@
       "Type": "String",
       "Required": true,
       "Description": "The Docker daemon address",
-      "DefaultFunc": "ENV(DOCKER_HOST)"
+      "DefaultFunc": "UNKNOWN"
     },
     "key_material": {
       "Type": "String",
@@ -36,9 +36,8 @@
       "DefaultFunc": "ENV(DOCKER_KEY_MATERIAL)"
     },
     "registry_auth": {
-      "Type": "List",
+      "Type": "Set",
       "Optional": true,
-      "MaxItems": 1,
       "IsBlock": true,
       "ConfigImplicitMode": "Block",
       "Elem": {
@@ -52,43 +51,25 @@
           "config_file": {
             "Type": "String",
             "Optional": true,
-            "Description": "Path to docker json file for registry auth",
-            "DefaultFunc": "ENV(DOCKER_CONFIG)",
-            "ConflictsWith": [
-              "registry_auth.username",
-              "registry_auth.password",
-              "registry_auth.config_file_content"
-            ]
+            "Description": "Path to docker json file for registry auth. Defaults to `~/.docker/config.json`. If `DOCKER_CONFIG` is set, the value of `DOCKER_CONFIG` is used as the path. `config_file` has predencen over all other options.",
+            "DefaultFunc": "ENV(DOCKER_CONFIG)"
           },
           "config_file_content": {
             "Type": "String",
             "Optional": true,
-            "Description": "Plain content of the docker json file for registry auth",
-            "ConflictsWith": [
-              "registry_auth.username",
-              "registry_auth.password",
-              "registry_auth.config_file"
-            ]
+            "Description": "Plain content of the docker json file for registry auth. `config_file_content` has precedence over username/password."
           },
           "password": {
             "Type": "String",
             "Optional": true,
-            "Description": "Password for the registry",
-            "DefaultFunc": "ENV(DOCKER_REGISTRY_PASS)",
-            "ConflictsWith": [
-              "registry_auth.config_file",
-              "registry_auth.config_file_content"
-            ]
+            "Description": "Password for the registry. Defaults to `DOCKER_REGISTRY_PASS` env variable if set.",
+            "DefaultFunc": "ENV(DOCKER_REGISTRY_PASS)"
           },
           "username": {
             "Type": "String",
             "Optional": true,
-            "Description": "Username for the registry",
-            "DefaultFunc": "ENV(DOCKER_REGISTRY_USER)",
-            "ConflictsWith": [
-              "registry_auth.config_file",
-              "registry_auth.config_file_content"
-            ]
+            "Description": "Username for the registry. Defaults to `DOCKER_REGISTRY_USER` env variable if set.",
+            "DefaultFunc": "ENV(DOCKER_REGISTRY_USER)"
           }
         }
       }
@@ -291,6 +272,11 @@
         "Description": "The network gateway of the container.",
         "Computed": true,
         "Deprecated": "Use `network_data` instead. The network gateway of the container as read from its NetworkSettings."
+      },
+      "gpus": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "GPU devices to add to the container. Currently, only the value `all` is supported. Passing any other value will result in unexpected behavior."
       },
       "group_add": {
         "Type": "Set",
@@ -739,7 +725,7 @@
             "name": {
               "Type": "String",
               "Required": true,
-              "Description": "The name of the network."
+              "Description": "The name or id of the network to use. You can use `name` or `id` attribute from a `docker_network` resource."
             }
           }
         }
@@ -836,6 +822,12 @@
           "Value": "false"
         }
       },
+      "runtime": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Runtime to use for the container.",
+        "Computed": true
+      },
       "security_opts": {
         "Type": "Set",
         "Optional": true,
@@ -870,6 +862,18 @@
           "Type": "bool",
           "Value": "false"
         }
+      },
+      "stop_signal": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Signal to stop a container (default `SIGTERM`).",
+        "Computed": true
+      },
+      "stop_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Timeout (in seconds) to stop a container.",
+        "Computed": true
       },
       "storage_opts": {
         "Type": "Map",
@@ -1117,6 +1121,16 @@
         "Optional": true,
         "Description": "If true, then the image is removed forcibly when the resource is destroyed."
       },
+      "id": {
+        "Type": "String",
+        "Description": "Unique identifier for this resource. This is not the image ID, but the ID of the resource in the Terraform state. This is used to identify the resource in the Terraform state. To reference the correct image ID, use the `image_id` attribute.",
+        "Computed": true
+      },
+      "image_id": {
+        "Type": "String",
+        "Description": "The ID of the image (as seen when executing `docker inspect` on the image). Can be used to reference the image via its ID in other resources.",
+        "Computed": true
+      },
       "keep_locally": {
         "Type": "Bool",
         "Optional": true,
@@ -1166,6 +1180,11 @@
         "Type": "String",
         "Description": "The image sha256 digest in the form of `repo[:tag]@sha256:\u003chash\u003e`.",
         "Computed": true
+      },
+      "triggers": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "A map of arbitrary strings that, when changed, will force the `docker_image` resource to be replaced. This can be used to rebuild an image when contents of source code folders change"
       }
     },
     "docker_network": {
@@ -2864,6 +2883,23 @@
             }
           }
         }
+      }
+    },
+    "docker_tag": {
+      "source_image": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the source image."
+      },
+      "source_image_id": {
+        "Type": "String",
+        "Description": "ImageID of the source image in the format of `sha256:\u003c\u003cID\u003e\u003e`",
+        "Computed": true
+      },
+      "target_image": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the target image."
       }
     },
     "docker_volume": {

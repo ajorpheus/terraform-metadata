@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "dnsimple",
   "type": "provider",
-  "version": "v0.11.0",
+  "version": "v0.14.0",
   "provider": {
     "account": {
       "Type": "String",
@@ -14,7 +14,7 @@
     "prefetch": {
       "Type": "Bool",
       "Optional": true,
-      "Description": "Flag to enable the prefetch of zone records",
+      "Description": "Flag to enable the prefetch of zone records.",
       "DefaultFunc": "ENV(PREFETCH)"
     },
     "sandbox": {
@@ -28,6 +28,11 @@
       "Required": true,
       "Description": "The API v2 token for API operations.",
       "DefaultFunc": "ENV(DNSIMPLE_TOKEN)"
+    },
+    "user_agent": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Custom string to append to the user agent used for sending HTTP requests to the API."
     }
   },
   "resources": {

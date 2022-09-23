@@ -3,12 +3,13 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "googleworkspace",
   "type": "provider",
-  "version": "v0.6.0",
+  "version": "v0.7.0",
   "provider": {
     "access_token": {
       "Type": "String",
       "Optional": true,
-      "Description": "A temporary [OAuth 2.0 access token] obtained from the Google Authorization server, i.e. the `Authorization: Bearer` token used to authenticate HTTP requests to Google Admin SDK APIs. This is an alternative to `credentials`, and ignores the `scopes` field. If both are specified, `access_token` will be used over the `credentials` field."
+      "Description": "A temporary [OAuth 2.0 access token] obtained from the Google Authorization server, i.e. the `Authorization: Bearer` token used to authenticate HTTP requests to Google Admin SDK APIs. This is an alternative to `credentials`, and ignores the `oauth_scopes` field. If both are specified, `access_token` will be used over the `credentials` field.",
+      "DefaultFunc": "MENV(GOOGLE_OAUTH_ACCESS_TOKEN)"
     },
     "credentials": {
       "Type": "String",
@@ -321,7 +322,7 @@
       "delivery_settings": {
         "Type": "String",
         "Optional": true,
-        "Description": "Defines mail delivery preferences of member. Acceptable values are:`ALL_MAIL`: All messages, delivered as soon as they arrive. `DAILY`: No more than one message a day. `DIGEST`: Up to 25 messages bundled into a single message. `DISABLED`: Remove subscription. `NONE`: No messages.",
+        "Description": "Defines mail delivery preferences of member. Acceptable values are: \n\t- `ALL_MAIL`: All messages, delivered as soon as they arrive.\n\t- `DAILY`: No more than one message a day.\n\t- `DIGEST`: Up to 25 messages bundled into a single message.\n\t- `DISABLED`: Remove subscription.\n\t- `NONE`: No messages.",
         "Default": {
           "Type": "string",
           "Value": "ALL_MAIL"
@@ -355,7 +356,7 @@
       "role": {
         "Type": "String",
         "Optional": true,
-        "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are: `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list. `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
+        "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are:\n\t- `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. \n\t- `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list.\n\t- `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
         "Default": {
           "Type": "string",
           "Value": "MEMBER"
@@ -369,7 +370,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The type of group member. Acceptable values are: `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. `GROUP`: The member is another group. `USER`: The member is a user.",
+        "Description": "The type of group member. Acceptable values are: \n\t- `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. \n\t- `GROUP`: The member is another group. \n\t- `USER`: The member is a user.",
         "Default": {
           "Type": "string",
           "Value": "USER"
@@ -404,7 +405,7 @@
             "delivery_settings": {
               "Type": "String",
               "Optional": true,
-              "Description": "Defines mail delivery preferences of member. Acceptable values are:`ALL_MAIL`: All messages, delivered as soon as they arrive. `DAILY`: No more than one message a day. `DIGEST`: Up to 25 messages bundled into a single message. `DISABLED`: Remove subscription. `NONE`: No messages.",
+              "Description": "Defines mail delivery preferences of member. Acceptable values are:\n\t- `ALL_MAIL`: All messages, delivered as soon as they arrive. \n\t- `DAILY`: No more than one message a day. \n\t- `DIGEST`: Up to 25 messages bundled into a single message. \n\t- `DISABLED`: Remove subscription. \n\t- `NONE`: No messages.",
               "Default": {
                 "Type": "string",
                 "Value": "ALL_MAIL"
@@ -423,7 +424,7 @@
             "role": {
               "Type": "String",
               "Optional": true,
-              "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are: `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list. `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
+              "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are: \n\t- `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. \n\t- `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list. \n\t- `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
               "Default": {
                 "Type": "string",
                 "Value": "MEMBER"
@@ -437,7 +438,7 @@
             "type": {
               "Type": "String",
               "Optional": true,
-              "Description": "The type of group member. Acceptable values are: `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. `GROUP`: The member is another group. `USER`: The member is a user.",
+              "Description": "The type of group member. Acceptable values are: \n\t- `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. \n\t- `GROUP`: The member is another group. \n\t- `USER`: The member is a user.",
               "Default": {
                 "Type": "string",
                 "Value": "USER"
@@ -562,7 +563,7 @@
       "message_moderation_level": {
         "Type": "String",
         "Optional": true,
-        "Description": "Moderation level of incoming messages. Possible values are: `MODERATE_ALL_MESSAGES`: All messages are sent to the group owner's email address for approval. If approved, the message is sent to the group. `MODERATE_NON_MEMBERS`: All messages from non group members are sent to the group owner's email address for approval. If approved, the message is sent to the group. `MODERATE_NEW_MEMBERS`: All messages from new members are sent to the group owner's email address for approval. If approved, the message is sent to the group. `MODERATE_NONE`: No moderator approval is required. Messages are delivered directly to the group.Note: When the `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the `message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam.When `member_can_post_as_the_group` is true, any message moderation settings on individual users or new members will not apply to posts made on behalf of the group.",
+        "Description": "Moderation level of incoming messages. Possible values are: \n\t- `MODERATE_ALL_MESSAGES`: All messages are sent to the group owner's email address for approval. If approved, the message is sent to the group. \n\t- `MODERATE_NON_MEMBERS`: All messages from non group members are sent to the group owner's email address for approval. If approved, the message is sent to the group. \n\t- `MODERATE_NEW_MEMBERS`: All messages from new members are sent to the group owner's email address for approval. If approved, the message is sent to the group. \n\t- `MODERATE_NONE`: No moderator approval is required. Messages are delivered directly to the group.\n\tNote: When the `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the `message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam.When `member_can_post_as_the_group` is true, any message moderation settings on individual users or new members will not apply to posts made on behalf of the group.",
         "Default": {
           "Type": "string",
           "Value": "MODERATE_NONE"
@@ -581,7 +582,7 @@
       "reply_to": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies who receives the default reply. Possible values are: `REPLY_TO_CUSTOM`: For replies to messages, use the group's custom email address. When set to `REPLY_TO_CUSTOM`, the `custom_reply_to` property holds the custom email address used when replying to a message, the customReplyTo property must have a value. Otherwise an error is returned. `REPLY_TO_SENDER`: The reply sent to author of message. `REPLY_TO_LIST`: This reply message is sent to the group. `REPLY_TO_OWNER`: The reply is sent to the owner(s) of the group. This does not include the group's managers. `REPLY_TO_IGNORE`: Group users individually decide where the message reply is sent. `REPLY_TO_MANAGERS`: This reply message is sent to the group's managers, which includes all managers and the group owner.",
+        "Description": "Specifies who receives the default reply. Possible values are: \n\t- `REPLY_TO_CUSTOM`: For replies to messages, use the group's custom email address. When set to `REPLY_TO_CUSTOM`, the `custom_reply_to` property holds the custom email address used when replying to a message, the customReplyTo property must have a value. Otherwise an error is returned. \n\t- `REPLY_TO_SENDER`: The reply sent to author of message. \n\t- `REPLY_TO_LIST`: This reply message is sent to the group. \n\t- `REPLY_TO_OWNER`: The reply is sent to the owner(s) of the group. This does not include the group's managers. \n\t- `REPLY_TO_IGNORE`: Group users individually decide where the message reply is sent. \n\t- `REPLY_TO_MANAGERS`: This reply message is sent to the group's managers, which includes all managers and the group owner.",
         "Default": {
           "Type": "string",
           "Value": "REPLY_TO_IGNORE"
@@ -599,7 +600,7 @@
       "spam_moderation_level": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies moderation levels for messages detected as spam. Possible values are: `ALLOW`: Post the message to the group. `MODERATE`: Send the message to the moderation queue. This is the default. `SILENTLY_MODERATE`: Send the message to the moderation queue, but do not send notification to moderators. `REJECT`: Immediately reject the message.",
+        "Description": "Specifies moderation levels for messages detected as spam. Possible values are: \n\t- `ALLOW`: Post the message to the group. \n\t- `MODERATE`: Send the message to the moderation queue. This is the default. \n\t- `SILENTLY_MODERATE`: Send the message to the moderation queue, but do not send notification to moderators. \n\t- `REJECT`: Immediately reject the message.",
         "Default": {
           "Type": "string",
           "Value": "MODERATE"
@@ -608,7 +609,7 @@
       "who_can_assist_content": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies who can moderate metadata. Possible values are: `ALL_MEMBERS`, `OWNERS_AND_MANAGERS`, `MANAGERS_ONLY`, `OWNERS_ONLY`, `NONE`",
+        "Description": "Specifies who can moderate metadata. Possible values are: \n\t- `ALL_MEMBERS`\n\t- `OWNERS_AND_MANAGERS`\n\t- `MANAGERS_ONLY`\n\t- `OWNERS_ONLY`\n\t- `NONE`",
         "Default": {
           "Type": "string",
           "Value": "NONE"
@@ -617,7 +618,7 @@
       "who_can_contact_owner": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permission to contact owner of the group via web UI. Possible values are: `ALL_IN_DOMAIN_CAN_CONTACT`, `ALL_MANAGERS_CAN_CONTACT`, `ALL_MEMBERS_CAN_CONTACT`, `ANYONE_CAN_CONTACT`, `ALL_OWNERS_CAN_CONTACT`",
+        "Description": "Permission to contact owner of the group via web UI. Possible values are: \n\t- `ALL_IN_DOMAIN_CAN_CONTACT`\n\t- `ALL_MANAGERS_CAN_CONTACT`\n\t- `ALL_MEMBERS_CAN_CONTACT`\n\t- `ANYONE_CAN_CONTACT`\n\t- `ALL_OWNERS_CAN_CONTACT`",
         "Default": {
           "Type": "string",
           "Value": "ANYONE_CAN_CONTACT"
@@ -626,7 +627,7 @@
       "who_can_discover_group": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies the set of users for whom this group is discoverable. Possible values are: `ANYONE_CAN_DISCOVER`, `ALL_IN_DOMAIN_CAN_DISCOVER`, `ALL_MEMBERS_CAN_DISCOVER`",
+        "Description": "Specifies the set of users for whom this group is discoverable. Possible values are: \n\t- `ANYONE_CAN_DISCOVER`\n\t- `ALL_IN_DOMAIN_CAN_DISCOVER`\n\t- `ALL_MEMBERS_CAN_DISCOVER`",
         "Default": {
           "Type": "string",
           "Value": "ALL_IN_DOMAIN_CAN_DISCOVER"
@@ -635,7 +636,7 @@
       "who_can_join": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permission to join group. Possible values are: `ANYONE_CAN_JOIN`: Any Internet user, both inside and outside your domain, can join the group. `ALL_IN_DOMAIN_CAN_JOIN`: Anyone in the account domain can join. This includes accounts with multiple domains. `INVITED_CAN_JOIN`: Candidates for membership can be invited to join. `CAN_REQUEST_TO_JOIN`: Non members can request an invitation to join.",
+        "Description": "Permission to join group. Possible values are: \n\t- `ANYONE_CAN_JOIN`: Any Internet user, both inside and outside your domain, can join the group. \n\t- `ALL_IN_DOMAIN_CAN_JOIN`: Anyone in the account domain can join. This includes accounts with multiple domains. \n\t- `INVITED_CAN_JOIN`: Candidates for membership can be invited to join. \n\t- `CAN_REQUEST_TO_JOIN`: Non members can request an invitation to join.",
         "Default": {
           "Type": "string",
           "Value": "CAN_REQUEST_TO_JOIN"
@@ -644,7 +645,7 @@
       "who_can_leave_group": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permission to leave the group. Possible values are: `ALL_MANAGERS_CAN_LEAVE`, `ALL_MEMBERS_CAN_LEAVE`, `NONE_CAN_LEAVE`",
+        "Description": "Permission to leave the group. Possible values are:\n\t- `ALL_MANAGERS_CAN_LEAVE`\n\t- `ALL_MEMBERS_CAN_LEAVE`\n\t- `NONE_CAN_LEAVE`",
         "Default": {
           "Type": "string",
           "Value": "ALL_MEMBERS_CAN_LEAVE"
@@ -653,7 +654,7 @@
       "who_can_moderate_content": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies who can moderate content. Possible values are: `ALL_MEMBERS`, `OWNERS_AND_MANAGERS`, `OWNERS_ONLY`, `NONE`",
+        "Description": "Specifies who can moderate content. Possible values are: \n\t- `ALL_MEMBERS`\n\t- `OWNERS_AND_MANAGERS`\n\t- `OWNERS_ONLY`\n\t- `NONE`",
         "Default": {
           "Type": "string",
           "Value": "OWNERS_AND_MANAGERS"
@@ -662,7 +663,7 @@
       "who_can_moderate_members": {
         "Type": "String",
         "Optional": true,
-        "Description": "Specifies who can manage members. Possible values are: `ALL_MEMBERS`, `OWNERS_AND_MANAGERS`, `OWNERS_ONLY`, `NONE`",
+        "Description": "Specifies who can manage members. Possible values are: \n\t- `ALL_MEMBERS`\n\t- `OWNERS_AND_MANAGERS`\n\t- `OWNERS_ONLY`\n\t- `NONE`",
         "Default": {
           "Type": "string",
           "Value": "OWNERS_AND_MANAGERS"
@@ -671,13 +672,13 @@
       "who_can_post_message": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permissions to post messages. Possible values are: `NONE_CAN_POST`: The group is disabled and archived. No one can post a message to this group. * When archiveOnly is false, updating whoCanPostMessage to NONE_CAN_POST, results in an error. * If archiveOnly is reverted from true to false, whoCanPostMessages is set to ALL_MANAGERS_CAN_POST. `ALL_MANAGERS_CAN_POST`: Managers, including group owners, can post messages. `ALL_MEMBERS_CAN_POST`: Any group member can post a message. `ALL_OWNERS_CAN_POST`: Only group owners can post a message. `ALL_IN_DOMAIN_CAN_POST`: Anyone in the account can post a message. `ANYONE_CAN_POST`: Any Internet user who outside your account can access your Google Groups service and post a message. *Note: When `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the`message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam. Users not belonging to the organization are not allowed to become members of this group.",
+        "Description": "Permissions to post messages. Possible values are: \n\t- `NONE_CAN_POST`: The group is disabled and archived. No one can post a message to this group. * When archiveOnly is false, updating whoCanPostMessage to NONE_CAN_POST, results in an error. * If archiveOnly is reverted from true to false, whoCanPostMessages is set to ALL_MANAGERS_CAN_POST. \n\t- `ALL_MANAGERS_CAN_POST`: Managers, including group owners, can post messages. \n\t- `ALL_MEMBERS_CAN_POST`: Any group member can post a message. \n\t- `ALL_OWNERS_CAN_POST`: Only group owners can post a message. \n\t- `ALL_IN_DOMAIN_CAN_POST`: Anyone in the account can post a message. \n\t- `ANYONE_CAN_POST`: Any Internet user who outside your account can access your Google Groups service and post a message. \n\t*Note: When `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the`message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam. Users not belonging to the organization are not allowed to become members of this group.",
         "Computed": true
       },
       "who_can_view_group": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permissions to view group messages. Possible values are: `ANYONE_CAN_VIEW`: Any Internet user can view the group's messages. `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in your account can view this group's messages. `ALL_MEMBERS_CAN_VIEW`: All group members can view the group's messages. `ALL_MANAGERS_CAN_VIEW`: Any group manager can view this group's messages. `ALL_OWNERS_CAN_VIEW`: The group owners can view this group's messages.",
+        "Description": "Permissions to view group messages. Possible values are: \n\t- `ANYONE_CAN_VIEW`: Any Internet user can view the group's messages. \n\t- `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in your account can view this group's messages. \n\t- `ALL_MEMBERS_CAN_VIEW`: All group members can view the group's messages. \n\t- `ALL_MANAGERS_CAN_VIEW`: Any group manager can view this group's messages. \n\t- `ALL_OWNERS_CAN_VIEW`: The group owners can view this group's messages.",
         "Default": {
           "Type": "string",
           "Value": "ALL_MEMBERS_CAN_VIEW"
@@ -686,7 +687,7 @@
       "who_can_view_membership": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permissions to view membership. Possible values are: `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in the account can view the group members list. If a group already has external members, those members can still send email to this group. `ALL_MEMBERS_CAN_VIEW`: The group members can view the group members list. `ALL_MANAGERS_CAN_VIEW`: The group managers can view group members list. `ALL_OWNERS_CAN_VIEW`: The group owners can view group members list.",
+        "Description": "Permissions to view membership. Possible values are: \n\t- `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in the account can view the group members list. If a group already has external members, those members can still send email to this group. \n\t- `ALL_MEMBERS_CAN_VIEW`: The group members can view the group members list. \n\t- `ALL_MANAGERS_CAN_VIEW`: The group managers can view group members list. \n\t- `ALL_OWNERS_CAN_VIEW`: The group owners can view group members list.",
         "Default": {
           "Type": "string",
           "Value": "ALL_MEMBERS_CAN_VIEW"
@@ -829,7 +830,7 @@
       "scope_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The scope in which this role is assigned. Valid values are 'CUSTOMER' or 'ORG_UNIT'",
+        "Description": "The scope in which this role is assigned. Valid values are :\n\t- `CUSTOMER`\n\t- `ORG_UNIT`",
         "Default": {
           "Type": "string",
           "Value": "CUSTOMER"
@@ -886,7 +887,7 @@
             "field_type": {
               "Type": "String",
               "Required": true,
-              "Description": "The type of the field. Acceptable values are: BOOL, DATE, DOUBLE, EMAIL, INT64, PHONE, STRING"
+              "Description": "The type of the field. Acceptable values are: \n\t- `BOOL`\n\t- `DATE`\n\t- `DOUBLE`\n\t- `EMAIL`\n\t- `INT64`\n\t- `PHONE`\n\t- `STRING`"
             },
             "indexed": {
               "Type": "Bool",
@@ -932,7 +933,7 @@
             "read_access_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "Specifies who can view values of this field. See Retrieve users as a non-administrator for more information. Acceptable values are: ADMINS_AND_SELF or ALL_DOMAIN_USERS. Note: It may take up to 24 hours for changes to this field to be reflected.",
+              "Description": "Specifies who can view values of this field. See Retrieve users as a non-administrator for more information. Acceptable values are: \n\t- `ADMINS_AND_SELF`\n\t- `ALL_DOMAIN_USERS`\n\tNote: It may take up to 24 hours for changes to this field to be reflected.",
               "Default": {
                 "Type": "string",
                 "Value": "ALL_DOMAIN_USERS"
@@ -1804,7 +1805,7 @@
             },
             "name": {
               "Type": "String",
-              "Description": "file name, relative to root of source tree",
+              "Description": "File name, relative to root of source tree",
               "Computed": true
             },
             "package": {
@@ -2009,7 +2010,7 @@
     "googleworkspace_group_member": {
       "delivery_settings": {
         "Type": "String",
-        "Description": "Defines mail delivery preferences of member. Acceptable values are:`ALL_MAIL`: All messages, delivered as soon as they arrive. `DAILY`: No more than one message a day. `DIGEST`: Up to 25 messages bundled into a single message. `DISABLED`: Remove subscription. `NONE`: No messages.",
+        "Description": "Defines mail delivery preferences of member. Acceptable values are: \n\t- `ALL_MAIL`: All messages, delivered as soon as they arrive.\n\t- `DAILY`: No more than one message a day.\n\t- `DIGEST`: Up to 25 messages bundled into a single message.\n\t- `DISABLED`: Remove subscription.\n\t- `NONE`: No messages.",
         "Computed": true
       },
       "email": {
@@ -2041,7 +2042,7 @@
       },
       "role": {
         "Type": "String",
-        "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are: `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list. `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
+        "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are:\n\t- `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. \n\t- `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list.\n\t- `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
         "Computed": true
       },
       "status": {
@@ -2051,7 +2052,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The type of group member. Acceptable values are: `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. `GROUP`: The member is another group. `USER`: The member is a user.",
+        "Description": "The type of group member. Acceptable values are: \n\t- `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. \n\t- `GROUP`: The member is another group. \n\t- `USER`: The member is a user.",
         "Computed": true
       }
     },
@@ -2087,7 +2088,7 @@
           "Info": {
             "delivery_settings": {
               "Type": "String",
-              "Description": "Defines mail delivery preferences of member. Acceptable values are:`ALL_MAIL`: All messages, delivered as soon as they arrive. `DAILY`: No more than one message a day. `DIGEST`: Up to 25 messages bundled into a single message. `DISABLED`: Remove subscription. `NONE`: No messages.",
+              "Description": "Defines mail delivery preferences of member. Acceptable values are:\n\t- `ALL_MAIL`: All messages, delivered as soon as they arrive. \n\t- `DAILY`: No more than one message a day. \n\t- `DIGEST`: Up to 25 messages bundled into a single message. \n\t- `DISABLED`: Remove subscription. \n\t- `NONE`: No messages.",
               "Computed": true
             },
             "email": {
@@ -2102,7 +2103,7 @@
             },
             "role": {
               "Type": "String",
-              "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are: `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list. `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
+              "Description": "The member's role in a group. The API returns an error for cycles in group memberships. For example, if group1 is a member of group2, group2 cannot be a member of group1. Acceptable values are: \n\t- `MANAGER`: This role is only available if the Google Groups for Business is enabled using the Admin Console. A `MANAGER` role can do everything done by an `OWNER` role except make a member an `OWNER` or delete the group. A group can have multiple `MANAGER` members. \n\t- `MEMBER`: This role can subscribe to a group, view discussion archives, and view the group's membership list. \n\t- `OWNER`: This role can send messages to the group, add or remove members, change member roles, change group's settings, and delete the group. An OWNER must be a member of the group. A group can have more than one OWNER.",
               "Computed": true
             },
             "status": {
@@ -2112,7 +2113,7 @@
             },
             "type": {
               "Type": "String",
-              "Description": "The type of group member. Acceptable values are: `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. `GROUP`: The member is another group. `USER`: The member is a user.",
+              "Description": "The type of group member. Acceptable values are: \n\t- `CUSTOMER`: The member represents all users in a domain. An email address is not returned and the ID returned is the customer ID. \n\t- `GROUP`: The member is another group. \n\t- `USER`: The member is a user.",
               "Computed": true
             }
           }
@@ -2197,7 +2198,7 @@
       },
       "message_moderation_level": {
         "Type": "String",
-        "Description": "Moderation level of incoming messages. Possible values are: `MODERATE_ALL_MESSAGES`: All messages are sent to the group owner's email address for approval. If approved, the message is sent to the group. `MODERATE_NON_MEMBERS`: All messages from non group members are sent to the group owner's email address for approval. If approved, the message is sent to the group. `MODERATE_NEW_MEMBERS`: All messages from new members are sent to the group owner's email address for approval. If approved, the message is sent to the group. `MODERATE_NONE`: No moderator approval is required. Messages are delivered directly to the group.Note: When the `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the `message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam.When `member_can_post_as_the_group` is true, any message moderation settings on individual users or new members will not apply to posts made on behalf of the group.",
+        "Description": "Moderation level of incoming messages. Possible values are: \n\t- `MODERATE_ALL_MESSAGES`: All messages are sent to the group owner's email address for approval. If approved, the message is sent to the group. \n\t- `MODERATE_NON_MEMBERS`: All messages from non group members are sent to the group owner's email address for approval. If approved, the message is sent to the group. \n\t- `MODERATE_NEW_MEMBERS`: All messages from new members are sent to the group owner's email address for approval. If approved, the message is sent to the group. \n\t- `MODERATE_NONE`: No moderator approval is required. Messages are delivered directly to the group.\n\tNote: When the `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the `message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam.When `member_can_post_as_the_group` is true, any message moderation settings on individual users or new members will not apply to posts made on behalf of the group.",
         "Computed": true
       },
       "name": {
@@ -2212,7 +2213,7 @@
       },
       "reply_to": {
         "Type": "String",
-        "Description": "Specifies who receives the default reply. Possible values are: `REPLY_TO_CUSTOM`: For replies to messages, use the group's custom email address. When set to `REPLY_TO_CUSTOM`, the `custom_reply_to` property holds the custom email address used when replying to a message, the customReplyTo property must have a value. Otherwise an error is returned. `REPLY_TO_SENDER`: The reply sent to author of message. `REPLY_TO_LIST`: This reply message is sent to the group. `REPLY_TO_OWNER`: The reply is sent to the owner(s) of the group. This does not include the group's managers. `REPLY_TO_IGNORE`: Group users individually decide where the message reply is sent. `REPLY_TO_MANAGERS`: This reply message is sent to the group's managers, which includes all managers and the group owner.",
+        "Description": "Specifies who receives the default reply. Possible values are: \n\t- `REPLY_TO_CUSTOM`: For replies to messages, use the group's custom email address. When set to `REPLY_TO_CUSTOM`, the `custom_reply_to` property holds the custom email address used when replying to a message, the customReplyTo property must have a value. Otherwise an error is returned. \n\t- `REPLY_TO_SENDER`: The reply sent to author of message. \n\t- `REPLY_TO_LIST`: This reply message is sent to the group. \n\t- `REPLY_TO_OWNER`: The reply is sent to the owner(s) of the group. This does not include the group's managers. \n\t- `REPLY_TO_IGNORE`: Group users individually decide where the message reply is sent. \n\t- `REPLY_TO_MANAGERS`: This reply message is sent to the group's managers, which includes all managers and the group owner.",
         "Computed": true
       },
       "send_message_deny_notification": {
@@ -2222,58 +2223,127 @@
       },
       "spam_moderation_level": {
         "Type": "String",
-        "Description": "Specifies moderation levels for messages detected as spam. Possible values are: `ALLOW`: Post the message to the group. `MODERATE`: Send the message to the moderation queue. This is the default. `SILENTLY_MODERATE`: Send the message to the moderation queue, but do not send notification to moderators. `REJECT`: Immediately reject the message.",
+        "Description": "Specifies moderation levels for messages detected as spam. Possible values are: \n\t- `ALLOW`: Post the message to the group. \n\t- `MODERATE`: Send the message to the moderation queue. This is the default. \n\t- `SILENTLY_MODERATE`: Send the message to the moderation queue, but do not send notification to moderators. \n\t- `REJECT`: Immediately reject the message.",
         "Computed": true
       },
       "who_can_assist_content": {
         "Type": "String",
-        "Description": "Specifies who can moderate metadata. Possible values are: `ALL_MEMBERS`, `OWNERS_AND_MANAGERS`, `MANAGERS_ONLY`, `OWNERS_ONLY`, `NONE`",
+        "Description": "Specifies who can moderate metadata. Possible values are: \n\t- `ALL_MEMBERS`\n\t- `OWNERS_AND_MANAGERS`\n\t- `MANAGERS_ONLY`\n\t- `OWNERS_ONLY`\n\t- `NONE`",
         "Computed": true
       },
       "who_can_contact_owner": {
         "Type": "String",
-        "Description": "Permission to contact owner of the group via web UI. Possible values are: `ALL_IN_DOMAIN_CAN_CONTACT`, `ALL_MANAGERS_CAN_CONTACT`, `ALL_MEMBERS_CAN_CONTACT`, `ANYONE_CAN_CONTACT`, `ALL_OWNERS_CAN_CONTACT`",
+        "Description": "Permission to contact owner of the group via web UI. Possible values are: \n\t- `ALL_IN_DOMAIN_CAN_CONTACT`\n\t- `ALL_MANAGERS_CAN_CONTACT`\n\t- `ALL_MEMBERS_CAN_CONTACT`\n\t- `ANYONE_CAN_CONTACT`\n\t- `ALL_OWNERS_CAN_CONTACT`",
         "Computed": true
       },
       "who_can_discover_group": {
         "Type": "String",
-        "Description": "Specifies the set of users for whom this group is discoverable. Possible values are: `ANYONE_CAN_DISCOVER`, `ALL_IN_DOMAIN_CAN_DISCOVER`, `ALL_MEMBERS_CAN_DISCOVER`",
+        "Description": "Specifies the set of users for whom this group is discoverable. Possible values are: \n\t- `ANYONE_CAN_DISCOVER`\n\t- `ALL_IN_DOMAIN_CAN_DISCOVER`\n\t- `ALL_MEMBERS_CAN_DISCOVER`",
         "Computed": true
       },
       "who_can_join": {
         "Type": "String",
-        "Description": "Permission to join group. Possible values are: `ANYONE_CAN_JOIN`: Any Internet user, both inside and outside your domain, can join the group. `ALL_IN_DOMAIN_CAN_JOIN`: Anyone in the account domain can join. This includes accounts with multiple domains. `INVITED_CAN_JOIN`: Candidates for membership can be invited to join. `CAN_REQUEST_TO_JOIN`: Non members can request an invitation to join.",
+        "Description": "Permission to join group. Possible values are: \n\t- `ANYONE_CAN_JOIN`: Any Internet user, both inside and outside your domain, can join the group. \n\t- `ALL_IN_DOMAIN_CAN_JOIN`: Anyone in the account domain can join. This includes accounts with multiple domains. \n\t- `INVITED_CAN_JOIN`: Candidates for membership can be invited to join. \n\t- `CAN_REQUEST_TO_JOIN`: Non members can request an invitation to join.",
         "Computed": true
       },
       "who_can_leave_group": {
         "Type": "String",
-        "Description": "Permission to leave the group. Possible values are: `ALL_MANAGERS_CAN_LEAVE`, `ALL_MEMBERS_CAN_LEAVE`, `NONE_CAN_LEAVE`",
+        "Description": "Permission to leave the group. Possible values are:\n\t- `ALL_MANAGERS_CAN_LEAVE`\n\t- `ALL_MEMBERS_CAN_LEAVE`\n\t- `NONE_CAN_LEAVE`",
         "Computed": true
       },
       "who_can_moderate_content": {
         "Type": "String",
-        "Description": "Specifies who can moderate content. Possible values are: `ALL_MEMBERS`, `OWNERS_AND_MANAGERS`, `OWNERS_ONLY`, `NONE`",
+        "Description": "Specifies who can moderate content. Possible values are: \n\t- `ALL_MEMBERS`\n\t- `OWNERS_AND_MANAGERS`\n\t- `OWNERS_ONLY`\n\t- `NONE`",
         "Computed": true
       },
       "who_can_moderate_members": {
         "Type": "String",
-        "Description": "Specifies who can manage members. Possible values are: `ALL_MEMBERS`, `OWNERS_AND_MANAGERS`, `OWNERS_ONLY`, `NONE`",
+        "Description": "Specifies who can manage members. Possible values are: \n\t- `ALL_MEMBERS`\n\t- `OWNERS_AND_MANAGERS`\n\t- `OWNERS_ONLY`\n\t- `NONE`",
         "Computed": true
       },
       "who_can_post_message": {
         "Type": "String",
-        "Description": "Permissions to post messages. Possible values are: `NONE_CAN_POST`: The group is disabled and archived. No one can post a message to this group. * When archiveOnly is false, updating whoCanPostMessage to NONE_CAN_POST, results in an error. * If archiveOnly is reverted from true to false, whoCanPostMessages is set to ALL_MANAGERS_CAN_POST. `ALL_MANAGERS_CAN_POST`: Managers, including group owners, can post messages. `ALL_MEMBERS_CAN_POST`: Any group member can post a message. `ALL_OWNERS_CAN_POST`: Only group owners can post a message. `ALL_IN_DOMAIN_CAN_POST`: Anyone in the account can post a message. `ANYONE_CAN_POST`: Any Internet user who outside your account can access your Google Groups service and post a message. *Note: When `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the`message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam. Users not belonging to the organization are not allowed to become members of this group.",
+        "Description": "Permissions to post messages. Possible values are: \n\t- `NONE_CAN_POST`: The group is disabled and archived. No one can post a message to this group. * When archiveOnly is false, updating whoCanPostMessage to NONE_CAN_POST, results in an error. * If archiveOnly is reverted from true to false, whoCanPostMessages is set to ALL_MANAGERS_CAN_POST. \n\t- `ALL_MANAGERS_CAN_POST`: Managers, including group owners, can post messages. \n\t- `ALL_MEMBERS_CAN_POST`: Any group member can post a message. \n\t- `ALL_OWNERS_CAN_POST`: Only group owners can post a message. \n\t- `ALL_IN_DOMAIN_CAN_POST`: Anyone in the account can post a message. \n\t- `ANYONE_CAN_POST`: Any Internet user who outside your account can access your Google Groups service and post a message. \n\t*Note: When `who_can_post_message` is set to `ANYONE_CAN_POST`, we recommend the`message_moderation_level` be set to `MODERATE_NON_MEMBERS` to protect the group from possible spam. Users not belonging to the organization are not allowed to become members of this group.",
         "Computed": true
       },
       "who_can_view_group": {
         "Type": "String",
-        "Description": "Permissions to view group messages. Possible values are: `ANYONE_CAN_VIEW`: Any Internet user can view the group's messages. `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in your account can view this group's messages. `ALL_MEMBERS_CAN_VIEW`: All group members can view the group's messages. `ALL_MANAGERS_CAN_VIEW`: Any group manager can view this group's messages. `ALL_OWNERS_CAN_VIEW`: The group owners can view this group's messages.",
+        "Description": "Permissions to view group messages. Possible values are: \n\t- `ANYONE_CAN_VIEW`: Any Internet user can view the group's messages. \n\t- `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in your account can view this group's messages. \n\t- `ALL_MEMBERS_CAN_VIEW`: All group members can view the group's messages. \n\t- `ALL_MANAGERS_CAN_VIEW`: Any group manager can view this group's messages. \n\t- `ALL_OWNERS_CAN_VIEW`: The group owners can view this group's messages.",
         "Computed": true
       },
       "who_can_view_membership": {
         "Type": "String",
-        "Description": "Permissions to view membership. Possible values are: `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in the account can view the group members list. If a group already has external members, those members can still send email to this group. `ALL_MEMBERS_CAN_VIEW`: The group members can view the group members list. `ALL_MANAGERS_CAN_VIEW`: The group managers can view group members list. `ALL_OWNERS_CAN_VIEW`: The group owners can view group members list.",
+        "Description": "Permissions to view membership. Possible values are: \n\t- `ALL_IN_DOMAIN_CAN_VIEW`: Anyone in the account can view the group members list. If a group already has external members, those members can still send email to this group. \n\t- `ALL_MEMBERS_CAN_VIEW`: The group members can view the group members list. \n\t- `ALL_MANAGERS_CAN_VIEW`: The group managers can view group members list. \n\t- `ALL_OWNERS_CAN_VIEW`: The group owners can view group members list.",
         "Computed": true
+      }
+    },
+    "googleworkspace_groups": {
+      "groups": {
+        "Type": "List",
+        "Description": "A list of Group resources.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "admin_created": {
+              "Type": "Bool",
+              "Description": "Value is true if this group was created by an administrator rather than a user.",
+              "Computed": true
+            },
+            "aliases": {
+              "Type": "List",
+              "Description": "asps.list of group's email addresses.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "description": {
+              "Type": "String",
+              "Description": "An extended description to help users determine the purpose of a group.For example, you can include information about who should join the group,the types of messages to send to the group, links to FAQs about the group, or related groups.",
+              "Computed": true
+            },
+            "direct_members_count": {
+              "Type": "Int",
+              "Description": "The number of users that are direct members of the group.If a group is a member (child) of this group (the parent),members of the child group are not counted in the directMembersCount property of the parent group.",
+              "Computed": true
+            },
+            "email": {
+              "Type": "String",
+              "Description": "The group's email address. If your account has multiple domains,select the appropriate domain for the email address. The email must be unique.",
+              "Computed": true
+            },
+            "etag": {
+              "Type": "String",
+              "Description": "ETag of the resource.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The unique ID of a group. A group id can be used as a group request URI's groupKey.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The group's display name.",
+              "Computed": true
+            },
+            "non_editable_aliases": {
+              "Type": "List",
+              "Description": "asps.list of the group's non-editable alias email addresses that are outside of the account's primary domain or subdomains. These are functioning email addresses used by the group.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       }
     },
     "googleworkspace_org_unit": {
@@ -2465,7 +2535,7 @@
             },
             "field_type": {
               "Type": "String",
-              "Description": "The type of the field. Acceptable values are: BOOL, DATE, DOUBLE, EMAIL, INT64, PHONE, STRING",
+              "Description": "The type of the field. Acceptable values are: \n\t- `BOOL`\n\t- `DATE`\n\t- `DOUBLE`\n\t- `EMAIL`\n\t- `INT64`\n\t- `PHONE`\n\t- `STRING`",
               "Computed": true
             },
             "indexed": {
@@ -2502,7 +2572,7 @@
             },
             "read_access_type": {
               "Type": "String",
-              "Description": "Specifies who can view values of this field. See Retrieve users as a non-administrator for more information. Acceptable values are: ADMINS_AND_SELF or ALL_DOMAIN_USERS. Note: It may take up to 24 hours for changes to this field to be reflected.",
+              "Description": "Specifies who can view values of this field. See Retrieve users as a non-administrator for more information. Acceptable values are: \n\t- `ADMINS_AND_SELF`\n\t- `ALL_DOMAIN_USERS`\n\tNote: It may take up to 24 hours for changes to this field to be reflected.",
               "Computed": true
             }
           }

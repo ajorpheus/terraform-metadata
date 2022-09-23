@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "acme",
   "type": "provider",
-  "version": "v2.8.0",
+  "version": "v2.10.0",
   "provider": {
     "server_url": {
       "Type": "String",

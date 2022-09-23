@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "helm",
   "type": "provider",
-  "version": "v2.4.1",
+  "version": "v2.6.0",
   "provider": {
     "debug": {
       "Type": "Bool",
@@ -154,6 +154,12 @@
             "Description": "The password to use for HTTP basic authentication when accessing the Kubernetes master endpoint.",
             "DefaultFunc": "ENV(KUBE_PASSWORD)"
           },
+          "proxy_url": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "URL to the proxy to be used for all API requests",
+            "DefaultFunc": "ENV(KUBE_PROXY_URL)"
+          },
           "token": {
             "Type": "String",
             "Optional": true,
@@ -289,7 +295,7 @@
         "Description": "Location of public keys used for verification. Used only if `verify` is true",
         "Default": {
           "Type": "string",
-          "Value": "/home/runner/.gnupg/pubring.gpg"
+          "Value": "/Users/b132ka/.gnupg/pubring.gpg"
         }
       },
       "lint": {
@@ -373,6 +379,15 @@
         "Description": "Namespace to install the release into.",
         "DefaultFunc": "ENV(HELM_NAMESPACE)"
       },
+      "pass_credentials": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Pass credentials to all domains",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "postrender": {
         "Type": "List",
         "Optional": true,
@@ -383,6 +398,16 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "args": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "an argument to the post-renderer (can specify multiple)",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "binary_path": {
               "Type": "String",
               "Required": true,
@@ -678,7 +703,7 @@
         "Description": "Location of public keys used for verification. Used only if `verify` is true",
         "Default": {
           "Type": "string",
-          "Value": "/home/runner/.gnupg/pubring.gpg"
+          "Value": "/Users/b132ka/.gnupg/pubring.gpg"
         }
       },
       "manifest": {
@@ -714,6 +739,11 @@
         "Optional": true,
         "Description": "Rendered notes if the chart contains a `NOTES.txt`.",
         "Computed": true
+      },
+      "pass_credentials": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Pass credentials to all domains"
       },
       "postrender": {
         "Type": "List",

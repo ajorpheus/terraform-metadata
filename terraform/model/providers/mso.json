@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "mso",
   "type": "provider",
-  "version": "v0.4.1",
+  "version": "v0.7.0",
   "provider": {
     "domain": {
       "Type": "String",
@@ -81,13 +81,38 @@
         "Type": "String",
         "Required": true
       },
+      "template": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "display_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "tenant_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
       "template_name": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Deprecated": "use template by specifying a name, display_name and tenant_id instead"
       },
       "tenant_id": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Deprecated": "use template by specifying a name, display_name and tenant_id instead"
       }
     },
     "mso_schema_site": {
@@ -131,6 +156,10 @@
         "Type": "String",
         "Required": true
       },
+      "private_link_label": {
+        "Type": "String",
+        "Optional": true
+      },
       "schema_id": {
         "Type": "String",
         "Required": true
@@ -160,11 +189,29 @@
       },
       "dn": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "ConflictsWith": [
+          "domain_name",
+          "domain_dn"
+        ],
+        "Deprecated": "use domain_dn alone or domain_name in association with domain_type and vmm_domain_type when it is applicable."
+      },
+      "domain_dn": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "domain_name",
+          "vmm_domain_type",
+          "domain_type"
+        ]
+      },
+      "domain_name": {
+        "Type": "String",
+        "Optional": true
       },
       "domain_type": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "enhanced_lag_policy_dn": {
         "Type": "String",
@@ -230,6 +277,10 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "vmm_domain_type": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "mso_schema_site_anp_epg_selector": {
@@ -652,6 +703,11 @@
                     "Type": "String",
                     "Required": true
                   },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "usage": {
                     "Type": "String",
                     "Optional": true,
@@ -659,7 +715,8 @@
                   },
                   "zone": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -812,6 +869,10 @@
       }
     },
     "mso_schema_template_anp_epg": {
+      "access_type": {
+        "Type": "String",
+        "Optional": true
+      },
       "anp_name": {
         "Type": "String",
         "Required": true
@@ -830,10 +891,26 @@
         "Optional": true,
         "Computed": true
       },
+      "custom_service_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "deployment_type": {
+        "Type": "String",
+        "Optional": true
+      },
       "display_name": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "epg_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "application"
+        }
       },
       "intersite_multicast_source": {
         "Type": "Bool",
@@ -868,6 +945,10 @@
       "schema_id": {
         "Type": "String",
         "Required": true
+      },
+      "service_type": {
+        "Type": "String",
+        "Optional": true
       },
       "template_name": {
         "Type": "String",
@@ -1057,6 +1138,11 @@
       }
     },
     "mso_schema_template_bd": {
+      "arp_flooding": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "dhcp_policy": {
         "Type": "Map",
         "Optional": true,
@@ -1075,6 +1161,11 @@
         "Optional": true,
         "Computed": true
       },
+      "ipv6_unknown_multicast_flooding": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "layer2_stretch": {
         "Type": "Bool",
         "Optional": true,
@@ -1087,6 +1178,11 @@
       },
       "layer3_multicast": {
         "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "multi_destination_flooding": {
+        "Type": "String",
         "Optional": true,
         "Computed": true
       },
@@ -1106,6 +1202,21 @@
       "template_name": {
         "Type": "String",
         "Required": true
+      },
+      "unicast_routing": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "unknown_multicast_flooding": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "virtual_mac_address": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "vrf_name": {
         "Type": "String",
@@ -2165,13 +2276,38 @@
         "Type": "String",
         "Required": true
       },
+      "template": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "display_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "tenant_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
       "template_name": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "see template"
       },
       "tenant_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "see template"
       }
     },
     "mso_schema_site": {
@@ -2250,11 +2386,29 @@
       },
       "dn": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "ConflictsWith": [
+          "domain_name",
+          "domain_dn"
+        ],
+        "Deprecated": "use domain_dn alone or domain_name in association with domain_type and vmm_domain_type when it is applicable."
+      },
+      "domain_dn": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "domain_name",
+          "vmm_domain_type",
+          "domain_type"
+        ]
+      },
+      "domain_name": {
+        "Type": "String",
+        "Optional": true
       },
       "domain_type": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "enhanced_lag_policy_dn": {
         "Type": "String",
@@ -2315,12 +2469,16 @@
       },
       "template_name": {
         "Type": "String",
-        "Optional": true
+        "Required": true
       },
       "vlan_encap_mode": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "vmm_domain_type": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "mso_schema_site_anp_epg_selector": {
@@ -2712,6 +2870,11 @@
                 "Type": "SchemaInfo",
                 "Info": {
                   "ip": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "name": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true

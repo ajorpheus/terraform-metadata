@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "heroku",
   "type": "provider",
-  "version": "v4.8.0",
+  "version": "v5.1.4-pre1",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -44,7 +44,7 @@
             "Optional": true,
             "Default": {
               "Type": "int64",
-              "Value": "5"
+              "Value": "10"
             }
           },
           "post_domain_create_delay": {
@@ -122,7 +122,7 @@
       }
     },
     "heroku_addon": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -132,7 +132,6 @@
       },
       "config_var_values": {
         "Type": "Map",
-        "Optional": true,
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -308,7 +307,7 @@
       }
     },
     "heroku_app_feature": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -326,7 +325,7 @@
       }
     },
     "heroku_app_release": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -373,7 +372,7 @@
       }
     },
     "heroku_build": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -490,7 +489,7 @@
       }
     },
     "heroku_collaborator": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -520,7 +519,7 @@
       }
     },
     "heroku_domain": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -539,7 +538,7 @@
       }
     },
     "heroku_drain": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -563,7 +562,7 @@
       }
     },
     "heroku_formation": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -640,13 +639,9 @@
       }
     },
     "heroku_pipeline_coupling": {
-      "app": {
-        "Type": "String",
-        "Required": true
-      },
       "app_id": {
         "Type": "String",
-        "Computed": true
+        "Required": true
       },
       "pipeline": {
         "Type": "String",
@@ -726,7 +721,7 @@
       }
     },
     "heroku_slug": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -980,7 +975,7 @@
       }
     },
     "heroku_team_collaborator": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Required": true
       },
@@ -1025,7 +1020,7 @@
   },
   "data-sources": {
     "heroku_addon": {
-      "app": {
+      "app_id": {
         "Type": "String",
         "Computed": true
       },

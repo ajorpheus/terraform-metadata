@@ -1,0 +1,1393 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "coralogix",
+  "type": "provider",
+  "version": "v1.2.9",
+  "provider": {
+    "api_key": {
+      "Type": "String",
+      "Required": true,
+      "Description": "The Coralogix API key.",
+      "DefaultFunc": "ENV(CORALOGIX_API_KEY)"
+    },
+    "timeout": {
+      "Type": "Int",
+      "Optional": true,
+      "Description": "The Coralogix API timeout.",
+      "DefaultFunc": "ENV(CORALOGIX_API_TIMEOUT)"
+    },
+    "url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The Coralogix API URL.",
+      "DefaultFunc": "ENV(CORALOGIX_URL)"
+    }
+  },
+  "resources": {
+    "coralogix_alert": {
+      "alert_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "condition": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "condition_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "group_by": {
+              "Type": "String",
+              "Optional": true,
+              "Deprecated": "group_by is no longer being used and will be deprecated in the next release. Please use 'group_by_array'",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "group_by_array": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "relative_timeframe": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "threshold": {
+              "Type": "Float",
+              "Required": true
+            },
+            "timeframe": {
+              "Type": "String",
+              "Required": true
+            },
+            "unique_count_key": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            }
+          }
+        }
+      },
+      "content": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alias": {
+              "Type": "String",
+              "Optional": true
+            },
+            "applications": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "severities": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 6,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subsystems": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "text": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "metric": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "arithmetic_operator": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "arithmetic_operator_modifier": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "0"
+              }
+            },
+            "field": {
+              "Type": "String",
+              "Optional": true
+            },
+            "non_null_percentage": {
+              "Type": "Int",
+              "Required": true
+            },
+            "promql_text": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "sample_threshold_percentage": {
+              "Type": "Int",
+              "Required": true
+            },
+            "source": {
+              "Type": "String",
+              "Optional": true
+            },
+            "swap_null_values": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "notifications": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "emails": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "integrations": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "notify_every": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
+      },
+      "notify_group_by_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "notify_per_group_by": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ratio": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alias": {
+              "Type": "String",
+              "Required": true
+            },
+            "applications": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "group_by": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "severities": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 6,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subsystems": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "text": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            }
+          }
+        }
+      },
+      "schedule": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "days": {
+              "Type": "Set",
+              "Required": true,
+              "MaxItems": 7,
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "end": {
+              "Type": "String",
+              "Required": true
+            },
+            "start": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "severity": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "coralogix_rule": {
+      "delete_source": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "destination_field": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "text"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "escaped_value": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "expression": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": ".*"
+        }
+      },
+      "format_standard": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "keep_blocked_logs": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "order": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "overwrite_destination": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "replace_value": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "rule_matcher": {
+        "Type": "Set",
+        "Optional": true,
+        "Deprecated": "rule_matcher is no longer being used and will be deprecated in the next release.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "constraint": {
+              "Type": "String",
+              "Required": true
+            },
+            "field": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "rules_group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "source_field": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "text"
+        }
+      },
+      "time_format": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "coralogix_rules_group": {
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "creator": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Coralogix Terraform Provider"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "order": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "rule_matcher": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "constraint": {
+              "Type": "String",
+              "Required": true
+            },
+            "field": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "rules": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "delete_source": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "destination_field": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "escaped_value": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "expression": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "keep_blocked_logs": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "order": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "overwrite_destinaton": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "replace_value": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "rule_matcher": {
+                    "Type": "Set",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "constraint": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "field": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "source_field": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "coralogix_webhook": {
+      "alias": {
+        "Type": "String",
+        "Required": true
+      },
+      "company_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "email_group": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "jira": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_token": {
+              "Type": "String",
+              "Required": true
+            },
+            "email": {
+              "Type": "String",
+              "Required": true
+            },
+            "project_key": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "pager_duty": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "web_request": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "headers": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "{}"
+              }
+            },
+            "method": {
+              "Type": "String",
+              "Required": true
+            },
+            "payload": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "{}"
+              }
+            },
+            "uuid": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "data-sources": {
+    "coralogix_alert": {
+      "alert_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "condition": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group_by": {
+              "Type": "String",
+              "Computed": true,
+              "Deprecated": "group_by is no longer being used and will be deprecated in the next release. Please use 'group_by_array'"
+            },
+            "group_by_array": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "relative_timeframe": {
+              "Type": "String",
+              "Computed": true
+            },
+            "threshold": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "timeframe": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "unique_count_key": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "content": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "filter": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alias": {
+              "Type": "String",
+              "Computed": true
+            },
+            "applications": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "severities": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subsystems": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "text": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "metric": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "arithmetic_operator": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "arithmetic_operator_modifier": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "field": {
+              "Type": "String",
+              "Computed": true
+            },
+            "non_null_percentage": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "promql_text": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sample_threshold_percentage": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "source": {
+              "Type": "String",
+              "Computed": true
+            },
+            "swap_null_values": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notifications": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "emails": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "integrations": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "notify_every": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "notify_group_by_only": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "notify_per_group_by": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "ratio": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alias": {
+              "Type": "String",
+              "Computed": true
+            },
+            "applications": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "group_by": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "severities": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subsystems": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "text": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "schedule": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "days": {
+              "Type": "Set",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "end": {
+              "Type": "String",
+              "Computed": true
+            },
+            "start": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "severity": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "unique_identifier": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "coralogix_rule": {
+      "delete_source": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "destination_field": {
+        "Type": "String",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "escaped_value": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "expression": {
+        "Type": "String",
+        "Computed": true
+      },
+      "keep_blocked_logs": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "order": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "overwrite_destination": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "replace_value": {
+        "Type": "String",
+        "Computed": true
+      },
+      "rule_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "rule_matcher": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "constraint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "field": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "rules_group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "source_field": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "coralogix_rules_group": {
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "creator": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "order": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "rule_matcher": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "constraint": {
+              "Type": "String",
+              "Computed": true
+            },
+            "field": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "rules": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "delete_source": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "destination_field": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "enabled": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "escaped_value": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "expression": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "keep_blocked_logs": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "order": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "overwrite_destinaton": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "replace_value": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "rule_matcher": {
+                    "Type": "Set",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "constraint": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "field": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "source_field": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "rules_group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "coralogix_webhook": {
+      "alias": {
+        "Type": "String",
+        "Computed": true
+      },
+      "company_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "email_group": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "jira": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_token": {
+              "Type": "String",
+              "Computed": true
+            },
+            "email": {
+              "Type": "String",
+              "Computed": true
+            },
+            "project_key": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "pager_duty": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "web_request": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "headers": {
+              "Type": "String",
+              "Computed": true
+            },
+            "method": {
+              "Type": "String",
+              "Computed": true
+            },
+            "payload": {
+              "Type": "String",
+              "Computed": true
+            },
+            "uuid": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1897 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v1",
+  "name": "netris",
+  "type": "provider",
+  "version": "v2.0.0",
+  "provider": {
+    "address": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(NETRIS_ADDRESS)"
+    },
+    "login": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(NETRIS_LOGIN)"
+    },
+    "password": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(NETRIS_PASSWORD)"
+    }
+  },
+  "resources": {
+    "netris_acl": {
+      "action": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Permit or Deny forwarding of matched packets. Valid values are `permit` and `deny`."
+      },
+      "comment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Descriptive comment, commonly used for approval workflows.",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "dstportfrom": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Destination port from. Valid values should be in range 1-65535"
+      },
+      "dstportgroup": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Match destination ports on a group of ports. Valid value name of ACL Port Group"
+      },
+      "dstportto": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Destination port to. Valid values should be in range 1-65535"
+      },
+      "dstprefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Destination IPv4/IPv6 address. Example `0.0.0.0/0`"
+      },
+      "established": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "For TCP, also match reverse packets except with TCP SYN flag. For non-TCP, also generate a reverse rule with swapped source/destination. Valid values are `0` and `1`. Default value is `1`",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "icmptype": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Custom IPv4 ICMP code. Valid values should be in range 1-37 according to RFC 1700. Default value is `1`",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique name for the ACL entry."
+      },
+      "proto": {
+        "Type": "String",
+        "Required": true,
+        "Description": "IP protocol to match. Valid values are `all`, `ip`, `tcp`, `udp`, `icmp`, `icmpv6`."
+      },
+      "reverse": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "For TCP, also match reverse packets except with TCP SYN flag. For non-TCP, also generate a reverse rule with swapped source/destination. Default value is `true`",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "srcportfrom": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Source port from. Valid values should be in range 1-65535"
+      },
+      "srcportgroup": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Match source ports on a group of ports. Valid value name of ACL Port Group"
+      },
+      "srcportto": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Source port to. Valid values should be in range 1-65535"
+      },
+      "srcprefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Source IPv4/IPv6 address. Example `192.0.2.0/24`"
+      },
+      "validuntil": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "netris_acltwozero": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ACL 2.0 unique name"
+      },
+      "privacy": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Valid values are `public`, `private`, `hidden`. Public - Service is visible to all users and every user can subscribe instances and get access without approval. Private - Service is visible to all users, instances can be subscribed either by service owning tenant members or will require approval. Hidden - Service is not visible to any user except those who are part of tenant owning the service, instances can be subscribed only by service owning tenant members."
+      },
+      "publishers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The block of publisher configurations",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "instanceids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of Instances ID (ROH)",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "lbvips": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of LB VIPs ID",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "prefixes": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List with prefixes",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "protocol": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The block of protocol configurations",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Custom name for the current protocol"
+                  },
+                  "port": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Port number. Example `80`. Or protocol number when protocol == `ip`"
+                  },
+                  "portgroupid": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "ID of Port Group. Use instead of port key"
+                  },
+                  "protocol": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Valid protocol. Possible values: `ip`, `tcp`, `udp`, `icmp`, `all`"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "State of the resource. Valid values are `enabled` or `disabled`"
+      },
+      "subscribers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The block of subscriber configurations",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "instanceids": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of Instances ID (ROH)",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "prefix": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of prefixes",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "comment": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Optional comment"
+                  },
+                  "prefix": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Valid prefix"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage this acl"
+      }
+    },
+    "netris_allocation": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique name for current allocation."
+      },
+      "prefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique prefix for allocation, must not overlap with other allocations."
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage subnets under this allocation."
+      }
+    },
+    "netris_bgp": {
+      "allowasin": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Optionally allow number of occurrences of the own AS number in received prefix AS-path. Default value is `0`."
+      },
+      "bgppassword": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "BGP session password"
+      },
+      "defaultoriginate": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Originate default route to current neighbor. Default value is `false`.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "BGP session description"
+      },
+      "hardware": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Defines hardware for Layer-3 and BGP session termination. Valid value is hardware name or `auto` when BGP is terminated on VNet. Default value is `auto`."
+      },
+      "inboundroutemap": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Reference to route-map resource. Valid value is route-map name.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "localip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP session local IP. Example `10.0.1.1/24`."
+      },
+      "localpreference": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "BGP session local preference. Default value is `100`.",
+        "Computed": true
+      },
+      "multihop": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Multihop BGP session configurations.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User assigned name of BGP session."
+      },
+      "neighboras": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "BGP neighbor AS number."
+      },
+      "outboundroutemap": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Reference to route-map resource. Valid value is route-map name.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "portid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Port ID where BGP neighbor cable is connected. Can't be used together `vnetid`.",
+        "Computed": true
+      },
+      "prefixinboundmax": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "BGP session will be interrupted if neighbor advertises more prefixes than defined. Equal to `1000` if BGP session is terminated on hardware type of switch.",
+        "Computed": true
+      },
+      "prefixlistinbound": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of inbound prefix list. Example `[\"deny 127.0.0.0/8 le 32\", \"permit 0.0.0.0/0 le 24\"]`.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "prefixlistoutbound": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of outbound prefix list, if not defined autogenerated prefix list will apply which will permit defined allocations and assignments, and will deny all private addresses. Example `[\"permit 192.0.2.0/24 le 26\"]`.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "prependinbound": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of times to prepend self AS to as-path of received prefix advertisements. Default value is `0`.",
+        "Computed": true
+      },
+      "prependoutbound": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of times to prepend self AS to as-path being advertised to neighbors. Default value is `0`.",
+        "Computed": true
+      },
+      "remoteip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP session remote IP. Example `10.0.1.2/24`."
+      },
+      "sendbgpcommunity": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Send BGP Community Unconditionally advertise defined list of BGP communities towards BGP neighbor. Format: AA:NN Community number in AA:NN format (where AA and NN are (0-65535)) or local-AS. Example `[\"65501:777\"]`.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Site (data center) ID where this BGP session should be terminated on."
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Valid value is `enabled` or `disabled`; enabled - initiating and waiting for BGP connections, disabled - disable Layer-2 tunnel and Layer-3 address. Default value is `enabled`.",
+        "Default": {
+          "Type": "string",
+          "Value": "enabled"
+        }
+      },
+      "vlanid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "VLAN ID for tagging BGP neighbor facing ethernet frames. Valid values should be in range 2-4094.",
+        "Computed": true
+      },
+      "vnetid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Existing VNet service ID to terminate E-BGP on. Can't be used together `portid`.",
+        "Computed": true
+      },
+      "weight": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "BGP session weight. Default value is `0`.",
+        "Computed": true
+      }
+    },
+    "netris_bgp_object": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the BGP Object"
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "BGP Objects type. Possible values: `ipv4`, `ipv6`, `aspath`, `community`, `extended`, `large`. Detailed documentation about objects types is available [here](https://www.netris.ai/docs/en/stable/network-policies.html#bgp-objects)"
+      },
+      "value": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Object value. For type `ipv4`, `ipv6` value can be multiline"
+      }
+    },
+    "netris_controller": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controller description.",
+        "Computed": true
+      },
+      "mainip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique IP address which will be used as a loopback address of this unit. Valid value is ip address (example `198.51.100.10`) or `auto`. If set `auto` the controller will assign an ip address automatically from subnets with relevant purpose."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User assigned name of controllers."
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The site ID where this controller belongs."
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to edit this unit."
+      }
+    },
+    "netris_inventory_profile": {
+      "customrule": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Custom Rules configuration block. User defined rules to allow certain traffic.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dstport": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Destination port. 1-65535, or empty for any."
+            },
+            "protocol": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Protocol. Valid value is `udp`, `tcp` or `any`."
+            },
+            "sourcesubnet": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Source Subnet. Example `10.0.0.0/8`"
+            },
+            "srcport": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Source port. 1-65535, or empty for any."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Inventory profile description",
+        "Computed": true
+      },
+      "dnsservers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of IP addresses of DNS servers. Example `[\"1.1.1.1\", \"8.8.8.8\"]`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ipv4ssh": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of IPv4 subnets allowed to ssh. Example `[\"10.0.10.0/24\", \"172.16.16.16\"]`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ipv6ssh": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of IPv6 subnets allowed to ssh. Example `[\"2001:DB8::/32\"]`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of inventory profile"
+      },
+      "ntpservers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of domain names or IP addresses of NTP servers. Example `[\"0.pool.ntp.org\", \"132.163.96.5\"]`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Devices using this inventory profile will adjust their system time to the selected timezone. Valid value is a name from the TZ [database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)."
+      }
+    },
+    "netris_l4lb": {
+      "backend": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of backends. Valid value is `ip`:`port` Example `[\"192.0.2.100:443\", \"192.0.2.101:443\"]`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "check": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "A health check determines whether instances in the target pool are healthy. If protocol == `udp` then check.type should be `none`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "frontend": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "L4LB frontend IP. If not specified, will be assigned automatically from subnets with relevant purpose."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the resource"
+      },
+      "port": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "L4LB frontend port to be exposed"
+      },
+      "protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Protocol. Possible values: `tcp` or `udp`"
+      },
+      "siteid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The site ID. Resources defined in the selected site will be permitted to be used as backed entries for this L4 Load Balancer service."
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Administrative status. Possible values: `active` or `disable`. Default value is `active`",
+        "Default": {
+          "Type": "string",
+          "Value": "active"
+        }
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to edit this unit."
+      }
+    },
+    "netris_link": {
+      "ports": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of two ports.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "netris_nat": {
+      "action": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Rule action. Possible values: `DNAT`, `SNAT`, `ACCEPT_SNAT`, `MASQUERADE`"
+      },
+      "comment": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Custom comment for NAT rule",
+        "Computed": true
+      },
+      "dnattoip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The internal IP address to which external hosts will gain access as a result of a DNAT translation. Only when action == `DNAT`",
+        "Computed": true
+      },
+      "dnattoport": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The internal port to which external port will gain access as a result of a DNAT translation. Only when action == `DNAT`",
+        "Computed": true
+      },
+      "dstaddress": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Match traffic destined to this subnet"
+      },
+      "dstport": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Match traffic destined to this port. Ignoring when protocol == `all` or `icmp`",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The unique name of NAT rule"
+      },
+      "protocol": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Possible values: `all`, `tcp`, `udp`, `icmp`"
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The site ID where this rule belongs"
+      },
+      "snattoip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Replace the original address with the specified one. Only when action == `SNAT`",
+        "Computed": true
+      },
+      "snattopool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Replace the original address with the pool of ip addresses. Only when action == `SNAT`",
+        "Computed": true
+      },
+      "srcaddress": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Match traffic sourced from this subnet"
+      },
+      "srcport": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Match traffic sourced from this port. Ignoring when protocol == `all` or `icmp`",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Rule state. Valid value is `enabled` or `disabled`. Default value is `enabled`.",
+        "Default": {
+          "Type": "string",
+          "Value": "enabled"
+        }
+      }
+    },
+    "netris_network_interface": {
+      "autoneg": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle auto negotiation. Possible values: `default`, `on`, `off`. Default value is `default`",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "breakout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle breakout. Possible values: `off`, `4x10`, `4x25`, `4x100`, `manual`. Default value is `off`",
+        "Default": {
+          "Type": "string",
+          "Value": "off"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Network Interface desired description"
+      },
+      "extension": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Network Interface extension configurations.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mtu": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "MTU must be integer between 68 and 9216. Default value is `9000`",
+        "Default": {
+          "Type": "int",
+          "Value": "9000"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Network Interface's exact name"
+      },
+      "nodeid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The node ID to whom this network interface belongs"
+      },
+      "speed": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle interface speed, make sure that current node supports the configured speed. Possibe values: `auto`, `1g`, `10g`, `25g`, `40g`, `50g`, `100g`, `200g`, `400g`. Default value is `auto`",
+        "Default": {
+          "Type": "string",
+          "Value": "auto"
+        }
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage network interface"
+      }
+    },
+    "netris_permission_group": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Permission Group description",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "groups": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of groups. Example: `[\"services.l4loadbalancer:view\"]`. Possible action value is `view` or `edit`. Addition action value `external-acl` only for key `services.acl`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Permission Group"
+      }
+    },
+    "netris_port": {
+      "autoneg": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle auto negotiation. Possible values: `default`, `on`, `off`. Default value is `default`",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
+      },
+      "breakout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle breakout. Possible values: `off`, `4x10`, `4x25`, `4x100`, `manual`. Default value is `off`",
+        "Default": {
+          "Type": "string",
+          "Value": "off"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Port desired description"
+      },
+      "extension": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Port extension configurations.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mtu": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "MTU must be integer between 68 and 9216. Default value is `9000`",
+        "Default": {
+          "Type": "int",
+          "Value": "9000"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Port's exact name"
+      },
+      "speed": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle interface speed, make sure that current switch supports the configured speed. Possibe values: `auto`, `1g`, `10g`, `25g`, `40g`, `50g`, `100g`, `200g`, `400g`. Default value is `auto`",
+        "Default": {
+          "Type": "string",
+          "Value": "auto"
+        }
+      },
+      "switchid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The switch ID to whom this port belongs"
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage port"
+      }
+    },
+    "netris_portgroup": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the ACL Port Group"
+      },
+      "ports": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of ports. Valid values are: single port `22`, range of ports `1024-2048`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "netris_roh": {
+      "anycastips": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of anycast IP addresses",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "inboundprefixlist": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of additional prefixes that the ROH server may advertise. Only when type == `hypervisor`",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Instance name. If type == `hypervisor` the name must be the same as the hypervisor's hostname"
+      },
+      "ports": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of physical switch ports",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "routingprofile": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Possible values: `inherit`, `default`, `default_agg`, `full_table`. Default value is `inherit`. Detailed documentation about routing profiles is available [here](https://www.netris.ai/docs/en/stable/roh.html#adding-roh-hosts)",
+        "Default": {
+          "Type": "string",
+          "Value": "inherit"
+        }
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The site ID where the current ROH instance belongs"
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage instance"
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Possible values: `physical` or `hypervisor` Physical Server, for all servers forming a BGP adjacency directly with the switch fabric. Hypervisor, for using the hypervisor as an interim router. Proxmox is currently the only supported hypervisor."
+      },
+      "unicastips": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of IPv4 addresses for the loopback interface.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "netris_route": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of route"
+      },
+      "hwids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Hardware ID where to apply this route. It is typically used for Null routes. If not set, Netris will automatically decide where to apply",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "nexthop": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Traffic destined to the Prefix will be routed towards the Next-Hop. Note that static routes will be injected only on units that have the Next-Hop as a connected network"
+      },
+      "prefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Route destination to match"
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The site ID where the current route belongs"
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Administrative state of the route. Possible values: `enabled` or `disabled`. Default value is `enabled`",
+        "Default": {
+          "Type": "string",
+          "Value": "enabled"
+        }
+      }
+    },
+    "netris_routemap": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of route-map"
+      },
+      "sequence": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The block of sequence. The sequence number will be assigned automatically",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "parameter": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The attribute to be manipulated. Possible values: `as_path`, `community`, `large_community`, `ipv4_next_hop`, `ipv6_next_hop`, `local_preference`, `med`, `origin`, `route_tag`, `weight`"
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Define whether to manipulate a particular BGP attribute or go to another sequence. Possible values: `set`, `goto`, `next`"
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "New attribute value"
+                  }
+                }
+              }
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Current black free description"
+            },
+            "match": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Block of Rules for route matching.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "objectid": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Description": "The ID of bgp object. Only for types: `as_path`, `community`, `extended_community`, `large_community`, `ipv4_prefix_list`, `ipv4_next_hop`, `route_source`, `ipv6_prefix_list`"
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Type of the object to match: `as_path`, `community`, `extended_community`, `large_community`, `ipv4_prefix_list`, `ipv4_next_hop`, `route_source`, `ipv6_prefix_list`, `ipv6_next_hop`, `local_preference`, `med`, `origin`, `route_tag`"
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Value of the object. Only for types: `ipv6_next_hop`, `local_preference`, `med`, `origin`, `route_tag`. Possible value for type `origin` is: `egp`, `incomplete`, `igp`"
+                  }
+                }
+              }
+            },
+            "policy": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Permit or deny the routes which match below all match clauses within the current sequence. Possible values: `permit` or `deny`"
+            }
+          }
+        }
+      }
+    },
+    "netris_site": {
+      "acldefaultpolicy": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Possible values: `permit` or `deny`. Deny - Layer-3 packet forwarding is denied by default. ACLs are required to permit necessary traffic flows. Deny ACLs will be applied before Permit ACLs. Permit - Layer-3 packet forwarding is allowed by default. ACLs are required to deny unwanted traffic flows. Permit ACLs will be applied before Deny ACLs."
+      },
+      "equinixlocation": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Equinix project location. Possible values:`se`, `dc`, `at`, `hk`, `am`, `ny`, `ty`, `sl`, `md`, `sp`, `fr`, `sy`, `ld`, `sg`, `pa`, `tr`, `sv`, `la`, `ch`, `da`"
+      },
+      "equinixprojectapikey": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Equinix project API Key."
+      },
+      "equinixprojectid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Equinix project ID."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the site"
+      },
+      "publicasn": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Site public ASN that should be used for external bgp peer configuration"
+      },
+      "rohasn": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ASN for ROH (Routing on the Host) compute instances, should be unique within the scope of a site, can be same for different sites"
+      },
+      "rohroutingprofile": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ROH Routing profile defines set of routing prefixes to be advertised to ROH instances. Possible values: `default`, `default_agg`, `full`. Default route only - Will advertise 0.0.0.0/0 + loopback address of physically connected switch. Default + Aggregate - Will add prefixes of defined subnets + `Default` profile. Full - Will advertise all prefixes available in the routing table of the connected switch"
+      },
+      "sitemesh": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Site to site VPN mode. Site mesh available values are: `disabled`, `hub`, `spoke`, `dspoke`"
+      },
+      "switchfabric": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Possible values: `equinix_metal`, `dot1q_trunk`, `netris`.",
+        "Default": {
+          "Type": "string",
+          "Value": "netris"
+        }
+      },
+      "vlanrange": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VLAN range.",
+        "Computed": true
+      },
+      "vmasn": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ASN for ROH (Routing on the Host) virtual compute instances, should be unique within the scope of a site, can be same for different sites"
+      }
+    },
+    "netris_softgate": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Softgate description.",
+        "Computed": true
+      },
+      "mainip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique IP address which will be used as a loopback address of this unit. Valid value is ip address (example `198.51.100.11`) or `auto`. If set `auto` the controller will assign an ip address automatically from subnets with relevant purpose."
+      },
+      "mgmtip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique IP address to be used on out of band management interface. Valid value is ip address (example `192.0.2.11`) or `auto`. If set `auto` the controller will assign an ip address automatically from subnets with relevant purpose."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User assigned name of softgate."
+      },
+      "profileid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "An inventory profile ID to define global configuration (NTP, DNS, timezone, etc...)"
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The site ID where this softgate belongs."
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to edit this unit."
+      }
+    },
+    "netris_subnet": {
+      "defaultgateway": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Use when purpose is set to `management`."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique name for current subnet."
+      },
+      "prefix": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique prefix for subnet, must not overlap with other subnets."
+      },
+      "purpose": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Describes which kind of service will be able to use this subnet. Possible values: `common`, `loopback`, `management`, `load-balancer`, `nat`, `inactive`"
+      },
+      "siteids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of sites IDs where this subnet is available.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage the subnet."
+      }
+    },
+    "netris_switch": {
+      "asnumber": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Switch AS numbers. Valid value is ASN (example `420000002`) or `auto`. If set `auto` the controller will assign automatically from `System ASN range`"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Switch description.",
+        "Computed": true
+      },
+      "macaddress": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mainip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique IP address which will be used as a loopback address of this unit. Valid value is ip address (example `198.51.100.21`) or `auto`. If set `auto` the controller will assign an ip address automatically from subnets with relevant purpose."
+      },
+      "mgmtip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A unique IP address to be used on out of band management interface. Valid value is ip address (example `192.0.2.21`) or `auto`. If set `auto` the controller will assign an ip address automatically from subnets with relevant purpose."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "User assigned name of switch."
+      },
+      "nos": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Switch OS. Possible values: `cumulus_linux`, `sonic`, `ubuntu_switch_dev`"
+      },
+      "portcount": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Preliminary port count is used for definition of topology. Possible values: `16`, `32`, `48`, `54`, `56`"
+      },
+      "profileid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "An inventory profile ID to define global configuration (NTP, DNS, timezone, etc...)"
+      },
+      "siteid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The site ID where this switch belongs."
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to edit this unit."
+      }
+    },
+    "netris_tenant": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Tenant's description"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the tenant"
+      }
+    },
+    "netris_user": {
+      "company": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Company the user works for. Usually useful for multi-tenant systems where the company provides Netris Controller access to customers."
+      },
+      "email": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The email address of the user. Also used for system notifications and for password retrieval."
+      },
+      "emailcc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Send copies of email notifications to this address."
+      },
+      "fullname": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Full Name of the user."
+      },
+      "pgroup": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of Permission Group. User permissions for viewing and editing parts of the Netris Controller. (if User Role is not used)."
+      },
+      "phone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "User’s phone number."
+      },
+      "position": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Position within the company."
+      },
+      "tenants": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of tenants. (if User Role is not used).",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "edit": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Edit access for tenant",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Tenant ID (-1 menas 'All tenants')"
+            }
+          }
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique username."
+      },
+      "userrole": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of User Role. When using a User Role object to define RBAC (role-based access control), `pgroup` and `tenants` fields will be ignoring."
+      }
+    },
+    "netris_user_role": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "User Role description",
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the user role."
+      },
+      "pgroup": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of existing permission group"
+      },
+      "tenantids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of tenant IDs",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      }
+    },
+    "netris_vnet": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the vnet"
+      },
+      "sites": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Block of per site vnet configuration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "gateways": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Block of gateways",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefix": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The address will be serving as anycast default gateway for selected subnet. Example: `203.0.113.1/25`"
+                  },
+                  "vlanid": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The site ID. Ports from these sites will be allowed to participate in the V-Net. (Multi-site vnet would require backbone connectivity between sites)."
+            },
+            "interface": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Block of interfaces",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "lacp": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "LAG mode. Allows for active-standby dual-homing, assuming LAG configuration on the remote end. Valid value is `on` or `off`. Default value is `off`.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "off"
+                    }
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Switch port name. Example: `swp5@my-sw01`"
+                  },
+                  "vlanid": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "VLAN tag for current port. If vlanid is not set - means port untagged",
+                    "Default": {
+                      "Type": "int",
+                      "Value": "1"
+                    }
+                  }
+                }
+              }
+            },
+            "ports": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Block of ports",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "lacp": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "LAG mode. Allows for active-standby dual-homing, assuming LAG configuration on the remote end. Valid value is `on` or `off`. Default value is `off`.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "off"
+                    }
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Switch port name. Example: `swp5@my-sw01`"
+                  },
+                  "vlanid": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "VLAN tag for current port. If vlanid is not set - means port untagged",
+                    "Default": {
+                      "Type": "int",
+                      "Value": "1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "V-Net state. Allowed values: `active` or `disabled`. Default value is `active`",
+        "Default": {
+          "Type": "string",
+          "Value": "active"
+        }
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to edit this unit."
+      },
+      "vlanid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VLAN ID"
+      }
+    }
+  },
+  "data-sources": {
+    "netris_bgp_object": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the BGP Object"
+      },
+      "type": {
+        "Type": "String",
+        "Description": "BGP Objects type. Detailed documentation about objects types is available [here](https://www.netris.ai/docs/en/stable/network-policies.html#bgp-objects)",
+        "Computed": true
+      },
+      "value": {
+        "Type": "String",
+        "Description": "Object value.",
+        "Computed": true
+      }
+    },
+    "netris_inventory_profile": {
+      "customrule": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Custom Rules configuration block. User defined rules to allow certain traffic.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "dstport": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Destination port. 1-65535, or empty for any."
+            },
+            "protocol": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Protocol."
+            },
+            "sourcesubnet": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Source Subnet."
+            },
+            "srcport": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Source port. 1-65535, or empty for any."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Inventory profile description",
+        "Computed": true
+      },
+      "dnsservers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of IP addresses of DNS servers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ipv4ssh": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of IPv4 subnets allowed to ssh.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ipv6ssh": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of IPv6 subnets allowed to ssh.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of inventory profile"
+      },
+      "ntpservers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of domain names or IP addresses of NTP servers.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Devices using this inventory profile will adjust their system time to the selected timezone. Valid value is a name from the TZ [database](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)."
+      }
+    },
+    "netris_network_interface": {
+      "autoneg": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle auto negotiation.",
+        "Computed": true
+      },
+      "breakout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle breakout.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Network Interface desired description",
+        "Computed": true
+      },
+      "extension": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Network Interface extension configurations.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mtu": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "MTU must be integer between 68 and 9216.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Network Interface's exact name"
+      },
+      "nodeid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The node ID to whom this network interface belongs",
+        "Computed": true
+      },
+      "speed": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle interface speed, make sure that current node supports the configured speed.",
+        "Computed": true
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage network interface",
+        "Computed": true
+      }
+    },
+    "netris_port": {
+      "autoneg": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle auto negotiation.",
+        "Computed": true
+      },
+      "breakout": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle breakout.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Port desired description",
+        "Computed": true
+      },
+      "extension": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Port extension configurations.",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mtu": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "MTU must be integer between 68 and 9216.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Port's exact name"
+      },
+      "speed": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Toggle interface speed, make sure that current switch supports the configured speed.",
+        "Computed": true
+      },
+      "switchid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The switch ID to whom this port belongs",
+        "Computed": true
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to manage port",
+        "Computed": true
+      }
+    },
+    "netris_routemap": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of route-map"
+      }
+    },
+    "netris_site": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the site"
+      }
+    },
+    "netris_tenant": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Tenant's description"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the tenant"
+      }
+    },
+    "netris_vnet": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the vnet."
+      },
+      "sites": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Block of per site vnet configuration.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "gateways": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Block of gateways.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefix": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The address will be serving as anycast default gateway for selected subnet."
+                  },
+                  "vlanid": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The site ID. Ports from these sites will be allowed to participate in the V-Net."
+            },
+            "ports": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Block of ports",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Switch port name."
+                  },
+                  "vlanid": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "VLAN tag for current port.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "V-Net state.",
+        "Computed": true
+      },
+      "tenantid": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of tenant. Users of this tenant will be permitted to edit this unit.",
+        "Computed": true
+      }
+    }
+  }
+}

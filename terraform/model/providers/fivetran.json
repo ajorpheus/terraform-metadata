@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "fivetran",
   "type": "provider",
-  "version": "v0.3.0",
+  "version": "v0.6.3",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -104,8 +104,13 @@
               "Optional": true
             },
             "account_ids": {
-              "Type": "String",
-              "Optional": true
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "accounts": {
               "Type": "List",
@@ -127,7 +132,8 @@
             },
             "action_report_time": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "adobe_analytics_configurations": {
               "Type": "List",
@@ -218,7 +224,13 @@
             },
             "aggregation": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
+            },
+            "always_encrypted": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "api_access_token": {
               "Type": "String",
@@ -229,8 +241,13 @@
               "Optional": true
             },
             "api_keys": {
-              "Type": "String",
-              "Optional": true
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "api_quota": {
               "Type": "String",
@@ -244,6 +261,11 @@
               "Type": "String",
               "Optional": true
             },
+            "api_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "api_url": {
               "Type": "String",
               "Optional": true
@@ -254,11 +276,13 @@
             },
             "app_sync_mode": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "append_file_option": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "apps": {
               "Type": "List",
@@ -279,13 +303,18 @@
             },
             "auth_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "authorization_method": {
               "Type": "String",
               "Computed": true
             },
             "aws_region_code": {
+              "Type": "String",
+              "Optional": true
+            },
+            "base_url": {
               "Type": "String",
               "Optional": true
             },
@@ -316,7 +345,8 @@
             },
             "click_attribution_window": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "client_id": {
               "Type": "String",
@@ -341,7 +371,8 @@
             },
             "compression": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "config_method": {
               "Type": "String",
@@ -349,11 +380,17 @@
             },
             "config_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "connection_string": {
               "Type": "String",
               "Optional": true
+            },
+            "connection_type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "consumer_group": {
               "Type": "String",
@@ -373,11 +410,13 @@
             },
             "conversion_report_time": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "conversion_window_size": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "custom_tables": {
               "Type": "List",
@@ -398,11 +437,13 @@
                   },
                   "action_report_time": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "aggregation": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "breakdowns": {
                     "Type": "List",
@@ -415,11 +456,13 @@
                   },
                   "click_attribution_window": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "config_type": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "fields": {
                     "Type": "List",
@@ -440,7 +483,8 @@
                   },
                   "view_attribution_window": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -471,7 +515,8 @@
             },
             "date_granularity": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "delimiter": {
               "Type": "String",
@@ -518,6 +563,11 @@
             },
             "enable_all_dimension_combinations": {
               "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "encryption_key": {
+              "Type": "String",
               "Optional": true
             },
             "endpoint": {
@@ -526,15 +576,26 @@
             },
             "engagement_attribution_window": {
               "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "entity_id": {
+              "Type": "String",
               "Optional": true
             },
             "escape_char": {
               "Type": "String",
               "Optional": true
             },
+            "eu_region": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "external_id": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "fields": {
               "Type": "List",
@@ -547,11 +608,13 @@
             },
             "file_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "finance_account_sync_mode": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "finance_accounts": {
               "Type": "List",
@@ -561,6 +624,10 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "folder_id": {
+              "Type": "String",
+              "Optional": true
             },
             "ftp_host": {
               "Type": "String",
@@ -637,15 +704,23 @@
             },
             "is_ftps": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
+            },
+            "is_multi_entity_feature_enabled": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "is_new_package": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "is_secure": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "key": {
               "Type": "String",
@@ -707,11 +782,13 @@
             },
             "on_error": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "on_premise": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "organization_id": {
               "Type": "String",
@@ -739,6 +816,10 @@
               "Type": "String",
               "Optional": true
             },
+            "pat": {
+              "Type": "String",
+              "Optional": true
+            },
             "path": {
               "Type": "String",
               "Optional": true
@@ -757,11 +838,13 @@
             },
             "post_click_attribution_window_size": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "prebuilt_report": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "prefix": {
               "Type": "String",
@@ -818,6 +901,11 @@
             },
             "public_key": {
               "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "publication_name": {
+              "Type": "String",
               "Optional": true
             },
             "query_id": {
@@ -852,7 +940,8 @@
             },
             "report_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "report_url": {
               "Type": "String",
@@ -868,7 +957,8 @@
                 "Info": {
                   "config_type": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "dimensions": {
                     "Type": "List",
@@ -907,7 +997,8 @@
                   },
                   "report_type": {
                     "Type": "String",
-                    "Optional": true
+                    "Optional": true,
+                    "Computed": true
                   },
                   "segments": {
                     "Type": "List",
@@ -964,7 +1055,8 @@
             },
             "sales_account_sync_mode": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sales_accounts": {
               "Type": "List",
@@ -974,14 +1066,6 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
-            },
-            "schema": {
-              "Type": "String",
-              "Optional": true
-            },
-            "schema_prefix": {
-              "Type": "String",
-              "Optional": true
             },
             "secret": {
               "Type": "String",
@@ -1026,7 +1110,8 @@
             },
             "sftp_is_key_pair": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sftp_password": {
               "Type": "String",
@@ -1063,15 +1148,22 @@
             },
             "skip_after": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "skip_before": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "soap_uri": {
               "Type": "String",
               "Optional": true
             },
             "source": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sub_domain": {
               "Type": "String",
@@ -1083,25 +1175,25 @@
             },
             "swipe_attribution_window": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sync_data_locker": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sync_format": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sync_mode": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "sync_type": {
-              "Type": "String",
-              "Optional": true
-            },
-            "table": {
               "Type": "String",
               "Optional": true
             },
@@ -1118,6 +1210,15 @@
               "Optional": true
             },
             "timeframe_months": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "token_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_secret": {
               "Type": "String",
               "Optional": true
             },
@@ -1139,21 +1240,29 @@
             },
             "update_config_on_each_sync": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "update_method": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "use_api_keys": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "use_webhooks": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "user": {
+              "Type": "String",
+              "Optional": true
+            },
+            "user_id": {
               "Type": "String",
               "Optional": true
             },
@@ -1180,11 +1289,13 @@
             },
             "view_attribution_window": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             },
             "view_through_attribution_window_size": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Computed": true
             }
           }
         }
@@ -1196,6 +1307,34 @@
       "created_at": {
         "Type": "String",
         "Computed": true
+      },
+      "daily_sync_time": {
+        "Type": "String",
+        "Optional": true
+      },
+      "destination_schema": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "prefix": {
+              "Type": "String",
+              "Optional": true
+            },
+            "table": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
       },
       "failed_at": {
         "Type": "String",
@@ -1210,6 +1349,10 @@
         "Computed": true
       },
       "last_updated": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
         "Type": "String",
         "Computed": true
       },
@@ -1228,10 +1371,6 @@
       "schedule_type": {
         "Type": "String",
         "Computed": true
-      },
-      "schema": {
-        "Type": "String",
-        "Required": true
       },
       "service": {
         "Type": "String",
@@ -1323,6 +1462,101 @@
         "Optional": true
       }
     },
+    "fivetran_connector_schema_config": {
+      "connector_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "schema": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "table": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "column": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "enabled": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "true"
+                          }
+                        },
+                        "hashed": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "false"
+                          }
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "enabled": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "true"
+                    }
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "sync_mode": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "schema_change_handling": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "fivetran_destination": {
       "config": {
         "Type": "List",
@@ -1393,9 +1627,17 @@
               "Type": "Int",
               "Optional": true
             },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
             "project_id": {
               "Type": "String",
               "Optional": true
+            },
+            "public_key": {
+              "Type": "String",
+              "Computed": true
             },
             "role_arn": {
               "Type": "String",
@@ -1474,10 +1716,6 @@
         "Type": "String",
         "Computed": true
       },
-      "creator": {
-        "Type": "String",
-        "Computed": true
-      },
       "id": {
         "Type": "String",
         "Computed": true
@@ -1489,6 +1727,20 @@
       "name": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "fivetran_group_users": {
+      "group_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_updated": {
+        "Type": "String",
+        "Computed": true
       },
       "user": {
         "Type": "Set",
@@ -1498,9 +1750,13 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "id": {
+            "email": {
               "Type": "String",
               "Required": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
             },
             "role": {
               "Type": "String",
@@ -1553,7 +1809,7 @@
       },
       "role": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "verified": {
         "Type": "Bool",
@@ -1596,8 +1852,13 @@
               "Computed": true
             },
             "account_ids": {
-              "Type": "String",
-              "Computed": true
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "accounts": {
               "Type": "List",
@@ -1712,6 +1973,10 @@
               "Type": "String",
               "Computed": true
             },
+            "always_encrypted": {
+              "Type": "String",
+              "Computed": true
+            },
             "api_access_token": {
               "Type": "String",
               "Computed": true
@@ -1733,6 +1998,10 @@
               "Computed": true
             },
             "api_token": {
+              "Type": "String",
+              "Computed": true
+            },
+            "api_type": {
               "Type": "String",
               "Computed": true
             },
@@ -1778,6 +2047,10 @@
               "Computed": true
             },
             "aws_region_code": {
+              "Type": "String",
+              "Computed": true
+            },
+            "base_url": {
               "Type": "String",
               "Computed": true
             },
@@ -1844,6 +2117,10 @@
               "Computed": true
             },
             "connection_string": {
+              "Type": "String",
+              "Computed": true
+            },
+            "connection_type": {
               "Type": "String",
               "Computed": true
             },
@@ -2012,6 +2289,10 @@
               "Type": "String",
               "Computed": true
             },
+            "encryption_key": {
+              "Type": "String",
+              "Computed": true
+            },
             "endpoint": {
               "Type": "String",
               "Computed": true
@@ -2020,7 +2301,15 @@
               "Type": "String",
               "Computed": true
             },
+            "entity_id": {
+              "Type": "String",
+              "Computed": true
+            },
             "escape_char": {
+              "Type": "String",
+              "Computed": true
+            },
+            "eu_region": {
               "Type": "String",
               "Computed": true
             },
@@ -2053,6 +2342,10 @@
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "folder_id": {
+              "Type": "String",
+              "Computed": true
             },
             "ftp_host": {
               "Type": "String",
@@ -2128,6 +2421,10 @@
               "Computed": true
             },
             "is_ftps": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_multi_entity_feature_enabled": {
               "Type": "String",
               "Computed": true
             },
@@ -2231,6 +2528,10 @@
               "Type": "String",
               "Computed": true
             },
+            "pat": {
+              "Type": "String",
+              "Computed": true
+            },
             "path": {
               "Type": "String",
               "Computed": true
@@ -2309,6 +2610,10 @@
               }
             },
             "public_key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "publication_name": {
               "Type": "String",
               "Computed": true
             },
@@ -2467,14 +2772,6 @@
                 "ElementsType": "String"
               }
             },
-            "schema": {
-              "Type": "String",
-              "Computed": true
-            },
-            "schema_prefix": {
-              "Type": "String",
-              "Computed": true
-            },
             "secret": {
               "Type": "String",
               "Computed": true
@@ -2561,6 +2858,10 @@
               "Type": "String",
               "Computed": true
             },
+            "soap_uri": {
+              "Type": "String",
+              "Computed": true
+            },
             "source": {
               "Type": "String",
               "Computed": true
@@ -2613,6 +2914,14 @@
               "Type": "String",
               "Computed": true
             },
+            "token_key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "token_secret": {
+              "Type": "String",
+              "Computed": true
+            },
             "tunnel_host": {
               "Type": "String",
               "Computed": true
@@ -2646,6 +2955,10 @@
               "Computed": true
             },
             "user": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_id": {
               "Type": "String",
               "Computed": true
             },
@@ -2689,6 +3002,33 @@
         "Type": "String",
         "Computed": true
       },
+      "daily_sync_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "destination_schema": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "prefix": {
+              "Type": "String",
+              "Computed": true
+            },
+            "table": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "failed_at": {
         "Type": "String",
         "Computed": true
@@ -2701,6 +3041,10 @@
         "Type": "String",
         "Required": true
       },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
       "pause_after_trial": {
         "Type": "String",
         "Computed": true
@@ -2710,10 +3054,6 @@
         "Computed": true
       },
       "schedule_type": {
-        "Type": "String",
-        "Computed": true
-      },
-      "schema": {
         "Type": "String",
         "Computed": true
       },
@@ -2909,7 +3249,15 @@
               "Type": "Int",
               "Computed": true
             },
+            "private_key": {
+              "Type": "String",
+              "Computed": true
+            },
             "project_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "public_key": {
               "Type": "String",
               "Computed": true
             },

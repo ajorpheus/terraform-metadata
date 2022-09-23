@@ -1,0 +1,174 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "netooze",
+  "type": "provider",
+  "version": "v0.2.0",
+  "provider": {
+    "host": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "ENV(NETOOZE_HOST)"
+    },
+    "key": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "ENV(NETOOZE_KEY)"
+    }
+  },
+  "resources": {
+    "netooze_isolated_network": {
+      "description": {
+        "Type": "String",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "mask": {
+        "Type": "Int",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "network_prefix": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "netooze_server": {
+      "boot_volume_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "boot_volume_size": {
+        "Type": "Int",
+        "Required": true
+      },
+      "cpu": {
+        "Type": "Int",
+        "Required": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "image": {
+        "Type": "String",
+        "Required": true
+      },
+      "location": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "nic": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 5,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bandwidth": {
+              "Type": "Int",
+              "Required": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "ip_address": {
+              "Type": "String",
+              "Computed": true
+            },
+            "network": {
+              "Type": "String",
+              "Required": true
+            },
+            "network_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "public_ip_addresses": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ram": {
+        "Type": "Int",
+        "Required": true
+      },
+      "ssh_keys": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "volume": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 4,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "size": {
+              "Type": "Int",
+              "Required": true
+            }
+          }
+        }
+      }
+    },
+    "netooze_ssh": {
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "public_key": {
+        "Type": "String",
+        "Required": true
+      }
+    }
+  },
+  "data-sources": {}
+}

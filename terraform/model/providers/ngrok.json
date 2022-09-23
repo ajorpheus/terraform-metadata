@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ngrok",
   "type": "provider",
-  "version": "v0.1.3",
+  "version": "v0.1.4",
   "provider": {
     "api_base_url": {
       "Type": "String",
@@ -19,6 +19,59 @@
     }
   },
   "resources": {
+    "ngrok_agent_ingress": {
+      "created_at": {
+        "Type": "String",
+        "Description": "timestamp when the Agent Ingress was created, RFC 3339 format",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "human-readable description of the use of this Agent Ingress. optional, max 255 bytes."
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "the domain that you own to be used as the base domain name to generate regional agent ingress domains."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "unique Agent Ingress resource identifier",
+        "Computed": true
+      },
+      "metadata": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "arbitrary user-defined machine-readable data of this Agent Ingress. optional, max 4096 bytes"
+      },
+      "ns_targets": {
+        "Type": "List",
+        "Description": "a list of target values to use as the values of NS records for the domain property these values will delegate control over the domain to ngrok",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "region_domains": {
+        "Type": "List",
+        "Description": "a list of regional agent ingress domains that are subdomains of the value of domain this value may increase over time as ngrok adds more regions",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "uri": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "URI to the API resource of this Agent ingress",
+        "Computed": true
+      }
+    },
     "ngrok_api_key": {
       "description": {
         "Type": "String",
@@ -162,7 +215,7 @@
             "auth_provider_id": {
               "Type": "String",
               "Optional": true,
-              "Description": "determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `-auth` flag, if any."
+              "Description": "determines how the basic auth credentials are validated. Currently only the value `agent` is supported which means that credentials will be validated against the username and password specified by the ngrok agent's `--basic-auth` flag, if any."
             },
             "enabled": {
               "Type": "Bool",
@@ -928,6 +981,11 @@
               "Description": "A public URL where the SP's metadata is hosted. If an IdP supports dynamic configuration, this is the URL it can use to retrieve the SP metadata.",
               "Computed": true
             },
+            "nameid_format": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Defines the name identifier format the SP expects the IdP to use in its assertions to identify subjects. If unspecified, a default value of `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent` will be used. A subset of the allowed values enumerated by the SAML specification are supported."
+            },
             "options_passthrough": {
               "Type": "Bool",
               "Optional": true,
@@ -1005,7 +1063,7 @@
             "provider": {
               "Type": "String",
               "Optional": true,
-              "Description": "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`."
+              "Description": "a string indicating which webhook provider will be sending webhooks to this endpoint. Value must be one of the supported providers: `SLACK`, `SNS`, `STRIPE`, `GITHUB`, `TWILIO`, `SHOPIFY`, `GITLAB`, `INTERCOM`, `SENDGRID`, `XERO`, `PAGERDUTY`."
             },
             "secret": {
               "Type": "String",
@@ -1076,12 +1134,12 @@
                             "Info": {
                               "aws_access_key_id": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "The ID portion of an AWS access key."
                               },
                               "aws_secret_access_key": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "The secret portion of an AWS access key."
                               }
                             }
@@ -1098,7 +1156,7 @@
                             "Info": {
                               "role_arn": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "An ARN that specifies the role that ngrok should use to deliver to the configured target."
                               }
                             }
@@ -1166,12 +1224,12 @@
                             "Info": {
                               "aws_access_key_id": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "The ID portion of an AWS access key."
                               },
                               "aws_secret_access_key": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "The secret portion of an AWS access key."
                               }
                             }
@@ -1188,7 +1246,7 @@
                             "Info": {
                               "role_arn": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "An ARN that specifies the role that ngrok should use to deliver to the configured target."
                               }
                             }
@@ -1234,12 +1292,12 @@
                             "Info": {
                               "aws_access_key_id": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "The ID portion of an AWS access key."
                               },
                               "aws_secret_access_key": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "The secret portion of an AWS access key."
                               }
                             }
@@ -1256,7 +1314,7 @@
                             "Info": {
                               "role_arn": {
                                 "Type": "String",
-                                "Optional": true,
+                                "Required": true,
                                 "Description": "An ARN that specifies the role that ngrok should use to deliver to the configured target."
                               }
                             }
@@ -1290,7 +1348,7 @@
       "destination_ids": {
         "Type": "List",
         "Optional": true,
-        "Description": "A list of Event Destination IDs which should be used for this Event Stream. Event Streams are required to have at least one Event Destination.",
+        "Description": "A list of Event Destination IDs which should be used for this Event Subscription.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1350,8 +1408,8 @@
     "ngrok_ip_policy": {
       "action": {
         "Type": "String",
-        "Required": true,
-        "Description": "the IP policy action. Supported values are `allow` or `deny`"
+        "Optional": true,
+        "Description": "this field is deprecated. Please leave it empty and use the ip policy rule object's \"action\" field instead. It is temporarily retained for backwards compatibility reasons."
       },
       "description": {
         "Type": "String",
@@ -1370,6 +1428,11 @@
       }
     },
     "ngrok_ip_policy_rule": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "the action to apply to the policy rule, either `allow` or `deny`"
+      },
       "cidr": {
         "Type": "String",
         "Required": true,
@@ -1435,29 +1498,6 @@
         "Description": "the type of IP restriction. this defines what traffic will be restricted with the attached policies. four values are currently supported: `dashboard`, `api`, `agent`, and `endpoints`"
       }
     },
-    "ngrok_ip_whitelist_entry": {
-      "description": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "human-readable description of the source IPs for this IP whitelist entry. optional, max 255 bytes."
-      },
-      "id": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "unique identifier for this IP whitelist entry",
-        "Computed": true
-      },
-      "ip_net": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "an IP address or IP network range in CIDR notation (e.g. 10.1.1.1 or 10.1.0.0/16) of addresses that will be whitelisted to communicate with your tunnel endpoints"
-      },
-      "metadata": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "arbitrary user-defined machine-readable data of this IP whitelist entry. optional, max 4096 bytes."
-      }
-    },
     "ngrok_reserved_addr": {
       "addr": {
         "Type": "String",
@@ -1497,6 +1537,12 @@
       }
     },
     "ngrok_reserved_domain": {
+      "acme_challenge_cname_target": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "DNS CNAME target for the host _acme-challenge.example.com, where example.com is your reserved domain name. This is required to issue certificates for wildcard, non-ngrok reserved domains. Must be null for non-wildcard domains and ngrok subdomains.",
+        "Computed": true
+      },
       "certificate_id": {
         "Type": "String",
         "Optional": true,

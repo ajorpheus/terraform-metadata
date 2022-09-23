@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "azurerm",
   "type": "backend",
-  "version": "v1.1.4",
+  "version": "v1.3.0-rc1",
   "schema": {
     "access_key": {
       "Type": "String",
@@ -69,6 +69,18 @@
       "Description": "The Managed Service Identity Endpoint.",
       "DefaultFunc": "ENV(ARM_MSI_ENDPOINT)"
     },
+    "oidc_request_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The bearer token for the request to the OIDC provider",
+      "DefaultFunc": "MENV(ARM_OIDC_REQUEST_TOKEN,ACTIONS_ID_TOKEN_REQUEST_TOKEN)"
+    },
+    "oidc_request_url": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The URL for the OIDC provider from which to request an ID token",
+      "DefaultFunc": "MENV(ARM_OIDC_REQUEST_URL,ACTIONS_ID_TOKEN_REQUEST_URL)"
+    },
     "resource_group_name": {
       "Type": "String",
       "Optional": true,
@@ -109,17 +121,17 @@
       "Description": "Should Terraform use AzureAD Authentication to access the Blob?",
       "DefaultFunc": "ENV(ARM_USE_AZUREAD)"
     },
-    "use_microsoft_graph": {
-      "Type": "Bool",
-      "Optional": true,
-      "Description": "Should Terraform obtain an MSAL auth token and use Microsoft Graph rather than Azure Active Directory?",
-      "DefaultFunc": "ENV(ARM_USE_MSGRAPH)"
-    },
     "use_msi": {
       "Type": "Bool",
       "Optional": true,
       "Description": "Should Managed Service Identity be used?",
       "DefaultFunc": "ENV(ARM_USE_MSI)"
+    },
+    "use_oidc": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Allow OIDC to be used for authentication",
+      "DefaultFunc": "ENV(ARM_USE_OIDC)"
     }
   }
 }

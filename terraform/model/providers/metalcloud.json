@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "metalcloud",
   "type": "provider",
-  "version": "v2.2.8",
+  "version": "v2.3.8",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -50,13 +50,17 @@
   },
   "resources": {
     "metalcloud_drive_array": {
+      "drive_array_allocation_affinity": {
+        "Type": "String",
+        "Optional": true
+      },
       "drive_array_id": {
         "Type": "Int",
         "Computed": true
       },
       "drive_array_io_limit_policy": {
         "Type": "String",
-        "Computed": true
+        "Optional": true
       },
       "drive_array_label": {
         "Type": "String",
@@ -67,15 +71,6 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
-      },
-      "drive_array_wwn": {
-        "Type": "Map",
-        "Optional": true,
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Value": "String"
-        }
       },
       "drive_size_mbytes_default": {
         "Type": "Int",
@@ -172,14 +167,6 @@
           "Value": "true"
         }
       },
-      "await_delete_finished": {
-        "Type": "Bool",
-        "Optional": true,
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
       "await_deploy_finished": {
         "Type": "Bool",
         "Optional": true,
@@ -221,14 +208,6 @@
         "Type": "Bool",
         "Optional": true,
         "Computed": true
-      },
-      "keep_infrastructure_on_resource_destroy": {
-        "Type": "Bool",
-        "Optional": true,
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
       },
       "prevent_deploy": {
         "Type": "Bool",
@@ -303,6 +282,14 @@
       }
     },
     "metalcloud_instance_array": {
+      "drive_array_id_boot": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "firewall_rule": {
         "Type": "Set",
         "Optional": true,
@@ -484,10 +471,6 @@
           }
         }
       },
-      "instances": {
-        "Type": "String",
-        "Computed": true
-      },
       "interface": {
         "Type": "Set",
         "Optional": true,
@@ -622,6 +605,10 @@
         "Type": "Int",
         "Required": true
       },
+      "shared_drive_allocation_affinity": {
+        "Type": "String",
+        "Optional": true
+      },
       "shared_drive_attached_instance_arrays": {
         "Type": "Set",
         "Optional": true,
@@ -639,8 +626,7 @@
       },
       "shared_drive_io_limit_policy": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "shared_drive_label": {
         "Type": "String",
@@ -656,15 +642,6 @@
         }
       },
       "shared_drive_storage_type": {
-        "Type": "String",
-        "Optional": true,
-        "Computed": true
-      },
-      "shared_drive_targets_json": {
-        "Type": "String",
-        "Computed": true
-      },
-      "shared_drive_wwn": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -719,6 +696,24 @@
       "infrastructure_label": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "metalcloud_infrastructure_output": {
+      "drives": {
+        "Type": "String",
+        "Computed": true
+      },
+      "infrastructure_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "instances": {
+        "Type": "String",
+        "Computed": true
+      },
+      "shared_drives": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "metalcloud_server_type": {

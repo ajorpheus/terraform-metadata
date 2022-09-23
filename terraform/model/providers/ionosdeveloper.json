@@ -1,0 +1,80 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "ionosdeveloper",
+  "type": "provider",
+  "version": "v0.0.1",
+  "provider": {
+    "api_key": {
+      "Type": "String",
+      "Required": true,
+      "DefaultFunc": "ENV(IONOS_API_KEY)"
+    },
+    "auth_header": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "ENV(IONOS_AUTH_HEADER)"
+    },
+    "url": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "ENV(IONOS_API_URL)"
+    }
+  },
+  "resources": {
+    "ionosdeveloper_dns_record": {
+      "content": {
+        "Type": "String",
+        "Required": true
+      },
+      "disabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "prio": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "ttl": {
+        "Type": "Int",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "zone_id": {
+        "Type": "String",
+        "Required": true
+      }
+    }
+  },
+  "data-sources": {
+    "ionosdeveloper_dns_zone": {
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      }
+    }
+  }
+}

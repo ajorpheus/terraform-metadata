@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "gridscale",
   "type": "provider",
-  "version": "v1.14.0",
+  "version": "v1.15.0",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -53,6 +53,17 @@
         "Type": "Bool",
         "Required": true,
         "Description": "The status of the schedule active or not"
+      },
+      "backup_location_name": {
+        "Type": "String",
+        "Description": "The human-readable name of backup location. It supports the full UTF-8 character set, with a maximum of 64 characters.",
+        "Computed": true
+      },
+      "backup_location_uuid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "UUID of the location where your backup is stored.",
+        "Computed": true
       },
       "change_time": {
         "Type": "String",
@@ -201,7 +212,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "performance_class": {
@@ -223,6 +235,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to Filesystem service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -937,7 +955,7 @@
             "storage_type": {
               "Type": "String",
               "Required": true,
-              "Description": "Storage type (one of storage, `storage_high, storage_insane)."
+              "Description": "Storage type."
             }
           }
         }
@@ -951,7 +969,8 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to PaaS service.",
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
       },
       "service_template_uuid": {
         "Type": "String",
@@ -1239,7 +1258,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -1261,6 +1281,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to MariaDB service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -1665,7 +1691,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -1687,6 +1714,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to Memcached service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -1863,7 +1896,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -1885,6 +1919,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to MySQL service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -2138,7 +2178,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "parameter": {
@@ -2194,6 +2235,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to PaaS service",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -2353,7 +2400,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -2375,6 +2423,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to PostgreSQL service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -2455,7 +2509,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -2477,6 +2532,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to Redis cache service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -2557,7 +2618,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -2579,6 +2641,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to Redis store service.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -2646,10 +2714,7 @@
         "Type": "String",
         "Optional": true,
         "Description": "The number of server cores.",
-        "Default": {
-          "Type": "string",
-          "Value": "default"
-        }
+        "Computed": true
       },
       "ipv4": {
         "Type": "String",
@@ -2696,7 +2761,6 @@
       "network": {
         "Type": "List",
         "Optional": true,
-        "MaxItems": 7,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -2968,7 +3032,6 @@
         "Type": "List",
         "Optional": true,
         "Description": "A list of storages attached to the server. The first storage in the list is always set as the boot storage of the server.",
-        "MaxItems": 8,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -3329,7 +3392,8 @@
       },
       "network_uuid": {
         "Type": "String",
-        "Description": "Network UUID containing security zone.",
+        "Optional": true,
+        "Description": "The UUID of the network that the service is attached to.",
         "Computed": true
       },
       "password": {
@@ -3397,6 +3461,12 @@
         "Type": "String",
         "Optional": true,
         "Description": "Security zone UUID linked to MS SQL Server.",
+        "Computed": true,
+        "Deprecated": "Security zone is deprecated for gridSQL, gridStore, and gridFs. Please consider to use private network instead."
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {
@@ -4023,6 +4093,16 @@
       "active": {
         "Type": "Bool",
         "Description": "The status of the schedule active or not",
+        "Computed": true
+      },
+      "backup_location_name": {
+        "Type": "String",
+        "Description": "The human-readable name of backup location. It supports the full UTF-8 character set, with a maximum of 64 characters.",
+        "Computed": true
+      },
+      "backup_location_uuid": {
+        "Type": "String",
+        "Description": "UUID of the location where your backup is stored.",
         "Computed": true
       },
       "change_time": {
@@ -5213,6 +5293,11 @@
       "security_zone_uuid": {
         "Type": "String",
         "Description": "Security zone UUID linked to PaaS service",
+        "Computed": true
+      },
+      "service_template_category": {
+        "Type": "String",
+        "Description": "The template service's category used to create the service.",
         "Computed": true
       },
       "service_template_uuid": {

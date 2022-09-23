@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "nsxt",
   "type": "provider",
-  "version": "v3.2.5",
+  "version": "v3.2.8",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
@@ -5880,7 +5880,8 @@
       "local_as_num": {
         "Type": "String",
         "Optional": true,
-        "Description": "BGP AS number in ASPLAIN/ASDOT Format"
+        "Description": "BGP AS number in ASPLAIN/ASDOT Format",
+        "Computed": true
       },
       "locale_service_id": {
         "Type": "String",
@@ -8281,6 +8282,37 @@
                 }
               }
             },
+            "external_id_expression": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "External ID expression specifying additional members in the Group",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "external_ids": {
+                    "Type": "Set",
+                    "Required": true,
+                    "Description": "List of external IDs",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "member_type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "External ID member type, default to virtual machine if not specified",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "VirtualMachine"
+                    }
+                  }
+                }
+              }
+            },
             "ipaddress_expression": {
               "Type": "List",
               "Optional": true,
@@ -9726,6 +9758,919 @@
         "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
         "Computed": true
       },
+      "rule": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of load balancer rules for layer 7 virtual servers with LBHttpProfile",
+        "MaxItems": 4000,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "List",
+              "Required": true,
+              "Description": "A list of actions to be executed at specified phase when load balancer rule matches.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "connection_drop": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to drop the connection.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "_dummy": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "dummy_value_to_indicate_presence_of_section"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "http_redirect": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to redirect HTTP request messages to a new URL.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "redirect_status": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "redirect_url": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_reject": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to reject HTTP request messages",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "reply_message": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "reply_status": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_request_header_delete": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to delete header fields of HTTP request messages at HTTP_REQUEST_REWRITE phase.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "header_name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_request_header_rewrite": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to rewrite header fields of HTTP request messages to specified new values at HTTP_REQUEST_REWRITE phase.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "header_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "header_value": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_request_uri_rewrite": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to rewrite URIs in matched HTTP request messages.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "uri": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "uri_arguments": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "http_response_header_delete": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to delete header fields of HTTP response messages at HTTP_RESPONSE_REWRITE phase.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "header_name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_response_header_rewrite": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to rewrite header fields of HTTP response messages to specified new values at HTTP_RESPONSE_REWRITE phase.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "header_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "header_value": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "jwt_auth": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action  to control access to backend server resources using JSON Web Token(JWT) authentication.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "key": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "MinItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "certificate_path": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "public_key_content": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "symmetric_key": {
+                                "Type": "String",
+                                "Optional": true
+                              }
+                            }
+                          }
+                        },
+                        "pass_jwt_to_pool": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "realm": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "tokens": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "JWT tokens",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "select_pool": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to select a pool for matched HTTP request messages.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "pool_id": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "ssl_mode_selection": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to select SSL mode.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "ssl_mode": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "variable_assignment": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to create a new variable and assign value to it.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "variable_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "variable_value": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "variable_persistence_learn": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to create a new variable and assign value to it.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "persistence_profile_path": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "variable_hash_enabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "variable_name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "variable_persistence_on": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Action to create a new variable and assign value to it.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "persistence_profile_path": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "variable_hash_enabled": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "variable_name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "condition": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A list of match conditions used to match application traffic.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "http_request_body": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on HTTP request body",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "body_value": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        }
+                      }
+                    }
+                  },
+                  "http_request_cookie": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on HTTP cookie",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "cookie_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "cookie_value": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        }
+                      }
+                    }
+                  },
+                  "http_request_header": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on HTTP request header",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "header_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "header_value": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        }
+                      }
+                    }
+                  },
+                  "http_request_method": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on http request method",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "method": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_request_uri": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on http request URI",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        },
+                        "uri": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_request_uri_arguments": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on http request URI arguments (query string)",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        },
+                        "uri_arguments": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_request_version": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on http request version",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "version": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "http_response_header": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on HTTP response header",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "header_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "header_value": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        }
+                      }
+                    }
+                  },
+                  "http_ssl": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on HTTP SSL handshake and connection",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "client_certificate_issuer_dn": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "case_sensitive": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "If true, case is significant in condition matching",
+                                "Default": {
+                                  "Type": "bool",
+                                  "Value": "true"
+                                }
+                              },
+                              "issuer_dn": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "match_type": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                              }
+                            }
+                          }
+                        },
+                        "client_certificate_subject_dn": {
+                          "Type": "Set",
+                          "Optional": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "case_sensitive": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "If true, case is significant in condition matching",
+                                "Default": {
+                                  "Type": "bool",
+                                  "Value": "true"
+                                }
+                              },
+                              "match_type": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                              },
+                              "subject_dn": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "client_supported_ssl_ciphers": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Supported SSL ciphers",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "session_reused": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "used_protocol": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "used_ssl_cipher": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "ip_header": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on IP settings of the message",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_path": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "source_address": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "ssl_sni": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on SSL SNI in client hello",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        },
+                        "sni": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "tcp_header": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on TCP settings of the message",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "source_port": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "variable": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Rule condition based on IP header",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "case_sensitive": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "If true, case is significant in condition matching",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "true"
+                          }
+                        },
+                        "inverse": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "Whether to reverse match result of this condition",
+                          "Default": {
+                            "Type": "bool",
+                            "Value": "false"
+                          }
+                        },
+                        "match_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "Match type (STARTS_WITH, ENDS_WITH, EQUALS, CONTAINS, REGEX)"
+                        },
+                        "variable_name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "variable_value": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "display_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Display name for this resource"
+            },
+            "match_strategy": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Match strategy for determining match of multiple conditions (ALL or ANY, default: ANY).",
+              "Default": {
+                "Type": "string",
+                "Value": "ANY"
+              }
+            },
+            "phase": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Load balancer processing phase, one of HTTP_REQUEST_REWRITE, HTTP_FORWARDING (Default), HTTP_RESPONSE_REWRITE, HTTP_ACCESS, TRANSPORT.",
+              "Default": {
+                "Type": "string",
+                "Value": "HTTP_FORWARDING"
+              }
+            }
+          }
+        }
+      },
       "server_ssl": {
         "Type": "List",
         "Optional": true,
@@ -9816,6 +10761,94 @@
             }
           }
         }
+      }
+    },
+    "nsxt_policy_mac_discovery_profile": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "mac_change_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "mac_learning_enabled": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "mac_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "4096"
+        }
+      },
+      "mac_limit_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "ALLOW"
+        }
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "remote_overlay_mac_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "2048"
+        }
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "unknown_unicast_flooding_enabled": {
+        "Type": "Bool",
+        "Optional": true
       }
     },
     "nsxt_policy_nat_rule": {
@@ -9949,7 +10982,7 @@
       },
       "translated_networks": {
         "Type": "List",
-        "Required": true,
+        "Optional": true,
         "Description": "The translated network(s) for the NAT Rule",
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -12230,7 +13263,8 @@
             "local_as_num": {
               "Type": "String",
               "Optional": true,
-              "Description": "BGP AS number in ASPLAIN/ASDOT Format"
+              "Description": "BGP AS number in ASPLAIN/ASDOT Format",
+              "Computed": true
             },
             "multipath_relax": {
               "Type": "Bool",
@@ -15789,6 +16823,27 @@
         "Optional": true,
         "Description": "Instance UUID of the Virtual Machine",
         "Computed": true
+      }
+    },
+    "nsxt_policy_vms": {
+      "items": {
+        "Type": "Map",
+        "Description": "Mapping of VM instance ID by display name",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "value_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Type of data populated in map value",
+        "Default": {
+          "Type": "string",
+          "Value": "bios_id"
+        }
       }
     },
     "nsxt_policy_vni_pool": {

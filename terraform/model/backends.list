@@ -9,6 +9,7 @@ etcdv3
 gcs
 http
 inmem
+kubernetes
 local
 manta
 oss

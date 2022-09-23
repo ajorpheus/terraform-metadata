@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "configcat",
   "type": "provider",
-  "version": "v1.1.0",
+  "version": "v1.3.2",
   "provider": {
     "base_path": {
       "Type": "String",
@@ -67,6 +67,32 @@
         "Required": true
       },
       "organization_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "configcat_segment": {
+      "comparator": {
+        "Type": "String",
+        "Required": true
+      },
+      "comparison_attribute": {
+        "Type": "String",
+        "Required": true
+      },
+      "comparison_value": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "product_id": {
         "Type": "String",
         "Required": true
       }
@@ -156,15 +182,23 @@
           "Info": {
             "comparator": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             },
             "comparison_attribute": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             },
             "comparison_value": {
               "Type": "String",
-              "Required": true
+              "Optional": true
+            },
+            "segment_comparator": {
+              "Type": "String",
+              "Optional": true
+            },
+            "segment_id": {
+              "Type": "String",
+              "Optional": true
             },
             "value": {
               "Type": "String",
@@ -346,6 +380,39 @@
       "secondary": {
         "Type": "String",
         "Computed": true
+      }
+    },
+    "configcat_segments": {
+      "name_filter_regex": {
+        "Type": "String",
+        "Optional": true
+      },
+      "product_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "segments": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "segment_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "configcat_settings": {

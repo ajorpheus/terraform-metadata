@@ -1,0 +1,2322 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "rockset",
+  "type": "provider",
+  "version": "v0.5.4",
+  "provider": {
+    "api_key": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The API key used to access Rockset",
+      "Default": {
+        "Type": "string"
+      }
+    },
+    "api_server": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The API server for accessing Rockset",
+      "Default": {
+        "Type": "string"
+      }
+    }
+  },
+  "resources": {
+    "rockset_alias": {
+      "collections": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of collections for this alias to refer to.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the alias.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the alias. Can contain alphanumeric or dash characters."
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the workspace the alias will be in."
+      }
+    },
+    "rockset_api_key": {
+      "key": {
+        "Type": "String",
+        "Description": "The resulting Rockset api key.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the api key."
+      },
+      "role": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The role the api key will use. If not specified, \"All User Assigned Roles\" will be used."
+      },
+      "user": {
+        "Type": "String",
+        "Description": "The user the key is created for.",
+        "Computed": true
+      }
+    },
+    "rockset_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of partitions on a field."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Field mapping SQL query."
+      },
+      "field_schemas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field schemas.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "column_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have store or no_store."
+            },
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            },
+            "range_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have v1_index or no_index."
+            },
+            "type_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            }
+          }
+        }
+      },
+      "insert_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "inverted_index_group_encoding_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Inverted index group encoding options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "doc_id_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Doc id codec."
+            },
+            "event_time_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Event time codec."
+            },
+            "group_size": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Group size."
+            },
+            "restart_length": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Restart length."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_dynamodb_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of partitions on a field."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Field mapping SQL query."
+      },
+      "field_schemas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field schemas.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "column_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have store or no_store."
+            },
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            },
+            "range_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have v1_index or no_index."
+            },
+            "type_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            }
+          }
+        }
+      },
+      "insert_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "inverted_index_group_encoding_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Inverted index group encoding options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "doc_id_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Doc id codec."
+            },
+            "event_time_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Event time codec."
+            },
+            "group_size": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Group size."
+            },
+            "restart_length": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Restart length."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "source": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Defines a source for this collection.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "AWS region name of DynamoDB table, by default us-west-2 is used."
+            },
+            "field_mapping_query": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Field mapping SQL query."
+            },
+            "integration_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Rockset DynamoDB integration."
+            },
+            "rcu": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Max RCU usage for scan."
+            },
+            "scan_end_time": {
+              "Type": "String",
+              "Description": "DynamoDB scan end time.",
+              "Computed": true
+            },
+            "scan_records_processed": {
+              "Type": "Int",
+              "Description": "Number of records inserted using scan.",
+              "Computed": true
+            },
+            "scan_start_time": {
+              "Type": "String",
+              "Description": "DynamoDB scan start time.",
+              "Computed": true
+            },
+            "scan_total_records": {
+              "Type": "Int",
+              "Description": "Number of records in DynamoDB table at time of scan.",
+              "Computed": true
+            },
+            "state": {
+              "Type": "String",
+              "Description": "State of current ingest for this table.",
+              "Computed": true
+            },
+            "stream_last_processed_at": {
+              "Type": "String",
+              "Description": "ISO-8601 date when source was last processed.",
+              "Computed": true
+            },
+            "table_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of DynamoDB table containing data."
+            }
+          }
+        }
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_dynamodb_integration": {
+      "aws_role_arn": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AWS Role Arn to use for this integration."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the integration.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the integration. Can contain alphanumeric or dash characters."
+      },
+      "s3_export_bucket_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "AWS S3 bucket name used for exporting the DynamoDB tables."
+      }
+    },
+    "rockset_gcs_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of partitions on a field."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Field mapping SQL query."
+      },
+      "field_schemas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field schemas.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "column_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have store or no_store."
+            },
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            },
+            "range_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have v1_index or no_index."
+            },
+            "type_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            }
+          }
+        }
+      },
+      "insert_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "inverted_index_group_encoding_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Inverted index group encoding options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "doc_id_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Doc id codec."
+            },
+            "event_time_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Event time codec."
+            },
+            "group_size": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Group size."
+            },
+            "restart_length": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Restart length."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "source": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Defines a source for this collection.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket": {
+              "Type": "String",
+              "Required": true,
+              "Description": "GCS bucket containing the target data."
+            },
+            "csv": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "column_names": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "The names of the columns.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "column_types": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "The types of the columns.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "encoding": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Can be one of: UTF-8, ISO_8859_1, UTF-16.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "UTF-8"
+                    }
+                  },
+                  "escape_char": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Escape character removes any special meaning from the character that follows it. Defaults to backslash.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "\\"
+                    }
+                  },
+                  "first_line_as_column_names": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "If the first line in every object specifies the column names.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  },
+                  "quote_char": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Character within which a cell value is enclosed. Defaults to double quote.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "\""
+                    }
+                  },
+                  "separator": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "A single character that is the column separator.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": ","
+                    }
+                  }
+                }
+              }
+            },
+            "field_mapping_query": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Field mapping SQL query."
+            },
+            "format": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Format of the data. One of: json, csv, xml. xml and csv blocks can only be set for their respective formats. "
+            },
+            "integration_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Rockset GCS integration."
+            },
+            "prefix": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Simple path prefix to GCS key."
+            },
+            "xml": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "attribute_prefix": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag to differentiate between attributes and elements."
+                  },
+                  "doc_tag": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tags with which documents are identified"
+                  },
+                  "encoding": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Encoding in which data source is encoded.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "UTF-8"
+                    }
+                  },
+                  "root_tag": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag until which xml is ignored."
+                  },
+                  "value_tag": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag used for the value when there are attributes in the element having no child.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_gcs_integration": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the integration.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the integration. Can contain alphanumeric or dash characters."
+      },
+      "service_account_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The GCP service account key JSON."
+      }
+    },
+    "rockset_kinesis_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of partitions on a field."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Field mapping SQL query."
+      },
+      "field_schemas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field schemas.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "column_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have store or no_store."
+            },
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            },
+            "range_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have v1_index or no_index."
+            },
+            "type_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            }
+          }
+        }
+      },
+      "insert_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "inverted_index_group_encoding_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Inverted index group encoding options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "doc_id_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Doc id codec."
+            },
+            "event_time_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Event time codec."
+            },
+            "group_size": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Group size."
+            },
+            "restart_length": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Restart length."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "source": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Defines a source for this collection.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "AWS region name for the Kinesis stream, by default us-west-2 is used",
+              "Default": {
+                "Type": "string",
+                "Value": "us-west-2"
+              }
+            },
+            "dms_primary_key": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Set of fields that correspond to a DMS primary key. Can only be set if format is mysql or postgres.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "field_mapping_query": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Field mapping SQL query."
+            },
+            "format": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Format of the data. One of: json, mysql, postgres. dms_primary_keys list can only be set for mysql or postgres. "
+            },
+            "integration_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Rockset Kinesis integration."
+            },
+            "stream_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of Kinesis stream."
+            }
+          }
+        }
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_kinesis_integration": {
+      "aws_role_arn": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AWS Role Arn to use for this integration."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the integration.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the integration. Can contain alphanumeric or dash characters."
+      }
+    },
+    "rockset_mongodb_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of partitions on a field."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Field mapping SQL query."
+      },
+      "field_schemas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field schemas.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "column_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have store or no_store."
+            },
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            },
+            "range_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have v1_index or no_index."
+            },
+            "type_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            }
+          }
+        }
+      },
+      "insert_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "inverted_index_group_encoding_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Inverted index group encoding options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "doc_id_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Doc id codec."
+            },
+            "event_time_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Event time codec."
+            },
+            "group_size": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Group size."
+            },
+            "restart_length": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Restart length."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "source": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Defines a source for this collection.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "collection_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "MongoDB collection name of the target collection."
+            },
+            "database_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "MongoDB database name containing the target collection."
+            },
+            "field_mapping_query": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Field mapping SQL query."
+            },
+            "integration_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Rockset MongoDB integration."
+            },
+            "scan_end_time": {
+              "Type": "String",
+              "Description": "MongoDB scan end time.",
+              "Computed": true
+            },
+            "scan_records_processed": {
+              "Type": "Int",
+              "Description": "Number of records inserted using scan.",
+              "Computed": true
+            },
+            "scan_start_time": {
+              "Type": "String",
+              "Description": "MongoDB scan start time.",
+              "Computed": true
+            },
+            "scan_total_records": {
+              "Type": "Int",
+              "Description": "Number of records in MongoDB table at time of scan.",
+              "Computed": true
+            },
+            "state": {
+              "Type": "String",
+              "Description": "State of current ingest for this table.",
+              "Computed": true
+            },
+            "stream_last_delete_processed_at": {
+              "Type": "String",
+              "Description": "ISO-8601 date when delete from source was last processed.",
+              "Computed": true
+            },
+            "stream_last_insert_processed_at": {
+              "Type": "String",
+              "Description": "ISO-8601 date when new insert from source was last processed.",
+              "Computed": true
+            },
+            "stream_last_update_processed_at": {
+              "Type": "String",
+              "Description": "ISO-8601 date when update from source was last processed.",
+              "Computed": true
+            },
+            "stream_records_deleted": {
+              "Type": "Int",
+              "Description": "Number of new records deleted using stream.",
+              "Computed": true
+            },
+            "stream_records_inserted": {
+              "Type": "Int",
+              "Description": "Number of new records inserted using stream.",
+              "Computed": true
+            },
+            "stream_records_updated": {
+              "Type": "Int",
+              "Description": "Number of new records updated using stream.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_mongodb_integration": {
+      "connection_uri": {
+        "Type": "String",
+        "Required": true,
+        "Description": "MongoDB connection URI string. The password is scrubbed from the URI when fetched by the API so this field is NOT set on imports and reads."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the integration.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the integration. Can contain alphanumeric or dash characters."
+      }
+    },
+    "rockset_query_lambda": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the query lambda.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the query lambda. Can contain alphanumeric or dash characters."
+      },
+      "sql": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_parameter": {
+              "Type": "Set",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "query": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The latest state of this query lambda.",
+        "Computed": true
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The latest version string of this query lambda.",
+        "Computed": true
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_query_lambda_tag": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the tag. Can contain alphanumeric or dash characters."
+      },
+      "query_lambda": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the query lambda. Can contain alphanumeric or dash characters."
+      },
+      "version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Version of the query lambda this tag should point to."
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace the query lambda is in."
+      }
+    },
+    "rockset_role": {
+      "created_at": {
+        "Type": "String",
+        "Description": "When the role was created.",
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "String",
+        "Description": "Who created the role.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Role description."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Role name."
+      },
+      "owner_email": {
+        "Type": "String",
+        "Description": "The email of the user who currently owns the role.",
+        "Computed": true
+      },
+      "privilege": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Privileges associated with the role.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The action allowed by this privilege."
+            },
+            "cluster": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Rockset cluster ID for which this action is allowed. Only applies to Workspace actions. Defaults to '*ALL*' if not specified."
+            },
+            "resource_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The resource on which this action is allowed. Defaults to 'All' if not specified."
+            }
+          }
+        }
+      }
+    },
+    "rockset_s3_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The type of partitions on a field."
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Field mapping SQL query."
+      },
+      "field_schemas": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field schemas.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "column_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have store or no_store."
+            },
+            "field_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of a field. Parsed as a SQL qualified name."
+            },
+            "index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            },
+            "range_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have v1_index or no_index."
+            },
+            "type_index_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Whether to have index or no_index."
+            }
+          }
+        }
+      },
+      "insert_only": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "inverted_index_group_encoding_options": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Inverted index group encoding options.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "doc_id_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Doc id codec."
+            },
+            "event_time_codec": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Event time codec."
+            },
+            "group_size": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Group size."
+            },
+            "restart_length": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Restart length."
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "source": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Defines a source for this collection.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket": {
+              "Type": "String",
+              "Required": true,
+              "Description": "S3 bucket containing the target data."
+            },
+            "csv": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "column_names": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "The names of the columns.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "column_types": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "The types of the columns.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "encoding": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Can be one of: UTF-8, ISO_8859_1, UTF-16.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "UTF-8"
+                    }
+                  },
+                  "escape_char": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Escape character removes any special meaning from the character that follows it. Defaults to backslash.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "\\"
+                    }
+                  },
+                  "first_line_as_column_names": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "If the first line in every object specifies the column names.",
+                    "Default": {
+                      "Type": "bool",
+                      "Value": "true"
+                    }
+                  },
+                  "quote_char": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Character within which a cell value is enclosed. Defaults to double quote.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "\""
+                    }
+                  },
+                  "separator": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "A single character that is the column separator.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": ","
+                    }
+                  }
+                }
+              }
+            },
+            "field_mapping_query": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Field mapping SQL query."
+            },
+            "format": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Format of the data. One of: json, csv, xml. xml and csv blocks can only be set for their respective formats. "
+            },
+            "integration_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the Rockset S3 integration. If no S3 integration is provided only data in public S3 buckets are accessible."
+            },
+            "pattern": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Regex path pattern to S3 keys."
+            },
+            "prefix": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Simple path prefix to S3 keys.",
+              "Deprecated": "use pattern instead"
+            },
+            "xml": {
+              "Type": "Set",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "attribute_prefix": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag to differentiate between attributes and elements."
+                  },
+                  "doc_tag": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tags with which documents are identified"
+                  },
+                  "encoding": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Encoding in which data source is encoded.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "UTF-8"
+                    }
+                  },
+                  "root_tag": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag until which xml is ignored."
+                  },
+                  "value_tag": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag used for the value when there are attributes in the element having no child.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_s3_integration": {
+      "aws_role_arn": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AWS Role Arn to use for this integration."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the integration.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the integration. Can contain alphanumeric or dash characters."
+      }
+    },
+    "rockset_user": {
+      "email": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Email address of the user. Also used to identify the user."
+      },
+      "roles": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of roles for the user. E.g. 'admin', 'member', 'read-only'.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "rockset_view": {
+      "created_by": {
+        "Type": "String",
+        "Description": "The user who created the view.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique name for the view in the workspace. Can contain alphanumeric or dash characters."
+      },
+      "query": {
+        "Type": "String",
+        "Required": true,
+        "Description": "SQL query used for thw view."
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Workspace name."
+      }
+    },
+    "rockset_workspace": {
+      "created_by": {
+        "Type": "String",
+        "Description": "The user who created the workspace.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for workspace. Can contain alphanumeric or dash characters."
+      }
+    }
+  },
+  "data-sources": {
+    "rockset_account": {
+      "account_id": {
+        "Type": "String",
+        "Description": "The AWS account ID to reference in AWS policies.",
+        "Computed": true
+      },
+      "clusters": {
+        "Type": "List",
+        "Description": "The Rockset clusters available to this API key.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_server": {
+              "Type": "String",
+              "Computed": true
+            },
+            "aws_region": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "external_id": {
+        "Type": "String",
+        "Description": "The external ID to use in AWS trust policies.",
+        "Computed": true
+      },
+      "organization": {
+        "Type": "String",
+        "Description": "The name of the organization for the API key.",
+        "Computed": true
+      },
+      "rockset_user": {
+        "Type": "String",
+        "Description": "The name of the Rockset user used for AWS trust policies.",
+        "Computed": true
+      }
+    }
+  }
+}

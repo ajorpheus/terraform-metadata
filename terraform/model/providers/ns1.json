@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "ns1",
   "type": "provider",
-  "version": "v1.12.4",
+  "version": "v1.12.8",
   "provider": {
     "apikey": {
       "Type": "String",
@@ -671,6 +671,14 @@
         "Type": "Map",
         "Optional": true
       },
+      "override_ttl": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "regions": {
         "Type": "List",
         "Optional": true,
@@ -720,6 +728,68 @@
       "zone": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "ns1_subnet": {
+      "children": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "desc": {
+        "Type": "String",
+        "Optional": true
+      },
+      "dhcp_scoped": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "free_addresses": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "network_id": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "parent_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "prefix": {
+        "Type": "String",
+        "Optional": true
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tags": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
+      "total_addresses": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "used_addresses": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "ns1_team": {
@@ -1015,6 +1085,20 @@
           "Type": "bool",
           "Value": "false"
         }
+      }
+    },
+    "ns1_tsigkey": {
+      "algorithm": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "secret": {
+        "Type": "String",
+        "Required": true
       }
     },
     "ns1_user": {
@@ -1367,6 +1451,7 @@
       },
       "hostmaster": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "link": {
@@ -1453,6 +1538,15 @@
               "Computed": true
             }
           }
+        }
+      },
+      "tsig": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "ttl": {

@@ -3,32 +3,24 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "local",
   "type": "provider",
-  "version": "v2.1.0",
+  "version": "v2.2.3",
   "provider": {},
   "resources": {
     "local_file": {
       "content": {
         "Type": "String",
         "Optional": true,
-        "ConflictsWith": [
-          "sensitive_content",
-          "content_base64",
-          "source"
-        ]
+        "Description": "Content to store in the file, expected to be an UTF-8 encoded string."
       },
       "content_base64": {
         "Type": "String",
         "Optional": true,
-        "ConflictsWith": [
-          "sensitive_content",
-          "content",
-          "source"
-        ]
+        "Description": "Content to store in the file, expected to be binary encoded as base64 string."
       },
       "directory_permission": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permissions to set for directories created",
+        "Description": "Permissions to set for directories created (in numeric notation).",
         "Default": {
           "Type": "string",
           "Value": "0777"
@@ -37,7 +29,7 @@
       "file_permission": {
         "Type": "String",
         "Optional": true,
-        "Description": "Permissions to set for the output file",
+        "Description": "Permissions to set for the output file (in numeric notation).",
         "Default": {
           "Type": "string",
           "Value": "0777"
@@ -46,26 +38,58 @@
       "filename": {
         "Type": "String",
         "Required": true,
-        "Description": "Path to the output file"
+        "Description": "\n\t\t\t\t\tThe path to the file that will be created.\n\t\t\t\t\tMissing parent directories will be created.\n\t\t\t\t\tIf the file already exists, it will be overridden with the given content.\n\t\t\t\t"
       },
       "sensitive_content": {
         "Type": "String",
         "Optional": true,
-        "ConflictsWith": [
-          "content",
-          "content_base64",
-          "source"
-        ]
+        "Description": "Sensitive content to store in the file, expected to be an UTF-8 encoded string.",
+        "Deprecated": "Use the `local_sensitive_file` resource instead."
       },
       "source": {
         "Type": "String",
         "Optional": true,
-        "Description": "Path to file to use as source for content of output file",
-        "ConflictsWith": [
-          "content",
-          "sensitive_content",
-          "content_base64"
-        ]
+        "Description": "Path to file to use as source for the one we are creating."
+      }
+    },
+    "local_sensitive_file": {
+      "content": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Sensitive content to store in the file, expected to be an UTF-8 encoded string."
+      },
+      "content_base64": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Sensitive content to store in the file, expected to be binary encoded as base64 string."
+      },
+      "directory_permission": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Permissions to set for directories created (in numeric notation).",
+        "Default": {
+          "Type": "string",
+          "Value": "0700"
+        }
+      },
+      "file_permission": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Permissions to set for the output file (in numeric notation).",
+        "Default": {
+          "Type": "string",
+          "Value": "0700"
+        }
+      },
+      "filename": {
+        "Type": "String",
+        "Required": true,
+        "Description": "\n\t\t\t\t\tThe path to the file that will be created.\n\t\t\t\t\tMissing parent directories will be created.\n\t\t\t\t\tIf the file already exists, it will be overridden with the given content.\n\t\t\t\t"
+      },
+      "source": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path to file to use as source for the one we are creating."
       }
     }
   },
@@ -73,16 +97,35 @@
     "local_file": {
       "content": {
         "Type": "String",
+        "Description": "Raw content of the file that was read, as UTF-8 encoded string.",
         "Computed": true
       },
       "content_base64": {
         "Type": "String",
+        "Description": "Base64 encoded version of the file content (use this when dealing with binary data).",
         "Computed": true
       },
       "filename": {
         "Type": "String",
         "Required": true,
-        "Description": "Path to the output file"
+        "Description": "Path to the file that will be read. The data source will return an error if the file does not exist."
+      }
+    },
+    "local_sensitive_file": {
+      "content": {
+        "Type": "String",
+        "Description": "Raw content of the file that was read, as UTF-8 encoded string.",
+        "Computed": true
+      },
+      "content_base64": {
+        "Type": "String",
+        "Description": "Base64 encoded version of the file raw content (use this when dealing with binary data).",
+        "Computed": true
+      },
+      "filename": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Path to the file that will be read. The data source will return an error if the file does not exist."
       }
     }
   }

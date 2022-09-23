@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "cloudsigma",
   "type": "provider",
-  "version": "v1.9.0",
+  "version": "v1.10.1",
   "provider": {
     "base_url": {
       "Type": "String",
@@ -189,7 +189,7 @@
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
-          "ElementsType": "String"
+          "ElementsType": "Int"
         }
       },
       "ipv4_address": {
@@ -199,6 +199,15 @@
       "memory": {
         "Type": "Int",
         "Required": true
+      },
+      "meta": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "name": {
         "Type": "String",

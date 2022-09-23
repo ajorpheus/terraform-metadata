@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "sumologic",
   "type": "provider",
-  "version": "v2.11.5",
+  "version": "v2.18.2",
   "provider": {
     "access_id": {
       "Type": "String",
@@ -52,6 +52,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -61,6 +93,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -213,6 +249,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -223,6 +283,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -285,6 +354,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -301,8 +374,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -333,6 +405,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -342,6 +446,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -494,6 +602,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -504,6 +636,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -566,6 +707,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -582,8 +727,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -633,6 +777,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -642,6 +818,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -794,6 +974,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -804,6 +1008,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -866,6 +1079,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -882,8 +1099,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -1032,8 +1248,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "token": {
@@ -1064,6 +1279,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -1073,6 +1320,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -1225,6 +1476,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -1235,6 +1510,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -1297,6 +1581,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -1313,8 +1601,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -1345,6 +1632,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -1354,6 +1673,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -1506,6 +1829,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -1516,6 +1863,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -1578,6 +1934,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -1594,8 +1954,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -1729,6 +2088,46 @@
       "parent_id": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "sumologic_content_permission": {
+      "content_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "notification_message": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "notify_recipient": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "permission": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "permission_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "source_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "source_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       }
     },
     "sumologic_cse_aggregation_rule": {
@@ -2061,6 +2460,78 @@
         "Required": true
       }
     },
+    "sumologic_cse_entity_entity_group_configuration": {
+      "criticality": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "entity_namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "entity_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "network_block": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "prefix": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "suffix": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "suppressed": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "sumologic_cse_insights_configuration": {
       "lookback_days": {
         "Type": "Float",
@@ -2097,6 +2568,58 @@
       "name": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "sumologic_cse_inventory_entity_group_configuration": {
+      "criticality": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "group": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "inventory_source": {
+        "Type": "String",
+        "Required": true
+      },
+      "inventory_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "suppressed": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "sumologic_cse_log_mapping": {
@@ -2192,7 +2715,7 @@
               "Optional": true
             },
             "split_index": {
-              "Type": "String",
+              "Type": "Int",
               "Optional": true
             },
             "time_zone": {
@@ -2286,6 +2809,67 @@
             }
           }
         }
+      }
+    },
+    "sumologic_cse_match_list": {
+      "created": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "default_ttl": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "description": {
+        "Type": "String",
+        "Required": true
+      },
+      "items": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Required": true
+            },
+            "expiration": {
+              "Type": "String",
+              "Optional": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "last_updated": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "target_column": {
+        "Type": "String",
+        "Required": true
       }
     },
     "sumologic_cse_match_rule": {
@@ -2589,6 +3173,10 @@
         }
       },
       "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "domain": {
         "Type": "String",
         "Optional": true
       },
@@ -3331,7 +3919,7 @@
           "Type": "SchemaInfo",
           "Info": {
             "data": {
-              "Type": "List",
+              "Type": "Set",
               "Required": true,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -3485,6 +4073,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -3494,6 +4114,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -3646,6 +4270,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -3656,6 +4304,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -3718,6 +4375,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -3734,8 +4395,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -3802,6 +4462,359 @@
       "parent_id": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "sumologic_gcp_metrics_source": {
+      "authentication": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "access_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "region": {
+              "Type": "String",
+              "Optional": true
+            },
+            "role_arn": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "automatic_date_parsing": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "category": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "collector_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "content_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "cutoff_relative_time": {
+        "Type": "String",
+        "Optional": true
+      },
+      "cutoff_timestamp": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "default_date_formats": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "format": {
+              "Type": "String",
+              "Required": true
+            },
+            "locator": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "fields": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "filters": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "filter_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "mask": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regexp": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "force_timezone": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "host_name": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "manual_prefix_regexp": {
+        "Type": "String",
+        "Optional": true
+      },
+      "multiline_processing_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "path": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "limit_to_namespaces": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "path_expression": {
+              "Type": "String",
+              "Optional": true
+            },
+            "sns_topic_or_subscription_arn": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "arn": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_success": {
+                    "Type": "Bool",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "tag_filters": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "namespace": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "tags": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "paused": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "scan_interval": {
+        "Type": "Int",
+        "Required": true
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "use_autoline_matching": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       }
     },
     "sumologic_gcp_source": {
@@ -3989,8 +5002,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -5995,8 +7007,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -6089,6 +7100,297 @@
       "timezone": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "sumologic_installed_collector": {
+      "alive": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "category": {
+        "Type": "String",
+        "Optional": true
+      },
+      "collector_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cutoff_timestamp": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ephemeral": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "fields": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "host_name": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "last_seen_alive": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "source_sync_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "UI"
+        }
+      },
+      "target_cpu": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Etc/UTC"
+        }
+      }
+    },
+    "sumologic_kinesis_log_source": {
+      "authentication": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "access_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "role_arn": {
+              "Type": "String",
+              "Optional": true
+            },
+            "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "automatic_date_parsing": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "category": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "collector_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "content_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "cutoff_relative_time": {
+        "Type": "String",
+        "Optional": true
+      },
+      "cutoff_timestamp": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "default_date_formats": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "format": {
+              "Type": "String",
+              "Required": true
+            },
+            "locator": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "fields": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "filters": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "filter_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "mask": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regexp": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "force_timezone": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "host_name": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "manual_prefix_regexp": {
+        "Type": "String",
+        "Optional": true
+      },
+      "message_per_request": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "multiline_processing_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "path": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "path_expression": {
+              "Type": "String",
+              "Optional": true
+            },
+            "scan_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "300000"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string"
+        }
+      },
+      "url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "use_autoline_matching": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       }
     },
     "sumologic_kinesis_metrics_source": {
@@ -6306,8 +7608,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -6597,8 +7898,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -6615,6 +7915,10 @@
       }
     },
     "sumologic_monitor": {
+      "alert_name": {
+        "Type": "String",
+        "Optional": true
+      },
       "content_type": {
         "Type": "String",
         "Optional": true,
@@ -6686,6 +7990,15 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "notification_group_fields": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "notifications": {
         "Type": "List",
@@ -6760,6 +8073,34 @@
           }
         }
       },
+      "obj_permission": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "permissions": {
+              "Type": "Set",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subject_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "subject_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
       "parent_id": {
         "Type": "String",
         "Optional": true,
@@ -6796,6 +8137,10 @@
             }
           }
         }
+      },
+      "slo_id": {
+        "Type": "String",
+        "Optional": true
       },
       "status": {
         "Type": "List",
@@ -7155,6 +8500,10 @@
                           "Elem": {
                             "Type": "SchemaInfo",
                             "Info": {
+                              "occurrence_type": {
+                                "Type": "String",
+                                "Optional": true
+                              },
                               "threshold": {
                                 "Type": "Float",
                                 "Optional": true
@@ -7215,6 +8564,10 @@
                           "Elem": {
                             "Type": "SchemaInfo",
                             "Info": {
+                              "occurrence_type": {
+                                "Type": "String",
+                                "Optional": true
+                              },
                               "threshold": {
                                 "Type": "Float",
                                 "Optional": true
@@ -7228,6 +8581,102 @@
                         },
                         "time_range": {
                           "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "slo_burn_rate_condition": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "burn_rate_threshold": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "time_range": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "warning": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "burn_rate_threshold": {
+                          "Type": "Float",
+                          "Required": true
+                        },
+                        "time_range": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "slo_sli_condition": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "sli_threshold": {
+                          "Type": "Float",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "warning": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "sli_threshold": {
+                          "Type": "Float",
                           "Required": true
                         }
                       }
@@ -7343,6 +8792,34 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "obj_permission": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "permissions": {
+              "Type": "Set",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "subject_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "subject_type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "parent_id": {
         "Type": "String",
@@ -7819,8 +9296,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -7874,6 +9350,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -7883,6 +9391,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -8035,6 +9547,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -8045,6 +9581,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -8107,6 +9652,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -8123,8 +9672,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -8155,6 +9703,38 @@
               "Type": "String",
               "Optional": true
             },
+            "auth_provider_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "auth_uri": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_email": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "client_x509_cert_url": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Optional": true
+            },
+            "project_id": {
+              "Type": "String",
+              "Optional": true
+            },
             "region": {
               "Type": "String",
               "Optional": true
@@ -8164,6 +9744,10 @@
               "Optional": true
             },
             "secret_key": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token_uri": {
               "Type": "String",
               "Optional": true
             },
@@ -8316,6 +9900,30 @@
               "Type": "String",
               "Optional": true
             },
+            "custom_services": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "prefixes": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "service_name": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
             "limit_to_namespaces": {
               "Type": "List",
               "Optional": true,
@@ -8326,6 +9934,15 @@
               }
             },
             "limit_to_regions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "limit_to_services": {
               "Type": "List",
               "Optional": true,
               "ConfigImplicitMode": "Attr",
@@ -8388,6 +10005,10 @@
             "type": {
               "Type": "String",
               "Required": true
+            },
+            "use_versioned_api": {
+              "Type": "Bool",
+              "Optional": true
             }
           }
         }
@@ -8404,8 +10025,7 @@
         "Type": "String",
         "Optional": true,
         "Default": {
-          "Type": "string",
-          "Value": "Etc/UTC"
+          "Type": "string"
         }
       },
       "url": {
@@ -8617,6 +10237,354 @@
         "Required": true
       }
     },
+    "sumologic_slo": {
+      "application": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "compliance": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "compliance_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "size": {
+              "Type": "String",
+              "Required": true
+            },
+            "start_from": {
+              "Type": "String",
+              "Optional": true
+            },
+            "target": {
+              "Type": "Float",
+              "Required": true
+            },
+            "timezone": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "indicator": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "request_based_evaluation": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "op": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "queries": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 6,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query_group": {
+                          "Type": "List",
+                          "Required": true,
+                          "MaxItems": 6,
+                          "MinItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "field": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "query": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "row_id": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "use_row_count": {
+                                "Type": "Bool",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "query_group_type": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "query_type": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "threshold": {
+                    "Type": "Float",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "window_based_evaluation": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "aggregation": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "op": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "queries": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 6,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query_group": {
+                          "Type": "List",
+                          "Required": true,
+                          "MaxItems": 6,
+                          "MinItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "field": {
+                                "Type": "String",
+                                "Optional": true
+                              },
+                              "query": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "row_id": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "use_row_count": {
+                                "Type": "Bool",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "query_group_type": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "query_type": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "size": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "threshold": {
+                    "Type": "Float",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "is_locked": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "is_mutable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_system": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "modified_at": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "modified_by": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "parent_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "post_request_map": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "signal_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "version": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "sumologic_slo_folder": {
+      "content_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Folder"
+        }
+      },
+      "created_at": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Required": true
+      },
+      "is_locked": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "is_mutable": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_system": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "modified_at": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "modified_by": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "parent_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "post_request_map": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "SlosLibraryFolder"
+        }
+      },
+      "version": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "sumologic_subdomain": {
       "subdomain": {
         "Type": "String",
@@ -8757,6 +10725,20 @@
         "Required": true
       },
       "vendor": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "sumologic_folder": {
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "path": {
         "Type": "String",
         "Required": true
       }

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "avi",
   "type": "provider",
-  "version": "v21.1.3",
+  "version": "v22.1.1-p1.0",
   "provider": {
     "avi_api_timeout": {
       "Type": "Int",
@@ -504,6 +504,11 @@
         "Optional": true,
         "Computed": true
       },
+      "error": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "file_path": {
         "Type": "String",
         "Required": true
@@ -513,6 +518,11 @@
         "Required": true
       },
       "s3_directory": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "status": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -574,7 +584,38 @@
         "Type": "String",
         "Required": true
       },
+      "params": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "pulse_job_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pulse_sync_status": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "result": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -608,6 +649,11 @@
         }
       },
       "tenant_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "token": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -1805,6 +1851,11 @@
           "Value": "5"
         }
       },
+      "hs_security_tls13_score": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "hs_security_weak_signature_algo_penalty": {
         "Type": "String",
         "Optional": true,
@@ -2146,6 +2197,43 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "time_tracker_props": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "be_conn_est_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "be_conn_est_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fe_conn_est_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fe_conn_est_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ingress_sig_log": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "uuid": {
         "Type": "String",
@@ -5769,6 +5857,14 @@
                 "Value": "48"
               }
             },
+            "collect_client_tls_fingerprint": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "compression_profile": {
               "Type": "Set",
               "Optional": true,
@@ -6132,12 +6228,28 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "enable_http2_server_push": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  },
                   "http2_initial_window_size": {
                     "Type": "String",
                     "Optional": true,
                     "Default": {
                       "Type": "string",
                       "Value": "64"
+                    }
+                  },
+                  "max_http2_concurrent_pushes_per_connection": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "10"
                     }
                   },
                   "max_http2_concurrent_streams_per_connection": {
@@ -6253,6 +6365,14 @@
               "Default": {
                 "Type": "string",
                 "Value": "0"
+              }
+            },
+            "max_header_count": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "64"
               }
             },
             "max_keepalive_requests": {
@@ -6582,6 +6702,34 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "ftp_profile": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "deactivate_active": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  },
+                  "deactivate_passive": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  }
+                }
+              }
+            },
             "pki_profile_ref": {
               "Type": "String",
               "Optional": true,
@@ -6613,6 +6761,191 @@
             }
           }
         }
+      },
+      "tenant_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "avi_authmappingprofile": {
+      "configpb_attributes": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mapping_rules": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "assign_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "assign_role": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "assign_tenant": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "assign_userprofile": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "attribute_match": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "criteria": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "values": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "default_tenant_ref": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "group_match": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "criteria": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "groups": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "index": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_superuser": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "policy_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role_refs": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tenant_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "tenant_refs": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "userprofile_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "userprofile_ref": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
       },
       "tenant_ref": {
         "Type": "String",
@@ -6958,8 +7291,7 @@
             },
             "pool_ref": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             },
             "token_endpoint": {
               "Type": "String",
@@ -7430,6 +7762,14 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "remote_file_transfer_protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "SCP"
+        }
       },
       "remote_hostname": {
         "Type": "String",
@@ -8261,6 +8601,14 @@
           "Type": "SchemaInfo",
           "Info": {
             "enabled": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
+            },
+            "use_tls_fingerprint": {
               "Type": "String",
               "Optional": true,
               "Default": {
@@ -10124,6 +10472,38 @@
           "Value": "false"
         }
       },
+      "markers": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true
+            },
+            "values": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "metrics_polling_interval": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "300"
+        }
+      },
       "mtu": {
         "Type": "String",
         "Optional": true,
@@ -10381,6 +10761,99 @@
               "Default": {
                 "Type": "string",
                 "Value": "default"
+              }
+            }
+          }
+        }
+      },
+      "ntp_configuration": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ntp_authentication_keys": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "algorithm": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "NTP_AUTH_ALGORITHM_MD5"
+                    }
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "key_number": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "ntp_server_list": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "addr": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "ntp_servers": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key_number": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "server": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "addr": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -11229,6 +11702,28 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "content_lib": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "datacenter": {
               "Type": "String",
               "Optional": true,
@@ -11290,6 +11785,14 @@
             "privilege": {
               "Type": "String",
               "Required": true
+            },
+            "use_content_lib": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
             },
             "username": {
               "Type": "String",
@@ -11980,6 +12483,50 @@
                       "Value": "false"
                     }
                   },
+                  "false_positive_learning_config": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "max_apps_supported": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "5"
+                          }
+                        },
+                        "min_monitor_time": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "10080"
+                          }
+                        },
+                        "min_trans_per_application": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "5000000"
+                          }
+                        },
+                        "min_trans_per_uri": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "10000"
+                          }
+                        }
+                      }
+                    }
+                  },
                   "fatal_error_lease_time": {
                     "Type": "String",
                     "Optional": true,
@@ -12121,6 +12668,14 @@
                       "Value": "21600"
                     }
                   },
+                  "restrict_cloud_read_access": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  },
                   "safenet_hsm_version": {
                     "Type": "String",
                     "Optional": true,
@@ -12164,6 +12719,14 @@
                     "Default": {
                       "Type": "string",
                       "Value": "300"
+                    }
+                  },
+                  "se_upgrade_flow_cleanup_timeout": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "90"
                     }
                   },
                   "se_vnic_cooldown": {
@@ -12255,6 +12818,22 @@
                       "Value": "300"
                     }
                   },
+                  "update_dns_entry_retry_limit": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "3"
+                    }
+                  },
+                  "update_dns_entry_timeout": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "120"
+                    }
+                  },
                   "upgrade_dns_ttl": {
                     "Type": "String",
                     "Optional": true,
@@ -12310,6 +12889,22 @@
                           "Default": {
                             "Type": "string",
                             "Value": "300000"
+                          }
+                        },
+                        "max_age": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "86400"
+                          }
+                        },
+                        "max_last_hit_time": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "86400"
                           }
                         },
                         "max_upstream_queries": {
@@ -13396,6 +13991,50 @@
           "Value": "false"
         }
       },
+      "false_positive_learning_config": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "max_apps_supported": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "5"
+              }
+            },
+            "min_monitor_time": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "10080"
+              }
+            },
+            "min_trans_per_application": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "5000000"
+              }
+            },
+            "min_trans_per_uri": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "10000"
+              }
+            }
+          }
+        }
+      },
       "fatal_error_lease_time": {
         "Type": "String",
         "Optional": true,
@@ -13537,6 +14176,14 @@
           "Value": "21600"
         }
       },
+      "restrict_cloud_read_access": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
       "safenet_hsm_version": {
         "Type": "String",
         "Optional": true,
@@ -13580,6 +14227,14 @@
         "Default": {
           "Type": "string",
           "Value": "300"
+        }
+      },
+      "se_upgrade_flow_cleanup_timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "90"
         }
       },
       "se_vnic_cooldown": {
@@ -13671,6 +14326,22 @@
           "Value": "300"
         }
       },
+      "update_dns_entry_retry_limit": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "3"
+        }
+      },
+      "update_dns_entry_timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "120"
+        }
+      },
       "upgrade_dns_ttl": {
         "Type": "String",
         "Optional": true,
@@ -13726,6 +14397,22 @@
               "Default": {
                 "Type": "string",
                 "Value": "300000"
+              }
+            },
+            "max_age": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
+              }
+            },
+            "max_last_hit_time": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
               }
             },
             "max_upstream_queries": {
@@ -14220,6 +14907,22 @@
                               }
                             }
                           }
+                        }
+                      }
+                    }
+                  },
+                  "gs_group_selection": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_name": {
+                          "Type": "String",
+                          "Required": true
                         }
                       }
                     }
@@ -15494,7 +16197,7 @@
       },
       "files": {
         "Type": "List",
-        "Required": true,
+        "Optional": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -16066,6 +16769,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "cluster_uuid": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "enabled": {
               "Type": "String",
               "Optional": true,
@@ -16216,6 +16924,16 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "checksum": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "file_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "filename": {
                     "Type": "String",
                     "Optional": true,
@@ -16228,6 +16946,11 @@
                       "Type": "string",
                       "Value": "GSLB_GEODB_FILE_FORMAT_AVI"
                     }
+                  },
+                  "timestamp": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -16561,6 +17284,14 @@
                       }
                     }
                   },
+                  "preference_order": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "1"
+                    }
+                  },
                   "public_ip": {
                     "Type": "Set",
                     "Optional": true,
@@ -16737,6 +17468,11 @@
         "Optional": true,
         "Computed": true
       },
+      "topology_policy_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "ttl": {
         "Type": "String",
         "Optional": true,
@@ -16799,6 +17535,11 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "client_config": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "cluster_cert": {
                     "Type": "String",
                     "Optional": true,
@@ -16822,6 +17563,11 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
+                  },
+                  "mgmt_config": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -18290,6 +19036,14 @@
                                 "Elem": {
                                   "Type": "SchemaInfo",
                                   "Info": {
+                                    "is_sensitive": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "false"
+                                      }
+                                    },
                                     "val": {
                                       "Type": "String",
                                       "Optional": true,
@@ -18305,6 +19059,11 @@
                               }
                             }
                           }
+                        },
+                        "hdr_index": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
                         }
                       }
                     }
@@ -19407,6 +20166,14 @@
                                 "Elem": {
                                   "Type": "SchemaInfo",
                                   "Info": {
+                                    "is_sensitive": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "false"
+                                      }
+                                    },
                                     "val": {
                                       "Type": "String",
                                       "Optional": true,
@@ -19422,6 +20189,11 @@
                               }
                             }
                           }
+                        },
+                        "hdr_index": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
                         }
                       }
                     }
@@ -21560,7 +22332,7 @@
         "Optional": true,
         "Computed": true
       },
-      "controller_patch_uuid": {
+      "controller_patch_ref": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -21838,6 +22610,22 @@
               "Optional": true,
               "Computed": true
             },
+            "podman_controller_host_min_free_disk_size": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "24"
+              }
+            },
+            "podman_se_host_min_free_disk_size": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "12"
+              }
+            },
             "rollback_controller_disk_space": {
               "Type": "String",
               "Optional": true,
@@ -22040,7 +22828,7 @@
         "Optional": true,
         "Computed": true
       },
-      "se_patch_uuid": {
+      "se_patch_ref": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -24304,6 +25092,50 @@
           }
         }
       },
+      "service_update": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "service_units": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "available_service_units": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "org_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "used_service_units": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "uuid": {
         "Type": "String",
         "Optional": true,
@@ -25246,6 +26078,11 @@
           "Type": "string",
           "Value": "true"
         }
+      },
+      "vimgrnw_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "vrf_context_ref": {
         "Type": "String",
@@ -27326,6 +28163,11 @@
           "Value": "1"
         }
       },
+      "gslb_sp_enabled": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "health_monitor_refs": {
         "Type": "List",
         "Optional": true,
@@ -27859,6 +28701,14 @@
           }
         }
       },
+      "pool_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "POOL_TYPE_GENERIC_APP"
+        }
+      },
       "request_queue_depth": {
         "Type": "String",
         "Optional": true,
@@ -28205,6 +29055,11 @@
               "Computed": true
             },
             "port": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "preference_order": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -31072,6 +31927,11 @@
         "Optional": true,
         "Computed": true
       },
+      "preference_order": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "prst_hdr_val": {
         "Type": "String",
         "Optional": true,
@@ -32619,10 +33479,7 @@
       "disable_gro": {
         "Type": "String",
         "Optional": true,
-        "Default": {
-          "Type": "string",
-          "Value": "true"
-        }
+        "Computed": true
       },
       "disable_se_memory_check": {
         "Type": "String",
@@ -32744,6 +33601,14 @@
           "Value": "10"
         }
       },
+      "dpdk_gro_timeout_interval": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "50"
+        }
+      },
       "enable_gratarp_permanent": {
         "Type": "String",
         "Optional": true,
@@ -32856,6 +33721,14 @@
         "Default": {
           "Type": "string",
           "Value": "10"
+        }
+      },
+      "grpc_channel_connect_timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "15"
         }
       },
       "ha_mode": {
@@ -34418,6 +35291,58 @@
           "Value": "1"
         }
       },
+      "se_time_tracker_props": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "egress_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "SE_TT_AUDIT_OFF"
+              }
+            },
+            "egress_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "20"
+              }
+            },
+            "event_gen_window": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "300"
+              }
+            },
+            "ingress_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "SE_TT_AUDIT_OFF"
+              }
+            },
+            "ingress_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "20"
+              }
+            }
+          }
+        }
+      },
       "se_tracert_port_range": {
         "Type": "Set",
         "Optional": true,
@@ -34741,6 +35666,22 @@
                 "Value": "300000"
               }
             },
+            "max_age": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
+              }
+            },
+            "max_last_hit_time": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
+              }
+            },
             "max_upstream_queries": {
               "Type": "String",
               "Optional": true,
@@ -34926,6 +35867,11 @@
           }
         }
       },
+      "vcenter_parking_vnic_pg": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "vcenters": {
         "Type": "List",
         "Optional": true,
@@ -35096,6 +36042,16 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "availability_zone": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "fip_capable": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
                         "subnet_uuid": {
                           "Type": "String",
                           "Optional": true,
@@ -35898,6 +36854,14 @@
         "Optional": true,
         "Computed": true
       },
+      "import_key_to_hsm": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
       "key": {
         "Type": "String",
         "Optional": true,
@@ -36062,6 +37026,64 @@
                 "Type": "string",
                 "Value": "OCSP_RESPONDER_URL_FAILOVER"
               }
+            }
+          }
+        }
+      },
+      "ocsp_error_status": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ocsp_responder_url_list_from_certs": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ocsp_response_info": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cert_status": {
+              "Type": "String",
+              "Required": true
+            },
+            "next_update": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ocsp_resp_from_responder_url": {
+              "Type": "String",
+              "Required": true
+            },
+            "ocsp_response": {
+              "Type": "String",
+              "Required": true
+            },
+            "revocation_reason": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "revocation_time": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "this_update": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             }
           }
         }
@@ -37826,303 +38848,25 @@
                 "Value": "true"
               }
             },
-            "alternate_auth_configurations": {
+            "remote_auth_configurations": {
               "Type": "List",
-              "Optional": true,
+              "Required": true,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "auth_mapping_profile_ref": {
+                    "Type": "String",
+                    "Required": true
+                  },
                   "auth_profile_ref": {
                     "Type": "String",
-                    "Optional": true,
-                    "Computed": true
+                    "Required": true
                   },
                   "index": {
                     "Type": "String",
                     "Required": true
-                  },
-                  "mapping_rules": {
-                    "Type": "List",
-                    "Optional": true,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "assign_policy": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "assign_role": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "assign_tenant": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "assign_userprofile": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "attribute_match": {
-                          "Type": "Set",
-                          "Optional": true,
-                          "Computed": true,
-                          "IsBlock": true,
-                          "ConfigImplicitMode": "Block",
-                          "Elem": {
-                            "Type": "SchemaInfo",
-                            "Info": {
-                              "criteria": {
-                                "Type": "String",
-                                "Required": true
-                              },
-                              "name": {
-                                "Type": "String",
-                                "Optional": true,
-                                "Computed": true
-                              },
-                              "values": {
-                                "Type": "List",
-                                "Optional": true,
-                                "ConfigImplicitMode": "Attr",
-                                "Elem": {
-                                  "Type": "SchemaElements",
-                                  "ElementsType": "String"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "group_match": {
-                          "Type": "Set",
-                          "Optional": true,
-                          "Computed": true,
-                          "IsBlock": true,
-                          "ConfigImplicitMode": "Block",
-                          "Elem": {
-                            "Type": "SchemaInfo",
-                            "Info": {
-                              "criteria": {
-                                "Type": "String",
-                                "Required": true
-                              },
-                              "groups": {
-                                "Type": "List",
-                                "Optional": true,
-                                "ConfigImplicitMode": "Attr",
-                                "Elem": {
-                                  "Type": "SchemaElements",
-                                  "ElementsType": "String"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "index": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "is_superuser": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "policy_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "role_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "role_refs": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        },
-                        "tenant_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "tenant_refs": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        },
-                        "userprofile_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "userprofile_ref": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "auth_profile_ref": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "mapping_rules": {
-              "Type": "List",
-              "Optional": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "assign_policy": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "assign_role": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "assign_tenant": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "assign_userprofile": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "attribute_match": {
-                    "Type": "Set",
-                    "Optional": true,
-                    "Computed": true,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "criteria": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "values": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "group_match": {
-                    "Type": "Set",
-                    "Optional": true,
-                    "Computed": true,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "criteria": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "groups": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "index": {
-                    "Type": "String",
-                    "Required": true
-                  },
-                  "is_superuser": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "policy_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "role_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "role_refs": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "tenant_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "tenant_refs": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "userprofile_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "userprofile_ref": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
                   }
                 }
               }
@@ -39488,6 +40232,33 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "bot_limits": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "allow_rules": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "hdrs": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "mapping_rules": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "certificates_per_virtualservice": {
               "Type": "String",
               "Optional": true,
@@ -39775,6 +40546,11 @@
                 "Type": "SchemaInfo",
                 "Info": {
                   "num_allowed_content_types": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "num_allowed_request_content_type_charsets": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true
@@ -42541,6 +43317,14 @@
           "Value": "180"
         }
       },
+      "login_failure_count_expiry_window": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "0"
+        }
+      },
       "max_concurrent_sessions": {
         "Type": "String",
         "Optional": true,
@@ -43214,6 +43998,11 @@
         "Optional": true,
         "Computed": true
       },
+      "azure_availability_set": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "bgp_peer_labels": {
         "Type": "List",
         "Optional": true,
@@ -43697,6 +44486,11 @@
               }
             },
             "fqdn": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "metadata": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -44536,6 +45330,22 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "acs_index": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "0"
+              }
+            },
+            "authn_req_acs_type": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "SAML_AUTHN_REQ_ACS_TYPE_NONE"
+              }
+            },
             "cookie_name": {
               "Type": "String",
               "Optional": true,
@@ -44587,6 +45397,11 @@
             "single_signon_url": {
               "Type": "String",
               "Required": true
+            },
+            "sp_metadata": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "use_idp_session_timeout": {
               "Type": "String",
@@ -44694,6 +45509,14 @@
                 "Value": "false"
               }
             },
+            "is_active_ftp_data_port": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "override_application_profile_ref": {
               "Type": "String",
               "Optional": true,
@@ -44775,6 +45598,15 @@
               "Required": true
             }
           }
+        }
+      },
+      "sp_pool_refs": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "ssl_key_and_certificate_refs": {
@@ -45356,7 +46188,7 @@
           }
         }
       },
-      "vh_parent_vs_uuid": {
+      "vh_parent_vs_ref": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -47078,6 +47910,11 @@
               "Optional": true,
               "Computed": true
             },
+            "metadata": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "num_records_in_response": {
               "Type": "String",
               "Optional": true,
@@ -47725,6 +48562,32 @@
       }
     },
     "avi_wafapplicationsignatureprovider": {
+      "available_applications": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "application": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "last_changed_ruleset_version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "number_of_rules": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "configpb_attributes": {
         "Type": "Set",
         "Optional": true,
@@ -47743,6 +48606,11 @@
         }
       },
       "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ruleset_version": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -47799,6 +48667,187 @@
                     "Required": true
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+      "signatures": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
+            },
+            "exclude_list": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "client_subnet": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "ip_addr": {
+                          "Type": "Set",
+                          "Required": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "addr": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "type": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "mask": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "match_element": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "match_element_criteria": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "match_case": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "SENSITIVE"
+                          }
+                        },
+                        "match_op": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "EQUALS"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "uri_match_criteria": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "match_case": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "SENSITIVE"
+                          }
+                        },
+                        "match_op": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "EQUALS"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "uri_path": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "index": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_sensitive": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
+            "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "phase": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "rule": {
+              "Type": "String",
+              "Required": true
+            },
+            "rule_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
               }
             }
           }
@@ -48129,6 +49178,11 @@
                     "Computed": true
                   },
                   "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "phase": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true
@@ -49082,6 +50136,11 @@
                     "Optional": true,
                     "Computed": true
                   },
+                  "phase": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "rule": {
                     "Type": "String",
                     "Required": true
@@ -49245,6 +50304,11 @@
                 }
               }
             },
+            "ruleset_version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "selected_applications": {
               "Type": "List",
               "Optional": true,
@@ -49255,6 +50319,14 @@
               }
             }
           }
+        }
+      },
+      "bypass_static_extensions": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "true"
         }
       },
       "confidence_override": {
@@ -49666,6 +50738,14 @@
                 "Value": "true"
               }
             },
+            "learn_from_authenticated_clients_only": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "max_params": {
               "Type": "String",
               "Optional": true,
@@ -49697,6 +50777,11 @@
                 "Type": "string",
                 "Value": "1"
               }
+            },
+            "trusted_ipgroup_ref": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "update_interval": {
               "Type": "String",
@@ -50078,6 +51163,11 @@
                     "Optional": true,
                     "Computed": true
                   },
+                  "phase": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "rule": {
                     "Type": "String",
                     "Required": true
@@ -50394,6 +51484,11 @@
                     "Computed": true
                   },
                   "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "phase": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true
@@ -50824,6 +51919,15 @@
                 "ElementsType": "String"
               }
             },
+            "allowed_request_content_type_charsets": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "argument_separator": {
               "Type": "String",
               "Optional": true,
@@ -51079,6 +52183,602 @@
         "Required": true
       },
       "tenant_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "avi_webapput": {
+      "configpb_attributes": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "mandatory_test": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "mandatory_message": {
+              "Type": "Set",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_messages": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_string": {
+              "Type": "String",
+              "Required": true
+            },
+            "mandatory_strings": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "mandatory_tests": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "mandatory_message": {
+              "Type": "Set",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_messages": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_string": {
+              "Type": "String",
+              "Required": true
+            },
+            "mandatory_strings": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "string_length_test": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "string_length_message": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "string_length_messages": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "test_string": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "test_strings": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "string_length_tests": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "string_length_message": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "string_length_messages": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "test_string": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "test_strings": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "tenant_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "test_string": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -51589,6 +53289,10 @@
         "Type": "String",
         "Computed": true
       },
+      "error": {
+        "Type": "String",
+        "Computed": true
+      },
       "file_path": {
         "Type": "String",
         "Computed": true
@@ -51599,6 +53303,10 @@
         "Computed": true
       },
       "s3_directory": {
+        "Type": "String",
+        "Computed": true
+      },
+      "status": {
         "Type": "String",
         "Computed": true
       },
@@ -51658,7 +53366,36 @@
         "Optional": true,
         "Computed": true
       },
+      "params": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "pulse_job_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "pulse_sync_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "result": {
         "Type": "String",
         "Computed": true
       },
@@ -51688,6 +53425,10 @@
       "tenant_ref": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      },
+      "token": {
+        "Type": "String",
         "Computed": true
       },
       "uuid": {
@@ -52576,6 +54317,10 @@
         "Type": "String",
         "Computed": true
       },
+      "hs_security_tls13_score": {
+        "Type": "String",
+        "Computed": true
+      },
       "hs_security_weak_signature_algo_penalty": {
         "Type": "String",
         "Computed": true
@@ -52904,6 +54649,42 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "time_tracker_props": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "be_conn_est_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "be_conn_est_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fe_conn_est_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "fe_conn_est_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ingress_sig_log": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "uuid": {
         "Type": "String",
@@ -56506,6 +58287,14 @@
                 "Value": "48"
               }
             },
+            "collect_client_tls_fingerprint": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "compression_profile": {
               "Type": "Set",
               "Optional": true,
@@ -56869,12 +58658,28 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "enable_http2_server_push": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  },
                   "http2_initial_window_size": {
                     "Type": "String",
                     "Optional": true,
                     "Default": {
                       "Type": "string",
                       "Value": "64"
+                    }
+                  },
+                  "max_http2_concurrent_pushes_per_connection": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "10"
                     }
                   },
                   "max_http2_concurrent_streams_per_connection": {
@@ -56990,6 +58795,14 @@
               "Default": {
                 "Type": "string",
                 "Value": "0"
+              }
+            },
+            "max_header_count": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "64"
               }
             },
             "max_keepalive_requests": {
@@ -57306,6 +59119,34 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "ftp_profile": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "deactivate_active": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  },
+                  "deactivate_passive": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  }
+                }
+              }
+            },
             "pki_profile_ref": {
               "Type": "String",
               "Optional": true,
@@ -57337,6 +59178,190 @@
             }
           }
         }
+      },
+      "tenant_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "avi_authmappingprofile": {
+      "configpb_attributes": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "mapping_rules": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "assign_policy": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "assign_role": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "assign_tenant": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "assign_userprofile": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "attribute_match": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "criteria": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "values": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "default_tenant_ref": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "group_match": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "criteria": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "groups": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "index": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_superuser": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "policy_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role_refs": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tenant_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "tenant_refs": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "userprofile_attribute_name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "userprofile_ref": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "tenant_ref": {
         "Type": "String",
@@ -57677,8 +59702,7 @@
             },
             "pool_ref": {
               "Type": "String",
-              "Optional": true,
-              "Computed": true
+              "Required": true
             },
             "token_endpoint": {
               "Type": "String",
@@ -58121,6 +60145,10 @@
         "Computed": true
       },
       "remote_directory": {
+        "Type": "String",
+        "Computed": true
+      },
+      "remote_file_transfer_protocol": {
         "Type": "String",
         "Computed": true
       },
@@ -58945,6 +60973,14 @@
           "Type": "SchemaInfo",
           "Info": {
             "enabled": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
+            },
+            "use_tls_fingerprint": {
               "Type": "String",
               "Optional": true,
               "Default": {
@@ -60767,6 +62803,34 @@
         "Type": "String",
         "Computed": true
       },
+      "markers": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true
+            },
+            "values": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "metrics_polling_interval": {
+        "Type": "String",
+        "Computed": true
+      },
       "mtu": {
         "Type": "String",
         "Computed": true
@@ -61020,6 +63084,98 @@
               "Default": {
                 "Type": "string",
                 "Value": "default"
+              }
+            }
+          }
+        }
+      },
+      "ntp_configuration": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ntp_authentication_keys": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "algorithm": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "NTP_AUTH_ALGORITHM_MD5"
+                    }
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "key_number": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "ntp_server_list": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "addr": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "ntp_servers": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key_number": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "server": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "addr": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -61853,6 +64009,28 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "content_lib": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "datacenter": {
               "Type": "String",
               "Optional": true,
@@ -61914,6 +64092,14 @@
             "privilege": {
               "Type": "String",
               "Required": true
+            },
+            "use_content_lib": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
             },
             "username": {
               "Type": "String",
@@ -62588,6 +64774,50 @@
                       "Value": "false"
                     }
                   },
+                  "false_positive_learning_config": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "max_apps_supported": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "5"
+                          }
+                        },
+                        "min_monitor_time": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "10080"
+                          }
+                        },
+                        "min_trans_per_application": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "5000000"
+                          }
+                        },
+                        "min_trans_per_uri": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "10000"
+                          }
+                        }
+                      }
+                    }
+                  },
                   "fatal_error_lease_time": {
                     "Type": "String",
                     "Optional": true,
@@ -62729,6 +64959,14 @@
                       "Value": "21600"
                     }
                   },
+                  "restrict_cloud_read_access": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "false"
+                    }
+                  },
                   "safenet_hsm_version": {
                     "Type": "String",
                     "Optional": true,
@@ -62772,6 +65010,14 @@
                     "Default": {
                       "Type": "string",
                       "Value": "300"
+                    }
+                  },
+                  "se_upgrade_flow_cleanup_timeout": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "90"
                     }
                   },
                   "se_vnic_cooldown": {
@@ -62863,6 +65109,22 @@
                       "Value": "300"
                     }
                   },
+                  "update_dns_entry_retry_limit": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "3"
+                    }
+                  },
+                  "update_dns_entry_timeout": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "120"
+                    }
+                  },
                   "upgrade_dns_ttl": {
                     "Type": "String",
                     "Optional": true,
@@ -62918,6 +65180,22 @@
                           "Default": {
                             "Type": "string",
                             "Value": "300000"
+                          }
+                        },
+                        "max_age": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "86400"
+                          }
+                        },
+                        "max_last_hit_time": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "86400"
                           }
                         },
                         "max_upstream_queries": {
@@ -63868,6 +66146,49 @@
         "Type": "String",
         "Computed": true
       },
+      "false_positive_learning_config": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "max_apps_supported": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "5"
+              }
+            },
+            "min_monitor_time": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "10080"
+              }
+            },
+            "min_trans_per_application": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "5000000"
+              }
+            },
+            "min_trans_per_uri": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "10000"
+              }
+            }
+          }
+        }
+      },
       "fatal_error_lease_time": {
         "Type": "String",
         "Computed": true
@@ -63940,6 +66261,10 @@
         "Type": "String",
         "Computed": true
       },
+      "restrict_cloud_read_access": {
+        "Type": "String",
+        "Computed": true
+      },
       "safenet_hsm_version": {
         "Type": "String",
         "Computed": true
@@ -63961,6 +66286,10 @@
         "Computed": true
       },
       "se_spawn_retry_interval": {
+        "Type": "String",
+        "Computed": true
+      },
+      "se_upgrade_flow_cleanup_timeout": {
         "Type": "String",
         "Computed": true
       },
@@ -64013,6 +66342,14 @@
         "Type": "String",
         "Computed": true
       },
+      "update_dns_entry_retry_limit": {
+        "Type": "String",
+        "Computed": true
+      },
+      "update_dns_entry_timeout": {
+        "Type": "String",
+        "Computed": true
+      },
       "upgrade_dns_ttl": {
         "Type": "String",
         "Computed": true
@@ -64051,6 +66388,22 @@
               "Default": {
                 "Type": "string",
                 "Value": "300000"
+              }
+            },
+            "max_age": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
+              }
+            },
+            "max_last_hit_time": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
               }
             },
             "max_upstream_queries": {
@@ -64478,6 +66831,22 @@
                               }
                             }
                           }
+                        }
+                      }
+                    }
+                  },
+                  "gs_group_selection": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_name": {
+                          "Type": "String",
+                          "Required": true
                         }
                       }
                     }
@@ -66238,6 +68607,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "cluster_uuid": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "enabled": {
               "Type": "String",
               "Optional": true,
@@ -66382,6 +68756,16 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "checksum": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "file_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "filename": {
                     "Type": "String",
                     "Optional": true,
@@ -66394,6 +68778,11 @@
                       "Type": "string",
                       "Value": "GSLB_GEODB_FILE_FORMAT_AVI"
                     }
+                  },
+                  "timestamp": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -66711,6 +69100,14 @@
                       }
                     }
                   },
+                  "preference_order": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "1"
+                    }
+                  },
                   "public_ip": {
                     "Type": "Set",
                     "Optional": true,
@@ -66862,6 +69259,10 @@
         "Optional": true,
         "Computed": true
       },
+      "topology_policy_enabled": {
+        "Type": "String",
+        "Computed": true
+      },
       "ttl": {
         "Type": "String",
         "Computed": true
@@ -66914,6 +69315,11 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "client_config": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "cluster_cert": {
                     "Type": "String",
                     "Optional": true,
@@ -66937,6 +69343,11 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
+                  },
+                  "mgmt_config": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
@@ -68357,6 +70768,14 @@
                                 "Elem": {
                                   "Type": "SchemaInfo",
                                   "Info": {
+                                    "is_sensitive": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "false"
+                                      }
+                                    },
                                     "val": {
                                       "Type": "String",
                                       "Optional": true,
@@ -68372,6 +70791,11 @@
                               }
                             }
                           }
+                        },
+                        "hdr_index": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
                         }
                       }
                     }
@@ -69473,6 +71897,14 @@
                                 "Elem": {
                                   "Type": "SchemaInfo",
                                   "Info": {
+                                    "is_sensitive": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Default": {
+                                        "Type": "string",
+                                        "Value": "false"
+                                      }
+                                    },
                                     "val": {
                                       "Type": "String",
                                       "Optional": true,
@@ -69488,6 +71920,11 @@
                               }
                             }
                           }
+                        },
+                        "hdr_index": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
                         }
                       }
                     }
@@ -71581,7 +74018,7 @@
         "Type": "String",
         "Computed": true
       },
-      "controller_patch_uuid": {
+      "controller_patch_ref": {
         "Type": "String",
         "Computed": true
       },
@@ -71854,6 +74291,22 @@
               "Optional": true,
               "Computed": true
             },
+            "podman_controller_host_min_free_disk_size": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "24"
+              }
+            },
+            "podman_se_host_min_free_disk_size": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "12"
+              }
+            },
             "rollback_controller_disk_space": {
               "Type": "String",
               "Optional": true,
@@ -72051,7 +74504,7 @@
         "Type": "String",
         "Computed": true
       },
-      "se_patch_uuid": {
+      "se_patch_ref": {
         "Type": "String",
         "Computed": true
       },
@@ -74256,6 +76709,49 @@
           }
         }
       },
+      "service_update": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "service_units": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "available_service_units": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "org_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "used_service_units": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "uuid": {
         "Type": "String",
         "Optional": true,
@@ -75166,6 +77662,10 @@
         "Computed": true
       },
       "vcenter_dvs": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vimgrnw_ref": {
         "Type": "String",
         "Computed": true
       },
@@ -77149,6 +79649,10 @@
         "Type": "String",
         "Computed": true
       },
+      "gslb_sp_enabled": {
+        "Type": "String",
+        "Computed": true
+      },
       "health_monitor_refs": {
         "Type": "List",
         "Computed": true,
@@ -77643,6 +80147,10 @@
           }
         }
       },
+      "pool_type": {
+        "Type": "String",
+        "Computed": true
+      },
       "request_queue_depth": {
         "Type": "String",
         "Computed": true
@@ -77958,6 +80466,11 @@
               "Computed": true
             },
             "port": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "preference_order": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -80705,6 +83218,10 @@
         "Type": "String",
         "Computed": true
       },
+      "preference_order": {
+        "Type": "String",
+        "Computed": true
+      },
       "prst_hdr_val": {
         "Type": "String",
         "Computed": true
@@ -82101,6 +84618,10 @@
         "Type": "String",
         "Computed": true
       },
+      "dpdk_gro_timeout_interval": {
+        "Type": "String",
+        "Computed": true
+      },
       "enable_gratarp_permanent": {
         "Type": "String",
         "Computed": true
@@ -82172,6 +84693,10 @@
         }
       },
       "gratarp_permanent_periodicity": {
+        "Type": "String",
+        "Computed": true
+      },
+      "grpc_channel_connect_timeout": {
         "Type": "String",
         "Computed": true
       },
@@ -83255,6 +85780,57 @@
         "Type": "String",
         "Computed": true
       },
+      "se_time_tracker_props": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "egress_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "SE_TT_AUDIT_OFF"
+              }
+            },
+            "egress_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "20"
+              }
+            },
+            "event_gen_window": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "300"
+              }
+            },
+            "ingress_audit_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "SE_TT_AUDIT_OFF"
+              }
+            },
+            "ingress_threshold": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "20"
+              }
+            }
+          }
+        }
+      },
       "se_tracert_port_range": {
         "Type": "Set",
         "Computed": true,
@@ -83475,6 +86051,22 @@
                 "Value": "300000"
               }
             },
+            "max_age": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
+              }
+            },
+            "max_last_hit_time": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "86400"
+              }
+            },
             "max_upstream_queries": {
               "Type": "String",
               "Optional": true,
@@ -83642,6 +86234,10 @@
           }
         }
       },
+      "vcenter_parking_vnic_pg": {
+        "Type": "String",
+        "Computed": true
+      },
       "vcenters": {
         "Type": "List",
         "Computed": true,
@@ -83807,6 +86403,16 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "availability_zone": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "fip_capable": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
                         "subnet_uuid": {
                           "Type": "String",
                           "Optional": true,
@@ -84518,6 +87124,10 @@
         "Type": "String",
         "Computed": true
       },
+      "import_key_to_hsm": {
+        "Type": "String",
+        "Computed": true
+      },
       "key": {
         "Type": "String",
         "Computed": true
@@ -84675,6 +87285,62 @@
                 "Type": "string",
                 "Value": "OCSP_RESPONDER_URL_FAILOVER"
               }
+            }
+          }
+        }
+      },
+      "ocsp_error_status": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ocsp_responder_url_list_from_certs": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ocsp_response_info": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cert_status": {
+              "Type": "String",
+              "Required": true
+            },
+            "next_update": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ocsp_resp_from_responder_url": {
+              "Type": "String",
+              "Required": true
+            },
+            "ocsp_response": {
+              "Type": "String",
+              "Required": true
+            },
+            "revocation_reason": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "revocation_time": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "this_update": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             }
           }
         }
@@ -86361,303 +89027,25 @@
                 "Value": "true"
               }
             },
-            "alternate_auth_configurations": {
+            "remote_auth_configurations": {
               "Type": "List",
-              "Optional": true,
+              "Required": true,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "auth_mapping_profile_ref": {
+                    "Type": "String",
+                    "Required": true
+                  },
                   "auth_profile_ref": {
                     "Type": "String",
-                    "Optional": true,
-                    "Computed": true
+                    "Required": true
                   },
                   "index": {
                     "Type": "String",
                     "Required": true
-                  },
-                  "mapping_rules": {
-                    "Type": "List",
-                    "Optional": true,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "assign_policy": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "assign_role": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "assign_tenant": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "assign_userprofile": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "attribute_match": {
-                          "Type": "Set",
-                          "Optional": true,
-                          "Computed": true,
-                          "IsBlock": true,
-                          "ConfigImplicitMode": "Block",
-                          "Elem": {
-                            "Type": "SchemaInfo",
-                            "Info": {
-                              "criteria": {
-                                "Type": "String",
-                                "Required": true
-                              },
-                              "name": {
-                                "Type": "String",
-                                "Optional": true,
-                                "Computed": true
-                              },
-                              "values": {
-                                "Type": "List",
-                                "Optional": true,
-                                "ConfigImplicitMode": "Attr",
-                                "Elem": {
-                                  "Type": "SchemaElements",
-                                  "ElementsType": "String"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "group_match": {
-                          "Type": "Set",
-                          "Optional": true,
-                          "Computed": true,
-                          "IsBlock": true,
-                          "ConfigImplicitMode": "Block",
-                          "Elem": {
-                            "Type": "SchemaInfo",
-                            "Info": {
-                              "criteria": {
-                                "Type": "String",
-                                "Required": true
-                              },
-                              "groups": {
-                                "Type": "List",
-                                "Optional": true,
-                                "ConfigImplicitMode": "Attr",
-                                "Elem": {
-                                  "Type": "SchemaElements",
-                                  "ElementsType": "String"
-                                }
-                              }
-                            }
-                          }
-                        },
-                        "index": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "is_superuser": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "policy_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "role_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "role_refs": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        },
-                        "tenant_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "tenant_refs": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        },
-                        "userprofile_attribute_name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "userprofile_ref": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "auth_profile_ref": {
-              "Type": "String",
-              "Optional": true,
-              "Computed": true
-            },
-            "mapping_rules": {
-              "Type": "List",
-              "Optional": true,
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "assign_policy": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "assign_role": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "assign_tenant": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "assign_userprofile": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "attribute_match": {
-                    "Type": "Set",
-                    "Optional": true,
-                    "Computed": true,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "criteria": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "name": {
-                          "Type": "String",
-                          "Optional": true,
-                          "Computed": true
-                        },
-                        "values": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "group_match": {
-                    "Type": "Set",
-                    "Optional": true,
-                    "Computed": true,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "criteria": {
-                          "Type": "String",
-                          "Required": true
-                        },
-                        "groups": {
-                          "Type": "List",
-                          "Optional": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        }
-                      }
-                    }
-                  },
-                  "index": {
-                    "Type": "String",
-                    "Required": true
-                  },
-                  "is_superuser": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "policy_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "role_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "role_refs": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "tenant_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "tenant_refs": {
-                    "Type": "List",
-                    "Optional": true,
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  },
-                  "userprofile_attribute_name": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
-                  },
-                  "userprofile_ref": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Computed": true
                   }
                 }
               }
@@ -87985,6 +90373,33 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "bot_limits": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "allow_rules": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "hdrs": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "mapping_rules": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "certificates_per_virtualservice": {
               "Type": "String",
               "Optional": true,
@@ -88272,6 +90687,11 @@
                 "Type": "SchemaInfo",
                 "Info": {
                   "num_allowed_content_types": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "num_allowed_request_content_type_charsets": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true
@@ -90907,6 +93327,10 @@
         "Type": "String",
         "Computed": true
       },
+      "login_failure_count_expiry_window": {
+        "Type": "String",
+        "Computed": true
+      },
       "max_concurrent_sessions": {
         "Type": "String",
         "Computed": true
@@ -91554,6 +93978,10 @@
         "Type": "String",
         "Computed": true
       },
+      "azure_availability_set": {
+        "Type": "String",
+        "Computed": true
+      },
       "bgp_peer_labels": {
         "Type": "List",
         "Computed": true,
@@ -92014,6 +94442,11 @@
               }
             },
             "fqdn": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "metadata": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -92801,6 +95234,22 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "acs_index": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "0"
+              }
+            },
+            "authn_req_acs_type": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "SAML_AUTHN_REQ_ACS_TYPE_NONE"
+              }
+            },
             "cookie_name": {
               "Type": "String",
               "Optional": true,
@@ -92852,6 +95301,11 @@
             "single_signon_url": {
               "Type": "String",
               "Required": true
+            },
+            "sp_metadata": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "use_idp_session_timeout": {
               "Type": "String",
@@ -92951,6 +95405,14 @@
                 "Value": "false"
               }
             },
+            "is_active_ftp_data_port": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "override_application_profile_ref": {
               "Type": "String",
               "Optional": true,
@@ -93031,6 +95493,15 @@
               "Required": true
             }
           }
+        }
+      },
+      "sp_pool_refs": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "ssl_key_and_certificate_refs": {
@@ -93588,7 +96059,7 @@
           }
         }
       },
-      "vh_parent_vs_uuid": {
+      "vh_parent_vs_ref": {
         "Type": "String",
         "Computed": true
       },
@@ -95273,6 +97744,11 @@
               "Optional": true,
               "Computed": true
             },
+            "metadata": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "num_records_in_response": {
               "Type": "String",
               "Optional": true,
@@ -95912,6 +98388,32 @@
       }
     },
     "avi_wafapplicationsignatureprovider": {
+      "available_applications": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "application": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "last_changed_ruleset_version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "number_of_rules": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "configpb_attributes": {
         "Type": "Set",
         "Computed": true,
@@ -95931,6 +98433,10 @@
       "name": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      },
+      "ruleset_version": {
+        "Type": "String",
         "Computed": true
       },
       "service_status": {
@@ -95984,6 +98490,187 @@
                     "Required": true
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+      "signatures": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "true"
+              }
+            },
+            "exclude_list": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "client_subnet": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "ip_addr": {
+                          "Type": "Set",
+                          "Required": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "addr": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "type": {
+                                "Type": "String",
+                                "Required": true
+                              }
+                            }
+                          }
+                        },
+                        "mask": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "match_element": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "match_element_criteria": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "match_case": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "SENSITIVE"
+                          }
+                        },
+                        "match_op": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "EQUALS"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "uri_match_criteria": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "match_case": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "SENSITIVE"
+                          }
+                        },
+                        "match_op": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Default": {
+                            "Type": "string",
+                            "Value": "EQUALS"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "uri_path": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "index": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_sensitive": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
+            "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "phase": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "rule": {
+              "Type": "String",
+              "Required": true
+            },
+            "rule_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
               }
             }
           }
@@ -96313,6 +99000,11 @@
                     "Computed": true
                   },
                   "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "phase": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true
@@ -97261,6 +99953,11 @@
                     "Optional": true,
                     "Computed": true
                   },
+                  "phase": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "rule": {
                     "Type": "String",
                     "Required": true
@@ -97424,6 +100121,11 @@
                 }
               }
             },
+            "ruleset_version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "selected_applications": {
               "Type": "List",
               "Optional": true,
@@ -97435,6 +100137,10 @@
             }
           }
         }
+      },
+      "bypass_static_extensions": {
+        "Type": "String",
+        "Computed": true
       },
       "confidence_override": {
         "Type": "Set",
@@ -97823,6 +100529,14 @@
                 "Value": "true"
               }
             },
+            "learn_from_authenticated_clients_only": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "max_params": {
               "Type": "String",
               "Optional": true,
@@ -97854,6 +100568,11 @@
                 "Type": "string",
                 "Value": "1"
               }
+            },
+            "trusted_ipgroup_ref": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             },
             "update_interval": {
               "Type": "String",
@@ -98223,6 +100942,11 @@
                     "Optional": true,
                     "Computed": true
                   },
+                  "phase": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "rule": {
                     "Type": "String",
                     "Required": true
@@ -98539,6 +101263,11 @@
                     "Computed": true
                   },
                   "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "phase": {
                     "Type": "String",
                     "Optional": true,
                     "Computed": true
@@ -98951,6 +101680,15 @@
                 "ElementsType": "String"
               }
             },
+            "allowed_request_content_type_charsets": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "argument_separator": {
               "Type": "String",
               "Optional": true,
@@ -99207,6 +101945,599 @@
       "tenant_ref": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "avi_webapput": {
+      "configpb_attributes": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "version": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "mandatory_test": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "mandatory_message": {
+              "Type": "Set",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_messages": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_string": {
+              "Type": "String",
+              "Required": true
+            },
+            "mandatory_strings": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "mandatory_tests": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "mandatory_message": {
+              "Type": "Set",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_messages": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mandatory_message": {
+                    "Type": "Set",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_messages": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "optional_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "mandatory_string": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "mandatory_strings": {
+                    "Type": "List",
+                    "Required": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "mandatory_string": {
+              "Type": "String",
+              "Required": true
+            },
+            "mandatory_strings": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "string_length_test": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "string_length_message": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "string_length_messages": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "test_string": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "test_strings": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "string_length_tests": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "string_length_message": {
+              "Type": "Set",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "string_length_messages": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "string_length_message": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "string_length_messages": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "test_string": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "test_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "test_strings": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "test_string": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "test_strings": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "tenant_ref": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "test_string": {
+        "Type": "String",
         "Computed": true
       },
       "uuid": {

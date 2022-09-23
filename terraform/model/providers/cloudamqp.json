@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "cloudamqp",
   "type": "provider",
-  "version": "v1.15.1",
+  "version": "v1.19.2",
   "provider": {
     "apikey": {
       "Type": "String",
@@ -15,10 +15,7 @@
       "Type": "String",
       "Optional": true,
       "Description": "Base URL to CloudAMQP Customer website",
-      "Default": {
-        "Type": "string",
-        "Value": "https://customer.cloudamqp.com"
-      }
+      "DefaultFunc": "ENV(CLOUDAMQP_BASEURL)"
     }
   },
   "resources": {
@@ -53,6 +50,15 @@
           "ElementsType": "Int"
         }
       },
+      "reminder_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The reminder interval (in seconds) to resend the alarm if not resolved. Set to 0 for no reminders. The Default is 0.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "time_threshold": {
         "Type": "Int",
         "Optional": true,
@@ -62,6 +68,11 @@
         "Type": "String",
         "Required": true,
         "Description": "Type of the alarm, valid options are: cpu, memory, disk_usage, queue_length, connection_count, consumers_count, net_split"
+      },
+      "value_calculation": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Disk value threshold calculation. Fixed or percentage of disk space remaining"
       },
       "value_threshold": {
         "Type": "Int",
@@ -79,6 +90,18 @@
         "Type": "String",
         "Required": true,
         "Description": "The custom hostname."
+      },
+      "instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Instance identifier"
+      }
+    },
+    "cloudamqp_extra_disk_size": {
+      "extra_disk_size": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Extra disk size in GB"
       },
       "instance_id": {
         "Type": "Int",
@@ -106,6 +129,15 @@
         "Type": "String",
         "Description": "Internal hostname for the CloudAMQP instance",
         "Computed": true
+      },
+      "keep_associated_vpc": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Keep associated VPC when deleting instance",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "name": {
         "Type": "String",
@@ -194,6 +226,11 @@
         "Optional": true,
         "Description": "The client email. (Stackdriver)"
       },
+      "host": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The host information. (Scalyr)"
+      },
       "host_port": {
         "Type": "String",
         "Optional": true,
@@ -237,7 +274,7 @@
       "token": {
         "Type": "String",
         "Optional": true,
-        "Description": "The token used for authentication. (Loggly, Logentries, Splunk)"
+        "Description": "The token used for authentication. (Loggly, Logentries, Splunk, Scalyr)"
       },
       "url": {
         "Type": "String",
@@ -341,6 +378,28 @@
         "Deprecated": "use vhost_allowlist instead"
       }
     },
+    "cloudamqp_node_actions": {
+      "action": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The action to perform on the node"
+      },
+      "instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Instance identifier"
+      },
+      "node_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the node"
+      },
+      "running": {
+        "Type": "Bool",
+        "Description": "If the node is running",
+        "Computed": true
+      }
+    },
     "cloudamqp_notification": {
       "instance_id": {
         "Type": "Int",
@@ -397,6 +456,61 @@
         "Description": "The name of the plugin"
       }
     },
+    "cloudamqp_rabbitmq_configuration": {
+      "channel_max": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Set the maximum permissible number of channels per connection. 0 means unlimited",
+        "Computed": true
+      },
+      "connection_max": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Set the maximum permissible number of connection, -1 means infinity.",
+        "Computed": true
+      },
+      "consumer_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "A consumer that has recevied a message and does not acknowledge that message within the timeout in milliseconds",
+        "Computed": true
+      },
+      "heartbeat": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Set the server AMQP 0-9-1 heartbeat timeout in seconds.",
+        "Computed": true
+      },
+      "instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Instance identifier"
+      },
+      "log_exchange_level": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Log level for the logger used for log integrations and the CloudAMQP Console log view. Does not affect the file logger. Requires a RabbitMQ restart to be applied.",
+        "Computed": true
+      },
+      "max_message_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The largest allowed message payload size in bytes.",
+        "Computed": true
+      },
+      "queue_index_embed_msgs_below": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Size in bytes below which to embed messages in the queue index.",
+        "Computed": true
+      },
+      "vm_memory_high_watermark": {
+        "Type": "Float",
+        "Optional": true,
+        "Description": "When the server will enter memory based flow-control as relative to the maximum available memory.",
+        "Computed": true
+      }
+    },
     "cloudamqp_security_firewall": {
       "instance_id": {
         "Type": "Int",
@@ -419,7 +533,7 @@
             "ip": {
               "Type": "String",
               "Required": true,
-              "Description": "IP address together with netmask to allow acces"
+              "Description": "CIDR address: IP address with CIDR notation (e.g. 10.56.72.0/24)"
             },
             "ports": {
               "Type": "List",
@@ -445,6 +559,45 @@
         }
       }
     },
+    "cloudamqp_upgrade_rabbitmq": {
+      "instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The CloudAMQP instance identifier"
+      }
+    },
+    "cloudamqp_vpc": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the VPC instance"
+      },
+      "region": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The hosted region for the standalone VPC instance"
+      },
+      "subnet": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The VPC subnet"
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Tag the VPC instance with optional tags",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "vpc_name": {
+        "Type": "String",
+        "Description": "VPC name given when hosted at the cloud provider",
+        "Computed": true
+      }
+    },
     "cloudamqp_vpc_gcp_peering": {
       "auto_create_routes": {
         "Type": "Bool",
@@ -453,7 +606,7 @@
       },
       "instance_id": {
         "Type": "Int",
-        "Required": true,
+        "Optional": true,
         "Description": "Instance identifier"
       },
       "peer_network_uri": {
@@ -470,12 +623,17 @@
         "Type": "String",
         "Description": "VPC peering state details",
         "Computed": true
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPC instance identifier"
       }
     },
     "cloudamqp_vpc_peering": {
       "instance_id": {
         "Type": "Int",
-        "Required": true,
+        "Optional": true,
         "Description": "Instance identifier"
       },
       "peering_id": {
@@ -483,10 +641,33 @@
         "Required": true,
         "Description": "VPC peering identifier"
       },
+      "sleep": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Configurable sleep time in seconds between retries for accepting or removing peering",
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
+      },
       "status": {
         "Type": "String",
         "Description": "VPC peering status",
         "Computed": true
+      },
+      "timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Configurable timeout time in seconds for accepting or removing peering",
+        "Default": {
+          "Type": "int",
+          "Value": "3600"
+        }
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPC instance identifier"
       }
     },
     "cloudamqp_webhook": {
@@ -566,6 +747,54 @@
         }
       }
     },
+    "cloudamqp_account_vpcs": {
+      "vpcs": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Description": "The instance identifier",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the instance",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Description": "The region were the instanece is located in",
+              "Computed": true
+            },
+            "subnet": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The VPC subnet"
+            },
+            "tags": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Tag the VPC instance with optional tags",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "vpc_name": {
+              "Type": "String",
+              "Description": "VPC name given when hosted at the cloud provider",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "cloudamqp_alarm": {
       "alarm_id": {
         "Type": "Int",
@@ -602,6 +831,11 @@
           "ElementsType": "Int"
         }
       },
+      "reminder_interval": {
+        "Type": "Int",
+        "Description": "The reminder interval (in seconds) to resend the alarm if not resolved. Set to 0 for no reminders",
+        "Computed": true
+      },
       "time_threshold": {
         "Type": "Int",
         "Description": "For how long (in seconds) the value_threshold should be active before trigger alarm",
@@ -611,6 +845,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "Type of the alarm"
+      },
+      "value_calculation": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Disk value threshold calculation. Fixed or percentage of disk space remaining"
       },
       "value_threshold": {
         "Type": "Int",
@@ -744,8 +983,16 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "additional_disk_size": {
+              "Type": "Int",
+              "Computed": true
+            },
             "configured": {
               "Type": "Bool",
+              "Computed": true
+            },
+            "disk_size": {
+              "Type": "Int",
               "Computed": true
             },
             "erlang_version": {
@@ -867,10 +1114,27 @@
         }
       }
     },
-    "cloudamqp_vpc_gcp_info": {
+    "cloudamqp_upgradable_versions": {
       "instance_id": {
         "Type": "Int",
         "Required": true,
+        "Description": "Instance identifier"
+      },
+      "new_erlang_version": {
+        "Type": "String",
+        "Description": "Latest possible upgradable Erlang version",
+        "Computed": true
+      },
+      "new_rabbitmq_version": {
+        "Type": "String",
+        "Description": "Latest possible upgradable RabbitMQ version",
+        "Computed": true
+      }
+    },
+    "cloudamqp_vpc_gcp_info": {
+      "instance_id": {
+        "Type": "Int",
+        "Optional": true,
         "Description": "Instance identifier"
       },
       "name": {
@@ -883,6 +1147,11 @@
         "Description": "VPC network uri",
         "Computed": true
       },
+      "vpc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPC instance identifier"
+      },
       "vpc_subnet": {
         "Type": "String",
         "Description": "VPC subnet",
@@ -892,7 +1161,7 @@
     "cloudamqp_vpc_info": {
       "instance_id": {
         "Type": "Int",
-        "Required": true,
+        "Optional": true,
         "Description": "Instance identifier"
       },
       "name": {
@@ -909,6 +1178,11 @@
         "Type": "String",
         "Description": "The security group identifier",
         "Computed": true
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPC instance identifier"
       },
       "vpc_subnet": {
         "Type": "String",

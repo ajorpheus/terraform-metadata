@@ -1,9 +1,9 @@
 {
   ".schema_version": "2",
-  ".sdk_type": "terraform-plugin-sdk-v1",
+  ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "spotinst",
   "type": "provider",
-  "version": "v1.65.0",
+  "version": "v1.84.0",
   "provider": {
     "account": {
       "Type": "String",
@@ -22,6 +22,36 @@
     }
   },
   "resources": {
+    "spotinst_data_integration": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "s3": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bucket_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "subdir": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "spotinst_elastigroup_aws": {
       "availability_zones": {
         "Type": "List",
@@ -197,6 +227,32 @@
       "image_id": {
         "Type": "String",
         "Optional": true
+      },
+      "images": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "image": {
+              "Type": "Set",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
       },
       "instance_types_ondemand": {
         "Type": "String",
@@ -910,6 +966,26 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "default_static_target_group": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "arn": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "percentage": {
+                    "Type": "Float",
+                    "Required": true
+                  }
+                }
+              }
+            },
             "fixed_target_groups": {
               "Type": "Bool",
               "Required": true
@@ -933,6 +1009,26 @@
                         "rule_arn": {
                           "Type": "String",
                           "Required": true
+                        },
+                        "static_target_group": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "arn": {
+                                "Type": "String",
+                                "Required": true
+                              },
+                              "percentage": {
+                                "Type": "Float",
+                                "Required": true
+                              }
+                            }
+                          }
                         }
                       }
                     }
@@ -1448,11 +1544,7 @@
             },
             "statistic": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "average"
-              }
+              "Optional": true
             },
             "step_adjustments": {
               "Type": "Set",
@@ -1515,15 +1607,15 @@
             },
             "threshold": {
               "Type": "Float",
-              "Optional": true
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             },
             "unit": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "percent"
-              }
+              "Optional": true
             }
           }
         }
@@ -1617,11 +1709,7 @@
             },
             "statistic": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "average"
-              }
+              "Optional": true
             },
             "target": {
               "Type": "Float",
@@ -1629,11 +1717,7 @@
             },
             "unit": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "percent"
-              }
+              "Optional": true
             }
           }
         }
@@ -1739,11 +1823,7 @@
             },
             "statistic": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "average"
-              }
+              "Optional": true
             },
             "step_adjustments": {
               "Type": "Set",
@@ -1806,15 +1886,15 @@
             },
             "threshold": {
               "Type": "Float",
-              "Optional": true
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             },
             "unit": {
               "Type": "String",
-              "Optional": true,
-              "Default": {
-                "Type": "string",
-                "Value": "percent"
-              }
+              "Optional": true
             }
           }
         }
@@ -6648,6 +6728,10 @@
           }
         }
       },
+      "max_pods": {
+        "Type": "Int",
+        "Optional": true
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -6846,6 +6930,16 @@
             }
           }
         }
+      },
+      "zones": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "spotinst_ocean_aks_virtual_node_group": {
@@ -6857,10 +6951,17 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "autoscale_headroom": {
-              "Type": "List",
+            "auto_headroom_percentage": {
+              "Type": "Int",
               "Optional": true,
-              "MaxItems": 1,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
+            },
+            "autoscale_headroom": {
+              "Type": "Set",
+              "Optional": true,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -6915,6 +7016,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "max_pods": {
+              "Type": "Int",
+              "Optional": true
+            },
             "os_disk": {
               "Type": "List",
               "Optional": true,
@@ -6930,6 +7035,10 @@
                   },
                   "type": {
                     "Type": "String",
+                    "Optional": true
+                  },
+                  "utilize_ephemeral_storage": {
+                    "Type": "Bool",
                     "Optional": true
                   }
                 }
@@ -7002,6 +7111,15 @@
             }
           }
         }
+      },
+      "zones": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "spotinst_ocean_aws": {
@@ -7020,7 +7138,11 @@
           "Info": {
             "auto_headroom_percentage": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             },
             "autoscale_cooldown": {
               "Type": "Int",
@@ -7089,6 +7211,15 @@
             "enable_automatic_and_manual_headroom": {
               "Type": "Bool",
               "Optional": true
+            },
+            "extended_resource_definitions": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "resource_limits": {
               "Type": "List",
@@ -7404,6 +7535,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "batch_min_healthy_percentage": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
                   "batch_size_percentage": {
                     "Type": "Int",
                     "Required": true
@@ -7416,6 +7551,10 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
+                  },
+                  "respect_pdb": {
+                    "Type": "Bool",
+                    "Optional": true
                   }
                 }
               }
@@ -7457,6 +7596,16 @@
         }
       }
     },
+    "spotinst_ocean_aws_extended_resource_definition": {
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "resource_mapping": {
+        "Type": "Map",
+        "Required": true
+      }
+    },
     "spotinst_ocean_aws_launch_spec": {
       "associate_public_ip_address": {
         "Type": "Bool",
@@ -7485,6 +7634,25 @@
             "num_of_units": {
               "Type": "Int",
               "Required": true
+            }
+          }
+        }
+      },
+      "autoscale_headrooms_automatic": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auto_headroom_percentage": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             }
           }
         }
@@ -7726,6 +7894,31 @@
       "root_volume_size": {
         "Type": "Int",
         "Optional": true
+      },
+      "scheduling_shutdown_hours": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "is_enabled": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "time_windows": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       },
       "scheduling_task": {
         "Type": "Set",
@@ -8129,6 +8322,45 @@
         "Type": "String",
         "Optional": true
       },
+      "logging": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "export": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "s3": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "id": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
       "max_size": {
         "Type": "Int",
         "Optional": true,
@@ -8311,6 +8543,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "batch_min_healthy_percentage": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
                   "batch_size_percentage": {
                     "Type": "Int",
                     "Required": true
@@ -8324,6 +8560,10 @@
             }
           }
         }
+      },
+      "use_as_template_only": {
+        "Type": "Bool",
+        "Optional": true
       },
       "user_data": {
         "Type": "String",
@@ -8513,6 +8753,15 @@
       "ocean_id": {
         "Type": "String",
         "Required": true
+      },
+      "preferred_spot_types": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "restrict_scale_down": {
         "Type": "Bool",
@@ -8763,6 +9012,15 @@
           }
         }
       },
+      "blacklist": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "cluster_controller_id": {
         "Type": "String",
         "Computed": true
@@ -8862,6 +9120,56 @@
           }
         }
       },
+      "shielded_instance_config": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable_integrity_monitoring": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "enable_secure_boot": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "strategy": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "draining_timeout": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "preemptible_percentage": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
+            },
+            "provisioning_model": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
       "update_policy": {
         "Type": "List",
         "Optional": true,
@@ -8884,6 +9192,10 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "batch_min_healthy_percentage": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
                   "batch_size_percentage": {
                     "Type": "Int",
                     "Required": true
@@ -8906,6 +9218,10 @@
             }
           }
         }
+      },
+      "use_as_template_only": {
+        "Type": "Bool",
+        "Optional": true
       },
       "whitelist": {
         "Type": "List",
@@ -8941,6 +9257,25 @@
             "num_of_units": {
               "Type": "Int",
               "Required": true
+            }
+          }
+        }
+      },
+      "autoscale_headrooms_automatic": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auto_headroom_percentage": {
+              "Type": "Int",
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             }
           }
         }
@@ -9167,6 +9502,16 @@
           }
         }
       },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "taints": {
         "Type": "Set",
         "Optional": true,
@@ -9235,6 +9580,994 @@
       "ocean_id": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "spotinst_ocean_spark": {
+      "compute": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "create_vngs": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "use_taints": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ingress": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "service_annotations": {
+              "Type": "Map",
+              "Optional": true,
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "log_collection": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "collect_driver_logs": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "ocean_cluster_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "webhook": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "host_network_ports": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Int"
+              }
+            },
+            "use_host_network": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "spotinst_stateful_node_azure": {
+      "attach_data_disk": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "data_disk_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "data_disk_resource_group_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "lun": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "size_gb": {
+              "Type": "Int",
+              "Required": true
+            },
+            "storage_account_type": {
+              "Type": "String",
+              "Required": true
+            },
+            "zone": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "boot_diagnostics": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "is_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "storage_url": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "custom_data": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "data_disk": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "lun": {
+              "Type": "Int",
+              "Required": true
+            },
+            "size_gb": {
+              "Type": "Int",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "data_disks_persistence_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "delete": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disk_should_deallocate": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "disk_ttl_in_hours": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "network_should_deallocate": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "network_ttl_in_hours": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "public_ip_should_deallocate": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "public_ip_ttl_in_hours": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "should_terminate_vm": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "snapshot_should_deallocate": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "snapshot_ttl_in_hours": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "detach_data_disk": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "data_disk_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "data_disk_resource_group_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "should_deallocate": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "ttl_in_hours": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "extension": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "api_version": {
+              "Type": "String",
+              "Required": true
+            },
+            "minor_version_auto_upgrade": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "protected_settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Computed": true
+            },
+            "public_settings": {
+              "Type": "Map",
+              "Optional": true,
+              "Computed": true
+            },
+            "publisher": {
+              "Type": "String",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "health": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auto_healing": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "grace_period": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "health_check_types": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "unhealthy_duration": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "image": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "custom_image": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "custom_image_resource_group_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "gallery": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "gallery_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "gallery_resource_group_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "image_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "version_name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "marketplace_image": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "offer": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "publisher": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "sku": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "version": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "import_vm": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "draining_timeout": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "original_vm_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "resource_group_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "resources_retention_time": {
+              "Type": "Int",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "load_balancer": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backend_pool_names": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "resource_group_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "sku": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "login": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ssh_public_key": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "user_name": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "managed_service_identities": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "resource_group_name": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "network": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "network_interface": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "additional_ip_configurations": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "private_ip_address_version": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "application_security_groups": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "network_resource_group_name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "assign_public_ip": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "enable_ip_forwarding": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "is_primary": {
+                    "Type": "Bool",
+                    "Required": true
+                  },
+                  "network_security_group": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "network_resource_group_name": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "private_ip_addresses": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "public_ip_sku": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "public_ips": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "name": {
+                          "Type": "String",
+                          "Required": true
+                        },
+                        "network_resource_group_name": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
+                  "subnet_name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "network_resource_group_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "virtual_network_name": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "od_sizes": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "os": {
+        "Type": "String",
+        "Required": true
+      },
+      "os_disk": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "size_gb": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "os_disk_persistence_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preferred_spot_sizes": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "preferred_zones": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "resource_group_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "scheduling_task": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cron_expression": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_enabled": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "secret": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "source_vault": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "resource_group_name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "vault_certificates": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "certificate_store": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "certificate_url": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "should_persist_data_disks": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "should_persist_network": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "should_persist_os_disk": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "should_persist_vm": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "shutdown_script": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "signal": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "timeout": {
+              "Type": "Int",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "spot_sizes": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "strategy": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "draining_timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "fallback_to_on_demand": {
+              "Type": "Bool",
+              "Required": true
+            },
+            "optimization_windows": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "preferred_life_cycle": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "revert_to_spot": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "perform_at": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "tag_key": {
+              "Type": "String",
+              "Required": true
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "update_state": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "state": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "zones": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "spotinst_subscription": {

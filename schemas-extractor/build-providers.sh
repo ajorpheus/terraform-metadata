@@ -8,7 +8,9 @@ logs="$CUR/logs/providers"
 failures="$CUR/providers-failure.txt"
 out="$CUR/schemas/providers"
 
-mkdir -p "$out"
+RESET_REPOS=1
+
+mkdir -p "$out" "$logs"
 rm -f "$failures"
 
 if [ ! -z ${ONLY+x} ]; then 
@@ -38,6 +40,7 @@ function process_provider() {
   pkg_prefix="$(jq_get "$name" 'pkg_prefix' | sed -e "s~__REPOSITORY__~$repository~g")"
   pkg_name="$(jq_get "$name" 'pkg_name')"
   provider_constr="$(jq_get "$name" 'provider_constr')"
+  provider_vars="$(jq_get "$name" 'provider_vars')"
   provider_args="$(jq_get "$name" 'provider_args')"
   provider_func_name="$(jq_get "$name" 'provider_func_name')"
   use_master="$(jq_get "$name" 'use_master')"
@@ -52,7 +55,6 @@ function process_provider() {
 
   if output=$(git -C "$location" status --untracked-files=no --porcelain) && [[ -n "$output" ]]; then
     if [[ -z "${RESET_REPOS:-}" ]]; then
-      mkdir -p "$logs"
       echo "git working copy '$location' is not clear, cannot proceed" | tee "$logs/$name.log"
       echo "$name" >>"$failures"
       return 2
@@ -176,6 +178,7 @@ EOF
     -e "s~__PKG_NAME__~${pkg_name}~g" \
     -e "s~__REVISION__~$revision~g" \
     -e "s~__PROVIDER_CONSTR__~$provider_constr~g" \
+    -e "s~__PROVIDER_VARS__~$provider_vars~g" \
     -e "s~__PROVIDER_ARGS__~$provider_args~g" \
     -e "s~__PROVIDER_FUNC_NAME__~$provider_func_name~g" \
     -e "s~__SDK__~$sdk~g" \

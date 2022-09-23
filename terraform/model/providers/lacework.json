@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "lacework",
   "type": "provider",
-  "version": "v0.15.0",
+  "version": "v0.25.0",
   "provider": {
     "account": {
       "Type": "String",
@@ -22,6 +22,12 @@
       "Optional": true,
       "Description": "Lacework API access secret",
       "DefaultFunc": "ENV(LW_API_SECRET)"
+    },
+    "api_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Lacework API access token",
+      "DefaultFunc": "ENV(LW_API_TOKEN)"
     },
     "organization": {
       "Type": "Bool",
@@ -1193,6 +1199,61 @@
         "Description": "The url of the external webhook"
       }
     },
+    "lacework_alert_profile": {
+      "alert": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "The list of alert templates",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The summary of the resulting alert"
+            },
+            "event_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the resulting alert"
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name that policies can use to refer to this template when generating alerts"
+            },
+            "subject": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A high-level observation of the resulting alert"
+            }
+          }
+        }
+      },
+      "extends": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of existing alert profile from which this profile extends"
+      },
+      "fields": {
+        "Type": "Set",
+        "Description": "A field is a declaration of a field to be mapped in from an LQL query",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the alert profile"
+      }
+    },
     "lacework_alert_rule": {
       "alert_channels": {
         "Type": "Set",
@@ -1284,6 +1345,120 @@
         }
       },
       "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "lacework_integration_aws_agentless_scanning": {
+      "account_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The aws account id"
+      },
+      "bucket_arn": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The bucket arn"
+      },
+      "created_or_updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_or_updated_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "credentials": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The credentials needed by the integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "external_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The external id"
+            },
+            "role_arn": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The role arn"
+            }
+          }
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The state of the external integration.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "intg_guid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The integration name."
+      },
+      "org_level": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "query_text": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The LQL query text"
+      },
+      "retries": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of attempts to create the external integration.",
+        "Default": {
+          "Type": "int",
+          "Value": "5"
+        }
+      },
+      "scan_containers": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to includes scanning for containers.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "scan_frequency": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "How often in hours the scan will run in hours."
+      },
+      "scan_host_vulnerabilities": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to includes scanning for host vulnerabilities.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "server_token": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "uri": {
         "Type": "String",
         "Computed": true
       }
@@ -1462,6 +1637,77 @@
           "Type": "int",
           "Value": "5"
         }
+      },
+      "type_name": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "lacework_integration_aws_eks_audit_log": {
+      "created_or_updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_or_updated_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "credentials": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The credentials needed by the integration.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "external_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "role_arn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The state of the external integration.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "intg_guid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "is_org": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The integration name."
+      },
+      "retries": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of attempts to create the external integration.",
+        "Default": {
+          "Type": "int",
+          "Value": "5"
+        }
+      },
+      "sns_arn": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The SNS ARN."
       },
       "type_name": {
         "Type": "String",
@@ -1975,6 +2221,15 @@
           "Value": "true"
         }
       },
+      "notifications": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Subscribe to registry notifications",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "org_level": {
         "Type": "Bool",
         "Computed": true
@@ -2470,6 +2725,94 @@
         "Computed": true
       }
     },
+    "lacework_integration_gcp_gke_audit_log": {
+      "created_or_updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_or_updated_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "credentials": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "client_email": {
+              "Type": "String",
+              "Required": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Required": true
+            },
+            "private_key": {
+              "Type": "String",
+              "Required": true
+            },
+            "private_key_id": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The state of the external integration.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "integration_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "intg_guid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "is_org": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The integration name."
+      },
+      "organization_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The GCP Organization ID (required when integration_type is organization)."
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The GCP Project ID."
+      },
+      "retries": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of attempts to create the external integration.",
+        "Default": {
+          "Type": "int",
+          "Value": "5"
+        }
+      },
+      "subscription": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The PubSub Subscription."
+      }
+    },
     "lacework_integration_gcr": {
       "created_or_updated_by": {
         "Type": "String",
@@ -2751,6 +3094,230 @@
         "Type": "String",
         "Required": true,
         "Description": "The username with permissions to pull the images from the container registry"
+      }
+    },
+    "lacework_policy": {
+      "alerting": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Alerting",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether alerting is enabled or disabled",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "profile": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The alerting profile id"
+            }
+          }
+        }
+      },
+      "computed_tags": {
+        "Type": "String",
+        "Description": "All policy tags, server generated and user specified tags",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The description of the query"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The state of the policy",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "evaluation": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The evaluation frequency must be either 'Hourly' or 'Daily'",
+        "Default": {
+          "Type": "string",
+          "Value": "Hourly"
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Set the number of records returned by the policy. Maximum value is 5000",
+        "Default": {
+          "Type": "int",
+          "Value": "1000"
+        }
+      },
+      "owner": {
+        "Type": "String",
+        "Computed": true
+      },
+      "policy_id_suffix": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The string appended to the end of the policy id"
+      },
+      "query_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of the query"
+      },
+      "remediation": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The remediation message to display"
+      },
+      "severity": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The severity for the policy. Valid severities are: Critical, High, Medium, Low, Info"
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of user specified policy tags",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "title": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The title of the policy"
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The policy type must be 'Violation'"
+      },
+      "updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_time": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "lacework_policy_exception": {
+      "constraint": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "The list of constraints",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "field_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The field key"
+            },
+            "field_value_map": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A list of key value pairs to filter the policy exception",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The values map key"
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The values map value"
+                  }
+                }
+              }
+            },
+            "field_values": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The field values",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The description of the policy exception"
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "policy_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of the policy the exception is associated"
+      },
+      "updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_time": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "lacework_query": {
+      "owner": {
+        "Type": "String",
+        "Computed": true
+      },
+      "query": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The query string"
+      },
+      "query_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of the query"
+      },
+      "result_schema": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_time": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "lacework_report_rule": {
@@ -3680,6 +4247,11 @@
           "Value": "true"
         }
       },
+      "expiry": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The expiration date of the vulnerability exception"
+      },
       "guid": {
         "Type": "String",
         "Computed": true
@@ -3797,7 +4369,16 @@
             "fixable": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "The state of the vulnerability exception"
+              "Description": "Whether to filter on fixable",
+              "ConflictsWith": [
+                "vulnerability_criteria.0.fixable_vuln"
+              ],
+              "Deprecated": "This attribute is deprecated and has been replaced by `fixable_vuln`"
+            },
+            "fixable_vuln": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether to filter on fixable"
             },
             "package": {
               "Type": "Set",
@@ -3858,6 +4439,11 @@
           "Value": "true"
         }
       },
+      "expiry": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The expiration date of the vulnerability exception"
+      },
       "guid": {
         "Type": "String",
         "Computed": true
@@ -3870,7 +4456,7 @@
       "reason": {
         "Type": "String",
         "Optional": true,
-        "Description": "List of severities for the vulnerability exception. Valid severities are: [Accepted Risk False Positive Compensating Controls Fix Pending Other Unknown]",
+        "Description": "List of severities for the vulnerability exception. Valid severities are: [Compensating Controls Fix Pending Other Unknown Accepted Risk False Positive]",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -3965,7 +4551,16 @@
             "fixable": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "The state of the vulnerability exception"
+              "Description": "Whether to filter on fixable",
+              "ConflictsWith": [
+                "vulnerability_criteria.0.fixable_vuln"
+              ],
+              "Deprecated": "This attribute is deprecated and has been replaced by `fixable_vuln`"
+            },
+            "fixable_vuln": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether to filter on fixable"
             },
             "package": {
               "Type": "Set",
@@ -4017,6 +4612,59 @@
     },
     "lacework_api_token": {
       "token": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "lacework_user_profile": {
+      "accounts": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "account_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "admin": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "cust_guid": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "user_guid": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "org_account": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "org_admin": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "org_user": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "username": {
         "Type": "String",
         "Computed": true
       }

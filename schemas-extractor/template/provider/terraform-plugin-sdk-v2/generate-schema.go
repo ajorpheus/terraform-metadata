@@ -3,6 +3,7 @@ package main
 //noinspection GoUnresolvedReference
 import (
 	prvdr "__PKG_PREFIX__/__PKG_NAME__"
+	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
 	"encoding/json"

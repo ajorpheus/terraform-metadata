@@ -3,13 +3,25 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ad",
   "type": "provider",
-  "version": "v0.4.3",
+  "version": "v0.4.4",
   "provider": {
+    "domain_controller": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Use a specific domain controller. (default: none, environment variable: AD_DC)",
+      "DefaultFunc": "ENV(AD_DC)"
+    },
     "krb_conf": {
       "Type": "String",
       "Optional": true,
       "Description": "Path to kerberos configuration file. (default: none, environment variable: AD_KRB_CONF)",
       "DefaultFunc": "ENV(AD_KRB_CONF)"
+    },
+    "krb_keytab": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Path to a keytab file to be used instead of a password",
+      "DefaultFunc": "ENV(AD_KRB_KEYTAB)"
     },
     "krb_realm": {
       "Type": "String",
@@ -612,6 +624,11 @@
         "Optional": true,
         "Description": "Description of the Group."
       },
+      "dn": {
+        "Type": "String",
+        "Description": "The distinguished name of the group object.",
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Required": true,
@@ -745,6 +762,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "Specifies the user's division. This parameter sets the Division property of a user object."
+      },
+      "dn": {
+        "Type": "String",
+        "Description": "The distinguished name of the user object.",
+        "Computed": true
       },
       "email_address": {
         "Type": "String",
@@ -977,6 +999,11 @@
         "Description": "The display name of the Group object.",
         "Computed": true
       },
+      "dn": {
+        "Type": "String",
+        "Description": "The distinguished name of the group object.",
+        "Computed": true
+      },
       "group_id": {
         "Type": "String",
         "Required": true,
@@ -1070,6 +1097,11 @@
       "division": {
         "Type": "String",
         "Description": "Division assigned to user object.",
+        "Computed": true
+      },
+      "dn": {
+        "Type": "String",
+        "Description": "The distinguished name of the user object.",
         "Computed": true
       },
       "email_address": {

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "newrelic",
   "type": "provider",
-  "version": "v2.35.1",
+  "version": "v3.2.1",
   "provider": {
     "account_id": {
       "Type": "Int",
@@ -78,6 +78,12 @@
   },
   "resources": {
     "newrelic_alert_channel": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to create alert channels.",
+        "Computed": true
+      },
       "config": {
         "Type": "List",
         "Optional": true,
@@ -328,7 +334,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "The type of condition. One of: (mobile_metric, servers_metric, apm_app_metric, apm_jvm_metric, apm_kt_metric, browser_metric)."
+        "Description": "The type of condition. One of: (apm_app_metric, apm_jvm_metric, apm_kt_metric, browser_metric, mobile_metric, servers_metric)."
       },
       "user_defined_metric": {
         "Type": "String",
@@ -515,6 +521,12 @@
       }
     },
     "newrelic_alert_policy_channel": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to link the channel to.",
+        "Computed": true
+      },
       "channel_ids": {
         "Type": "Set",
         "Required": true,
@@ -590,287 +602,2457 @@
         "Required": true
       }
     },
-    "newrelic_dashboard": {
-      "dashboard_url": {
-        "Type": "String",
-        "Description": "The URL for viewing the dashboard.",
+    "newrelic_cloud_aws_govcloud_integrations": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the account in New Relic.",
         "Computed": true
       },
-      "editable": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Determines who can edit the dashboard in an account. Valid values are all, editable_by_all, editable_by_owner, or read_only. Defaults to editable_by_all.",
-        "Default": {
-          "Type": "string",
-          "Value": "editable_by_all"
-        }
-      },
-      "filter": {
+      "alb": {
         "Type": "List",
         "Optional": true,
-        "Description": "A nested block that describes a dashboard filter. Exactly one nested filter block is allowed.",
+        "Description": "The alb integration",
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "attributes": {
-              "Type": "Set",
+            "aws_regions": {
+              "Type": "List",
               "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
             },
-            "event_types": {
-              "Type": "Set",
-              "Required": true,
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "load_balancer_prefixes": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each name or prefix for the LBs that you want to monitor. Filter values are case-sensitive.",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "String"
               }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
             }
           }
         }
       },
-      "grid_column_count": {
-        "Type": "Int",
+      "api_gateway": {
+        "Type": "List",
         "Optional": true,
-        "Description": "New Relic One supports a 3 column grid or a 12 column grid. New Relic Insights supports a 3 column grid.",
-        "Default": {
-          "Type": "int",
-          "Value": "3"
-        }
-      },
-      "icon": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The icon for the dashboard.",
-        "Default": {
-          "Type": "string",
-          "Value": "bar-chart"
-        }
-      },
-      "title": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The title of the dashboard."
-      },
-      "visibility": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Determines who can see the dashboard in an account. Valid values are all or owner. Defaults to all.",
-        "Default": {
-          "Type": "string",
-          "Value": "all"
-        }
-      },
-      "widget": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "A nested block that describes a visualization. Up to 300 widget blocks are allowed in a dashboard definition.",
-        "MaxItems": 300,
+        "Description": "The api gateway integration",
+        "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "account_id": {
-              "Type": "Int",
+            "aws_regions": {
+              "Type": "List",
               "Optional": true,
-              "Description": "The target account ID to fetch data from, if not the current account."
-            },
-            "column": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Column position of widget from top left, starting at 1."
-            },
-            "compare_with": {
-              "Type": "Set",
-              "Optional": true,
-              "Description": "A block describing a COMPARE WITH clause.",
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
-              "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "offset_duration": {
-                    "Type": "String",
-                    "Required": true,
-                    "Description": "The offset duration for the COMPARE WITH clause."
-                  },
-                  "presentation": {
-                    "Type": "List",
-                    "Required": true,
-                    "Description": "The presentation settings for the rendered data.",
-                    "MaxItems": 1,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "color": {
-                          "Type": "String",
-                          "Required": true,
-                          "Description": "The color for the rendered data."
-                        },
-                        "name": {
-                          "Type": "String",
-                          "Required": true,
-                          "Description": "The name for the rendered data."
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "drilldown_dashboard_id": {
-              "Type": "Int",
-              "Optional": true,
-              "Description": "The ID of a dashboard to link to from the widget's facets."
-            },
-            "duration": {
-              "Type": "Int",
-              "Optional": true
-            },
-            "end_time": {
-              "Type": "Int",
-              "Optional": true
-            },
-            "entity_ids": {
-              "Type": "Set",
-              "Optional": true,
-              "Description": "A collection of entity ids to display data for. These are typically application IDs.",
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
-                "ElementsType": "Int"
+                "ElementsType": "String"
               }
             },
-            "facet": {
-              "Type": "String",
-              "Optional": true
-            },
-            "height": {
+            "metrics_polling_interval": {
               "Type": "Int",
               "Optional": true,
-              "Description": "Height of the widget. Valid values are 1 to 3 inclusive. Defaults to 1.",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
-              }
+              "Description": "The data polling interval in seconds"
             },
-            "limit": {
-              "Type": "Int",
+            "stage_prefixes": {
+              "Type": "List",
               "Optional": true,
-              "Description": "The limit of distinct data series to display.  Requires `order_by` to be set."
-            },
-            "metric": {
-              "Type": "Set",
-              "Optional": true,
-              "Description": "A nested block that describes a metric.",
-              "IsBlock": true,
-              "ConfigImplicitMode": "Block",
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit.",
+              "ConfigImplicitMode": "Attr",
               "Elem": {
-                "Type": "SchemaInfo",
-                "Info": {
-                  "name": {
-                    "Type": "String",
-                    "Required": true,
-                    "Description": "The metric name to display."
-                  },
-                  "scope": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Description": "The metric scope."
-                  },
-                  "units": {
-                    "Type": "String",
-                    "Optional": true,
-                    "Description": "The metric units."
-                  },
-                  "values": {
-                    "Type": "Set",
-                    "Optional": true,
-                    "Description": "The metric values to display.",
-                    "ConfigImplicitMode": "Attr",
-                    "Elem": {
-                      "Type": "SchemaElements",
-                      "ElementsType": "String"
-                    }
-                  }
-                }
+                "Type": "SchemaElements",
+                "ElementsType": "String"
               }
             },
-            "notes": {
+            "tag_key": {
               "Type": "String",
               "Optional": true,
-              "Description": "Description of the widget."
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
             },
-            "nrql": {
+            "tag_value": {
               "Type": "String",
               "Optional": true,
-              "Description": "Valid NRQL query string."
-            },
-            "order_by": {
-              "Type": "String",
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "auto_scaling": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The auto scaling integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
               "Optional": true,
-              "Description": "Set the order of result series.  Required when using `limit`."
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
-            "raw_metric_name": {
-              "Type": "String",
-              "Computed": true
-            },
-            "row": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Row position of widget from top left, starting at 1."
-            },
-            "source": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The markdown source to be rendered in the widget."
-            },
-            "threshold_red": {
-              "Type": "Float",
-              "Optional": true,
-              "Description": "Threshold above which the displayed value will be styled with a red color."
-            },
-            "threshold_yellow": {
-              "Type": "Float",
-              "Optional": true,
-              "Description": "Threshold above which the displayed value will be styled with a yellow color."
-            },
-            "title": {
-              "Type": "String",
-              "Required": true,
-              "Description": "A title for the widget."
-            },
-            "visualization": {
-              "Type": "String",
-              "Required": true,
-              "Description": "How the widget visualizes data."
-            },
-            "widget_id": {
-              "Type": "Int",
-              "Description": "The ID of the widget.",
-              "Computed": true
-            },
-            "width": {
+            "metrics_polling_interval": {
               "Type": "Int",
               "Optional": true,
-              "Description": "Width of the widget. Valid values are 1 to 3 inclusive. Defaults to 1.",
-              "Default": {
-                "Type": "int",
-                "Value": "1"
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "aws_direct_connect": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The aws direct connect integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "aws_states": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The aws states integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "cloudtrail": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The cloudtrail integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "dynamo_db": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The dynamo DB integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "ebs": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The ebs integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "ec2": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The ec2 integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_ip_addresses": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if IP addresses of ec2 instance should be collected",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Bool"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
               }
             }
           }
         }
+      },
+      "elastic_search": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The elastic search integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_nodes": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if IP addresses of ec2 instance should be collected"
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "elb": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The elb integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "emr": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The emr integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit.\n\n",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Bool"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "iam": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The iam integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "lambda": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The lambda integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit.\n\n",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "Bool"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "linked_account_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the linked AwsGovCloud account in New Relic"
+      },
+      "rds": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The rds integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "red_shift": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The redshift integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "route53": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The route53 integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "s3": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The s3 integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      },
+      "sns": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The sns integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "sqs": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The sqs integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_extended_inventory": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Determine if extra inventory data be collected or not. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if tags should be collected. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "queue_prefixes": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each name or prefix for the Queues that you want to monitor. Filter values are case-sensitive.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive.\n\n"
+            }
+          }
+        }
+      }
+    },
+    "newrelic_cloud_aws_govcloud_link_account": {
+      "access_key_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "access-key-id of awsGovcloud account"
+      },
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the account in New Relic.",
+        "Computed": true
+      },
+      "aws_account_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "awsGovcloud account id"
+      },
+      "metric_collection_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "push or pull"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "name of the account"
+      },
+      "secret_access_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "secret access key of the awsGovcloud account"
+      }
+    },
+    "newrelic_cloud_aws_integrations": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the account in New Relic.",
+        "Computed": true
+      },
+      "billing": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Billing integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      },
+      "cloudtrail": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "CloudTrail integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      },
+      "doc_db": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Billing integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      },
+      "health": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Health integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      },
+      "linked_account_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the linked AWS account in New Relic"
+      },
+      "s3": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "S3 integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      },
+      "trusted_advisor": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Trusted Advisor integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      },
+      "vpc": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "VPC integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "fetch_nat_gateway": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if NAT gateway should be monitored. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "fetch_vpn": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specify if VPN should be monitored. May affect total data collection time and contribute to the Cloud provider API rate limit."
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag key associated with the resources that you want to monitor. Filter values are case-sensitive."
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specify a Tag value associated with the resources that you want to monitor. Filter values are case-sensitive."
+            }
+          }
+        }
+      },
+      "x_ray": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "X-Ray integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aws_regions": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each AWS region that includes the resources that you want to monitor.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds."
+            }
+          }
+        }
+      }
+    },
+    "newrelic_cloud_aws_link_account": {
+      "__timeouts__": [
+        "create"
+      ],
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to link the AWS account.",
+        "Computed": true
+      },
+      "arn": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The AWS role ARN."
+      },
+      "metric_collection_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "How metrics will be collected. Defaults to `PULL` if empty."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the linked account."
+      }
+    },
+    "newrelic_cloud_azure_integrations": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the account in New Relic.",
+        "Computed": true
+      },
+      "api_management": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure api management integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "app_gateway": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure app gateway integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "app_service": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure app services",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "containers": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure containers",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "cosmos_db": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure cosmoDB",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "cost_management": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure cost management",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "tag_keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify if additional cost data per tag should be collected. This field is case sensitive.\n\n",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "data_factory": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure data factory",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "event_hub": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure event hub",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "express_route": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure express route",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "firewalls": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure firewalls",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "front_door": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure front door",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "functions": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure functions",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "key_vault": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure key vault",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "linked_account_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The ID of the linked Azure account in New Relic"
+      },
+      "load_balancer": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure load balancer",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "logic_apps": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure logic apps",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "machine_learning": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure machine learning",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "maria_db": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure Maria DB",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "mysql": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure mysql",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "postgresql": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure postgresql",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "power_bi_dedicated": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure powerBI dedicated",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "redis_cache": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure redis cache",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "service_bus": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure service bus",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "sql": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure sql",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "sql_managed": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure sql managed",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "storage": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure storage",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "virtual_machine": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure virtual machine",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "virtual_networks": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure virtual networks",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "vms": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure Vms",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "vpn_gateway": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The Azure vpn gateway",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "The data polling interval in seconds"
+            },
+            "resource_groups": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Specify each Resource group associated with the resources that you want to monitor. Filter values are case-sensitive",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      }
+    },
+    "newrelic_cloud_azure_link_account": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to link the Azure account.",
+        "Computed": true
+      },
+      "application_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Application ID for Azure account"
+      },
+      "client_secret": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Value of the client secret from Azure"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the linked account"
+      },
+      "subscription_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Subscription ID for the Azure account"
+      },
+      "tenant_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Tenant ID for the Azure account"
+      }
+    },
+    "newrelic_cloud_gcp_integrations": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the newrelic account",
+        "Computed": true
+      },
+      "app_engine": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP app engine service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "big_query": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP biq query service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "to fetch tags of the resource"
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "big_table": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "composer": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "data_flow": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "data_proc": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "data_store": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "fire_base_database": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "fire_base_hosting": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "fire_base_storage": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "fire_store": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "functions": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "interconnect": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "kubernetes": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "linked_account_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Id of the linked gcp account in New Relic"
+      },
+      "load_balancing": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "mem_cache": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "pub_sub": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "to fetch tags of the resource"
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "redis": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "router": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "run": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "spanner": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "to fetch tags of the resource"
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "sql": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "storage": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "fetch_tags": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "to fetch tags of the resource"
+            },
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "virtual_machines": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      },
+      "vpc_access": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "GCP big table service",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "metrics_polling_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "the data polling interval in seconds"
+            }
+          }
+        }
+      }
+    },
+    "newrelic_cloud_gcp_link_account": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "accountID of newrelic account",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "name of the linked account"
+      },
+      "project_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "project id of the Gcp account"
       }
     },
     "newrelic_entity_tags": {
@@ -1136,6 +3318,199 @@
         }
       }
     },
+    "newrelic_notification_channel": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The account id of the channel.",
+        "Computed": true
+      },
+      "active": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether the channel is active.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "destination_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The id of the destination."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The name of the channel."
+      },
+      "product": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The type of the channel product. One of: (DISCUSSIONS, ERROR_TRACKING, IINT)."
+      },
+      "property": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Notification channel property type.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "display_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Notification property display key."
+            },
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Notification property key."
+            },
+            "label": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Notification property label."
+            },
+            "value": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Notification property value."
+            }
+          }
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The status of the channel.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The type of the channel. One of: (WEBHOOK, EMAIL, SERVICENOW_INCIDENTS, PAGERDUTY_ACCOUNT_INTEGRATION, PAGERDUTY_SERVICE_INTEGRATION, JIRA_CLASSIC, SLACK, SLACK_COLLABORATION, SLACK_LEGACY, MOBILE_PUSH, EVENT_BRIDGE)."
+      }
+    },
+    "newrelic_notification_destination": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The account ID under which to put the destination.",
+        "Computed": true
+      },
+      "active": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether the destination is active.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "auth_basic": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Basic username and password authentication credentials.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "auth_token"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Required": true
+            },
+            "user": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "auth_token": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Token authentication credentials.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "ConflictsWith": [
+          "auth_basic"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "prefix": {
+              "Type": "String",
+              "Optional": true
+            },
+            "token": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "last_sent": {
+        "Type": "String",
+        "Description": "The last time a notification was sent.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The name of the destination."
+      },
+      "property": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Notification destination property type.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "display_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Notification property display key."
+            },
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Notification property key."
+            },
+            "label": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Notification property label."
+            },
+            "value": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Notification property value."
+            }
+          }
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "The status of the destination.",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The type of the destination. One of: (WEBHOOK, EMAIL, SERVICE_NOW, PAGERDUTY_ACCOUNT_INTEGRATION, PAGERDUTY_SERVICE_INTEGRATION, JIRA, SLACK, SLACK_COLLABORATION, SLACK_LEGACY, MOBILE_PUSH, EVENT_BRIDGE)."
+      }
+    },
     "newrelic_nrql_alert_condition": {
       "account_id": {
         "Type": "Int",
@@ -1144,17 +3519,17 @@
         "Computed": true
       },
       "aggregation_delay": {
-        "Type": "Int",
+        "Type": "String",
         "Optional": true,
         "Description": "How long we wait for data that belongs in each aggregation window. Depending on your data, a longer delay may increase accuracy but delay notifications. Use aggregationDelay with the EVENT_FLOW and CADENCE aggregation methods."
       },
       "aggregation_method": {
         "Type": "String",
         "Optional": true,
-        "Description": "The method that determines when we consider an aggregation window to be complete so that we can evaluate the signal for violations. Default is CADENCE."
+        "Description": "The method that determines when we consider an aggregation window to be complete so that we can evaluate the signal for violations. Default is EVENT_FLOW."
       },
       "aggregation_timer": {
-        "Type": "Int",
+        "Type": "String",
         "Optional": true,
         "Description": "How long we wait after each data point arrives to make sure we've processed the whole batch. Use aggregationTimer with the EVENT_TIMER aggregation method."
       },
@@ -1200,7 +3575,7 @@
             "operator": {
               "Type": "String",
               "Optional": true,
-              "Description": "One of (above, below, equals). Defaults to 'equals'.",
+              "Description": "One of (above, above_or_equals, below, below_or_equals, equals, not_equals). Defaults to 'equals'.",
               "Default": {
                 "Type": "string",
                 "Value": "equals"
@@ -1209,12 +3584,12 @@
             "threshold": {
               "Type": "Float",
               "Required": true,
-              "Description": "Must be 0 or greater. For baseline conditions must be in range [1, 1000]."
+              "Description": "For baseline conditions must be in range [1, 1000]."
             },
             "threshold_duration": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The duration, in seconds, that the threshold must violate in order to create a violation. Value must be a multiple of the 'aggregation_window' (which has a default of 60 seconds). Value must be within 120-3600 seconds for baseline and outlier conditions, within 120-7200 seconds for static conditions with the sum value function, and within 60-7200 seconds for static conditions with the single_value value function."
+              "Description": "The duration, in seconds, that the threshold must violate in order to create a violation. Value must be a multiple of the 'aggregation_window' (which has a default of 60 seconds). Value must be within 120-3600 seconds for baseline conditions, within 120-7200 seconds for static conditions with the sum value function, and within 60-7200 seconds for static conditions with the single_value value function."
             },
             "threshold_occurrences": {
               "Type": "String",
@@ -1244,15 +3619,15 @@
           "Value": "true"
         }
       },
-      "expected_groups": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Number of expected groups when using outlier detection."
+      "entity_guid": {
+        "Type": "String",
+        "Description": "The unique entity identifier of the NRQL Condition in New Relic.",
+        "Computed": true
       },
       "expiration_duration": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The amount of time (in seconds) to wait before considering the signal expired."
+        "Description": "The amount of time (in seconds) to wait before considering the signal expired.  Must be in the range of 30 to 172800 (inclusive)"
       },
       "fill_option": {
         "Type": "String",
@@ -1263,15 +3638,6 @@
         "Type": "Float",
         "Optional": true,
         "Description": "If using the 'static' fill option, this value will be used for filling gaps in the signal."
-      },
-      "ignore_overlap": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether to look for a convergence of groups when using outlier detection.",
-        "ConflictsWith": [
-          "open_violation_on_group_overlap"
-        ],
-        "Deprecated": "use `open_violation_on_group_overlap` attribute instead, but use the inverse of your boolean - e.g. if ignore_overlap = false, use open_violation_on_group_overlap = true"
       },
       "name": {
         "Type": "String",
@@ -1296,7 +3662,7 @@
               "ConflictsWith": [
                 "nrql.0.since_value"
               ],
-              "Deprecated": "use `signal.aggregation_method` attribute instead"
+              "Deprecated": "use `aggregation_method` attribute instead"
             },
             "query": {
               "Type": "String",
@@ -1309,7 +3675,7 @@
               "ConflictsWith": [
                 "nrql.0.evaluation_offset"
               ],
-              "Deprecated": "use `signal.aggregation_method` attribute instead"
+              "Deprecated": "use `aggregation_method` attribute instead"
             }
           }
         }
@@ -1318,14 +3684,6 @@
         "Type": "Bool",
         "Optional": true,
         "Description": "Whether to create a new violation to capture that the signal expired."
-      },
-      "open_violation_on_group_overlap": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether overlapping groups should produce a violation.",
-        "ConflictsWith": [
-          "ignore_overlap"
-        ]
       },
       "policy_id": {
         "Type": "Int",
@@ -1336,6 +3694,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "Runbook URL to display in notifications."
+      },
+      "slide_by": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The duration of overlapping timewindows used to smooth the chart line, in seconds. Must be a factor of `aggregation_window` and less than the aggregation window. It should be greater or equal to 30 seconds if `aggregation_window` is less than or equal to 3600 seconds, or greater or equal to `aggregation_window / 120` if `aggregation_window` is greater than 3600 seconds."
       },
       "term": {
         "Type": "Set",
@@ -1362,7 +3725,7 @@
             "operator": {
               "Type": "String",
               "Optional": true,
-              "Description": "One of (above, below, equals). Defaults to 'equals'.",
+              "Description": "One of (above, above_or_equals, below, below_or_equals, equals, not_equals). Defaults to 'equals'.",
               "Default": {
                 "Type": "string",
                 "Value": "equals"
@@ -1380,12 +3743,12 @@
             "threshold": {
               "Type": "Float",
               "Required": true,
-              "Description": "Must be 0 or greater. For baseline conditions must be in range [1, 1000]."
+              "Description": "For baseline conditions must be in range [1, 1000]."
             },
             "threshold_duration": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The duration, in seconds, that the threshold must violate in order to create a violation. Value must be a multiple of the 'aggregation_window' (which has a default of 60 seconds). Value must be within 120-3600 seconds for baseline and outlier conditions, within 120-7200 seconds for static conditions with the sum value function, and within 60-7200 seconds for static conditions with the single_value value function."
+              "Description": "The duration, in seconds, that the threshold must violate in order to create a violation. Value must be a multiple of the 'aggregation_window' (which has a default of 60 seconds). Value must be within 120-3600 seconds for baseline conditions, within 120-7200 seconds for static conditions with the sum value function, and within 60-7200 seconds for static conditions with the single_value value function."
             },
             "threshold_occurrences": {
               "Type": "String",
@@ -1404,7 +3767,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The type of NRQL alert condition to create. Valid values are: 'static', 'baseline', 'outlier' (deprecated).",
+        "Description": "The type of NRQL alert condition to create. Valid values are: 'static', 'baseline'.",
         "Default": {
           "Type": "string",
           "Value": "static"
@@ -1413,7 +3776,8 @@
       "value_function": {
         "Type": "String",
         "Optional": true,
-        "Description": "Valid values are: 'single_value' or 'sum'"
+        "Description": "Values are: 'single_value' (deprecated) or 'sum' (deprecated)",
+        "Deprecated": "'value_function' is deprecated.  Remove this field and condition will evaluate as 'single_value' by default.  To replicate 'sum' behavior, use 'slide_by'."
       },
       "violation_time_limit": {
         "Type": "String",
@@ -1456,7 +3820,7 @@
             "operator": {
               "Type": "String",
               "Optional": true,
-              "Description": "One of (above, below, equals). Defaults to 'equals'.",
+              "Description": "One of (above, above_or_equals, below, below_or_equals, equals, not_equals). Defaults to 'equals'.",
               "Default": {
                 "Type": "string",
                 "Value": "equals"
@@ -1465,12 +3829,12 @@
             "threshold": {
               "Type": "Float",
               "Required": true,
-              "Description": "Must be 0 or greater. For baseline conditions must be in range [1, 1000]."
+              "Description": "For baseline conditions must be in range [1, 1000]."
             },
             "threshold_duration": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The duration, in seconds, that the threshold must violate in order to create a violation. Value must be a multiple of the 'aggregation_window' (which has a default of 60 seconds). Value must be within 120-3600 seconds for baseline and outlier conditions, within 120-7200 seconds for static conditions with the sum value function, and within 60-7200 seconds for static conditions with the single_value value function."
+              "Description": "The duration, in seconds, that the threshold must violate in order to create a violation. Value must be a multiple of the 'aggregation_window' (which has a default of 60 seconds). Value must be within 120-3600 seconds for baseline conditions, within 120-7200 seconds for static conditions with the sum value function, and within 60-7200 seconds for static conditions with the single_value value function."
             },
             "threshold_occurrences": {
               "Type": "String",
@@ -1586,6 +3950,10 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "nrql_query": {
                     "Type": "List",
                     "Required": true,
@@ -1659,6 +4027,10 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "linked_entity_guids": {
                     "Type": "List",
                     "Optional": true,
@@ -1726,7 +4098,7 @@
                     "Required": true
                   },
                   "critical": {
-                    "Type": "Float",
+                    "Type": "String",
                     "Optional": true,
                     "Description": "The critical threshold value."
                   },
@@ -1742,6 +4114,10 @@
                     "Type": "String",
                     "Description": "The ID of the widget.",
                     "Computed": true
+                  },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
                   },
                   "nrql_query": {
                     "Type": "List",
@@ -1775,7 +4151,7 @@
                     "Description": "A title for the widget."
                   },
                   "warning": {
-                    "Type": "Float",
+                    "Type": "String",
                     "Optional": true,
                     "Description": "The warning threshold value."
                   },
@@ -1816,9 +4192,13 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "limit": {
                     "Type": "Float",
-                    "Optional": true,
+                    "Required": true,
                     "Description": "The maximum value for the visualization"
                   },
                   "nrql_query": {
@@ -1889,6 +4269,10 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "nrql_query": {
                     "Type": "List",
                     "Required": true,
@@ -1956,6 +4340,10 @@
                     "Type": "String",
                     "Description": "The ID of the widget.",
                     "Computed": true
+                  },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
                   },
                   "nrql_query": {
                     "Type": "List",
@@ -2025,6 +4413,10 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "nrql_query": {
                     "Type": "List",
                     "Required": true,
@@ -2092,6 +4484,10 @@
                     "Type": "String",
                     "Description": "The ID of the widget.",
                     "Computed": true
+                  },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
                   },
                   "nrql_query": {
                     "Type": "List",
@@ -2161,6 +4557,82 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "nrql_query": {
+                    "Type": "List",
+                    "Required": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "account_id": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "The account id used for the NRQL query.",
+                          "Computed": true
+                        },
+                        "query": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The NRQL query."
+                        }
+                      }
+                    }
+                  },
+                  "row": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "title": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A title for the widget."
+                  },
+                  "width": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "int",
+                      "Value": "4"
+                    }
+                  }
+                }
+              }
+            },
+            "widget_log_table": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A log table widget.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "column": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "height": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "int",
+                      "Value": "3"
+                    }
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Description": "The ID of the widget.",
+                    "Computed": true
+                  },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "nrql_query": {
                     "Type": "List",
                     "Required": true,
@@ -2229,6 +4701,10 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "row": {
                     "Type": "Int",
                     "Required": true
@@ -2286,6 +4762,10 @@
                     "Type": "String",
                     "Description": "The ID of the widget.",
                     "Computed": true
+                  },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
                   },
                   "linked_entity_guids": {
                     "Type": "List",
@@ -2366,6 +4846,10 @@
                     "Description": "The ID of the widget.",
                     "Computed": true
                   },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
                   "nrql_query": {
                     "Type": "List",
                     "Required": true,
@@ -2438,6 +4922,10 @@
                     "Type": "String",
                     "Description": "The ID of the widget.",
                     "Computed": true
+                  },
+                  "ignore_time_range": {
+                    "Type": "Bool",
+                    "Optional": true
                   },
                   "linked_entity_guids": {
                     "Type": "List",
@@ -2639,113 +5127,6 @@
         }
       }
     },
-    "newrelic_plugins_alert_condition": {
-      "enabled": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Whether or not this condition is enabled.",
-        "Default": {
-          "Type": "bool",
-          "Value": "true"
-        }
-      },
-      "entities": {
-        "Type": "Set",
-        "Required": true,
-        "Description": "The plugin component IDs to target.",
-        "MinItems": 1,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "Int"
-        }
-      },
-      "metric": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The plugin metric to evaluate."
-      },
-      "metric_description": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The metric description."
-      },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The title of the condition. Must be between 1 and 64 characters, inclusive."
-      },
-      "plugin_guid": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The GUID of the plugin which produces the metric."
-      },
-      "plugin_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The ID of the installed plugin instance which produces the metric."
-      },
-      "policy_id": {
-        "Type": "Int",
-        "Required": true,
-        "Description": "The ID of the policy where this condition should be used."
-      },
-      "runbook_url": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Runbook URL to display in notifications."
-      },
-      "term": {
-        "Type": "Set",
-        "Required": true,
-        "MinItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "duration": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "In minutes, must be in the range of 5 to 120, inclusive."
-            },
-            "operator": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "One of `above`, `below`, or `equal`. Defaults to equal.",
-              "Default": {
-                "Type": "string",
-                "Value": "equal"
-              }
-            },
-            "priority": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "One of `critical` or `warning`. Defaults to critical.",
-              "Default": {
-                "Type": "string",
-                "Value": "critical"
-              }
-            },
-            "threshold": {
-              "Type": "Float",
-              "Required": true,
-              "Description": "Must be 0 or greater."
-            },
-            "time_function": {
-              "Type": "String",
-              "Required": true,
-              "Description": "One of `all` or `any`."
-            }
-          }
-        }
-      },
-      "value_function": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The value function to apply to the metric data.  One of `min`, `max`, `average`, `sample_size`, `total`, or `percent`."
-      }
-    },
     "newrelic_service_level": {
       "description": {
         "Type": "String",
@@ -2839,7 +5220,9 @@
       },
       "objective": {
         "Type": "Set",
-        "Optional": true,
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -2894,6 +5277,10 @@
           }
         }
       },
+      "sli_guid": {
+        "Type": "String",
+        "Computed": true
+      },
       "sli_id": {
         "Type": "String",
         "Computed": true
@@ -2935,20 +5322,221 @@
         "Description": "Runbook URL to display in notifications."
       }
     },
+    "newrelic_synthetics_broken_links_monitor": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the newrelic account.",
+        "Computed": true
+      },
+      "guid": {
+        "Type": "String",
+        "Description": "The unique entity identifier of the monitor in New Relic.",
+        "Computed": true
+      },
+      "locations_private": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List private location GUIDs for which the monitor will run.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "locations_public": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Publicly available location names in which the monitor will run.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The title of this monitor."
+      },
+      "period": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The interval at which this monitor should run. Valid values are EVERY_MINUTE, EVERY_5_MINUTES, EVERY_10_MINUTES, EVERY_15_MINUTES, EVERY_30_MINUTES, EVERY_HOUR, EVERY_6_HOURS, EVERY_12_HOURS, or EVERY_DAY."
+      },
+      "status": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The monitor status (i.e. ENABLED, MUTED, DISABLED)."
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The tags that will be associated with the monitor.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the tag key"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Values associated with the tag key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "uri": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The URI the monitor runs against."
+      }
+    },
+    "newrelic_synthetics_cert_check_monitor": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the newrelic account",
+        "Computed": true
+      },
+      "certificate_expiration": {
+        "Type": "Int",
+        "Required": true
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true
+      },
+      "locations_private": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The locations in which this monitor should be run.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "locations_public": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The locations in which this monitor should be run.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "name of the cert check monitor"
+      },
+      "period": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The interval at which this monitor should run. Valid values are EVERY_MINUTE, EVERY_5_MINUTES, EVERY_10_MINUTES, EVERY_15_MINUTES, EVERY_30_MINUTES, EVERY_HOUR, EVERY_6_HOURS, EVERY_12_HOURS, or EVERY_DAY."
+      },
+      "status": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The monitor status (i.e. ENABLED, MUTED, DISABLED)."
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The tags that will be associated with the monitor",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the tag key"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Values associated with the tag key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      }
+    },
     "newrelic_synthetics_monitor": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the newrelic account",
+        "Computed": true
+      },
       "bypass_head_request": {
         "Type": "Bool",
         "Optional": true,
         "Description": "Bypass HEAD request."
       },
-      "frequency": {
-        "Type": "Int",
-        "Required": true,
-        "Description": "The interval (in minutes) at which this monitor should run. Valid values are 1, 5, 10, 15, 30, 60, 360, 720, or 1440."
-      },
-      "locations": {
+      "custom_header": {
         "Type": "Set",
-        "Required": true,
+        "Optional": true,
+        "Description": "Custom headers to use in monitor job",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Header name"
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Header value"
+            }
+          }
+        }
+      },
+      "enable_screenshot_on_failure_and_script": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Capture a screenshot during job execution"
+      },
+      "locations_private": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The locations in which this monitor should be run.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "locations_public": {
+        "Type": "Set",
+        "Optional": true,
         "Description": "The locations in which this monitor should be run.",
         "MinItems": 1,
         "ConfigImplicitMode": "Attr",
@@ -2962,19 +5550,59 @@
         "Required": true,
         "Description": "The title of this monitor."
       },
-      "sla_threshold": {
-        "Type": "Float",
+      "period": {
+        "Type": "String",
         "Optional": true,
-        "Description": "The base threshold for the SLA report.",
-        "Default": {
-          "Type": "int",
-          "Value": "7"
-        }
+        "Description": "The interval at which this monitor should run. Valid values are EVERY_MINUTE, EVERY_5_MINUTES, EVERY_10_MINUTES, EVERY_15_MINUTES, EVERY_30_MINUTES, EVERY_HOUR, EVERY_6_HOURS, EVERY_12_HOURS, or EVERY_DAY.",
+        "Computed": true
+      },
+      "runtime_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The runtime type that the monitor will run"
+      },
+      "runtime_type_version": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The specific version of the runtime type selected"
+      },
+      "script_language": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The programing language that should execute the script"
       },
       "status": {
         "Type": "String",
         "Required": true,
         "Description": "The monitor status (i.e. ENABLED, MUTED, DISABLED)."
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The tags that will be associated with the monitor",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the tag key"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Values associated with the tag key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       },
       "treat_redirect_as_failure": {
         "Type": "Bool",
@@ -2984,7 +5612,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "The monitor type. Valid values are SIMPLE, BROWSER, SCRIPT_BROWSER, and SCRIPT_API."
+        "Description": "The monitor type. Valid values are SIMPLE AND BROWSER."
       },
       "uri": {
         "Type": "String",
@@ -2999,46 +5627,11 @@
       "verify_ssl": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Verify SSL."
-      }
-    },
-    "newrelic_synthetics_monitor_script": {
-      "location": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "A list of locations for a monitor script.",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "hmac": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The HMAC for the monitor script location. Use only one of `hmac` or `vse_password.`"
-            },
-            "name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The monitor script location name"
-            },
-            "vse_password": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "The password for the monitor script location used to calculate HMAC. Use only one of `vse_password` or `hmac.`"
-            }
-          }
+        "Description": "Verify SSL.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
         }
-      },
-      "monitor_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The ID of the monitor to attach the script to."
-      },
-      "text": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The plaintext representing the monitor script."
       }
     },
     "newrelic_synthetics_multilocation_alert_condition": {
@@ -3121,11 +5714,179 @@
         }
       }
     },
-    "newrelic_synthetics_secure_credential": {
-      "created_at": {
+    "newrelic_synthetics_private_location": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the account in New Relic.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The private location description."
+      },
+      "domain_id": {
+        "Type": "String",
+        "Description": "The private location globally unique identifier.",
+        "Computed": true
+      },
+      "guid": {
+        "Type": "String",
+        "Description": "The guid of the entity to tag.",
+        "Computed": true
+      },
+      "key": {
+        "Type": "String",
+        "Description": "The private locations key.",
+        "Computed": true
+      },
+      "location_id": {
+        "Type": "String",
+        "Description": "An alternate identifier based on name.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the private location."
+      },
+      "verified_script_execution": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The private location requires a password to edit if value is true.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
+    "newrelic_synthetics_script_monitor": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the newrelic account.",
+        "Computed": true
+      },
+      "enable_screenshot_on_failure_and_script": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Capture a screenshot during job execution."
+      },
+      "guid": {
+        "Type": "String",
+        "Description": "The unique entity identifier of the monitor in New Relic.",
+        "Computed": true
+      },
+      "location_private": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "guid": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique identifier for the Synthetics private location in New Relic."
+            },
+            "vse_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The location's Verified Script Execution password (Only necessary if Verified Script Execution is enabled for the location)."
+            }
+          }
+        }
+      },
+      "locations_public": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The public location(s) that the monitor will run jobs from.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The title of this monitor."
+      },
+      "period": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The interval at which this monitor should run. Valid values are EVERY_MINUTE, EVERY_5_MINUTES, EVERY_10_MINUTES, EVERY_15_MINUTES, EVERY_30_MINUTES, EVERY_HOUR, EVERY_6_HOURS, EVERY_12_HOURS, or EVERY_DAY."
+      },
+      "runtime_type": {
         "Type": "String",
         "Optional": true,
-        "Description": "The time the secure credential was created.",
+        "Description": "The runtime type that the monitor will run."
+      },
+      "runtime_type_version": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The specific semver version of the runtime type."
+      },
+      "script": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The script that the monitor runs."
+      },
+      "script_language": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The programing language that should execute the script."
+      },
+      "status": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The monitor status (i.e. ENABLED, MUTED, DISABLED)."
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The tags that will be associated with the monitor.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the tag key"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Values associated with the tag key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The monitor type. Valid values are SCRIPT_BROWSER, and SCRIPT_API."
+      }
+    },
+    "newrelic_synthetics_secure_credential": {
+      "__timeouts__": [
+        "read"
+      ],
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to create the secure credential.",
         "Computed": true
       },
       "description": {
@@ -3148,6 +5909,335 @@
         "Type": "String",
         "Required": true,
         "Description": "The secure credential's value."
+      }
+    },
+    "newrelic_synthetics_step_monitor": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "ID of the newrelic account.",
+        "Computed": true
+      },
+      "enable_screenshot_on_failure_and_script": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Capture a screenshot during job execution."
+      },
+      "guid": {
+        "Type": "String",
+        "Description": "The unique entity identifier of the monitor in New Relic.",
+        "Computed": true
+      },
+      "location_private": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "guid": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The unique identifier for the Synthetics private location in New Relic."
+            },
+            "vse_password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The location's Verified Script Execution password (Only necessary if Verified Script Execution is enabled for the location)."
+            }
+          }
+        }
+      },
+      "locations_public": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The public location(s) that the monitor will run jobs from.",
+        "MinItems": 1,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The title of this monitor."
+      },
+      "period": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The interval at which this monitor should run. Valid values are EVERY_MINUTE, EVERY_5_MINUTES, EVERY_10_MINUTES, EVERY_15_MINUTES, EVERY_30_MINUTES, EVERY_HOUR, EVERY_6_HOURS, EVERY_12_HOURS, or EVERY_DAY."
+      },
+      "status": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The monitor status (i.e. ENABLED, MUTED, DISABLED)."
+      },
+      "steps": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The steps that make up the script the monitor will run",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ordinal": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "The position of the step within the script ranging from 0-100"
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of step to be added to the script."
+            },
+            "values": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The metadata values related to the check the step performs.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The tags that will be associated with the monitor.",
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the tag key"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "Values associated with the tag key",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      }
+    },
+    "newrelic_workflow": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The account id of the workflow."
+      },
+      "destination": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Workflow's destination configuration.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "channel_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "(Required) Destination's channel id."
+            },
+            "name": {
+              "Type": "String",
+              "Description": "(Required) Destination's name.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "(Required) The type of the destination. One of: (EMAIL, EVENT_BRIDGE, PAGERDUTY_ACCOUNT_INTEGRATION, PAGERDUTY_SERVICE_INTEGRATION, SERVICE_NOW, WEBHOOK, MOBILE_PUSH, SLACK, JIRA).",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "destinations_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether the destinations are enabled.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether the workflow is enabled.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "enrichments": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Enrichments can give additional context on alert notifications by adding NRQL query results to them.",
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "nrql": {
+              "Type": "List",
+              "Required": true,
+              "Description": "(Required) Nrql type Enrichments.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "account_id": {
+                    "Type": "Int",
+                    "Description": "The account id of the enrichment.",
+                    "Computed": true
+                  },
+                  "configuration": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "A set of key-value pairs to represent a enrichment configuration.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "enrichment's NRQL query"
+                        }
+                      }
+                    }
+                  },
+                  "enrichment_id": {
+                    "Type": "String",
+                    "Description": "Enrichment's id.",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "(Required) Enrichment's name."
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Description": "The type of the enrichment. One of: (NRQL).",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "enrichments_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates whether the enrichments are enabled.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "issues_filter": {
+        "Type": "Set",
+        "Required": true,
+        "MaxItems": 1,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "filter_id": {
+              "Type": "String",
+              "Description": "filter id.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "(Required) Filter's name."
+            },
+            "predicate": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "attribute": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "(Required) predicate's attribute."
+                  },
+                  "operator": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The type of the operator. One of: (CONTAINS, DOES_NOT_CONTAIN, DOES_NOT_EQUAL, DOES_NOT_EXACTLY_MATCH, ENDS_WITH, EQUAL, EXACTLY_MATCHES, GREATER_OR_EQUAL, GREATER_THAN, IS, IS_NOT, LESS_OR_EQUAL, LESS_THAN, STARTS_WITH)."
+                  },
+                  "values": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "List of predicate values.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "(Required) The type of the filter. One of: (FILTER, VIEW)."
+            }
+          }
+        }
+      },
+      "last_run": {
+        "Type": "String",
+        "Description": "The last time notification was sent for this workflow.",
+        "Computed": true
+      },
+      "muting_rules_handling": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The type of the muting rule handling. One of: (NOTIFY_ALL_ISSUES, DONT_NOTIFY_FULLY_MUTED_ISSUES, DONT_NOTIFY_FULLY_OR_PARTIALLY_MUTED_ISSUES)."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "(Required) The name of the workflow."
+      },
+      "workflow_id": {
+        "Type": "String",
+        "Description": "The id of the workflow.",
+        "Computed": true
       }
     },
     "newrelic_workload": {
@@ -3246,6 +6336,12 @@
       }
     },
     "newrelic_alert_channel": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to retrieve the alert channel.",
+        "Computed": true
+      },
       "config": {
         "Type": "List",
         "Description": "Alert channel configuration.",
@@ -3305,6 +6401,10 @@
                 "ElementsType": "String"
               }
             },
+            "payload_string": {
+              "Type": "String",
+              "Optional": true
+            },
             "payload_type": {
               "Type": "String",
               "Optional": true
@@ -3361,7 +6461,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The type of channel. One of: (slack, user, victorops, webhook, email, opsgenie, pagerduty).",
+        "Description": "The type of channel. One of: (pagerduty, slack, user, victorops, webhook, email, opsgenie).",
         "Computed": true
       }
     },
@@ -3418,6 +6518,23 @@
         "Type": "String",
         "Required": true,
         "Description": "The name of the application in New Relic."
+      }
+    },
+    "newrelic_cloud_account": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The ID of the New Relic account."
+      },
+      "cloud_provider": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The cloud provider of the account, e.g. aws, gcp, azure"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the cloud account."
       }
     },
     "newrelic_entity": {
@@ -3498,85 +6615,14 @@
         "Description": "The name of the key transaction in New Relic."
       }
     },
-    "newrelic_plugin": {
-      "guid": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The GUID of the plugin in New Relic."
-      },
-      "id": {
-        "Type": "String",
-        "Description": "The ID of the installed plugin instance.",
-        "Computed": true
-      }
-    },
-    "newrelic_plugin_component": {
-      "health_status": {
-        "Type": "String",
-        "Description": "The health status of the plugin component.",
-        "Computed": true
-      },
-      "id": {
-        "Type": "String",
-        "Description": "The ID of the plugin component.",
-        "Computed": true
-      },
+    "newrelic_synthetics_private_location": {
       "name": {
         "Type": "String",
         "Required": true,
-        "Description": "The name of the plugin component."
-      },
-      "plugin_id": {
-        "Type": "Int",
-        "Required": true,
-        "Description": "The ID of the plugin instance this component belongs to."
-      }
-    },
-    "newrelic_synthetics_monitor": {
-      "monitor_id": {
-        "Type": "String",
-        "Description": "The ID of the synthetics monitor.",
-        "Computed": true
-      },
-      "name": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The name of the synthetics monitor in New Relic."
-      }
-    },
-    "newrelic_synthetics_monitor_location": {
-      "description": {
-        "Type": "String",
-        "Description": "A description of the Synthetics monitor location.",
-        "Computed": true
-      },
-      "high_security_mode": {
-        "Type": "Bool",
-        "Description": "Represents if high security mode is enabled for the location. A value of true means that high security mode is enabled, and a value of false means it is disabled.",
-        "Computed": true
-      },
-      "label": {
-        "Type": "String",
-        "Required": true,
-        "Description": "The label of the Synthetics monitor location."
-      },
-      "name": {
-        "Type": "String",
-        "Description": "The name of the Synthetics monitor location.",
-        "Computed": true
-      },
-      "private": {
-        "Type": "Bool",
-        "Description": "Represents if this location is a private location. A value of true means that the location is private, and a value of false means it is public.",
-        "Computed": true
+        "Description": "The name of the Synthetics monitor private location."
       }
     },
     "newrelic_synthetics_secure_credential": {
-      "created_at": {
-        "Type": "String",
-        "Description": "The time the secure credential was created.",
-        "Computed": true
-      },
       "description": {
         "Type": "String",
         "Description": "The secure credential's description.",

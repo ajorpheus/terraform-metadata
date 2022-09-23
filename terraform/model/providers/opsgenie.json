@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "opsgenie",
   "type": "provider",
-  "version": "v0.6.8",
+  "version": "v0.6.14",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -2266,7 +2266,7 @@
         "Optional": true
       },
       "member": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",

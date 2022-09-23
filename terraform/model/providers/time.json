@@ -3,66 +3,85 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "time",
   "type": "provider",
-  "version": "v0.7.2",
+  "version": "v0.8.0",
   "provider": {},
   "resources": {
     "time_offset": {
       "base_rfc3339": {
         "Type": "String",
         "Optional": true,
+        "Description": "Base timestamp in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.8) format (see [RFC3339 time string](https://tools.ietf.org/html/rfc3339#section-5.8) e.g., `YYYY-MM-DDTHH:MM:SSZ`). Defaults to the current time.",
         "Computed": true
       },
       "day": {
         "Type": "Int",
+        "Description": "Number day of offset timestamp.",
         "Computed": true
       },
       "hour": {
         "Type": "Int",
+        "Description": "Number hour of offset timestamp.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "RFC3339 format of the offset timestamp, e.g. `2020-02-12T06:36:13Z`.",
         "Computed": true
       },
       "minute": {
         "Type": "Int",
+        "Description": "Number minute of offset timestamp.",
         "Computed": true
       },
       "month": {
         "Type": "Int",
+        "Description": "Number month of offset timestamp.",
         "Computed": true
       },
       "offset_days": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of days to offset the base timestamp. At least one of the 'offset_' arguments must be configured."
       },
       "offset_hours": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": " Number of hours to offset the base timestamp. At least one of the 'offset_' arguments must be configured."
       },
       "offset_minutes": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of minutes to offset the base timestamp. At least one of the 'offset_' arguments must be configured."
       },
       "offset_months": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of months to offset the base timestamp. At least one of the 'offset_' arguments must be configured."
       },
       "offset_seconds": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of seconds to offset the base timestamp. At least one of the 'offset_' arguments must be configured."
       },
       "offset_years": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of years to offset the base timestamp. At least one of the 'offset_' arguments must be configured."
       },
       "rfc3339": {
         "Type": "String",
+        "Description": "RFC3339 format of the offset timestamp, e.g. `2020-02-12T06:36:13Z`.",
         "Computed": true
       },
       "second": {
         "Type": "Int",
+        "Description": "Number second of offset timestamp.",
         "Computed": true
       },
       "triggers": {
         "Type": "Map",
         "Optional": true,
+        "Description": "Arbitrary map of values that, when changed, will trigger a new base timestamp value to be saved. See [the main provider documentation](../index.md) for more information.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -71,67 +90,87 @@
       },
       "unix": {
         "Type": "Int",
+        "Description": "Number of seconds since epoch time, e.g. `1581489373`.",
         "Computed": true
       },
       "year": {
         "Type": "Int",
+        "Description": "Number year of offset timestamp.",
         "Computed": true
       }
     },
     "time_rotating": {
       "day": {
         "Type": "Int",
+        "Description": "Number day of timestamp.",
         "Computed": true
       },
       "hour": {
         "Type": "Int",
+        "Description": "Number hour of timestamp.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "RFC3339 format of the offset timestamp, e.g. `2020-02-12T06:36:13Z`.",
         "Computed": true
       },
       "minute": {
         "Type": "Int",
+        "Description": "Number minute of timestamp.",
         "Computed": true
       },
       "month": {
         "Type": "Int",
+        "Description": "Number month of timestamp.",
         "Computed": true
       },
       "rfc3339": {
         "Type": "String",
         "Optional": true,
+        "Description": "Base timestamp in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.8) format (see [RFC3339 time string](https://tools.ietf.org/html/rfc3339#section-5.8) e.g., `YYYY-MM-DDTHH:MM:SSZ`). Defaults to the current time.",
         "Computed": true
       },
       "rotation_days": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of days to add to the base timestamp to configure the rotation timestamp. When the current time has passed the rotation timestamp, the resource will trigger recreation. At least one of the 'rotation_' arguments must be configured."
       },
       "rotation_hours": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of hours to add to the base timestamp to configure the rotation timestamp. When the current time has passed the rotation timestamp, the resource will trigger recreation. At least one of the 'rotation_' arguments must be configured."
       },
       "rotation_minutes": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of minutes to add to the base timestamp to configure the rotation timestamp. When the current time has passed the rotation timestamp, the resource will trigger recreation. At least one of the 'rotation_' arguments must be configured."
       },
       "rotation_months": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of months to add to the base timestamp to configure the rotation timestamp. When the current time has passed the rotation timestamp, the resource will trigger recreation. At least one of the 'rotation_' arguments must be configured."
       },
       "rotation_rfc3339": {
         "Type": "String",
         "Optional": true,
+        "Description": "Configure the rotation timestamp with an [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.8) format of the offset timestamp. When the current time has passed the rotation timestamp, the resource will trigger recreation. At least one of the 'rotation_' arguments must be configured.",
         "Computed": true
       },
       "rotation_years": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Description": "Number of years to add to the base timestamp to configure the rotation timestamp. When the current time has passed the rotation timestamp, the resource will trigger recreation. At least one of the 'rotation_' arguments must be configured."
       },
       "second": {
         "Type": "Int",
+        "Description": "Number second of timestamp.",
         "Computed": true
       },
       "triggers": {
         "Type": "Map",
         "Optional": true,
+        "Description": "Arbitrary map of values that, when changed, will trigger a new base timestamp value to be saved. These conditions recreate the resource in addition to other rotation arguments. See [the main provider documentation](../index.md) for more information.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -140,25 +179,35 @@
       },
       "unix": {
         "Type": "Int",
+        "Description": "Number of seconds since epoch time, e.g. `1581489373`.",
         "Computed": true
       },
       "year": {
         "Type": "Int",
+        "Description": "Number year of timestamp.",
         "Computed": true
       }
     },
     "time_sleep": {
       "create_duration": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "[Time duration](https://golang.org/pkg/time/#ParseDuration) to delay resource creation. For example, `30s` for 30 seconds or `5m` for 5 minutes. Updating this value by itself will not trigger a delay."
       },
       "destroy_duration": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "[Time duration](https://golang.org/pkg/time/#ParseDuration) to delay resource destroy. For example, `30s` for 30 seconds or `5m` for 5 minutes. Updating this value by itself will not trigger a delay. This value or any updates to it must be successfully applied into the Terraform state before destroying this resource to take effect."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "RFC3339 format of the offset timestamp, e.g. `2020-02-12T06:36:13Z`.",
+        "Computed": true
       },
       "triggers": {
         "Type": "Map",
         "Optional": true,
+        "Description": "(Optional) Arbitrary map of values that, when changed, will run any creation or destroy delays again. See [the main provider documentation](../index.md) for more information.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -169,32 +218,44 @@
     "time_static": {
       "day": {
         "Type": "Int",
+        "Description": "Number day of timestamp.",
         "Computed": true
       },
       "hour": {
         "Type": "Int",
+        "Description": "Number hour of timestamp.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "RFC3339 format of the offset timestamp, e.g. `2020-02-12T06:36:13Z`.",
         "Computed": true
       },
       "minute": {
         "Type": "Int",
+        "Description": "Number minute of timestamp.",
         "Computed": true
       },
       "month": {
         "Type": "Int",
+        "Description": "Number month of timestamp.",
         "Computed": true
       },
       "rfc3339": {
         "Type": "String",
         "Optional": true,
+        "Description": "Base timestamp in [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339#section-5.8) format (see [RFC3339 time string](https://tools.ietf.org/html/rfc3339#section-5.8) e.g., `YYYY-MM-DDTHH:MM:SSZ`). Defaults to the current time.",
         "Computed": true
       },
       "second": {
         "Type": "Int",
+        "Description": "Number second of timestamp.",
         "Computed": true
       },
       "triggers": {
         "Type": "Map",
         "Optional": true,
+        "Description": "Arbitrary map of values that, when changed, will trigger a new base timestamp value to be saved. See [the main provider documentation](../index.md) for more information.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -203,10 +264,12 @@
       },
       "unix": {
         "Type": "Int",
+        "Description": "Number of seconds since epoch time, e.g. `1581489373`.",
         "Computed": true
       },
       "year": {
         "Type": "Int",
+        "Description": "Number year of timestamp.",
         "Computed": true
       }
     }

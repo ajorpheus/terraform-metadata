@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "functions",
   "type": "functions",
-  "version": "v1.1.4",
+  "version": "v1.3.0-rc1",
   "schema": {
     "abs": {
       "Parameters": [
@@ -264,22 +264,6 @@
       ],
       "ReturnType": "Any"
     },
-    "defaults": {
-      "Parameters": [
-        {
-          "Name": "input",
-          "Type": "Any",
-          "AllowNull": true,
-          "AllowMarked": true
-        },
-        {
-          "Name": "defaults",
-          "Type": "Any",
-          "AllowMarked": true
-        }
-      ],
-      "ReturnType": "Any"
-    },
     "dirname": {
       "Parameters": [
         {
@@ -311,6 +295,19 @@
         }
       ],
       "ReturnType": "Any"
+    },
+    "endswith": {
+      "Parameters": [
+        {
+          "Name": "str",
+          "Type": "String"
+        },
+        {
+          "Name": "suffix",
+          "Type": "String"
+        }
+      ],
+      "ReturnType": "Bool"
     },
     "file": {
       "Parameters": [
@@ -924,6 +921,19 @@
       ],
       "ReturnType": "List(String)"
     },
+    "startswith": {
+      "Parameters": [
+        {
+          "Name": "str",
+          "Type": "String"
+        },
+        {
+          "Name": "prefix",
+          "Type": "String"
+        }
+      ],
+      "ReturnType": "Bool"
+    },
     "strrev": {
       "Parameters": [
         {
@@ -1016,6 +1026,19 @@
       ],
       "ReturnType": "String"
     },
+    "timecmp": {
+      "Parameters": [
+        {
+          "Name": "timestamp_a",
+          "Type": "String"
+        },
+        {
+          "Name": "timestamp_b",
+          "Type": "String"
+        }
+      ],
+      "ReturnType": "Number"
+    },
     "timestamp": {
       "ReturnType": "String"
     },
@@ -1034,10 +1057,11 @@
           "Name": "v",
           "Type": "Any",
           "AllowNull": true,
+          "AllowDynamicType": true,
           "AllowMarked": true
         }
       ],
-      "ReturnType": "Any"
+      "ReturnType": "Bool"
     },
     "tolist": {
       "Parameters": [
@@ -1045,10 +1069,11 @@
           "Name": "v",
           "Type": "Any",
           "AllowNull": true,
+          "AllowDynamicType": true,
           "AllowMarked": true
         }
       ],
-      "ReturnType": "Any"
+      "ReturnType": "List(Any)"
     },
     "tomap": {
       "Parameters": [
@@ -1056,10 +1081,11 @@
           "Name": "v",
           "Type": "Any",
           "AllowNull": true,
+          "AllowDynamicType": true,
           "AllowMarked": true
         }
       ],
-      "ReturnType": "Any"
+      "ReturnType": "Map(Any)"
     },
     "tonumber": {
       "Parameters": [
@@ -1067,10 +1093,11 @@
           "Name": "v",
           "Type": "Any",
           "AllowNull": true,
+          "AllowDynamicType": true,
           "AllowMarked": true
         }
       ],
-      "ReturnType": "Any"
+      "ReturnType": "Number"
     },
     "toset": {
       "Parameters": [
@@ -1078,10 +1105,11 @@
           "Name": "v",
           "Type": "Any",
           "AllowNull": true,
+          "AllowDynamicType": true,
           "AllowMarked": true
         }
       ],
-      "ReturnType": "Any"
+      "ReturnType": "Set(Any)"
     },
     "tostring": {
       "Parameters": [
@@ -1089,10 +1117,11 @@
           "Name": "v",
           "Type": "Any",
           "AllowNull": true,
+          "AllowDynamicType": true,
           "AllowMarked": true
         }
       ],
-      "ReturnType": "Any"
+      "ReturnType": "String"
     },
     "transpose": {
       "Parameters": [

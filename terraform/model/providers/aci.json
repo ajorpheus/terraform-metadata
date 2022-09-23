@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "aci",
   "type": "provider",
-  "version": "v2.0.0",
+  "version": "v2.5.2",
   "provider": {
     "cert_name": {
       "Type": "String",
@@ -90,6 +90,53 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_aaa_domain_relationship": {
+      "aaa_domain_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "parent_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_aaep_to_domain": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "attachable_access_entity_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "domain_dn": {
+        "Type": "String",
+        "Required": true
       }
     },
     "aci_access_generic": {
@@ -393,6 +440,37 @@
         "Description": "Create relation to topoctrl:FwdScaleProfilePol"
       }
     },
+    "aci_action_rule_additional_communities": {
+      "action_rule_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "community": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_criteria": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_action_rule_profile": {
       "annotation": {
         "Type": "String",
@@ -405,11 +483,108 @@
         "Optional": true,
         "Computed": true
       },
+      "multipath": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "set_route_tag"
+        ]
+      },
       "name": {
         "Type": "String",
         "Required": true
       },
       "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "next_hop_propagation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "set_route_tag"
+        ]
+      },
+      "set_as_path_prepend_as": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "asn": {
+              "Type": "String",
+              "Required": true,
+              "Description": "ASN must be between 0 and 2147483647"
+            },
+            "order": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Order must be between 0 and 31"
+            }
+          }
+        }
+      },
+      "set_as_path_prepend_last_as": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_communities": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "set_dampening": {
+        "Type": "Map",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "set_metric": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_metric_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_next_hop": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_preference": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_route_tag": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "multipath",
+          "next_hop_propagation"
+        ]
+      },
+      "set_weight": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -639,6 +814,7 @@
       "relation_fv_rs_path_att": {
         "Type": "Set",
         "Optional": true,
+        "Deprecated": "use resource aci_epg_to_static_path instead",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1086,7 +1262,8 @@
       },
       "relation_bgp_rs_peer_pfx_pol": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "relation_bgp_rs_peer_to_profile": {
         "Type": "Set",
@@ -1485,6 +1662,62 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "aci_bulk_epg_to_static_path": {
+      "application_epg_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "static_path": {
+        "Type": "Set",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "deployment_immediacy": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "lazy"
+              }
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "encap": {
+              "Type": "String",
+              "Required": true
+            },
+            "interface_dn": {
+              "Type": "String",
+              "Required": true
+            },
+            "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "regular"
+              }
+            },
+            "primary_encap": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "unknown"
+              }
+            }
+          }
+        }
       }
     },
     "aci_cdp_interface_policy": {
@@ -2138,6 +2371,83 @@
         "Optional": true
       }
     },
+    "aci_concrete_device": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_device_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vm_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_controller_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_concrete_interface": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "concrete_device_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_c_if_path_att": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fabric:PathEp"
+      },
+      "vnic_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_configuration_export_policy": {
       "admin_st": {
         "Type": "String",
@@ -2522,6 +2832,7 @@
       "filter_entry_ids": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2531,6 +2842,7 @@
       "filter_ids": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2577,10 +2889,89 @@
         "Computed": true,
         "DefaultFunc": "UNKNOWN"
       },
+      "apply_both_directions": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "yes"
+        }
+      },
       "cons_match_t": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "consumer_to_provider": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set InTerm attributes",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "prio": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "relation_vz_rs_filt_att": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Create relation to vzFilter",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "action": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "directives": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "filter_dn": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "priority_override": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "relation_vz_rs_in_term_graph_att": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "target_dscp": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "contract_dn": {
         "Type": "String",
@@ -2610,9 +3001,81 @@
         "Optional": true,
         "Computed": true
       },
+      "provider_to_consumer": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set OutTerm attributes",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "prio": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "relation_vz_rs_filt_att": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Create relation to vzFilter",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "action": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "directives": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "filter_dn": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "priority_override": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "relation_vz_rs_out_term_graph_att": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "target_dscp": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "relation_vz_rs_sdwan_pol": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "relation_vz_rs_subj_filt_att": {
         "Type": "Set",
@@ -2625,7 +3088,8 @@
       },
       "relation_vz_rs_subj_graph_att": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "rev_flt_ports": {
         "Type": "String",
@@ -2633,6 +3097,88 @@
         "Computed": true
       },
       "target_dscp": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_contract_subject_filter": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "contract_subject_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "directives": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "filter_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "priority_override": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_contract_subject_one_way_filter": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "contract_subject_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "directives": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "filter_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "priority_override": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -2761,9 +3307,8 @@
         "Computed": true
       },
       "dhcp_option": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
-        "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -2801,15 +3346,6 @@
               "Computed": true
             }
           }
-        }
-      },
-      "dhcp_option_ids": {
-        "Type": "List",
-        "Optional": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
         }
       },
       "name": {
@@ -3412,6 +3948,32 @@
         "Computed": true
       }
     },
+    "aci_epg_to_contract_interface": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "application_epg_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "contract_interface_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_epg_to_domain": {
       "allow_micro_seg": {
         "Type": "Bool",
@@ -3433,6 +3995,11 @@
         "Optional": true,
         "Computed": true
       },
+      "custom_epg_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "delimiter": {
         "Type": "String",
         "Optional": true,
@@ -3447,6 +4014,10 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "enhanced_lag_policy": {
+        "Type": "String",
+        "Optional": true
       },
       "epg_cos": {
         "Type": "String",
@@ -3466,7 +4037,8 @@
       "lag_policy_name": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "use enhanced_lag_policy instead"
       },
       "netflow_dir": {
         "Type": "String",
@@ -3555,8 +4127,7 @@
       },
       "encap": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Required": true
       },
       "instr_imedcy": {
         "Type": "String",
@@ -3763,11 +4334,13 @@
       "relation_fv_rs_cust_qos_pol": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "relation_fv_rs_cust_qos_pol attribute is no longer available"
       },
       "relation_fv_rs_intra_epg": {
         "Type": "Set",
         "Optional": true,
+        "Deprecated": "relation_fv_rs_intra_epg attribute is no longer available",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -3803,7 +4376,8 @@
       },
       "relation_l3ext_rs_inst_p_to_nat_mapping_epg": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "relation_l3ext_rs_inst_p_to_nat_mapping_epg attribute is no longer available"
       },
       "relation_l3ext_rs_inst_p_to_profile": {
         "Type": "Set",
@@ -3826,7 +4400,8 @@
       },
       "relation_l3ext_rs_l3_inst_p_to_dom_p": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Deprecated": "relation_l3ext_rs_l3_inst_p_to_dom_p attribute is no longer available"
       },
       "target_dscp": {
         "Type": "String",
@@ -4950,6 +5525,87 @@
         "Computed": true
       }
     },
+    "aci_ip_sla_monitoring_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "http_uri": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "http_version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "request_data_size": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_detect_multiplier": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_frequency": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_port": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "threshold": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "traffic_class_value": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type_of_service": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_isis_domain_policy": {
       "annotation": {
         "Type": "String",
@@ -5562,10 +6218,19 @@
         "Type": "String",
         "Required": true
       },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "name_alias": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "relation_bgp_rs_best_path_ctrl_pol": {
+        "Type": "String",
+        "Optional": true
       },
       "relation_bgp_rs_bgp_node_ctx_pol": {
         "Type": "String",
@@ -5657,17 +6322,26 @@
             "forged_transmit": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "string",
+                "Value": "Disabled"
+              }
             },
             "mac_change": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "string",
+                "Value": "Disabled"
+              }
             },
             "promiscuous_mode": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Default": {
+                "Type": "string",
+                "Value": "Disabled"
+              }
             },
             "tdn": {
               "Type": "String",
@@ -6191,6 +6865,190 @@
         "Computed": true
       },
       "side": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l4_l7_device": {
+      "active": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "context_aware": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "function_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_copy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "managed": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "no"
+        }
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "promiscuous_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_al_dev_to_dom_p": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vmmDomP",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "relation_vns_rs_al_dev_to_phys_dom_p"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain_dn": {
+              "Type": "String",
+              "Required": true
+            },
+            "switching_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "native"
+              }
+            }
+          }
+        }
+      },
+      "relation_vns_rs_al_dev_to_phys_dom_p": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to phys:DomP"
+      },
+      "service_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "trunking": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l4_l7_logical_interface": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "enhanced_lag_policy_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_device_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_c_if_att_n": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vnsCIf",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "aci_l4_l7_redirect_health_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
         "Type": "String",
         "Required": true
       }
@@ -7214,7 +8072,7 @@
       },
       "relation_vns_rs_l_dev_ctx_to_l_dev": {
         "Type": "String",
-        "Optional": true
+        "Required": true
       },
       "relation_vns_rs_l_dev_ctx_to_rtr_cfg": {
         "Type": "String",
@@ -7640,6 +8498,95 @@
       "name": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "aci_match_community_terms": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "match_community_factors": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create Community Factors",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "community": {
+              "Type": "String",
+              "Required": true
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "scope": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "match_rule_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_match_regex_community_terms": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "community_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "match_rule_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "regex": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "aci_match_route_destination_rule": {
@@ -9767,6 +10714,14 @@
         "Computed": true,
         "DefaultFunc": "UNKNOWN"
       },
+      "anycast_mac": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "msnlb",
+          "next_hop_addr"
+        ]
+      },
       "ctrl": {
         "Type": "List",
         "Optional": true,
@@ -9786,10 +10741,54 @@
         "Type": "String",
         "Required": true
       },
+      "msnlb": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "next_hop_addr",
+          "anycast_mac"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "0.0.0.0"
+              }
+            },
+            "mac": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "00:00:00:00:00:00"
+              }
+            },
+            "mode": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
       "name_alias": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "next_hop_addr": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "msnlb",
+          "anycast_mac"
+        ]
       },
       "parent_dn": {
         "Type": "String",
@@ -10507,6 +11506,11 @@
         "Optional": true,
         "Computed": true
       },
+      "enable_vm_folder": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "encap_mode": {
         "Type": "String",
         "Optional": true,
@@ -10820,6 +11824,63 @@
         "Required": true
       }
     },
+    "aci_vrf_leak_epg_bd_subnet": {
+      "allow_l3out_advertisement": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "leak_to": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_l3out_advertisement": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "inherit"
+              }
+            },
+            "vrf_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vrf_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_vrf_snmp_context": {
       "annotation": {
         "Type": "String",
@@ -10863,6 +11924,36 @@
         "Computed": true
       },
       "vrf_snmp_context_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_vrf_to_bgp_address_family_context": {
+      "address_family": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "bgp_address_family_context_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vrf_dn": {
         "Type": "String",
         "Required": true
       }
@@ -11049,6 +12140,54 @@
         "Required": true
       },
       "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_aaa_domain_relationship": {
+      "aaa_domain_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "parent_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_aaep_to_domain": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "attachable_access_entity_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "domain_dn": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -11255,6 +12394,37 @@
         "Computed": true
       }
     },
+    "aci_action_rule_additional_communities": {
+      "action_rule_profile_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "community": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "set_criteria": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_action_rule_profile": {
       "annotation": {
         "Type": "String",
@@ -11267,6 +12437,10 @@
         "Optional": true,
         "Computed": true
       },
+      "multipath": {
+        "Type": "String",
+        "Optional": true
+      },
       "name": {
         "Type": "String",
         "Required": true
@@ -11275,6 +12449,75 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "next_hop_propagation": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_as_path_prepend_as": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "asn": {
+              "Type": "String",
+              "Optional": true
+            },
+            "order": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "set_as_path_prepend_last_as": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_communities": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "set_dampening": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "set_metric": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_metric_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_next_hop": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_preference": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_route_tag": {
+        "Type": "String",
+        "Optional": true
+      },
+      "set_weight": {
+        "Type": "String",
+        "Optional": true
       },
       "tenant_dn": {
         "Type": "String",
@@ -12137,6 +13380,14 @@
       }
     },
     "aci_client_end_point": {
+      "allow_empty_result": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "annotation": {
         "Type": "String",
         "Optional": true,
@@ -12733,6 +13984,83 @@
         "Computed": true
       }
     },
+    "aci_concrete_device": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_device_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vm_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vmm_controller_dn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_concrete_interface": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "concrete_device_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_c_if_path_att": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to fabric:PathEp"
+      },
+      "vnic_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_configuration_export_policy": {
       "admin_st": {
         "Type": "String",
@@ -12969,10 +14297,83 @@
         "Computed": true,
         "DefaultFunc": "UNKNOWN"
       },
+      "apply_both_directions": {
+        "Type": "String",
+        "Optional": true
+      },
       "cons_match_t": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "consumer_to_provider": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "prio": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "relation_vz_rs_filt_att": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Represent a relation to vzFilter",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "action": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "directives": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "filter_dn": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "priority_override": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "relation_vz_rs_in_term_graph_att": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "target_dscp": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "contract_dn": {
         "Type": "String",
@@ -13002,6 +14403,75 @@
         "Optional": true,
         "Computed": true
       },
+      "provider_to_consumer": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "prio": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "relation_vz_rs_filt_att": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Represent a relation to vzFilter",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "action": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "directives": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "filter_dn": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "priority_override": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "relation_vz_rs_out_term_graph_att": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "target_dscp": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "rev_flt_ports": {
         "Type": "String",
         "Optional": true,
@@ -13010,6 +14480,97 @@
       "target_dscp": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_contract_subject_filter": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "contract_subject_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "directives": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "filter_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "priority_override": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_contract_subject_one_way_filter": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "contract_subject_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "directives": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "filter_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "priority_override": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tn_vz_filter_name": {
+        "Type": "String",
         "Computed": true
       }
     },
@@ -13625,6 +15186,37 @@
         "Computed": true
       }
     },
+    "aci_epg_to_contract_interface": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "application_epg_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "contract_interface_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "prio": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_epg_to_domain": {
       "allow_micro_seg": {
         "Type": "Bool",
@@ -13645,6 +15237,11 @@
         "Optional": true,
         "Computed": true
       },
+      "custom_epg_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "delimiter": {
         "Type": "String",
         "Optional": true,
@@ -13659,6 +15256,10 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "enhanced_lag_policy": {
+        "Type": "String",
+        "Optional": true
       },
       "epg_cos": {
         "Type": "String",
@@ -13678,7 +15279,8 @@
       "lag_policy_name": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Computed": true,
+        "Deprecated": "see enhanced_lag_policy"
       },
       "netflow_dir": {
         "Type": "String",
@@ -15008,6 +16610,87 @@
         "Computed": true
       }
     },
+    "aci_ip_sla_monitoring_policy": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "http_uri": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "http_version": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "request_data_size": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_detect_multiplier": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_frequency": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_port": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sla_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "threshold": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "timeout": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "traffic_class_value": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type_of_service": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
     "aci_isis_domain_policy": {
       "annotation": {
         "Type": "String",
@@ -15414,6 +17097,11 @@
       "logical_node_profile_dn": {
         "Type": "String",
         "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "name_alias": {
         "Type": "String",
@@ -15982,6 +17670,235 @@
         "Computed": true
       },
       "side": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_l4_l7_deployed_graph_connector_vlan": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "delete_pbr_scenario": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fabric_encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "logical_context_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "member_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "router_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l4_l7_device": {
+      "active": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "context_aware": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "function_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "is_copy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "managed": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "promiscuous_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_al_dev_to_dom_p": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vmmDomP",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "relation_vns_rs_al_dev_to_phys_dom_p"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain_dn": {
+              "Type": "String",
+              "Optional": true
+            },
+            "switching_mode": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "relation_vns_rs_al_dev_to_phys_dom_p": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Create relation to phys:DomP"
+      },
+      "service_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "trunking": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_l4_l7_logical_interface": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "encap": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "enhanced_lag_policy_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l4_l7_device_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "relation_vns_rs_c_if_att_n": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create relation to vnsCIf",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "aci_l4_l7_redirect_health_group": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_dn": {
         "Type": "String",
         "Required": true
       }
@@ -16880,6 +18797,94 @@
       "name": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "aci_match_community_terms": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "match_community_factors": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Create Community Factors",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "community": {
+              "Type": "String",
+              "Required": true
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "scope": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "match_rule_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "aci_match_regex_community_terms": {
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "community_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "match_rule_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "regex": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       }
     },
     "aci_match_route_destination_rule": {
@@ -18688,6 +20693,14 @@
         "Computed": true,
         "DefaultFunc": "UNKNOWN"
       },
+      "anycast_mac": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "msnlb",
+          "next_hop_addr"
+        ]
+      },
       "ctrl": {
         "Type": "List",
         "Optional": true,
@@ -18707,10 +20720,46 @@
         "Type": "String",
         "Required": true
       },
+      "msnlb": {
+        "Type": "Set",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "next_hop_addr",
+          "anycast_mac"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group": {
+              "Type": "String",
+              "Optional": true
+            },
+            "mac": {
+              "Type": "String",
+              "Optional": true
+            },
+            "mode": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
       "name_alias": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "next_hop_addr": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "msnlb",
+          "anycast_mac"
+        ]
       },
       "parent_dn": {
         "Type": "String",
@@ -19553,6 +21602,11 @@
         "Optional": true,
         "Computed": true
       },
+      "enable_vm_folder": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "encap_mode": {
         "Type": "String",
         "Optional": true,
@@ -19707,6 +21761,55 @@
         "Required": true
       }
     },
+    "aci_vrf_leak_epg_bd_subnet": {
+      "allow_l3out_advertisement": {
+        "Type": "String",
+        "Optional": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip": {
+        "Type": "String",
+        "Required": true
+      },
+      "leak_to": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_l3out_advertisement": {
+              "Type": "String",
+              "Optional": true
+            },
+            "vrf_dn": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vrf_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "aci_vrf_snmp_context": {
       "annotation": {
         "Type": "String",
@@ -19750,6 +21853,36 @@
         "Computed": true
       },
       "vrf_snmp_context_dn": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "aci_vrf_to_bgp_address_family_context": {
+      "address_family": {
+        "Type": "String",
+        "Required": true
+      },
+      "annotation": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "DefaultFunc": "UNKNOWN"
+      },
+      "bgp_address_family_context_dn": {
+        "Type": "String",
+        "Required": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name_alias": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vrf_dn": {
         "Type": "String",
         "Required": true
       }

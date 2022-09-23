@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "hcloud",
   "type": "provider",
-  "version": "v1.32.2",
+  "version": "v1.35.2",
   "provider": {
     "endpoint": {
       "Type": "String",
@@ -148,6 +148,30 @@
               }
             }
           }
+        }
+      }
+    },
+    "hcloud_firewall_attachment": {
+      "firewall_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "label_selectors": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "server_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
         }
       }
     },
@@ -633,6 +657,55 @@
         "Required": true
       }
     },
+    "hcloud_primary_ip": {
+      "assignee_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "assignee_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "auto_delete": {
+        "Type": "Bool",
+        "Required": true
+      },
+      "datacenter": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "delete_protection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "ip_address": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ip_network": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "hcloud_rdns": {
       "dns_ptr": {
         "Type": "String",
@@ -659,6 +732,14 @@
       "__timeouts__": [
         "create"
       ],
+      "allow_deprecated_images": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "backup_window": {
         "Type": "String",
         "Computed": true,
@@ -695,9 +776,17 @@
           "ElementsType": "Int"
         }
       },
+      "ignore_remote_firewall_ids": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "image": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "ipv4_address": {
         "Type": "String",
@@ -772,6 +861,43 @@
       "placement_group_id": {
         "Type": "Int",
         "Optional": true
+      },
+      "public_net": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ipv4": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "ipv4_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            },
+            "ipv6": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "ipv6_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            }
+          }
+        }
       },
       "rebuild_protection": {
         "Type": "Bool",
@@ -2148,6 +2274,10 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "network_zone": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "hcloud_locations": {
@@ -2207,6 +2337,10 @@
             "name": {
               "Type": "String",
               "Optional": true,
+              "Computed": true
+            },
+            "network_zone": {
+              "Type": "String",
               "Computed": true
             }
           }
@@ -2366,6 +2500,123 @@
             "type": {
               "Type": "String",
               "Optional": true
+            }
+          }
+        }
+      },
+      "with_selector": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "hcloud_primary_ip": {
+      "assignee_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "assignee_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "auto_delete": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "datacenter": {
+        "Type": "String",
+        "Computed": true
+      },
+      "delete_protection": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_address": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_network": {
+        "Type": "String",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "with_selector": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "hcloud_primary_ips": {
+      "primary_ips": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "assignee_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "assignee_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "auto_delete": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "datacenter": {
+              "Type": "String",
+              "Computed": true
+            },
+            "delete_protection": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "ip_address": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ip_network": {
+              "Type": "String",
+              "Computed": true
+            },
+            "labels": {
+              "Type": "Map",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
             }
           }
         }

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "rundeck",
   "type": "provider",
-  "version": "v0.4.2",
+  "version": "v0.4.3",
   "provider": {
     "api_version": {
       "Type": "String",
@@ -595,6 +595,10 @@
         "Optional": true
       },
       "time_zone": {
+        "Type": "String",
+        "Optional": true
+      },
+      "timeout": {
         "Type": "String",
         "Optional": true
       }
