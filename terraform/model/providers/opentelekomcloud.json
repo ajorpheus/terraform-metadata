@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "opentelekomcloud",
   "type": "provider",
-  "version": "v1.31.3",
+  "version": "v1.31.6-hotfix.1",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -649,7 +649,7 @@
               "Optional": true,
               "Default": {
                 "Type": "string",
-                "Value": "2022-09-20T14:45Z"
+                "Value": "2022-10-31T15:02Z"
               }
             }
           }
@@ -2487,6 +2487,10 @@
         "Type": "Bool",
         "Optional": true
       },
+      "encrypted_password": {
+        "Type": "String",
+        "Computed": true
+      },
       "flavor_id": {
         "Type": "String",
         "Optional": true,
@@ -2572,6 +2576,10 @@
           }
         }
       },
+      "password": {
+        "Type": "String",
+        "Computed": true
+      },
       "power_state": {
         "Type": "String",
         "Optional": true,
@@ -2652,6 +2660,10 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "ssh_private_key_path": {
+        "Type": "String",
+        "Optional": true
       },
       "stop_before_destroy": {
         "Type": "Bool",
@@ -3604,6 +3616,11 @@
         "Optional": true,
         "Computed": true
       },
+      "enable_whitelist": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
       "engine": {
         "Type": "String",
         "Required": true
@@ -3670,7 +3687,7 @@
       },
       "security_group_id": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "security_group_name": {
         "Type": "String",
@@ -3707,6 +3724,30 @@
       "vpc_name": {
         "Type": "String",
         "Computed": true
+      },
+      "whitelist": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "group_name": {
+              "Type": "String",
+              "Required": true
+            },
+            "ip_list": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
       }
     },
     "opentelekomcloud_dds_instance_v3": {
@@ -5320,7 +5361,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "/Users/b132ka/.terraform/image_cache"
+          "Value": "/Users/B441OU/.terraform/image_cache"
         }
       },
       "image_source_url": {
@@ -10324,6 +10365,10 @@
           "ElementsType": "String"
         }
       },
+      "unbind_port": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "value_specs": {
         "Type": "Map",
         "Optional": true
@@ -12673,7 +12718,15 @@
         "Type": "String",
         "Computed": true
       },
+      "admin_pass": {
+        "Type": "String",
+        "Computed": true
+      },
       "availability_zone": {
+        "Type": "String",
+        "Computed": true
+      },
+      "encrypted_password": {
         "Type": "String",
         "Computed": true
       },
@@ -12747,6 +12800,10 @@
           }
         }
       },
+      "password": {
+        "Type": "String",
+        "Computed": true
+      },
       "power_state": {
         "Type": "String",
         "Computed": true
@@ -12764,6 +12821,10 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "ssh_private_key_path": {
+        "Type": "String",
+        "Optional": true
       },
       "tags": {
         "Type": "Map",
@@ -14043,6 +14104,81 @@
       "region": {
         "Type": "String",
         "Computed": true
+      }
+    },
+    "opentelekomcloud_identity_role_custom_v3": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "domain_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true,
+        "ConflictsWith": [
+          "display_name",
+          "type"
+        ]
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "statement": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "condition": {
+              "Type": "String",
+              "Computed": true
+            },
+            "effect": {
+              "Type": "String",
+              "Computed": true
+            },
+            "resource": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "id"
+        ]
       }
     },
     "opentelekomcloud_identity_role_v3": {

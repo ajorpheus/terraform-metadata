@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "fortios",
   "type": "provider",
-  "version": "v1.15.0",
+  "version": "v1.16.0",
   "provider": {
     "cabundlecontent": {
       "Type": "String",
@@ -365,6 +365,7 @@
       "cifs": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -436,6 +437,7 @@
       "content_disarm": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -632,6 +634,7 @@
       "ftp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -699,6 +702,7 @@
       "http": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -764,6 +768,11 @@
               "Type": "String",
               "Optional": true,
               "Computed": true
+            },
+            "unknown_content_encoding": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             }
           }
         }
@@ -771,6 +780,7 @@
       "imap": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -853,6 +863,7 @@
       "mapi": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -930,6 +941,7 @@
       "nac_quar": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -961,6 +973,7 @@
       "nntp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1028,6 +1041,7 @@
       "outbreak_prevention": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1055,6 +1069,7 @@
       "pop3": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1142,6 +1157,7 @@
       "smb": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1179,6 +1195,7 @@
       "smtp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1256,6 +1273,7 @@
       "ssh": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -2493,6 +2511,11 @@
         "Type": "String",
         "Required": true
       },
+      "obsolete": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "range": {
         "Type": "String",
         "Optional": true,
@@ -2715,6 +2738,11 @@
         "Type": "String",
         "Required": true
       },
+      "private_key_retain": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "range": {
         "Type": "String",
         "Optional": true,
@@ -2832,6 +2860,7 @@
       "file_filter": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3821,6 +3850,7 @@
       "domain_filter": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3862,6 +3892,7 @@
       "ftgd_dns": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4546,6 +4577,7 @@
       "file_filter": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4624,6 +4656,7 @@
       "gmail": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4646,6 +4679,7 @@
       "imap": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4683,6 +4717,7 @@
       "mapi": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4710,6 +4745,7 @@
       "msn_hotmail": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4742,6 +4778,7 @@
       "other_webmails": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4759,6 +4796,7 @@
       "pop3": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4801,6 +4839,7 @@
       "smtp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4902,6 +4941,7 @@
       "yahoo_mail": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -4987,6 +5027,16 @@
         "Optional": true,
         "Computed": true
       },
+      "dirty_reason": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ems_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "fortinetone_cloud_authentication": {
         "Type": "String",
         "Optional": true,
@@ -5058,6 +5108,21 @@
         "Computed": true
       },
       "source_ip": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "status_check_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant_id": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -5171,6 +5236,7 @@
       "forticlient_android_settings": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -5257,6 +5323,7 @@
       "forticlient_ios_settings": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -5357,6 +5424,7 @@
       "forticlient_winmac_settings": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6023,6 +6091,7 @@
       "controller_report": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6117,6 +6186,7 @@
       "modem1": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6126,6 +6196,7 @@
             "auto_switch": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6234,6 +6305,7 @@
       "modem2": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6243,6 +6315,7 @@
             "auto_switch": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6456,6 +6529,7 @@
       "wan_extension": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6499,6 +6573,7 @@
       "controller_report": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6545,6 +6620,7 @@
       "modem1": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6554,6 +6630,7 @@
             "auto_switch": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6662,6 +6739,7 @@
       "modem2": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6671,6 +6749,7 @@
             "auto_switch": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6804,6 +6883,7 @@
       "cellular": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -6813,6 +6893,7 @@
             "controller_report": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6856,6 +6937,7 @@
             "modem1": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6865,6 +6947,7 @@
                   "auto_switch": {
                     "Type": "List",
                     "Optional": true,
+                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -6968,6 +7051,7 @@
             "modem2": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -6977,6 +7061,7 @@
                   "auto_switch": {
                     "Type": "List",
                     "Optional": true,
+                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -7080,6 +7165,7 @@
             "sms_notification": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -7089,6 +7175,7 @@
                   "alert": {
                     "Type": "List",
                     "Optional": true,
+                    "Computed": true,
                     "MaxItems": 1,
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -7193,6 +7280,7 @@
       "lan_extension": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -7266,6 +7354,815 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "fortios_extensioncontroller_dataplan": {
+      "apn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "auth_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "billing_date": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "capacity": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "carrier": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "iccid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "modem_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "monthly_fee": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "overage": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "password": {
+        "Type": "String",
+        "Optional": true
+      },
+      "pdn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "preferred_subnet": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "private_network": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "signal_period": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "signal_threshold": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "slot": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "fortios_extensioncontroller_extender": {
+      "allowaccess": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "authorized": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "bandwidth_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "enforce_bandwidth": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ext_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "extension_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "firmware_provision_latest": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fosid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "login_password": {
+        "Type": "String",
+        "Optional": true
+      },
+      "login_password_change": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "override_allowaccess": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "override_enforce_bandwidth": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "override_login_password_change": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "profile": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdom": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      },
+      "wan_extension": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "modem1_extension": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "modem2_extension": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "fortios_extensioncontroller_extenderprofile": {
+      "allowaccess": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "bandwidth_limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "cellular": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "controller_report": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "interval": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "signal_threshold": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "status": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "dataplan": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "modem1": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "auto_switch": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "dataplan": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "disconnect": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "disconnect_period": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "disconnect_threshold": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "signal": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "switch_back": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "switch_back_time": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "switch_back_timer": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "conn_status": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "default_sim": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "gps": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "preferred_carrier": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "redundant_intf": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "redundant_mode": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "sim1_pin": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "sim1_pin_code": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "sim2_pin": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "sim2_pin_code": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "modem2": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "auto_switch": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "dataplan": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "disconnect": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "disconnect_period": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "disconnect_threshold": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "signal": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "switch_back": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "switch_back_time": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "switch_back_timer": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "conn_status": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "default_sim": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "gps": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "preferred_carrier": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "redundant_intf": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "redundant_mode": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "sim1_pin": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "sim1_pin_code": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "sim2_pin": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "sim2_pin_code": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "sms_notification": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "alert": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "data_exhausted": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "fgt_backup_mode_switch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "low_signal_strength": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "mode_switch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "os_image_fallback": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "session_disconnect": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "system_reboot": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "receiver": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "alert": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "phone_number": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "status": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "status": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "enforce_bandwidth": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "extension": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fosid": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "lan_extension": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backhaul": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "role": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "weight": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "backhaul_interface": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "backhaul_ip": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ipsec_tunnel": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "link_loadbalance": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "login_password": {
+        "Type": "String",
+        "Optional": true
+      },
+      "login_password_change": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "model": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "fortios_extensioncontroller_fortigate": {
+      "authorized": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "device_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "fosid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "profile": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdom": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
+    "fortios_extensioncontroller_fortigateprofile": {
+      "extension": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fosid": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "lan_extension": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backhaul_interface": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "backhaul_ip": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "ipsec_tunnel": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "name": {
         "Type": "String",
@@ -7664,6 +8561,11 @@
       }
     },
     "fortios_firewall_accessproxy": {
+      "add_vhost_domain_to_dnsdb": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "api_gateway": {
         "Type": "List",
         "Optional": true,
@@ -7672,6 +8574,22 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "application": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "http_cookie_age": {
               "Type": "Int",
               "Optional": true,
@@ -7921,6 +8839,22 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "application": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "http_cookie_age": {
               "Type": "Int",
               "Optional": true,
@@ -8201,6 +9135,11 @@
         "Computed": true
       },
       "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "user_agent_detect": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -8216,6 +9155,11 @@
       }
     },
     "fortios_firewall_accessproxy6": {
+      "add_vhost_domain_to_dnsdb": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "api_gateway": {
         "Type": "List",
         "Optional": true,
@@ -8224,6 +9168,22 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "application": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "http_cookie_age": {
               "Type": "Int",
               "Optional": true,
@@ -8473,6 +9433,22 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "application": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
             "http_cookie_age": {
               "Type": "Int",
               "Optional": true,
@@ -8753,6 +9729,11 @@
         "Computed": true
       },
       "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "user_agent_detect": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -8868,6 +9849,11 @@
         "Optional": true,
         "Computed": true
       },
+      "replacemsg_group": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "ssl_certificate": {
         "Type": "String",
         "Optional": true,
@@ -8924,7 +9910,8 @@
       },
       "end_mac": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "epg_name": {
         "Type": "String",
@@ -9046,7 +10033,8 @@
       },
       "start_mac": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "sub_type": {
         "Type": "String",
@@ -9177,6 +10165,11 @@
         "Optional": true,
         "Computed": true
       },
+      "epg_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "fabric_object": {
         "Type": "String",
         "Optional": true,
@@ -9244,6 +10237,11 @@
         "Optional": true
       },
       "sdn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sdn_tag": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -9322,6 +10320,11 @@
         }
       },
       "template": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "tenant": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -10084,6 +11087,17 @@
         "Optional": true
       }
     },
+    "fortios_firewall_global": {
+      "banned_ip_persistency": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "fortios_firewall_identitybasedroute": {
       "comments": {
         "Type": "String",
@@ -10530,6 +11544,11 @@
         "Optional": true,
         "Computed": true
       },
+      "extra_ip6_range_number": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "extra_ip_range_number": {
         "Type": "Int",
         "Optional": true,
@@ -10541,6 +11560,11 @@
         "Computed": true
       },
       "icon_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip6_range_number": {
         "Type": "Int",
         "Optional": true,
         "Computed": true
@@ -10606,6 +11630,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "id": {
               "Type": "Int",
               "Optional": true,
@@ -10656,6 +11685,11 @@
       }
     },
     "fortios_firewall_internetserviceappend": {
+      "addr_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "append_port": {
         "Type": "Int",
         "Optional": true,
@@ -10708,7 +11742,28 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "dst": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "dst6": {
               "Type": "List",
               "Optional": true,
               "IsBlock": true,
@@ -10911,10 +11966,41 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "id": {
               "Type": "Int",
               "Optional": true,
               "Computed": true
+            },
+            "ip6_range": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "end_ip6": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "start_ip6": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
             },
             "ip_range": {
               "Type": "List",
@@ -10997,7 +12083,28 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "dst": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "dst6": {
               "Type": "List",
               "Optional": true,
               "IsBlock": true,
@@ -12131,6 +13238,30 @@
         "Optional": true
       }
     },
+    "fortios_firewall_networkservicedynamic": {
+      "comment": {
+        "Type": "String",
+        "Optional": true
+      },
+      "filter": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sdn": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vdomparam": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "fortios_firewall_object_address": {
       "associated_interface": {
         "Type": "String",
@@ -12576,6 +13707,11 @@
           }
         }
       },
+      "diffserv_copy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "diffserv_forward": {
         "Type": "String",
         "Optional": true,
@@ -12649,6 +13785,11 @@
             }
           }
         }
+      },
+      "dstaddr6_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "dstaddr_negate": {
         "Type": "String",
@@ -12790,6 +13931,154 @@
         "Computed": true
       },
       "internet_service": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6_custom": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_custom_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_name": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6_src": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6_src_custom": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_custom_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_name": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_negate": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -13040,6 +14329,38 @@
         "Optional": true,
         "Computed": true
       },
+      "network_service_dynamic": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "network_service_src_dynamic": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "np_acceleration": {
         "Type": "String",
         "Optional": true,
@@ -13107,7 +14428,8 @@
       },
       "policyid": {
         "Type": "Int",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "poolname": {
         "Type": "List",
@@ -13173,7 +14495,16 @@
         "Optional": true,
         "Computed": true
       },
+      "reputation_direction6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "reputation_minimum": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "reputation_minimum6": {
         "Type": "Int",
         "Optional": true
       },
@@ -13325,6 +14656,11 @@
             }
           }
         }
+      },
+      "srcaddr6_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "srcaddr_negate": {
         "Type": "String",
@@ -14680,6 +16016,7 @@
       "cifs": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -14782,6 +16119,7 @@
       "dns": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -14809,6 +16147,7 @@
       "ftp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -14822,6 +16161,11 @@
             },
             "comfort_interval": {
               "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "explicit_ftp_tls": {
+              "Type": "String",
               "Optional": true,
               "Computed": true
             },
@@ -14901,6 +16245,7 @@
       "http": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15061,6 +16406,11 @@
               "Type": "String",
               "Optional": true,
               "Computed": true
+            },
+            "verify_dns_for_policy_matching": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
             }
           }
         }
@@ -15068,6 +16418,7 @@
       "imap": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15130,6 +16481,7 @@
       "mail_signature": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15152,6 +16504,7 @@
       "mapi": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15203,6 +16556,7 @@
       "nntp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15265,6 +16619,7 @@
       "pop3": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15337,6 +16692,7 @@
       "smtp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15404,6 +16760,7 @@
       "ssh": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -15489,6 +16846,22 @@
       }
     },
     "fortios_firewall_proxyaddress": {
+      "application": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
       "case_sensitivity": {
         "Type": "String",
         "Optional": true,
@@ -16968,6 +18341,154 @@
         "Optional": true,
         "Computed": true
       },
+      "internet_service6": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6_custom": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_custom_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_name": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6_src": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service6_src_custom": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_custom_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_group": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_name": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "internet_service_custom": {
         "Type": "List",
         "Optional": true,
@@ -17846,6 +19367,11 @@
           }
         }
       },
+      "uuid": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "vdomparam": {
         "Type": "String",
         "Optional": true
@@ -18299,6 +19825,7 @@
       "dot": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18379,6 +19906,7 @@
       "ftps": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18471,6 +19999,7 @@
       "https": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18573,6 +20102,7 @@
       "imaps": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18674,6 +20204,7 @@
       "pop3s": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18781,6 +20312,7 @@
       "smtps": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18873,6 +20405,7 @@
       "ssh": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -18925,6 +20458,7 @@
       "ssl": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -24592,6 +26126,7 @@
       "tls_active_probe": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -25656,6 +27191,7 @@
       "ips": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -25693,6 +27229,7 @@
       "level": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -25725,6 +27262,7 @@
       "malware": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -31494,6 +33032,7 @@
       "category_series": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -31704,6 +33243,7 @@
       "value_series": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -31725,6 +33265,7 @@
       "x_series": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -31792,6 +33333,7 @@
       "y_series": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -32177,6 +33719,7 @@
       "page": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -32191,6 +33734,7 @@
             "footer": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -32249,6 +33793,7 @@
             "header": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -34684,6 +36229,11 @@
         "Optional": true,
         "Computed": true
       },
+      "recursive_inherit_priority": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "recursive_next_hop": {
         "Type": "String",
         "Optional": true,
@@ -35634,6 +37184,7 @@
             "igmp": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -35790,6 +37341,7 @@
       "pim_sm_global": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -36013,6 +37565,7 @@
       "pim_sm_global": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -37520,6 +39073,11 @@
       }
     },
     "fortios_router_policy6": {
+      "action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "comments": {
         "Type": "String",
         "Optional": true
@@ -37528,6 +39086,35 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "dst_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "dstaddr": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "dynamic_sort_subtable": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
       },
       "end_port": {
         "Type": "Int",
@@ -37542,6 +39129,43 @@
       "input_device": {
         "Type": "String",
         "Required": true
+      },
+      "input_device_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "internet_service_custom": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service_id": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "output_device": {
         "Type": "String",
@@ -37562,6 +39186,27 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "src_negate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "srcaddr": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "start_port": {
         "Type": "Int",
@@ -38922,6 +40567,11 @@
         "Optional": true,
         "Computed": true
       },
+      "dstaddr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "dynamic_gateway": {
         "Type": "String",
         "Optional": true,
@@ -38991,6 +40641,11 @@
         "Computed": true
       },
       "vrf": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "weight": {
         "Type": "Int",
         "Optional": true,
         "Computed": true
@@ -40496,6 +42151,7 @@
       "gmail": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40513,6 +42169,7 @@
       "imap": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40545,6 +42202,7 @@
       "mapi": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40567,6 +42225,7 @@
       "msn_hotmail": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40593,6 +42252,7 @@
       "pop3": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40630,6 +42290,7 @@
       "smtp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40721,6 +42382,7 @@
       "yahoo_mail": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -40758,6 +42420,7 @@
       "file_filter": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -41236,6 +42899,7 @@
       "nac_ports": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -41448,6 +43112,11 @@
         "Optional": true,
         "Computed": true
       },
+      "query_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "vdomparam": {
         "Type": "String",
         "Optional": true
@@ -41655,6 +43324,7 @@
       "address_civic": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -41837,6 +43507,7 @@
       "coordinates": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -41879,6 +43550,7 @@
       "elin_number": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -42026,6 +43698,7 @@
       "igmp_snooping": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -42214,6 +43887,7 @@
       "n802_1x_settings": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -42301,6 +43975,7 @@
       "ports": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -42468,6 +44143,11 @@
               "Optional": true,
               "Computed": true
             },
+            "igmp_snooping_flood_reports": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "igmps_flood_reports": {
               "Type": "String",
               "Optional": true,
@@ -42561,6 +44241,11 @@
             },
             "max_bundle": {
               "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "mcast_snooping_flood_traffic": {
+              "Type": "String",
               "Optional": true,
               "Computed": true
             },
@@ -42985,6 +44670,7 @@
       "snmp_sysinfo": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -43022,6 +44708,7 @@
       "snmp_trap_threshold": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -43144,6 +44831,7 @@
       "storm_control": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -43202,6 +44890,7 @@
       "stp_settings": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -43273,6 +44962,7 @@
       "switch_log": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -43305,6 +44995,7 @@
       "switch_stp_settings": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -44056,6 +45747,16 @@
         "Optional": true,
         "Computed": true
       },
+      "revision_backup_on_logout": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "revision_backup_on_upgrade": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "vdomparam": {
         "Type": "String",
         "Optional": true
@@ -44344,6 +46045,7 @@
       "portal_message_overrides": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -45170,6 +46872,7 @@
       "fwgrp_permission": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -45212,6 +46915,7 @@
       "loggrp_permission": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -45253,6 +46957,7 @@
       "netgrp_permission": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -45295,6 +47000,7 @@
       "sysgrp_permission": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -45329,6 +47035,16 @@
         "Optional": true,
         "Computed": true
       },
+      "system_execute_ssh": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "system_execute_telnet": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "utmgrp": {
         "Type": "String",
         "Optional": true,
@@ -45337,6 +47053,7 @@
       "utmgrp_permission": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -46030,6 +47747,11 @@
             }
           }
         }
+      },
+      "vdom_override": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "vdomparam": {
         "Type": "String",
@@ -46893,6 +48615,11 @@
         "Optional": true,
         "Computed": true
       },
+      "system_action": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "timeout": {
         "Type": "Int",
         "Optional": true,
@@ -47163,6 +48890,11 @@
       "serial": {
         "Type": "String",
         "Optional": true
+      },
+      "trigger_datetime": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "trigger_day": {
         "Type": "Int",
@@ -47483,6 +49215,7 @@
       "session_sync_filter": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -48089,6 +49822,16 @@
           "Value": "false"
         }
       },
+      "fqdn_cache_ttl": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "fqdn_min_refresh": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "interface": {
         "Type": "String",
         "Optional": true,
@@ -48507,6 +50250,11 @@
         "Optional": true,
         "Computed": true
       },
+      "update_method": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "user_agent": {
         "Type": "String",
         "Optional": true,
@@ -48750,6 +50498,26 @@
         "Optional": true,
         "Computed": true
       },
+      "auto_firmware_upgrade": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "auto_firmware_upgrade_day": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "auto_firmware_upgrade_end_hour": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
+      "auto_firmware_upgrade_start_hour": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "auto_join_forticloud": {
         "Type": "String",
         "Optional": true,
@@ -48859,6 +50627,11 @@
         "Computed": true
       },
       "proxy_username": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sandbox_inline_scan": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -49685,6 +51458,11 @@
         "Optional": true,
         "Computed": true
       },
+      "fortiextender_provision_on_authorization": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "fortiextender_vlan_mode": {
         "Type": "String",
         "Optional": true,
@@ -49706,6 +51484,11 @@
         "Computed": true
       },
       "gui_allow_default_hostname": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gui_app_detection_sdwan": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -50930,6 +52713,7 @@
       "secondary_vcluster": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51138,6 +52922,11 @@
               "Optional": true,
               "Computed": true
             },
+            "pingserver_secondary_force_reset": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "pingserver_slave_force_reset": {
               "Type": "String",
               "Optional": true,
@@ -51227,6 +53016,7 @@
       "dh_group_1": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51254,6 +53044,7 @@
       "dh_group_14": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51281,6 +53072,7 @@
       "dh_group_15": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51308,6 +53100,7 @@
       "dh_group_16": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51335,6 +53128,7 @@
       "dh_group_17": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51362,6 +53156,7 @@
       "dh_group_18": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51389,6 +53184,7 @@
       "dh_group_19": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51416,6 +53212,7 @@
       "dh_group_2": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51443,6 +53240,7 @@
       "dh_group_20": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51470,6 +53268,7 @@
       "dh_group_21": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51497,6 +53296,7 @@
       "dh_group_27": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51524,6 +53324,7 @@
       "dh_group_28": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51551,6 +53352,7 @@
       "dh_group_29": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51578,6 +53380,7 @@
       "dh_group_30": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51605,6 +53408,7 @@
       "dh_group_31": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51632,6 +53436,7 @@
       "dh_group_32": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51659,6 +53464,7 @@
       "dh_group_5": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -51730,6 +53536,11 @@
         "Computed": true
       },
       "aggregate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "aggregate_type": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -52276,6 +54087,7 @@
       "ipv6": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -52707,6 +54519,11 @@
         }
       },
       "l2forward": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "lacp_ha_secondary": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -53247,6 +55064,11 @@
         "Optional": true,
         "Computed": true
       },
+      "switch_controller_netflow_collect": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "switch_controller_rspan_mode": {
         "Type": "String",
         "Optional": true,
@@ -53511,10 +55333,123 @@
       }
     },
     "fortios_system_ipam": {
+      "dynamic_sort_subtable": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
       "pool_subnet": {
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "pools": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "subnet": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "rules": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "device": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "dhcp": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "interface": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "pool": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "role": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
       },
       "server_type": {
         "Type": "String",
@@ -54661,6 +56596,7 @@
       "priority_protocol": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -56237,6 +58173,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "external_id": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "region_list": {
               "Type": "List",
               "Optional": true,
@@ -56858,6 +58799,11 @@
               "Optional": true,
               "Computed": true
             },
+            "embed_measured_health": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
             "failtime": {
               "Type": "Int",
               "Optional": true,
@@ -57015,11 +58961,26 @@
                     "Type": "Int",
                     "Optional": true,
                     "Computed": true
+                  },
+                  "priority_in_sla": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "priority_out_sla": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
                   }
                 }
               }
             },
             "sla_fail_log_period": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "sla_id_redistribute": {
               "Type": "Int",
               "Optional": true,
               "Computed": true
@@ -57770,6 +59731,7 @@
       "zone": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -58081,6 +60043,11 @@
         "Optional": true,
         "Computed": true
       },
+      "dyn_addr_session_check": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "dynamic_sort_subtable": {
         "Type": "String",
         "Optional": true,
@@ -58099,7 +60066,17 @@
         "Optional": true,
         "Computed": true
       },
+      "ext_resource_session_check": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "firewall_session_dirty": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "fqdn_session_check": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -58120,6 +60097,11 @@
         "Computed": true
       },
       "gui_advanced_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "gui_advanced_wireless_features": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -58470,6 +60452,11 @@
         "Optional": true,
         "Computed": true
       },
+      "lan_extension_controller_addr": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "link_down_access": {
         "Type": "String",
         "Optional": true,
@@ -58520,7 +60507,17 @@
         "Optional": true,
         "Computed": true
       },
+      "nat46_force_ipv4_packet_forwarding": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "nat46_generate_ipv6_fragment_header": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nat64_force_ipv6_packet_forwarding": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -58954,6 +60951,161 @@
       }
     },
     "fortios_system_standalonecluster": {
+      "cluster_peer": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "down_intfs_before_sess_sync": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "hb_interval": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "hb_lost_threshold": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "ipsec_tunnel_sync": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "peerip": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "peervd": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "secondary_add_ipsec_routes": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "session_sync_filter": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "custom_service": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "dst_port_range": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "id": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "src_port_range": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "dstaddr": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "dstaddr6": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "dstintf": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "srcaddr": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "srcaddr6": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "srcintf": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "sync_id": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            },
+            "syncvd": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dynamic_sort_subtable": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
       "encryption": {
         "Type": "String",
         "Optional": true,
@@ -61297,6 +63449,27 @@
               "Type": "String",
               "Optional": true,
               "Computed": true
+            },
+            "vci_match": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "vci_string": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "vci_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -61313,7 +63486,8 @@
       },
       "fosid": {
         "Type": "Int",
-        "Required": true
+        "Optional": true,
+        "Computed": true
       },
       "interface": {
         "Type": "String",
@@ -61346,6 +63520,27 @@
               "Type": "String",
               "Optional": true,
               "Computed": true
+            },
+            "vci_match": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "vci_string": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "vci_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -61426,6 +63621,27 @@
               "Type": "String",
               "Optional": true,
               "Computed": true
+            },
+            "vci_match": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "vci_string": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "vci_string": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -61590,6 +63806,7 @@
       "guest": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61627,6 +63844,7 @@
       "guest_voice_signaling": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61668,6 +63886,7 @@
       "softphone": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61705,6 +63924,7 @@
       "streaming_video": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61746,6 +63966,7 @@
       "video_conferencing": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61783,6 +64004,7 @@
       "video_signaling": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61820,6 +64042,7 @@
       "voice": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -61857,6 +64080,7 @@
       "voice_signaling": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -63930,6 +66154,11 @@
         "Optional": true,
         "Computed": true
       },
+      "two_factor_filter": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "two_factor_notification": {
         "Type": "String",
         "Optional": true,
@@ -64614,6 +66843,21 @@
         "Optional": true,
         "Computed": true
       },
+      "mac_case": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mac_password_delimiter": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "mac_username_delimiter": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "name": {
         "Type": "String",
         "Optional": true,
@@ -64785,6 +67029,10 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "auth_url": {
+        "Type": "String",
+        "Optional": true
       },
       "cert": {
         "Type": "String",
@@ -65191,6 +67439,7 @@
       "fortiguard_category": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -65363,6 +67612,7 @@
       "msrp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -65399,6 +67649,7 @@
       "sccp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -65441,6 +67692,7 @@
       "sip": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -66275,6 +68527,7 @@
       "forticlient_access": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -66532,6 +68785,11 @@
         "Type": "String",
         "Required": true
       },
+      "obsolete": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "range": {
         "Type": "String",
         "Optional": true,
@@ -66755,6 +69013,11 @@
         "Optional": true,
         "Computed": true
       },
+      "private_key_retain": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "range": {
         "Type": "String",
         "Optional": true,
@@ -66856,6 +69119,11 @@
       }
     },
     "fortios_vpncertificate_setting": {
+      "cert_expire_warning": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "certname_dsa1024": {
         "Type": "String",
         "Required": true
@@ -66933,6 +69201,7 @@
       "crl_verification": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -67532,6 +69801,11 @@
         "Optional": true,
         "Computed": true
       },
+      "fgsp_sync": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "forticlient_enforcement": {
         "Type": "String",
         "Optional": true,
@@ -67898,6 +70172,11 @@
         "Computed": true
       },
       "rsa_signature_format": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rsa_signature_hash_override": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -68295,6 +70574,11 @@
         "Optional": true,
         "Computed": true
       },
+      "fgsp_sync": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "forticlient_enforcement": {
         "Type": "String",
         "Optional": true,
@@ -68530,6 +70814,11 @@
         "Optional": true,
         "Computed": true
       },
+      "link_cost": {
+        "Type": "Int",
+        "Optional": true,
+        "Computed": true
+      },
       "local_gw": {
         "Type": "String",
         "Optional": true,
@@ -68634,6 +70923,11 @@
         "Optional": true,
         "Computed": true
       },
+      "packet_redistribution": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "passive_mode": {
         "Type": "String",
         "Optional": true,
@@ -68716,6 +71010,11 @@
         "Computed": true
       },
       "rsa_signature_format": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rsa_signature_hash_override": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -69882,6 +72181,11 @@
         "Computed": true
       },
       "x_content_type_options": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ztna_trusted_client": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -71121,6 +73425,7 @@
       "address_list": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -71184,6 +73489,7 @@
       "constraint": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -71193,6 +73499,7 @@
             "content_length": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71326,6 +73633,7 @@
             "header_length": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71363,6 +73671,7 @@
             "hostname": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71395,6 +73704,7 @@
             "line_length": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71432,6 +73742,7 @@
             "malformed": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71464,6 +73775,7 @@
             "max_cookie": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71501,6 +73813,7 @@
             "max_header_line": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71538,6 +73851,7 @@
             "max_range_segment": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71575,6 +73889,7 @@
             "max_url_param": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71612,6 +73927,7 @@
             "method": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71644,6 +73960,7 @@
             "param_length": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71681,6 +73998,7 @@
             "url_param_length": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71718,6 +74036,7 @@
             "version": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -71771,6 +74090,7 @@
       "method": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -71844,6 +74164,7 @@
       "signature": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -72296,6 +74617,7 @@
             "content_id": {
               "Type": "List",
               "Optional": true,
+              "Computed": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -72482,6 +74804,7 @@
       "cifs": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -72538,6 +74861,7 @@
       "ftp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -72595,6 +74919,7 @@
       "http": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -72667,6 +74992,7 @@
       "mapi": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -72714,6 +75040,7 @@
       "tcp": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -73277,6 +75604,7 @@
       "antiphish": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -73408,6 +75736,7 @@
       "file_filter": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -73491,6 +75820,7 @@
       "ftgd_wf": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -73680,6 +76010,7 @@
       "override": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -73773,6 +76104,7 @@
       "web": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -74242,6 +76574,11 @@
         "Computed": true
       },
       "pac_file_server_status": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "pac_file_through_https": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -76536,6 +78873,11 @@
         "Optional": true,
         "Computed": true
       },
+      "application_dscp_marking": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "application_list": {
         "Type": "String",
         "Optional": true,
@@ -76807,6 +79149,11 @@
         "Computed": true
       },
       "l3_roaming": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "l3_roaming_mode": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -77108,6 +79455,7 @@
       "portal_message_overrides": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -77238,12 +79586,22 @@
         "Optional": true,
         "Computed": true
       },
+      "rates_11ac_mcs_map": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "rates_11ac_ss12": {
         "Type": "String",
         "Optional": true,
         "Computed": true
       },
       "rates_11ac_ss34": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "rates_11ax_mcs_map": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -77278,9 +79636,24 @@
         "Optional": true,
         "Computed": true
       },
+      "sae_h2e_only": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
       "sae_password": {
         "Type": "String",
         "Optional": true
+      },
+      "sae_pk": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sae_private_key": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
       },
       "scan_botnet_connections": {
         "Type": "String",
@@ -77354,6 +79727,11 @@
         "Computed": true
       },
       "sticky_client_threshold_5g": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "sticky_client_threshold_6g": {
         "Type": "String",
         "Optional": true,
         "Computed": true
@@ -77916,6 +80294,7 @@
       "lan": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -78092,6 +80471,7 @@
       "radio_1": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -78221,6 +80601,7 @@
       "radio_2": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -78350,6 +80731,7 @@
       "radio_3": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -78474,6 +80856,7 @@
       "radio_4": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -78807,6 +81190,7 @@
       "esl_ses_dongle": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -78909,6 +81293,7 @@
       "lan": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -79021,6 +81406,7 @@
       "lbs": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -79197,6 +81583,7 @@
       "platform": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -79229,6 +81616,7 @@
       "radio_1": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -79442,6 +81830,11 @@
               "Computed": true
             },
             "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "n80211d": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -79616,6 +82009,7 @@
       "radio_2": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -79829,6 +82223,11 @@
               "Computed": true
             },
             "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "n80211d": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -80003,6 +82402,7 @@
       "radio_3": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -80216,6 +82616,11 @@
               "Computed": true
             },
             "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "n80211d": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -80385,6 +82790,7 @@
       "radio_4": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -80598,6 +83004,11 @@
               "Computed": true
             },
             "mode": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "n80211d": {
               "Type": "String",
               "Optional": true,
               "Computed": true
@@ -82438,6 +84849,10 @@
         "Type": "String",
         "Computed": true
       },
+      "epg_name": {
+        "Type": "String",
+        "Computed": true
+      },
       "fabric_object": {
         "Type": "String",
         "Computed": true
@@ -82497,6 +84912,10 @@
         "Computed": true
       },
       "sdn": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sdn_tag": {
         "Type": "String",
         "Computed": true
       },
@@ -82566,6 +84985,10 @@
         }
       },
       "template": {
+        "Type": "String",
+        "Computed": true
+      },
+      "tenant": {
         "Type": "String",
         "Computed": true
       },
@@ -83136,6 +85559,10 @@
         "Type": "String",
         "Computed": true
       },
+      "extra_ip6_range_number": {
+        "Type": "Int",
+        "Computed": true
+      },
       "extra_ip_range_number": {
         "Type": "Int",
         "Computed": true
@@ -83145,6 +85572,10 @@
         "Required": true
       },
       "icon_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "ip6_range_number": {
         "Type": "Int",
         "Computed": true
       },
@@ -83194,7 +85625,26 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Computed": true
+            },
             "dst": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "dst6": {
               "Type": "List",
               "Computed": true,
               "IsBlock": true,
@@ -83419,9 +85869,36 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Computed": true
+            },
             "id": {
               "Type": "Int",
               "Computed": true
+            },
+            "ip6_range": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "end_ip6": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "start_ip6": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             },
             "ip_range": {
               "Type": "List",
@@ -83488,7 +85965,26 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "addr_mode": {
+              "Type": "String",
+              "Computed": true
+            },
             "dst": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "dst6": {
               "Type": "List",
               "Computed": true,
               "IsBlock": true,
@@ -83988,6 +86484,10 @@
           }
         }
       },
+      "diffserv_copy": {
+        "Type": "String",
+        "Computed": true
+      },
       "diffserv_forward": {
         "Type": "String",
         "Computed": true
@@ -84053,6 +86553,10 @@
             }
           }
         }
+      },
+      "dstaddr6_negate": {
+        "Type": "String",
+        "Computed": true
       },
       "dstaddr_negate": {
         "Type": "String",
@@ -84172,6 +86676,142 @@
         "Computed": true
       },
       "internet_service": {
+        "Type": "String",
+        "Computed": true
+      },
+      "internet_service6": {
+        "Type": "String",
+        "Computed": true
+      },
+      "internet_service6_custom": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_custom_group": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_group": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_name": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_negate": {
+        "Type": "String",
+        "Computed": true
+      },
+      "internet_service6_src": {
+        "Type": "String",
+        "Computed": true
+      },
+      "internet_service6_src_custom": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_custom_group": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_group": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_name": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service6_src_negate": {
         "Type": "String",
         "Computed": true
       },
@@ -84397,6 +87037,36 @@
         "Type": "String",
         "Computed": true
       },
+      "network_service_dynamic": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "network_service_src_dynamic": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "np_acceleration": {
         "Type": "String",
         "Computed": true
@@ -84514,7 +87184,15 @@
         "Type": "String",
         "Computed": true
       },
+      "reputation_direction6": {
+        "Type": "String",
+        "Computed": true
+      },
       "reputation_minimum": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "reputation_minimum6": {
         "Type": "Int",
         "Computed": true
       },
@@ -84651,6 +87329,10 @@
             }
           }
         }
+      },
+      "srcaddr6_negate": {
+        "Type": "String",
+        "Computed": true
       },
       "srcaddr_negate": {
         "Type": "String",
@@ -85923,6 +88605,10 @@
               "Type": "Int",
               "Computed": true
             },
+            "explicit_ftp_tls": {
+              "Type": "String",
+              "Computed": true
+            },
             "inspect_all": {
               "Type": "String",
               "Computed": true
@@ -86111,6 +88797,10 @@
               "Computed": true
             },
             "unknown_http_version": {
+              "Type": "String",
+              "Computed": true
+            },
+            "verify_dns_for_policy_matching": {
               "Type": "String",
               "Computed": true
             }
@@ -86487,6 +89177,21 @@
       }
     },
     "fortios_firewall_proxyaddress": {
+      "application": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
       "case_sensitivity": {
         "Type": "String",
         "Computed": true
@@ -90336,6 +93041,10 @@
         "Type": "String",
         "Computed": true
       },
+      "recursive_inherit_priority": {
+        "Type": "String",
+        "Computed": true
+      },
       "recursive_next_hop": {
         "Type": "String",
         "Computed": true
@@ -92765,6 +95474,10 @@
       }
     },
     "fortios_router_policy6": {
+      "action": {
+        "Type": "String",
+        "Computed": true
+      },
       "comments": {
         "Type": "String",
         "Computed": true
@@ -92772,6 +95485,25 @@
       "dst": {
         "Type": "String",
         "Computed": true
+      },
+      "dst_negate": {
+        "Type": "String",
+        "Computed": true
+      },
+      "dstaddr": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       },
       "end_port": {
         "Type": "Int",
@@ -92784,6 +95516,40 @@
       "input_device": {
         "Type": "String",
         "Computed": true
+      },
+      "input_device_negate": {
+        "Type": "String",
+        "Computed": true
+      },
+      "internet_service_custom": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "internet_service_id": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
       },
       "output_device": {
         "Type": "String",
@@ -92800,6 +95566,25 @@
       "src": {
         "Type": "String",
         "Computed": true
+      },
+      "src_negate": {
+        "Type": "String",
+        "Computed": true
+      },
+      "srcaddr": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
       },
       "start_port": {
         "Type": "Int",
@@ -94015,6 +96800,10 @@
         "Type": "String",
         "Computed": true
       },
+      "dstaddr": {
+        "Type": "String",
+        "Computed": true
+      },
       "dynamic_gateway": {
         "Type": "String",
         "Computed": true
@@ -94067,6 +96856,10 @@
         "Computed": true
       },
       "vrf": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "weight": {
         "Type": "Int",
         "Computed": true
       }
@@ -94789,6 +97582,14 @@
         "Type": "String",
         "Computed": true
       },
+      "system_execute_ssh": {
+        "Type": "String",
+        "Computed": true
+      },
+      "system_execute_telnet": {
+        "Type": "String",
+        "Computed": true
+      },
       "utmgrp": {
         "Type": "String",
         "Computed": true
@@ -95324,6 +98125,10 @@
           }
         }
       },
+      "vdom_override": {
+        "Type": "String",
+        "Computed": true
+      },
       "vdomparam": {
         "Type": "String",
         "Optional": true
@@ -95800,6 +98605,10 @@
         "Type": "String",
         "Computed": true
       },
+      "system_action": {
+        "Type": "String",
+        "Computed": true
+      },
       "timeout": {
         "Type": "Int",
         "Computed": true
@@ -95980,6 +98789,10 @@
         "Computed": true
       },
       "serial": {
+        "Type": "String",
+        "Computed": true
+      },
+      "trigger_datetime": {
         "Type": "String",
         "Computed": true
       },
@@ -96761,6 +99574,14 @@
           }
         }
       },
+      "fqdn_cache_ttl": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "fqdn_min_refresh": {
+        "Type": "Int",
+        "Computed": true
+      },
       "interface": {
         "Type": "String",
         "Computed": true
@@ -97150,6 +99971,10 @@
         "Type": "String",
         "Computed": true
       },
+      "update_method": {
+        "Type": "String",
+        "Computed": true
+      },
       "user_agent": {
         "Type": "String",
         "Computed": true
@@ -97279,6 +100104,22 @@
         "Type": "Int",
         "Computed": true
       },
+      "auto_firmware_upgrade": {
+        "Type": "String",
+        "Computed": true
+      },
+      "auto_firmware_upgrade_day": {
+        "Type": "String",
+        "Computed": true
+      },
+      "auto_firmware_upgrade_end_hour": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "auto_firmware_upgrade_start_hour": {
+        "Type": "Int",
+        "Computed": true
+      },
       "auto_join_forticloud": {
         "Type": "String",
         "Computed": true
@@ -97368,6 +100209,10 @@
         "Computed": true
       },
       "proxy_username": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sandbox_inline_scan": {
         "Type": "String",
         "Computed": true
       },
@@ -97905,6 +100750,10 @@
         "Type": "String",
         "Computed": true
       },
+      "fortiextender_provision_on_authorization": {
+        "Type": "String",
+        "Computed": true
+      },
       "fortiextender_vlan_mode": {
         "Type": "String",
         "Computed": true
@@ -97922,6 +100771,10 @@
         "Computed": true
       },
       "gui_allow_default_hostname": {
+        "Type": "String",
+        "Computed": true
+      },
+      "gui_app_detection_sdwan": {
         "Type": "String",
         "Computed": true
       },
@@ -99093,6 +101946,10 @@
               "Type": "String",
               "Computed": true
             },
+            "pingserver_secondary_force_reset": {
+              "Type": "String",
+              "Computed": true
+            },
             "pingserver_slave_force_reset": {
               "Type": "String",
               "Computed": true
@@ -99172,6 +102029,10 @@
         "Computed": true
       },
       "aggregate": {
+        "Type": "String",
+        "Computed": true
+      },
+      "aggregate_type": {
         "Type": "String",
         "Computed": true
       },
@@ -99969,6 +102830,10 @@
         "Type": "String",
         "Computed": true
       },
+      "lacp_ha_secondary": {
+        "Type": "String",
+        "Computed": true
+      },
       "lacp_ha_slave": {
         "Type": "String",
         "Computed": true
@@ -100406,6 +103271,10 @@
         "Computed": true
       },
       "switch_controller_nac": {
+        "Type": "String",
+        "Computed": true
+      },
+      "switch_controller_netflow_collect": {
         "Type": "String",
         "Computed": true
       },
@@ -102428,6 +105297,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "external_id": {
+              "Type": "String",
+              "Computed": true
+            },
             "region_list": {
               "Type": "List",
               "Computed": true,
@@ -104347,6 +107220,25 @@
             "start_ip": {
               "Type": "String",
               "Computed": true
+            },
+            "vci_match": {
+              "Type": "String",
+              "Computed": true
+            },
+            "vci_string": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "vci_string": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -104390,6 +107282,25 @@
             "start_ip": {
               "Type": "String",
               "Computed": true
+            },
+            "vci_match": {
+              "Type": "String",
+              "Computed": true
+            },
+            "vci_string": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "vci_string": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -104457,6 +107368,25 @@
             "value": {
               "Type": "String",
               "Computed": true
+            },
+            "vci_match": {
+              "Type": "String",
+              "Computed": true
+            },
+            "vci_string": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "vci_string": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             }
           }
         }
@@ -105213,6 +108143,10 @@
     },
     "fortios_user_saml": {
       "adfs_claim": {
+        "Type": "String",
+        "Computed": true
+      },
+      "auth_url": {
         "Type": "String",
         "Computed": true
       },

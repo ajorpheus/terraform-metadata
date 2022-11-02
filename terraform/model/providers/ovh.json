@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ovh",
   "type": "provider",
-  "version": "v0.21.0",
+  "version": "v0.22.0",
   "provider": {
     "application_key": {
       "Type": "String",
@@ -482,6 +482,11 @@
         "Required": true,
         "Description": "The node flavor used for this cluster"
       },
+      "kafka_rest_api": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Defines whether the REST API is enabled on a Kafka cluster"
+      },
       "maintenance_time": {
         "Type": "String",
         "Description": "Time on which maintenances can start every day",
@@ -505,7 +510,7 @@
             "network_id": {
               "Type": "String",
               "Optional": true,
-              "Description": "Private network ID in which the node is"
+              "Description": "Private network ID in which the node is. It's the regional openstackId of the private network."
             },
             "region": {
               "Type": "String",
@@ -519,6 +524,11 @@
             }
           }
         }
+      },
+      "opensearch_acls_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Defines whether the ACLs are enabled on an Opensearch cluster"
       },
       "plan": {
         "Type": "String",
@@ -539,6 +549,89 @@
         "Type": "String",
         "Required": true,
         "Description": "Version of the engine deployed on the cluster"
+      }
+    },
+    "ovh_cloud_project_database_database": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "default": {
+        "Type": "Bool",
+        "Description": "Defines if the database has been created by default",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Database name"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_integration": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "destination_service_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the destination service"
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "parameters": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Parameters for the integration",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "source_service_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the source service"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the integration",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Type of the integration",
+        "Computed": true
       }
     },
     "ovh_cloud_project_database_ip_restriction": {
@@ -660,6 +753,121 @@
         "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
       }
     },
+    "ovh_cloud_project_database_m3db_namespace": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the namespace"
+      },
+      "resolution": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Resolution for an aggregated namespace"
+      },
+      "retention_block_data_expiration_duration": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controls how long we wait before expiring stale data"
+      },
+      "retention_block_size_duration": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controls how long to keep a block in memory before flushing to a fileset on disk",
+        "Computed": true
+      },
+      "retention_buffer_future_duration": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controls how far into the future writes to the namespace will be accepted"
+      },
+      "retention_buffer_past_duration": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Controls how far into the past writes to the namespace will be accepted"
+      },
+      "retention_period_duration": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Controls the duration of time that M3DB will retain data for the namespace"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "snapshot_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Defines whether M3db will create snapshot files for this namespace"
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Type of namespace",
+        "Computed": true
+      },
+      "writes_to_commit_log_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Defines whether M3db will include writes to this namespace in the commit log"
+      }
+    },
+    "ovh_cloud_project_database_m3db_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "group": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Group of the user"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "password": {
+        "Type": "String",
+        "Description": "Password of the user",
+        "Computed": true
+      },
+      "password_reset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Arbitrary string to change to trigger a password update"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
+      }
+    },
     "ovh_cloud_project_database_mongodb_user": {
       "__timeouts__": [
         "create",
@@ -685,6 +893,11 @@
         "Type": "String",
         "Description": "Password of the user",
         "Computed": true
+      },
+      "password_reset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Arbitrary string to change to trigger a password update"
       },
       "roles": {
         "Type": "Set",
@@ -781,6 +994,11 @@
         "Description": "Password of the user",
         "Computed": true
       },
+      "password_reset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Arbitrary string to change to trigger a password update"
+      },
       "service_name": {
         "Type": "String",
         "Required": true,
@@ -817,6 +1035,11 @@
         "Type": "String",
         "Description": "Password of the user",
         "Computed": true
+      },
+      "password_reset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Arbitrary string to change to trigger a password update"
       },
       "roles": {
         "Type": "Set",
@@ -906,6 +1129,11 @@
         "Description": "Password of the user",
         "Computed": true
       },
+      "password_reset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Arbitrary string to change to trigger a password update"
+      },
       "service_name": {
         "Type": "String",
         "Required": true,
@@ -920,6 +1148,7 @@
     "ovh_cloud_project_database_user": {
       "__timeouts__": [
         "create",
+        "update",
         "delete"
       ],
       "cluster_id": {
@@ -946,6 +1175,11 @@
         "Type": "String",
         "Description": "Password of the user",
         "Computed": true
+      },
+      "password_reset": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Arbitrary string to change to trigger a password update"
       },
       "service_name": {
         "Type": "String",
@@ -4797,6 +5031,11 @@
         "Required": true,
         "Description": "Cluster ID"
       },
+      "kafka_rest_api": {
+        "Type": "Bool",
+        "Description": "Defines whether the REST API is enabled on a Kafka cluster",
+        "Computed": true
+      },
       "maintenance_time": {
         "Type": "String",
         "Description": "Time on which maintenances can start every day",
@@ -4834,6 +5073,11 @@
           }
         }
       },
+      "opensearch_acls_enabled": {
+        "Type": "Bool",
+        "Description": "Defines whether the ACLs are enabled on an Opensearch cluster",
+        "Computed": true
+      },
       "plan": {
         "Type": "String",
         "Description": "Plan of the cluster",
@@ -4853,6 +5097,296 @@
         "Type": "String",
         "Description": "Version of the engine deployed on the cluster",
         "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_capabilities": {
+      "engines": {
+        "Type": "Set",
+        "Description": "Database engines available",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_version": {
+              "Type": "String",
+              "Description": "Default version used for the engine",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "Description of the engine",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Engine name",
+              "Computed": true
+            },
+            "ssl_modes": {
+              "Type": "Set",
+              "Description": "SSL modes for this engine",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "versions": {
+              "Type": "Set",
+              "Description": "Versions available for this engine",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "flavors": {
+        "Type": "Set",
+        "Description": "Flavors available",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "core": {
+              "Type": "Int",
+              "Description": "Flavor core number",
+              "Computed": true
+            },
+            "memory": {
+              "Type": "Int",
+              "Description": "Flavor ram size in GB",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the flavor",
+              "Computed": true
+            },
+            "storage": {
+              "Type": "Int",
+              "Description": "Flavor disk size in GB",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "options": {
+        "Type": "Set",
+        "Description": "Options available",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Description": "Name of the option",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Type of the option",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "plans": {
+        "Type": "Set",
+        "Description": "Plans available",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backup_retention": {
+              "Type": "String",
+              "Description": "Automatic backup retention duration",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "Description of the plan",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the plan",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_certificates": {
+      "ca": {
+        "Type": "String",
+        "Description": "CA certificate used for the service",
+        "Computed": true
+      },
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Id of the database cluster"
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_database": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "default": {
+        "Type": "Bool",
+        "Description": "Defines if the database has been created by default",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the database"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_databases": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "database_ids": {
+        "Type": "List",
+        "Description": "List of databases ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_integration": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "destination_service_id": {
+        "Type": "String",
+        "Description": "ID of the destination service",
+        "Computed": true
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Integration ID"
+      },
+      "parameters": {
+        "Type": "Map",
+        "Description": "Parameters for the integration",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "source_service_id": {
+        "Type": "String",
+        "Description": "ID of the source service",
+        "Computed": true
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the integration",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Type of the integration",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_integrations": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "engine": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the engine of the service"
+      },
+      "integration_ids": {
+        "Type": "List",
+        "Description": "List of integrations ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
       }
     },
     "ovh_cloud_project_database_ip_restrictions": {
@@ -4924,23 +5458,6 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "cluster_id": {
-        "Type": "String",
-        "Required": true,
-        "Description": "Id of the database cluster"
-      },
-      "service_name": {
-        "Type": "String",
-        "Required": true,
-        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
-      }
-    },
-    "ovh_cloud_project_database_kafka_certificates": {
-      "ca": {
-        "Type": "String",
-        "Description": "CA certificate used for the service",
-        "Computed": true
       },
       "cluster_id": {
         "Type": "String",
@@ -5047,6 +5564,122 @@
         "Type": "String",
         "Required": true,
         "Description": "Id of the user"
+      }
+    },
+    "ovh_cloud_project_database_m3db_namespace": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the namespace"
+      },
+      "resolution": {
+        "Type": "String",
+        "Description": "Resolution for an aggregated namespace",
+        "Computed": true
+      },
+      "retention_block_data_expiration_duration": {
+        "Type": "String",
+        "Description": "Controls how long we wait before expiring stale data",
+        "Computed": true
+      },
+      "retention_block_size_duration": {
+        "Type": "String",
+        "Description": "Controls how long to keep a block in memory before flushing to a fileset on disk",
+        "Computed": true
+      },
+      "retention_buffer_future_duration": {
+        "Type": "String",
+        "Description": "Controls how far into the future writes to the namespace will be accepted",
+        "Computed": true
+      },
+      "retention_buffer_past_duration": {
+        "Type": "String",
+        "Description": "Controls how far into the past writes to the namespace will be accepted",
+        "Computed": true
+      },
+      "retention_period_duration": {
+        "Type": "String",
+        "Description": "Controls the duration of time that M3DB will retain data for the namespace",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "snapshot_enabled": {
+        "Type": "Bool",
+        "Description": "Defines whether M3DB will create snapshot files for this namespace",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Description": "Type of namespace",
+        "Computed": true
+      },
+      "writes_to_commit_log_enabled": {
+        "Type": "Bool",
+        "Description": "Defines whether M3DB will include writes to this namespace in the commit log",
+        "Computed": true
+      }
+    },
+    "ovh_cloud_project_database_m3db_namespaces": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "namespace_ids": {
+        "Type": "List",
+        "Description": "List of namespaces ids",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      }
+    },
+    "ovh_cloud_project_database_m3db_user": {
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID"
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date of the creation of the user",
+        "Computed": true
+      },
+      "group": {
+        "Type": "String",
+        "Description": "Group of the user",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the user"
+      },
+      "service_name": {
+        "Type": "String",
+        "Required": true,
+        "DefaultFunc": "ENV(OVH_CLOUD_PROJECT_SERVICE)"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Current status of the user",
+        "Computed": true
       }
     },
     "ovh_cloud_project_database_mongodb_user": {

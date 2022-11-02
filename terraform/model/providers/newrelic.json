@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "newrelic",
   "type": "provider",
-  "version": "v3.2.1",
+  "version": "v3.6.1",
   "provider": {
     "account_id": {
       "Type": "Int",
@@ -17,7 +17,7 @@
     },
     "api_key": {
       "Type": "String",
-      "Optional": true,
+      "Required": true,
       "DefaultFunc": "ENV(NEW_RELIC_API_KEY)"
     },
     "api_url": {
@@ -232,7 +232,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "(Required) The type of channel. One of: (user, victorops, webhook, email, opsgenie, pagerduty, slack)."
+        "Description": "(Required) The type of channel. One of: (email, opsgenie, pagerduty, slack, user, victorops, webhook)."
       }
     },
     "newrelic_alert_condition": {
@@ -334,7 +334,7 @@
       "type": {
         "Type": "String",
         "Required": true,
-        "Description": "The type of condition. One of: (apm_app_metric, apm_jvm_metric, apm_kt_metric, browser_metric, mobile_metric, servers_metric)."
+        "Description": "The type of condition. One of: (browser_metric, mobile_metric, servers_metric, apm_app_metric, apm_jvm_metric, apm_kt_metric)."
       },
       "user_defined_metric": {
         "Type": "String",
@@ -344,7 +344,7 @@
       "user_defined_value_function": {
         "Type": "String",
         "Optional": true,
-        "Description": "One of: (average, min, max, total, sample_size)."
+        "Description": "One of: (average, min, max, total, sample_size, percent, rate)."
       },
       "violation_close_timer": {
         "Type": "Int",
@@ -3413,7 +3413,6 @@
         "Optional": true,
         "Description": "Basic username and password authentication credentials.",
         "MaxItems": 1,
-        "MinItems": 1,
         "ConflictsWith": [
           "auth_token"
         ],
@@ -3438,7 +3437,6 @@
         "Optional": true,
         "Description": "Token authentication credentials.",
         "MaxItems": 1,
-        "MinItems": 1,
         "ConflictsWith": [
           "auth_basic"
         ],
@@ -4328,6 +4326,11 @@
                     "Type": "Int",
                     "Required": true
                   },
+                  "filter_current_dashboard": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Description": "Use this item to filter the current dashboard"
+                  },
                   "height": {
                     "Type": "Int",
                     "Optional": true,
@@ -4344,6 +4347,17 @@
                   "ignore_time_range": {
                     "Type": "Bool",
                     "Optional": true
+                  },
+                  "linked_entity_guids": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Related entities. Currently only supports Dashboard entities, but may allow other cases in the future.",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "nrql_query": {
                     "Type": "List",
@@ -4998,6 +5012,34 @@
         }
       }
     },
+    "newrelic_one_dashboard_json": {
+      "account_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The New Relic account ID where you want to create the dashboard.",
+        "Computed": true
+      },
+      "guid": {
+        "Type": "String",
+        "Description": "The unique entity identifier of the dashboard in New Relic.",
+        "Computed": true
+      },
+      "json": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The dashboard's json."
+      },
+      "permalink": {
+        "Type": "String",
+        "Description": "The URL of the dashboard.",
+        "Computed": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Description": "The date and time when the dashboard was last updated.",
+        "Computed": true
+      }
+    },
     "newrelic_one_dashboard_raw": {
       "account_id": {
         "Type": "Int",
@@ -5159,6 +5201,26 @@
                     "Type": "String",
                     "Required": true
                   },
+                  "select": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "attribute": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "function": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
+                  },
                   "where": {
                     "Type": "String",
                     "Optional": true
@@ -5178,6 +5240,26 @@
                   "from": {
                     "Type": "String",
                     "Required": true
+                  },
+                  "select": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "attribute": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "function": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
                   },
                   "where": {
                     "Type": "String",
@@ -5199,6 +5281,26 @@
                   "from": {
                     "Type": "String",
                     "Required": true
+                  },
+                  "select": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "attribute": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "function": {
+                          "Type": "String",
+                          "Required": true
+                        }
+                      }
+                    }
                   },
                   "where": {
                     "Type": "String",
@@ -5880,9 +5982,6 @@
       }
     },
     "newrelic_synthetics_secure_credential": {
-      "__timeouts__": [
-        "read"
-      ],
       "account_id": {
         "Type": "Int",
         "Optional": true,
@@ -6041,7 +6140,8 @@
       "account_id": {
         "Type": "Int",
         "Optional": true,
-        "Description": "The account id of the workflow."
+        "Description": "The account id of the workflow.",
+        "Computed": true
       },
       "destination": {
         "Type": "Set",
@@ -6093,7 +6193,6 @@
         "Optional": true,
         "Description": "Enrichments can give additional context on alert notifications by adding NRQL query results to them.",
         "MaxItems": 1,
-        "MinItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -6252,6 +6351,11 @@
         "Description": "The composite query used to compose a dynamic workload.",
         "Computed": true
       },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Relevant information about the workload."
+      },
       "entity_guids": {
         "Type": "Set",
         "Optional": true,
@@ -6304,6 +6408,171 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "Int"
+        }
+      },
+      "status_config_automatic": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "An input object used to represent an automatic status configuration.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Whether the automatic status configuration is enabled or not."
+            },
+            "remaining_entities_rule": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "An additional meta-rule that can consider all entities that haven't been evaluated by any other rule.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "remaining_entities_rule_rollup": {
+                    "Type": "Set",
+                    "Required": true,
+                    "Description": "The input object used to represent a rollup strategy.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "group_by": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The grouping to be applied to the remaining entities."
+                        },
+                        "strategy": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The rollup strategy that is applied to a group of entities."
+                        },
+                        "threshold_type": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Type of threshold defined for the rule. This is an optional field that only applies when strategy is WORST_STATUS_WINS. Use a threshold to roll up the worst status only after a certain amount of entities are not operational."
+                        },
+                        "threshold_value": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "Threshold value defined for the rule. This optional field is used in combination with thresholdType. If the threshold type is null, the threshold value will be ignored."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "rule": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "A list of rules.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "entity_guids": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "A list of entity GUIDs composing the rule.",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "nrql_query": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "A list of entity search queries used to retrieve the entities that compose the rule.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The entity search query that is used to perform the search of a group of entities."
+                        }
+                      }
+                    }
+                  },
+                  "rollup": {
+                    "Type": "Set",
+                    "Required": true,
+                    "Description": "The input object used to represent a rollup strategy.",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "strategy": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The rollup strategy that is applied to a group of entities."
+                        },
+                        "threshold_type": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "Type of threshold defined for the rule. This is an optional field that only applies when strategy is WORST_STATUS_WINS. Use a threshold to roll up the worst status only after a certain amount of entities are not operational."
+                        },
+                        "threshold_value": {
+                          "Type": "Int",
+                          "Optional": true,
+                          "Description": "Threshold value defined for the rule. This optional field is used in combination with thresholdType. If the threshold type is null, the threshold value will be ignored."
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "status_config_static": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "A list of static status configurations. You can only configure one static status for a workload.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A description that provides additional details about the status of the workload."
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Whether the static status configuration is enabled or not."
+            },
+            "status": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The status of the workload."
+            },
+            "summary": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A short description of the status of the workload."
+            }
+          }
         }
       },
       "workload_id": {
@@ -6461,7 +6730,7 @@
       },
       "type": {
         "Type": "String",
-        "Description": "The type of channel. One of: (pagerduty, slack, user, victorops, webhook, email, opsgenie).",
+        "Description": "The type of channel. One of: (slack, user, victorops, webhook, email, opsgenie, pagerduty).",
         "Computed": true
       }
     },
@@ -6623,6 +6892,11 @@
       }
     },
     "newrelic_synthetics_secure_credential": {
+      "account_id": {
+        "Type": "Int",
+        "Description": "The New Relic account ID associated with this secure credential.",
+        "Computed": true
+      },
       "description": {
         "Type": "String",
         "Description": "The secure credential's description.",

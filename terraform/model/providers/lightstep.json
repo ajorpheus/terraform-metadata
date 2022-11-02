@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "lightstep",
   "type": "provider",
-  "version": "v1.62.0",
+  "version": "v1.70.6",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -51,9 +51,98 @@
         "Required": true
       }
     },
+    "lightstep_dashboard": {
+      "chart": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "query": {
+              "Type": "List",
+              "Required": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "display": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "hidden": {
+                    "Type": "Bool",
+                    "Required": true
+                  },
+                  "query_name": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "query_string": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "rank": {
+              "Type": "Int",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            },
+            "y_axis": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "Deprecated": "The y_axis field is no longer used",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "max": {
+                    "Type": "Float",
+                    "Required": true
+                  },
+                  "min": {
+                    "Type": "Float",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "dashboard_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_name": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "lightstep_metric_condition": {
       "alerting_rule": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -73,7 +162,6 @@
               "Type": "List",
               "Optional": true,
               "Description": "Non-equality filters (operand: contains, regexp, etc)",
-              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -325,7 +413,9 @@
             "tql": {
               "Type": "String",
               "Optional": true,
-              "Computed": true
+              "Description": "Deprecated, use query_string instead",
+              "Computed": true,
+              "Deprecated": "Use lightstep_dashboard or query_string field instead"
             }
           }
         }
@@ -521,7 +611,9 @@
                   "tql": {
                     "Type": "String",
                     "Optional": true,
-                    "Computed": true
+                    "Description": "Deprecated, use query_string instead",
+                    "Computed": true,
+                    "Deprecated": "Use lightstep_dashboard or query_string field instead"
                   }
                 }
               }

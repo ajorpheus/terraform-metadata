@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "honeycombio",
   "type": "provider",
-  "version": "v0.10.0",
+  "version": "v0.11.1",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -290,6 +290,28 @@
       "url": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "honeycombio_marker_setting": {
+      "color": {
+        "Type": "String",
+        "Required": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
+      "dataset": {
+        "Type": "String",
+        "Required": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "honeycombio_pagerduty_recipient": {

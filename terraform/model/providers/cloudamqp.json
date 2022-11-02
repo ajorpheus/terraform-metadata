@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "cloudamqp",
   "type": "provider",
-  "version": "v1.19.2",
+  "version": "v1.20.0",
   "provider": {
     "apikey": {
       "Type": "String",
@@ -266,6 +266,11 @@
         "Optional": true,
         "Description": "AWS secret access key. (Cloudwatch)"
       },
+      "sourcetype": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Assign source type to the data exported, eg. generic_single_line. (Splunk)"
+      },
       "tags": {
         "Type": "String",
         "Optional": true,
@@ -423,6 +428,11 @@
       }
     },
     "cloudamqp_plugin": {
+      "description": {
+        "Type": "String",
+        "Description": "The description of the plugin",
+        "Computed": true
+      },
       "enabled": {
         "Type": "Bool",
         "Required": true,
@@ -437,9 +447,19 @@
         "Type": "String",
         "Required": true,
         "Description": "The name of the plugin"
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The version of the plugin",
+        "Computed": true
       }
     },
     "cloudamqp_plugin_community": {
+      "description": {
+        "Type": "String",
+        "Description": "The description of the plugin",
+        "Computed": true
+      },
       "enabled": {
         "Type": "Bool",
         "Required": true,
@@ -454,6 +474,116 @@
         "Type": "String",
         "Required": true,
         "Description": "The name of the plugin"
+      },
+      "require": {
+        "Type": "String",
+        "Description": "Required version of RabbitMQ",
+        "Computed": true
+      }
+    },
+    "cloudamqp_privatelink_aws": {
+      "active_zones": {
+        "Type": "List",
+        "Description": "Covering availability zones used when creating an Endpoint from other VPC",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "allowed_principals": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Allowed principals to access the endpoint service",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The CloudAMQP instance identifier"
+      },
+      "service_name": {
+        "Type": "String",
+        "Description": "Service name of the PrivateLink, needed when creating the endpoint",
+        "Computed": true
+      },
+      "sleep": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Configurable sleep in seconds between retries when enable PrivateLink",
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the PrivateLink [enabled, pending, disabled]",
+        "Computed": true
+      },
+      "timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Configurable timeout in seconds when enable PrivateLink",
+        "Default": {
+          "Type": "int",
+          "Value": "3600"
+        }
+      }
+    },
+    "cloudamqp_privatelink_azure": {
+      "approved_subscriptions": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Approved subscriptions to access the endpoint service",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "instance_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The CloudAMQP instance identifier"
+      },
+      "server_name": {
+        "Type": "String",
+        "Description": "Name of the server having the PrivateLink enabled",
+        "Computed": true
+      },
+      "service_name": {
+        "Type": "String",
+        "Description": "Service name (alias) of the PrivateLink, needed when creating the endpoint",
+        "Computed": true
+      },
+      "sleep": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Configurable sleep in seconds between retries when enable PrivateLink",
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of the PrivateLink [enabled, pending, disabled]",
+        "Computed": true
+      },
+      "timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Configurable timeout in seconds when enable PrivateLink",
+        "Default": {
+          "Type": "int",
+          "Value": "3600"
+        }
       }
     },
     "cloudamqp_rabbitmq_configuration": {

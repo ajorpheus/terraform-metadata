@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "rockset",
   "type": "provider",
-  "version": "v0.5.4",
+  "version": "v0.6.2",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -83,6 +83,10 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -125,6 +129,9 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
         "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -203,86 +210,7 @@
       "field_mapping_query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Field mapping SQL query."
-      },
-      "field_schemas": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "List of field schemas.",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "column_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have store or no_store."
-            },
-            "field_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of a field. Parsed as a SQL qualified name."
-            },
-            "index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            },
-            "range_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have v1_index or no_index."
-            },
-            "type_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            }
-          }
-        }
-      },
-      "insert_only": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "inverted_index_group_encoding_options": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Inverted index group encoding options.",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "doc_id_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Doc id codec."
-            },
-            "event_time_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Event time codec."
-            },
-            "group_size": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Group size."
-            },
-            "restart_length": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Restart length."
-            }
-          }
-        }
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
       "name": {
         "Type": "String",
@@ -293,6 +221,24 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "wait_for_collection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
       },
       "workspace": {
         "Type": "String",
@@ -305,6 +251,10 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -347,6 +297,9 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
         "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -425,86 +378,7 @@
       "field_mapping_query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Field mapping SQL query."
-      },
-      "field_schemas": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "List of field schemas.",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "column_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have store or no_store."
-            },
-            "field_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of a field. Parsed as a SQL qualified name."
-            },
-            "index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            },
-            "range_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have v1_index or no_index."
-            },
-            "type_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            }
-          }
-        }
-      },
-      "insert_only": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "inverted_index_group_encoding_options": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Inverted index group encoding options.",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "doc_id_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Doc id codec."
-            },
-            "event_time_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Event time codec."
-            },
-            "group_size": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Group size."
-            },
-            "restart_length": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Restart length."
-            }
-          }
-        }
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
       "name": {
         "Type": "String",
@@ -530,11 +404,6 @@
               "Type": "String",
               "Optional": true,
               "Description": "AWS region name of DynamoDB table, by default us-west-2 is used."
-            },
-            "field_mapping_query": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Field mapping SQL query."
             },
             "integration_name": {
               "Type": "String",
@@ -584,6 +453,24 @@
           }
         }
       },
+      "wait_for_collection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "workspace": {
         "Type": "String",
         "Required": true,
@@ -621,6 +508,10 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -663,6 +554,9 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
         "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -741,86 +635,7 @@
       "field_mapping_query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Field mapping SQL query."
-      },
-      "field_schemas": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "List of field schemas.",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "column_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have store or no_store."
-            },
-            "field_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of a field. Parsed as a SQL qualified name."
-            },
-            "index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            },
-            "range_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have v1_index or no_index."
-            },
-            "type_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            }
-          }
-        }
-      },
-      "insert_only": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "inverted_index_group_encoding_options": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Inverted index group encoding options.",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "doc_id_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Doc id codec."
-            },
-            "event_time_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Event time codec."
-            },
-            "group_size": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Group size."
-            },
-            "restart_length": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Restart length."
-            }
-          }
-        }
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
       "name": {
         "Type": "String",
@@ -924,11 +739,6 @@
                 }
               }
             },
-            "field_mapping_query": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Field mapping SQL query."
-            },
             "format": {
               "Type": "String",
               "Required": true,
@@ -992,6 +802,24 @@
           }
         }
       },
+      "wait_for_collection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "workspace": {
         "Type": "String",
         "Required": true,
@@ -1019,11 +847,15 @@
         "Description": "The GCP service account key JSON."
       }
     },
-    "rockset_kinesis_collection": {
+    "rockset_kafka_collection": {
       "clustering_key": {
         "Type": "List",
         "Optional": true,
         "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -1066,6 +898,9 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
         "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1144,86 +979,370 @@
       "field_mapping_query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Field mapping SQL query."
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
-      "field_schemas": {
-        "Type": "List",
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the collection. Can contain alphanumeric or dash characters."
+      },
+      "retention_secs": {
+        "Type": "Int",
         "Optional": true,
-        "Description": "List of field schemas.",
+        "Description": "Number of seconds after which data is purged. Based on event time."
+      },
+      "source": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Defines a source for this collection.",
+        "MinItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "column_index_mode": {
+            "consumer_group_id": {
               "Type": "String",
-              "Required": true,
-              "Description": "Whether to have store or no_store."
+              "Description": "The Kafka consumer group Id being used.",
+              "Computed": true
             },
-            "field_name": {
+            "integration_name": {
               "Type": "String",
               "Required": true,
-              "Description": "The name of a field. Parsed as a SQL qualified name."
+              "Description": "The name of the Rockset Kafka integration."
             },
-            "index_mode": {
+            "offset_reset_policy": {
               "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
+              "Optional": true,
+              "Description": "The offset reset policy. Possible values: LATEST, EARLIEST. Only valid with v3 collections."
             },
-            "range_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have v1_index or no_index."
+            "status": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "documents_processed": {
+                    "Type": "Int",
+                    "Description": "Number of documents processed by this Kafka topic.",
+                    "Computed": true
+                  },
+                  "last_consumed_time": {
+                    "Type": "String",
+                    "Description": "The type of partitions on a field.",
+                    "Computed": true
+                  },
+                  "partitions": {
+                    "Type": "Set",
+                    "Description": "The status info per partition.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "offset_lag": {
+                          "Type": "Int",
+                          "Description": "Per partition lag for offset.",
+                          "Computed": true
+                        },
+                        "partition_number": {
+                          "Type": "Int",
+                          "Description": "The number of this partition.",
+                          "Computed": true
+                        },
+                        "partition_offset": {
+                          "Type": "Int",
+                          "Description": "Latest offset of this partition.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "state": {
+                    "Type": "String",
+                    "Description": "State of the Kafka source. Possible values: NO_DOCS_YET, ACTIVE, DORMANT.",
+                    "Computed": true
+                  }
+                }
+              }
             },
-            "type_index_mode": {
+            "topic_name": {
               "Type": "String",
               "Required": true,
-              "Description": "Whether to have index or no_index."
+              "Description": "Name of Kafka topic to be tailed."
+            },
+            "use_v3": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether to use v3 integration. Required if the kafka integration uses v3.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
             }
           }
         }
       },
-      "insert_only": {
+      "wait_for_collection": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
+      "workspace": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the workspace."
+      }
+    },
+    "rockset_kafka_integration": {
+      "bootstrap_servers": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Kafka bootstrap server url(s). Required only for V3 integration.",
+        "ConflictsWith": [
+          "kafka_topic_names",
+          "kafka_data_format",
+          "connection_string"
+        ]
+      },
+      "connection_string": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Kafka connection string.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the integration.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "kafka_data_format": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The format of the Kafka topics being tailed. Possible values: JSON, AVRO.",
+        "ConflictsWith": [
+          "bootstrap_servers",
+          "security_config",
+          "schema_registry_config"
+        ]
+      },
+      "kafka_topic_names": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Kafka topics to tail.",
+        "ConflictsWith": [
+          "bootstrap_servers",
+          "security_config",
+          "schema_registry_config"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique identifier for the integration. Can contain alphanumeric or dash characters."
+      },
+      "schema_registry_config": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Kafka configuration for schema registry. Required only for V3 integration.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "security_config": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Kafka security configurations. Required only for V3 integration.",
+        "ConflictsWith": [
+          "kafka_topic_names",
+          "kafka_data_format",
+          "connection_string"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "use_v3": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Use v3 for Confluent Cloud.",
         "Default": {
           "Type": "bool",
           "Value": "false"
         }
       },
-      "inverted_index_group_encoding_options": {
-        "Type": "Set",
+      "wait_for_integration": {
+        "Type": "Bool",
         "Optional": true,
-        "Description": "Inverted index group encoding options.",
-        "MaxItems": 1,
+        "Description": "Wait until the integration is active.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      }
+    },
+    "rockset_kinesis_collection": {
+      "clustering_key": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "doc_id_codec": {
+            "field_name": {
               "Type": "String",
               "Required": true,
-              "Description": "Doc id codec."
+              "Description": "The name of a field. Parsed as a SQL qualified name."
             },
-            "event_time_codec": {
+            "keys": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The values for partitioning of a field.",
+              "MinItems": 1,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
               "Type": "String",
-              "Required": true,
-              "Description": "Event time codec."
-            },
-            "group_size": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Group size."
-            },
-            "restart_length": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Restart length."
+              "Optional": true,
+              "Description": "The type of partitions on a field."
             }
           }
         }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Text describing the collection.",
+        "Default": {
+          "Type": "string",
+          "Value": "created by Rockset terraform provider"
+        }
+      },
+      "field_mapping": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "input_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "List of input fields.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the field in your input data to apply this field mapping to."
+                  },
+                  "if_missing": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when the field evaluates to either NULL or UNDEFINED. It accepts two valid strings as input: SKIP, which skips the update for this document entirely, or PASS, which will simply set this field to NULL."
+                  },
+                  "is_drop": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "Specifies whether or not to drop this field completely from the document as it is being inserted."
+                  },
+                  "param": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name alias for this field which can be referred to in a SQL expression in the output_field attribute."
+                  }
+                }
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the field mapping."
+            },
+            "output_field": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of output fields.",
+              "MaxItems": 1,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "field_name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Name of the new field created by your SQL expression."
+                  },
+                  "on_error": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Specifies the behavior for when there is an error while evaluating the SQL expression defined in the sql parameter. It accepts two valid strings as input: SKIP, which skips only this output field but continues the update, or FAIL, which causes this update to fail entirely."
+                  },
+                  "sql": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "A string SQL expression used to define the new field being created. It may optionally take another field name as a parameter, or a param name alias specified in an input_fields field mapping."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "field_mapping_query": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
       "name": {
         "Type": "String",
@@ -1265,11 +1384,6 @@
                 "ElementsType": "String"
               }
             },
-            "field_mapping_query": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Field mapping SQL query."
-            },
             "format": {
               "Type": "String",
               "Required": true,
@@ -1286,6 +1400,24 @@
               "Description": "Name of Kinesis stream."
             }
           }
+        }
+      },
+      "wait_for_collection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
         }
       },
       "workspace": {
@@ -1320,6 +1452,10 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -1362,6 +1498,9 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
         "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1440,86 +1579,7 @@
       "field_mapping_query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Field mapping SQL query."
-      },
-      "field_schemas": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "List of field schemas.",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "column_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have store or no_store."
-            },
-            "field_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of a field. Parsed as a SQL qualified name."
-            },
-            "index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            },
-            "range_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have v1_index or no_index."
-            },
-            "type_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            }
-          }
-        }
-      },
-      "insert_only": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "inverted_index_group_encoding_options": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Inverted index group encoding options.",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "doc_id_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Doc id codec."
-            },
-            "event_time_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Event time codec."
-            },
-            "group_size": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Group size."
-            },
-            "restart_length": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Restart length."
-            }
-          }
-        }
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
       "name": {
         "Type": "String",
@@ -1550,11 +1610,6 @@
               "Type": "String",
               "Required": true,
               "Description": "MongoDB database name containing the target collection."
-            },
-            "field_mapping_query": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Field mapping SQL query."
             },
             "integration_name": {
               "Type": "String",
@@ -1617,6 +1672,24 @@
               "Computed": true
             }
           }
+        }
+      },
+      "wait_for_collection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
         }
       },
       "workspace": {
@@ -1780,7 +1853,7 @@
             "cluster": {
               "Type": "String",
               "Optional": true,
-              "Description": "Rockset cluster ID for which this action is allowed. Only applies to Workspace actions. Defaults to '*ALL*' if not specified."
+              "Description": "Rockset cluster ID for which this action is allowed. Only valid for Workspace actions. Use '*ALL*' for actions which apply to all clusters."
             },
             "resource_name": {
               "Type": "String",
@@ -1796,6 +1869,10 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of clustering fields.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
+        "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -1838,6 +1915,9 @@
         "Type": "List",
         "Optional": true,
         "Description": "List of field mappings.",
+        "ConflictsWith": [
+          "field_mapping_query"
+        ],
         "Deprecated": "Use a `field_mapping_query` instead",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1916,86 +1996,7 @@
       "field_mapping_query": {
         "Type": "String",
         "Optional": true,
-        "Description": "Field mapping SQL query."
-      },
-      "field_schemas": {
-        "Type": "List",
-        "Optional": true,
-        "Description": "List of field schemas.",
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "column_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have store or no_store."
-            },
-            "field_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "The name of a field. Parsed as a SQL qualified name."
-            },
-            "index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            },
-            "range_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have v1_index or no_index."
-            },
-            "type_index_mode": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Whether to have index or no_index."
-            }
-          }
-        }
-      },
-      "insert_only": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "If true disallows updates and deletes, but makes indexing more efficient",
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "inverted_index_group_encoding_options": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "Inverted index group encoding options.",
-        "MaxItems": 1,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "doc_id_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Doc id codec."
-            },
-            "event_time_codec": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Event time codec."
-            },
-            "group_size": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Group size."
-            },
-            "restart_length": {
-              "Type": "Int",
-              "Required": true,
-              "Description": "Restart length."
-            }
-          }
-        }
+        "Description": "Ingest transformation SQL query. Turns the collection into insert_only mode.\n\nWhen inserting data into Rockset, you can transform the data by providing a single SQL query, \nthat contains all of the desired data transformations. \nThis is referred to as the collection’s ingest transformation or, historically, its field mapping query.\n\nFor more information see https://rockset.com/docs/ingest-transformation/"
       },
       "name": {
         "Type": "String",
@@ -2099,11 +2100,6 @@
                 }
               }
             },
-            "field_mapping_query": {
-              "Type": "String",
-              "Optional": true,
-              "Description": "Field mapping SQL query."
-            },
             "format": {
               "Type": "String",
               "Required": true,
@@ -2173,6 +2169,24 @@
           }
         }
       },
+      "wait_for_collection": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Wait until the collection is ready.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "wait_for_documents": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Wait until the collection has documents. The default is to wait for 0 documents, which means it doesn't wait.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "workspace": {
         "Type": "String",
         "Required": true,
@@ -2201,10 +2215,25 @@
       }
     },
     "rockset_user": {
+      "created_at": {
+        "Type": "String",
+        "Description": "The ISO-8601 time of when the user was created.",
+        "Computed": true
+      },
       "email": {
         "Type": "String",
         "Required": true,
         "Description": "Email address of the user. Also used to identify the user."
+      },
+      "first_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "User's first name. This can only be set once the state is ACTIVE, i.e after the user has accepted the invite."
+      },
+      "last_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "User's last name. This can only be set once the state is ACTIVE, i.e after the user has accepted the invite."
       },
       "roles": {
         "Type": "List",
@@ -2216,6 +2245,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "state": {
+        "Type": "String",
+        "Description": "State of the user, either NEW or ACTIVE.",
+        "Computed": true
       }
     },
     "rockset_view": {

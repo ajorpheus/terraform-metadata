@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "nomad",
   "type": "provider",
-  "version": "v1.4.18",
+  "version": "v1.4.19",
   "provider": {
     "address": {
       "Type": "String",
@@ -142,6 +142,35 @@
         "Description": "HCL or JSON representation of the rules to enforce on this policy. Use file() to specify a file as input."
       }
     },
+    "nomad_acl_role": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this ACL role."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Unique name for this ACL role."
+      },
+      "policy": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "The policies that should be applied to the role. It may be used multiple times.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the ACL policy to link."
+            }
+          }
+        }
+      }
+    },
     "nomad_acl_token": {
       "accessor_id": {
         "Type": "String",
@@ -152,6 +181,16 @@
         "Type": "String",
         "Description": "The timestamp the token was created.",
         "Computed": true
+      },
+      "expiration_time": {
+        "Type": "String",
+        "Description": "The point after which a token is considered expired and eligible for destruction.",
+        "Computed": true
+      },
+      "expiration_ttl": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Provides a TTL for the token in the form of a time duration such as \"5m\" or \"1h\"."
       },
       "global": {
         "Type": "Bool",
@@ -175,6 +214,28 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "role": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The roles that should be applied to the token. It may be used multiple times.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The ID of the ACL role to link."
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the ACL role linked.",
+              "Computed": true
+            }
+          }
         }
       },
       "secret_id": {
@@ -721,10 +782,53 @@
       }
     },
     "nomad_namespace": {
+      "capabilities": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Capabilities of the namespace.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disabled_task_drivers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Disabled task drivers for the namespace.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "enabled_task_drivers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Enabled task drivers for the namespace.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "description": {
         "Type": "String",
         "Optional": true,
         "Description": "Description for this namespace."
+      },
+      "meta": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Metadata associated with the namespace.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "name": {
         "Type": "String",
@@ -1174,6 +1278,89 @@
         "Computed": true
       }
     },
+    "nomad_acl_role": {
+      "description": {
+        "Type": "String",
+        "Description": "Description for the ACL role.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The ACL Role unique identifier."
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Unique name of the ACL role.",
+        "Computed": true
+      },
+      "policies": {
+        "Type": "Set",
+        "Description": "The list of policies applied to the role.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the ACL policy to link."
+            }
+          }
+        }
+      }
+    },
+    "nomad_acl_roles": {
+      "acl_roles": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Description": "Description for the ACL role.",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Description": "The ACL Role unique identifier.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Unique name of the ACL role.",
+              "Computed": true
+            },
+            "policies": {
+              "Type": "Set",
+              "Description": "The ACL policies applied to the role.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The name of the ACL policy to link."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "prefix": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "nomad_acl_token": {
       "accessor_id": {
         "Type": "String",
@@ -1183,6 +1370,16 @@
       "create_time": {
         "Type": "String",
         "Description": "Date and time the token was created.",
+        "Computed": true
+      },
+      "expiration_time": {
+        "Type": "String",
+        "Description": "The point after which a token is considered revoked and eligible for destruction.",
+        "Computed": true
+      },
+      "expiration_ttl": {
+        "Type": "String",
+        "Description": "The expiration TTL for the token.",
         "Computed": true
       },
       "global": {
@@ -1203,6 +1400,28 @@
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
+        }
+      },
+      "roles": {
+        "Type": "Set",
+        "Description": "The roles that are applied to the token.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Description": "The ID of the ACL role.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the ACL role.",
+              "Computed": true
+            }
+          }
         }
       },
       "secret_id": {
@@ -1233,6 +1452,11 @@
               "Type": "String",
               "Computed": true
             },
+            "expiration_time": {
+              "Type": "String",
+              "Description": "The point after which a token is considered revoked and eligible for destruction.",
+              "Computed": true
+            },
             "global": {
               "Type": "Bool",
               "Computed": true
@@ -1248,6 +1472,28 @@
               "Elem": {
                 "Type": "SchemaElements",
                 "ElementsType": "String"
+              }
+            },
+            "roles": {
+              "Type": "Set",
+              "Description": "The roles that are applied to the token.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Description": "The ID of the ACL role.",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Description": "The name of the ACL role.",
+                    "Computed": true
+                  }
+                }
               }
             },
             "type": {
@@ -1575,9 +1821,49 @@
       }
     },
     "nomad_namespace": {
+      "capabilities": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disabled_task_drivers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Disabled task drivers for the namespace.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "enabled_task_drivers": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Enabled task drivers for the namespace.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "description": {
         "Type": "String",
         "Computed": true
+      },
+      "meta": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "name": {
         "Type": "String",

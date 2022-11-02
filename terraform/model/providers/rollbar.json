@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "rollbar",
   "type": "provider",
-  "version": "v1.7.0",
+  "version": "v1.8.0",
   "provider": {
     "api_key": {
       "Type": "String",

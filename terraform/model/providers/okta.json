@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "okta",
   "type": "provider",
-  "version": "v3.36.0",
+  "version": "v3.38.0",
   "provider": {
     "access_token": {
       "Type": "String",
@@ -1200,7 +1200,7 @@
       "pkce_required": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. `true` for `browser` and `native` application types."
+        "Description": "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. See: https://developer.okta.com/docs/reference/api/apps/#oauth-credential-object"
       },
       "policy_uri": {
         "Type": "String",
@@ -4876,6 +4876,11 @@
         "Required": true,
         "Description": "Brand ID"
       },
+      "force_is_default": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Force is_default on the create and delete by deleting all email customizations. Comma separated string with values of 'create' or 'destroy' or both `create,destroy'."
+      },
       "id": {
         "Type": "String",
         "Description": "The ID of the customization",
@@ -7182,7 +7187,7 @@
       "pkce_required": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. `true` for `browser` and `native` application types."
+        "Description": "Require Proof Key for Code Exchange (PKCE) for additional verification key rotation mode. See: https://developer.okta.com/docs/reference/api/apps/#oauth-credential-object"
       },
       "policy_uri": {
         "Type": "String",
@@ -9321,6 +9326,11 @@
         "Type": "String",
         "Optional": true,
         "Description": "The ID of a Group that this User should be added to"
+      },
+      "ui_schema_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Value created by the backend. If present all policy updates must include this attribute/value."
       },
       "unknown_user_action": {
         "Type": "String",

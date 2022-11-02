@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "bigip",
   "type": "provider",
-  "version": "v1.15.1",
+  "version": "v1.15.2",
   "provider": {
     "address": {
       "Type": "String",
@@ -55,11 +55,27 @@
       "Description": "A token generated outside the provider, in place of password",
       "DefaultFunc": "ENV(BIGIP_TOKEN_VALUE)"
     },
+    "trusted_cert_path": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Valid Trusted Certificate path",
+      "DefaultFunc": "ENV(BIGIP_TRUSTED_CERT_PATH)"
+    },
     "username": {
       "Type": "String",
       "Optional": true,
       "Description": "Username with API access to the BigIP",
       "DefaultFunc": "ENV(BIGIP_USER)"
+    },
+    "validate_certs_disable": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Enables TLS certificate check on BIG-IP",
+      "DefaultFunc": "ENV(BIGIP_VERIFY_CERT_DISABLE)",
+      "Default": {
+        "Type": "bool",
+        "Value": "true"
+      }
     }
   },
   "resources": {
@@ -504,21 +520,21 @@
         "Required": true,
         "Description": "Name of FAST HTTP application."
       },
-      "exist_pool_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Select an existing BIG-IP Pool",
-        "ConflictsWith": [
-          "fast_create_pool_members"
-        ]
-      },
       "existing_monitor": {
         "Type": "String",
         "Optional": true,
         "Description": "Select an existing BIG-IP HTTPS pool monitor. Monitors are used to determine the health of the application on each server",
         "ConflictsWith": [
-          "exist_pool_name",
-          "fast_create_monitor"
+          "existing_pool",
+          "monitor"
+        ]
+      },
+      "existing_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP Pool",
+        "ConflictsWith": [
+          "pool_members"
         ]
       },
       "existing_snat_pool": {
@@ -526,17 +542,22 @@
         "Optional": true,
         "Description": "name of an existing BIG-IP SNAT pool",
         "ConflictsWith": [
-          "fast_create_snat_pool_address"
+          "snat_pool_address"
         ]
       },
-      "fast_create_monitor": {
+      "load_balancing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "none"
+      },
+      "monitor": {
         "Type": "List",
         "Optional": true,
         "Description": "foo",
         "MaxItems": 1,
         "ConflictsWith": [
           "existing_monitor",
-          "exist_pool_name"
+          "existing_pool"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -580,11 +601,11 @@
           }
         }
       },
-      "fast_create_pool_members": {
+      "pool_members": {
         "Type": "Set",
         "Optional": true,
         "ConflictsWith": [
-          "exist_pool_name"
+          "existing_pool"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -628,7 +649,12 @@
           }
         }
       },
-      "fast_create_snat_pool_address": {
+      "slow_ramp_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "none"
+      },
+      "snat_pool_address": {
         "Type": "List",
         "Optional": true,
         "ConflictsWith": [
@@ -639,16 +665,6 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "load_balancing_mode": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "none"
-      },
-      "slow_ramp_time": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "none"
       },
       "tenant": {
         "Type": "String",
@@ -684,48 +700,23 @@
         "Required": true,
         "Description": "Name of FAST HTTPS application."
       },
-      "create_tls_server_profile": {
-        "Type": "List",
-        "Optional": true,
-        "MaxItems": 1,
-        "ConflictsWith": [
-          "tls_server_profile_name"
-        ],
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "tls_cert_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Select an existing BIG-IP SSL certificate"
-            },
-            "tls_key_name": {
-              "Type": "String",
-              "Required": true,
-              "Description": "Select an existing BIG-IP SSL key"
-            }
-          }
-        }
-      },
-      "exist_pool_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Select an existing BIG-IP Pool",
-        "ConflictsWith": [
-          "fast_create_pool_members",
-          "existing_monitor",
-          "fast_create_monitor"
-        ]
-      },
       "existing_monitor": {
         "Type": "String",
         "Optional": true,
         "Description": "Select an existing BIG-IP HTTPS pool monitor. Monitors are used to determine the health of the application on each server",
         "ConflictsWith": [
-          "exist_pool_name",
-          "fast_create_monitor"
+          "existing_pool",
+          "monitor"
+        ]
+      },
+      "existing_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP Pool",
+        "ConflictsWith": [
+          "pool_members",
+          "existing_monitor",
+          "monitor"
         ]
       },
       "existing_snat_pool": {
@@ -733,17 +724,49 @@
         "Optional": true,
         "Description": "name of an existing BIG-IP SNAT pool",
         "ConflictsWith": [
-          "fast_create_snat_pool_address"
+          "snat_pool_address"
         ]
       },
-      "fast_create_monitor": {
+      "existing_tls_client_profile": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing TLS client profile",
+        "ConflictsWith": [
+          "tls_client_profile"
+        ]
+      },
+      "existing_tls_server_profile": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing TLS server profile",
+        "ConflictsWith": [
+          "tls_server_profile"
+        ]
+      },
+      "existing_waf_security_policy": {
+        "Type": "String",
+        "Optional": true,
+        "ConflictsWith": [
+          "waf_security_policy"
+        ]
+      },
+      "load_balancing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "none",
+        "Default": {
+          "Type": "string",
+          "Value": "least-connections-member"
+        }
+      },
+      "monitor": {
         "Type": "List",
         "Optional": true,
         "Description": "foo",
         "MaxItems": 1,
         "ConflictsWith": [
           "existing_monitor",
-          "exist_pool_name"
+          "existing_pool"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -787,11 +810,11 @@
           }
         }
       },
-      "fast_create_pool_members": {
+      "pool_members": {
         "Type": "Set",
         "Optional": true,
         "ConflictsWith": [
-          "exist_pool_name"
+          "existing_pool"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -835,7 +858,12 @@
           }
         }
       },
-      "fast_create_snat_pool_address": {
+      "slow_ramp_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "none"
+      },
+      "snat_pool_address": {
         "Type": "List",
         "Optional": true,
         "ConflictsWith": [
@@ -847,32 +875,60 @@
           "ElementsType": "String"
         }
       },
-      "load_balancing_mode": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "none",
-        "Default": {
-          "Type": "string",
-          "Value": "least-connections-member"
-        }
-      },
-      "slow_ramp_time": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "none"
-      },
       "tenant": {
         "Type": "String",
         "Required": true,
         "Description": "Name of FAST HTTPS application tenant."
       },
-      "tls_server_profile_name": {
-        "Type": "String",
+      "tls_client_profile": {
+        "Type": "List",
         "Optional": true,
-        "Description": "Select an existing TLS server profile",
+        "MaxItems": 1,
         "ConflictsWith": [
-          "create_tls_server_profile"
-        ]
+          "existing_tls_client_profile"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "tls_cert_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Select an existing BIG-IP SSL certificate"
+            },
+            "tls_key_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Select an existing BIG-IP SSL key"
+            }
+          }
+        }
+      },
+      "tls_server_profile": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "existing_tls_server_profile"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "tls_cert_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Select an existing BIG-IP SSL certificate"
+            },
+            "tls_key_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Select an existing BIG-IP SSL key"
+            }
+          }
+        }
       },
       "virtual_server": {
         "Type": "List",
@@ -895,6 +951,26 @@
             }
           }
         }
+      },
+      "waf_security_policy": {
+        "Type": "List",
+        "Optional": true,
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "existing_waf_security_policy"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "Enables Fast to WAF security policy"
+            }
+          }
+        }
       }
     },
     "bigip_fast_tcp_app": {
@@ -903,21 +979,21 @@
         "Required": true,
         "Description": "Name of the TCP FAST application"
       },
-      "exist_pool_name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Select an existing BIG-IP Pool.",
-        "ConflictsWith": [
-          "fast_create_pool_members"
-        ]
-      },
       "existing_monitor": {
         "Type": "String",
         "Optional": true,
         "Description": "Select an existing BIG-IP HTTPS pool monitor. Monitors are used to determine the health of the application on each server",
         "ConflictsWith": [
-          "exist_pool_name",
-          "fast_create_monitor"
+          "existing_pool",
+          "monitor"
+        ]
+      },
+      "existing_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Select an existing BIG-IP Pool.",
+        "ConflictsWith": [
+          "pool_members"
         ]
       },
       "existing_snat_pool": {
@@ -925,17 +1001,27 @@
         "Optional": true,
         "Description": "Name of an existing BIG-IP SNAT pool.",
         "ConflictsWith": [
-          "fast_create_snat_pool_address"
+          "snat_pool_address"
         ]
       },
-      "fast_create_monitor": {
+      "fast_tcp_json": {
+        "Type": "String",
+        "Description": "Json payload for FAST TCP application.",
+        "Computed": true
+      },
+      "load_balancing_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "none"
+      },
+      "monitor": {
         "Type": "List",
         "Optional": true,
         "Description": "Use a FAST generated pool monitor.",
         "MaxItems": 1,
         "ConflictsWith": [
           "existing_monitor",
-          "exist_pool_name"
+          "existing_pool"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -950,11 +1036,11 @@
           }
         }
       },
-      "fast_create_pool_members": {
+      "pool_members": {
         "Type": "Set",
         "Optional": true,
         "ConflictsWith": [
-          "exist_pool_name"
+          "existing_pool"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -993,7 +1079,12 @@
           }
         }
       },
-      "fast_create_snat_pool_address": {
+      "slow_ramp_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Slow ramp temporarily throttles the number of connections to a new pool member."
+      },
+      "snat_pool_address": {
         "Type": "List",
         "Optional": true,
         "ConflictsWith": [
@@ -1004,21 +1095,6 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "fast_tcp_json": {
-        "Type": "String",
-        "Description": "Json payload for FAST TCP application.",
-        "Computed": true
-      },
-      "load_balancing_mode": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "none"
-      },
-      "slow_ramp_time": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Slow ramp temporarily throttles the number of connections to a new pool member."
       },
       "tenant": {
         "Type": "String",
@@ -1298,7 +1374,7 @@
       "parent": {
         "Type": "String",
         "Required": true,
-        "Description": "Existing monitor to inherit from. Must be one of /Common/http, /Common/https, /Common/icmp or /Common/gateway_icmp."
+        "Description": "Existing monitor to inherit from. Must be one of /Common/http, /Common/https, /Common/icmp, /Common/gateway_icmp or /Common/tcp_half_open."
       },
       "password": {
         "Type": "String",
@@ -2382,6 +2458,11 @@
                     "Computed": true
                   },
                   "cipher_bits": {
+                    "Type": "Bool",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "client_accepted": {
                     "Type": "Bool",
                     "Optional": true,
                     "Computed": true
@@ -4595,7 +4676,6 @@
       "profiles": {
         "Type": "Set",
         "Optional": true,
-        "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -5916,7 +5996,7 @@
       },
       "defaults_from": {
         "Type": "String",
-        "Description": "Existing monitor to inherit from. Must be one of /Common/http, /Common/https, /Common/icmp or /Common/gateway-icmp.",
+        "Description": "Existing monitor to inherit from. Must be one of /Common/http, /Common/https, /Common/icmp, /Common/gateway-icmp or /Common/tcp-half-open.",
         "Computed": true
       },
       "destination": {

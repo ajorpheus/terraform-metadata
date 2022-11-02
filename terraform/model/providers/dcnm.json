@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "dcnm",
   "type": "provider",
-  "version": "v1.2.3",
+  "version": "v1.2.5",
   "provider": {
     "expiry": {
       "Type": "Int",
@@ -690,6 +690,14 @@
         "Default": {
           "Type": "bool",
           "Value": "true"
+        }
+      },
+      "deploy_timeout": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "60"
         }
       },
       "description": {

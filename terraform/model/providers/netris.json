@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "netris",
   "type": "provider",
-  "version": "v2.0.0",
+  "version": "v2.0.1",
   "provider": {
     "address": {
       "Type": "String",
@@ -1446,6 +1446,29 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
+                  "dhcp": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Default": {
+                      "Type": "string",
+                      "Value": "disabled"
+                    }
+                  },
+                  "dhcpendip": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "dhcpoptionsetid": {
+                    "Type": "Int",
+                    "Optional": true,
+                    "Computed": true
+                  },
+                  "dhcpstartip": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Computed": true
+                  },
                   "prefix": {
                     "Type": "String",
                     "Required": true,

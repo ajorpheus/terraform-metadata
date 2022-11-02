@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "equinix",
   "type": "provider",
-  "version": "v1.9.0",
+  "version": "v1.10.0",
   "provider": {
     "auth_token": {
       "Type": "String",
@@ -1582,6 +1582,68 @@
         "Type": "String",
         "Optional": true,
         "Description": "Website link"
+      }
+    },
+    "equinix_metal_organization_member": {
+      "created": {
+        "Type": "String",
+        "Description": "When the invitation was created (only known in the invitation stage)",
+        "Computed": true
+      },
+      "invited_by": {
+        "Type": "String",
+        "Description": "The user id of the user that sent the invitation (only known in the invitation stage)",
+        "Computed": true
+      },
+      "invitee": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The email address of the user to invite"
+      },
+      "message": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A message to the invitee (only used during the invitation stage)"
+      },
+      "nonce": {
+        "Type": "String",
+        "Description": "The nonce for the invitation (only known in the invitation stage)",
+        "Computed": true
+      },
+      "organization_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The organization to invite the user to"
+      },
+      "projects_ids": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Project IDs the member has access to within the organization. If the member is an 'owner', the projects list should be empty.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "roles": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Organization roles (owner, collaborator, limited_collaborator, billing)",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Description": "The state of the membership ('invited' when an invitation is open, 'active' when the user is an organization member)",
+        "Computed": true
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "When the invitation was updated (only known in the invitation stage)",
+        "Computed": true
       }
     },
     "equinix_metal_port": {

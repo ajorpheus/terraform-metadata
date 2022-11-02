@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "zpa",
   "type": "provider",
-  "version": "v2.3.2",
+  "version": "v2.4.0",
   "provider": {
     "zpa_client_id": {
       "Type": "String",
@@ -18,7 +18,7 @@
     "zpa_cloud": {
       "Type": "String",
       "Optional": true,
-      "Description": "Cloud to use PRODUCTION, BETA or GOV",
+      "Description": "Cloud to use PRODUCTION, BETA, GOV or PREVIEW",
       "Default": {
         "Type": "string",
         "Value": "PRODUCTION"
@@ -97,6 +97,24 @@
         "Description": "Whether the default version profile of the App Connector Group is applied or overridden. Supported values: true, false",
         "Computed": true
       },
+      "tcp_quick_ack_app": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether TCP Quick Acknowledgement is enabled or disabled for the application. The tcpQuickAckApp, tcpQuickAckAssistant, and tcpQuickAckReadAssistant fields must all share the same value.",
+        "Computed": true
+      },
+      "tcp_quick_ack_assistant": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether TCP Quick Acknowledgement is enabled or disabled for the application. The tcpQuickAckApp, tcpQuickAckAssistant, and tcpQuickAckReadAssistant fields must all share the same value.",
+        "Computed": true
+      },
+      "tcp_quick_ack_read_assistant": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether TCP Quick Acknowledgement is enabled or disabled for the application. The tcpQuickAckApp, tcpQuickAckAssistant, and tcpQuickAckReadAssistant fields must all share the same value.",
+        "Computed": true
+      },
       "upgrade_day": {
         "Type": "String",
         "Optional": true,
@@ -114,6 +132,11 @@
           "Type": "string",
           "Value": "66600"
         }
+      },
+      "use_in_dr_mode": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
       },
       "version_profile_id": {
         "Type": "String",
@@ -226,6 +249,249 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "segment_group_name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "server_groups": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of the server group IDs.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "tcp_port_range": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "tcp port range",
+        "Computed": true,
+        "ConfigExplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "from": {
+              "Type": "String",
+              "Optional": true
+            },
+            "to": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "tcp_port_ranges": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "TCP port ranges used to access the app.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "udp_port_range": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "udp port range",
+        "Computed": true,
+        "ConfigExplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "from": {
+              "Type": "String",
+              "Optional": true
+            },
+            "to": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "udp_port_ranges": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "UDP port ranges used to access the app.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zpa_application_segment_browser_access": {
+      "bypass_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Indicates whether users can bypass ZPA to access applications. Default: NEVER. Supported values: ALWAYS, NEVER, ON_NET. The value NEVER indicates the use of the client forwarding policy.",
+        "Default": {
+          "Type": "string",
+          "Value": "NEVER"
+        }
+      },
+      "clientless_apps": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_options": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If you want ZPA to forward unauthenticated HTTP preflight OPTIONS requests from the browser to the app."
+            },
+            "application_port": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Port for the BA app."
+            },
+            "application_protocol": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Protocol for the BA app."
+            },
+            "certificate_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "ID of the BA certificate."
+            },
+            "cname": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true
+            },
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Domain name or IP address of the BA app."
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "hidden": {
+              "Type": "Bool",
+              "Optional": true,
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "local_domain": {
+              "Type": "String",
+              "Optional": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "path": {
+              "Type": "String",
+              "Optional": true
+            },
+            "trust_untrusted_cert": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Indicates whether Use Untrusted Certificates is enabled or disabled for a BA app.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "config_space": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "DEFAULT"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the application."
+      },
+      "domain_names": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of domains and IPs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "double_encrypt": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether Double Encryption is enabled or disabled for the app."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "health_check_type": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "health_reporting": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Whether health reporting for the app is Continuous or On Access. Supported values: NONE, ON_ACCESS, CONTINUOUS.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "is_cname_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Indicates if the Zscaler Client Connector (formerly Zscaler App or Z App) receives CNAME DNS records from the connectors."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the application."
+      },
+      "passive_health_enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "segment_group_id": {
+        "Type": "String",
+        "Required": true
       },
       "segment_group_name": {
         "Type": "String",
@@ -959,7 +1225,7 @@
       },
       "clientless_apps": {
         "Type": "List",
-        "Optional": true,
+        "Required": true,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -1048,8 +1314,8 @@
         "Description": "Description of the application."
       },
       "domain_names": {
-        "Type": "List",
-        "Optional": true,
+        "Type": "Set",
+        "Required": true,
         "Description": "List of domains and IPs.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -1081,10 +1347,6 @@
       "id": {
         "Type": "String",
         "Computed": true
-      },
-      "ip_anchored": {
-        "Type": "Bool",
-        "Optional": true
       },
       "is_cname_enabled": {
         "Type": "Bool",
@@ -1136,8 +1398,7 @@
         "Optional": true,
         "Description": "tcp port range",
         "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
+        "ConfigExplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
@@ -1168,8 +1429,7 @@
         "Optional": true,
         "Description": "udp port range",
         "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
+        "ConfigExplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
@@ -2702,12 +2962,12 @@
         "Computed": true
       },
       "is_public": {
-        "Type": "String",
+        "Type": "Bool",
         "Optional": true,
         "Description": "Enable or disable public access for the Service Edge Group.",
         "Default": {
-          "Type": "string",
-          "Value": "FALSE"
+          "Type": "bool",
+          "Value": "false"
         }
       },
       "latitude": {
@@ -2799,17 +3059,19 @@
       },
       "version_profile_id": {
         "Type": "String",
-        "Required": true,
-        "Description": "ID of the version profile. To learn more"
+        "Optional": true,
+        "Description": "ID of the version profile.",
+        "Computed": true
       },
       "version_profile_name": {
         "Type": "String",
-        "Description": "ID of the version profile. To learn more",
+        "Optional": true,
+        "Description": "ID of the version profile.",
         "Computed": true
       },
       "version_profile_visibility_scope": {
         "Type": "String",
-        "Description": "ID of the version profile. To learn more",
+        "Description": "ID of the version profile.",
         "Computed": true
       }
     }
@@ -3236,12 +3498,31 @@
           }
         }
       },
+      "tcp_quick_ack_app": {
+        "Type": "Bool",
+        "Description": "Whether TCP Quick Acknowledgement is enabled or disabled for the application. The tcpQuickAckApp, tcpQuickAckAssistant, and tcpQuickAckReadAssistant fields must all share the same value.",
+        "Computed": true
+      },
+      "tcp_quick_ack_assistant": {
+        "Type": "Bool",
+        "Description": "Whether TCP Quick Acknowledgement is enabled or disabled for the application. The tcpQuickAckApp, tcpQuickAckAssistant, and tcpQuickAckReadAssistant fields must all share the same value.",
+        "Computed": true
+      },
+      "tcp_quick_ack_read_assistant": {
+        "Type": "Bool",
+        "Description": "Whether TCP Quick Acknowledgement is enabled or disabled for the application. The tcpQuickAckApp, tcpQuickAckAssistant, and tcpQuickAckReadAssistant fields must all share the same value.",
+        "Computed": true
+      },
       "upgrade_day": {
         "Type": "String",
         "Computed": true
       },
       "upgrade_time_in_secs": {
         "Type": "String",
+        "Computed": true
+      },
+      "use_in_dr_mode": {
+        "Type": "Bool",
         "Computed": true
       },
       "version_profile_id": {
@@ -3447,6 +3728,237 @@
       },
       "udp_port_ranges": {
         "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "zpa_application_segment_browser_access": {
+      "bypass_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "clientless_apps": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_options": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "app_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "application_port": {
+              "Type": "String",
+              "Computed": true
+            },
+            "application_protocol": {
+              "Type": "String",
+              "Computed": true
+            },
+            "certificate_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "certificate_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cname": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "domain": {
+              "Type": "String",
+              "Computed": true
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "hidden": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "local_domain": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "path": {
+              "Type": "String",
+              "Computed": true
+            },
+            "trust_untrusted_cert": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "config_space": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "Description of the application.",
+        "Computed": true
+      },
+      "domain_names": {
+        "Type": "List",
+        "Description": "List of domains and IPs.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "double_encrypt": {
+        "Type": "Bool",
+        "Description": "Whether Double Encryption is enabled or disabled for the app.",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "health_check_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "health_reporting": {
+        "Type": "String",
+        "Description": "Whether health reporting for the app is Continuous or On Access. Supported values: NONE, ON_ACCESS, CONTINUOUS.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "ip_anchored": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "is_cname_enabled": {
+        "Type": "Bool",
+        "Description": "Indicates if the Zscaler Client Connector (formerly Zscaler App or Z App) receives CNAME DNS records from the connectors.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the application."
+      },
+      "passive_health_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "segment_group_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "segment_group_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "server_groups": {
+        "Type": "Set",
+        "Description": "List of the server group IDs.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "tcp_port_range": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "tcp port range",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "from": {
+              "Type": "String",
+              "Optional": true
+            },
+            "to": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "tcp_port_ranges": {
+        "Type": "List",
+        "Description": "TCP port ranges used to access the app.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "udp_port_range": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "udp port range",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "from": {
+              "Type": "String",
+              "Optional": true
+            },
+            "to": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "udp_port_ranges": {
+        "Type": "List",
+        "Description": "UDP port ranges used to access the app.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -4005,237 +4517,6 @@
       "valid_to_in_epochsec": {
         "Type": "String",
         "Computed": true
-      }
-    },
-    "zpa_browser_access": {
-      "bypass_type": {
-        "Type": "String",
-        "Computed": true
-      },
-      "clientless_apps": {
-        "Type": "List",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "allow_options": {
-              "Type": "Bool",
-              "Computed": true
-            },
-            "app_id": {
-              "Type": "String",
-              "Computed": true
-            },
-            "application_port": {
-              "Type": "String",
-              "Computed": true
-            },
-            "application_protocol": {
-              "Type": "String",
-              "Computed": true
-            },
-            "certificate_id": {
-              "Type": "String",
-              "Computed": true
-            },
-            "certificate_name": {
-              "Type": "String",
-              "Computed": true
-            },
-            "cname": {
-              "Type": "String",
-              "Computed": true
-            },
-            "description": {
-              "Type": "String",
-              "Computed": true
-            },
-            "domain": {
-              "Type": "String",
-              "Computed": true
-            },
-            "enabled": {
-              "Type": "Bool",
-              "Computed": true
-            },
-            "hidden": {
-              "Type": "Bool",
-              "Computed": true
-            },
-            "id": {
-              "Type": "String",
-              "Computed": true
-            },
-            "local_domain": {
-              "Type": "String",
-              "Computed": true
-            },
-            "name": {
-              "Type": "String",
-              "Required": true
-            },
-            "path": {
-              "Type": "String",
-              "Computed": true
-            },
-            "trust_untrusted_cert": {
-              "Type": "Bool",
-              "Computed": true
-            }
-          }
-        }
-      },
-      "config_space": {
-        "Type": "String",
-        "Computed": true
-      },
-      "description": {
-        "Type": "String",
-        "Description": "Description of the application.",
-        "Computed": true
-      },
-      "domain_names": {
-        "Type": "List",
-        "Description": "List of domains and IPs.",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "double_encrypt": {
-        "Type": "Bool",
-        "Description": "Whether Double Encryption is enabled or disabled for the app.",
-        "Computed": true
-      },
-      "enabled": {
-        "Type": "Bool",
-        "Computed": true
-      },
-      "health_check_type": {
-        "Type": "String",
-        "Computed": true
-      },
-      "health_reporting": {
-        "Type": "String",
-        "Description": "Whether health reporting for the app is Continuous or On Access. Supported values: NONE, ON_ACCESS, CONTINUOUS.",
-        "Computed": true
-      },
-      "id": {
-        "Type": "String",
-        "Optional": true
-      },
-      "ip_anchored": {
-        "Type": "Bool",
-        "Computed": true
-      },
-      "is_cname_enabled": {
-        "Type": "Bool",
-        "Description": "Indicates if the Zscaler Client Connector (formerly Zscaler App or Z App) receives CNAME DNS records from the connectors.",
-        "Computed": true
-      },
-      "name": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Name of the application."
-      },
-      "passive_health_enabled": {
-        "Type": "Bool",
-        "Computed": true
-      },
-      "segment_group_id": {
-        "Type": "String",
-        "Computed": true
-      },
-      "segment_group_name": {
-        "Type": "String",
-        "Computed": true
-      },
-      "server_groups": {
-        "Type": "Set",
-        "Description": "List of the server group IDs.",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "id": {
-              "Type": "List",
-              "Computed": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            }
-          }
-        }
-      },
-      "tcp_port_range": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "tcp port range",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "from": {
-              "Type": "String",
-              "Optional": true
-            },
-            "to": {
-              "Type": "String",
-              "Optional": true
-            }
-          }
-        }
-      },
-      "tcp_port_ranges": {
-        "Type": "List",
-        "Description": "TCP port ranges used to access the app.",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
-      "udp_port_range": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "udp port range",
-        "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "Block",
-        "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "from": {
-              "Type": "String",
-              "Optional": true
-            },
-            "to": {
-              "Type": "String",
-              "Optional": true
-            }
-          }
-        }
-      },
-      "udp_port_ranges": {
-        "Type": "List",
-        "Description": "UDP port ranges used to access the app.",
-        "Computed": true,
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
       }
     },
     "zpa_cloud_connector_group": {

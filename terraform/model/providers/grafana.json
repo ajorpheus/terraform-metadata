@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "grafana",
   "type": "provider",
-  "version": "v1.28.2",
+  "version": "v1.30.0",
   "provider": {
     "auth": {
       "Type": "String",
@@ -1771,6 +1771,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "alertmanager_uid": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "(Prometheus) The name of the Alertmanager datasource to manage alerts via UI"
+            },
             "assume_role_arn": {
               "Type": "String",
               "Optional": true,
@@ -3642,6 +3647,33 @@
         }
       }
     },
+    "grafana_organization_preferences": {
+      "home_dashboard_id": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The Organization home dashboard ID."
+      },
+      "home_dashboard_uid": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Organization home dashboard UID."
+      },
+      "theme": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Organization theme. Available values are `light`, `dark`, or an empty string for the default."
+      },
+      "timezone": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Organization timezone. Available values are `utc`, `browser`, or an empty string for the default."
+      },
+      "week_start": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The Organization week start."
+      }
+    },
     "grafana_playlist": {
       "interval": {
         "Type": "String",
@@ -3720,7 +3752,7 @@
       "layout": {
         "Type": "String",
         "Optional": true,
-        "Description": "Layout of the report. `simple` or `grid`",
+        "Description": "Layout of the report. Allowed values: `simple`, `grid`.",
         "Default": {
           "Type": "string",
           "Value": "grid"
@@ -3739,7 +3771,7 @@
       "orientation": {
         "Type": "String",
         "Optional": true,
-        "Description": "Orientation of the report. `landscape` or `portrait`",
+        "Description": "Orientation of the report. Allowed values: `landscape`, `portrait`.",
         "Default": {
           "Type": "string",
           "Value": "landscape"
@@ -3785,7 +3817,16 @@
             "frequency": {
               "Type": "String",
               "Required": true,
-              "Description": "Frequency of the report. One of `never`, `once`, `hourly`, `daily`, `weekly`, `monthly` or `custom`."
+              "Description": "Frequency of the report. Allowed values: `never`, `once`, `hourly`, `daily`, `weekly`, `monthly`, `custom`."
+            },
+            "last_day_of_month": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Send the report on the last day of the month",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
             },
             "start_time": {
               "Type": "String",
@@ -3899,6 +3940,43 @@
         "Type": "Int",
         "Required": true,
         "Description": "Version of the role. A role is updated only on version increase."
+      }
+    },
+    "grafana_role_assignment": {
+      "role_uid": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Grafana RBAC role UID."
+      },
+      "service_accounts": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "IDs of service accounts that the role should be assigned to.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "teams": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "IDs of teams that the role should be assigned to.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "users": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "IDs of users that the role should be assigned to.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
       }
     },
     "grafana_rule_group": {
@@ -5584,6 +5662,33 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "grafana_organization_preferences": {
+      "home_dashboard_id": {
+        "Type": "Int",
+        "Description": "The Organization home dashboard ID.",
+        "Computed": true
+      },
+      "home_dashboard_uid": {
+        "Type": "String",
+        "Description": "The Organization home dashboard UID.",
+        "Computed": true
+      },
+      "theme": {
+        "Type": "String",
+        "Description": "The Organization theme. Available values are `light`, `dark`, or an empty string for the default.",
+        "Computed": true
+      },
+      "timezone": {
+        "Type": "String",
+        "Description": "The Organization timezone. Available values are `utc`, `browser`, or an empty string for the default.",
+        "Computed": true
+      },
+      "week_start": {
+        "Type": "String",
+        "Description": "The Organization week start.",
+        "Computed": true
       }
     },
     "grafana_synthetic_monitoring_probe": {

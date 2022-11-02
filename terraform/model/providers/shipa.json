@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "shipa",
   "type": "provider",
-  "version": "v0.0.13",
+  "version": "v0.0.18",
   "provider": {
     "admin_email": {
       "Type": "String",
@@ -60,13 +60,13 @@
                 }
               }
             },
+            "environment": {
+              "Type": "String",
+              "Required": true
+            },
             "error": {
               "Type": "String",
               "Computed": true
-            },
-            "framework": {
-              "Type": "String",
-              "Required": true
             },
             "ip": {
               "Type": "String",
@@ -364,7 +364,7 @@
                 "ElementsType": "String"
               }
             },
-            "framework": {
+            "environment": {
               "Type": "String",
               "Optional": true
             },
@@ -630,27 +630,6 @@
               "Elem": {
                 "Type": "SchemaInfo",
                 "Info": {
-                  "frameworks": {
-                    "Type": "List",
-                    "Required": true,
-                    "MaxItems": 1,
-                    "IsBlock": true,
-                    "ConfigImplicitMode": "Block",
-                    "Elem": {
-                      "Type": "SchemaInfo",
-                      "Info": {
-                        "name": {
-                          "Type": "List",
-                          "Required": true,
-                          "ConfigImplicitMode": "Attr",
-                          "Elem": {
-                            "Type": "SchemaElements",
-                            "ElementsType": "String"
-                          }
-                        }
-                      }
-                    }
-                  },
                   "ingress_controllers": {
                     "Type": "List",
                     "Optional": true,
@@ -2801,11 +2780,34 @@
                 }
               }
             },
-            "error": {
-              "Type": "String",
-              "Computed": true
+            "environment": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "framework": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "namespace": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             },
-            "framework": {
+            "error": {
               "Type": "String",
               "Computed": true
             },
@@ -3092,11 +3094,34 @@
                 }
               }
             },
-            "error": {
-              "Type": "String",
-              "Computed": true
+            "environment": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "framework": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "namespace": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
             },
-            "framework": {
+            "error": {
               "Type": "String",
               "Computed": true
             },

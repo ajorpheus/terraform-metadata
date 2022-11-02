@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "github",
   "type": "provider",
-  "version": "v5.1.0",
+  "version": "v5.7.0",
   "provider": {
     "app_auth": {
       "Type": "List",
@@ -1051,6 +1051,181 @@
         "Computed": true
       }
     },
+    "github_organization_settings": {
+      "advanced_security_enabled_for_new_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "billing_email": {
+        "Type": "String",
+        "Required": true
+      },
+      "blog": {
+        "Type": "String",
+        "Optional": true
+      },
+      "company": {
+        "Type": "String",
+        "Optional": true
+      },
+      "default_repository_permission": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "read"
+        }
+      },
+      "dependabot_alerts_enabled_for_new_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "dependabot_security_updates_enabled_for_new_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "dependency_graph_enabled_for_new_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "email": {
+        "Type": "String",
+        "Optional": true
+      },
+      "has_organization_projects": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "has_repository_projects": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Optional": true
+      },
+      "members_can_create_internal_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Setting to true allows organization members to create internal repositories. Only available to Enterprise Organizations."
+      },
+      "members_can_create_pages": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "members_can_create_private_pages": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "members_can_create_private_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "members_can_create_public_pages": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "members_can_create_public_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "members_can_create_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "members_can_fork_private_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "secret_scanning_enabled_for_new_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "secret_scanning_push_protection_enabled_for_new_repositories": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "twitter_username": {
+        "Type": "String",
+        "Optional": true
+      },
+      "web_commit_signoff_required": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
     "github_organization_webhook": {
       "active": {
         "Type": "Bool",
@@ -1187,6 +1362,10 @@
           "Type": "bool",
           "Value": "true"
         }
+      },
+      "allow_update_branch": {
+        "Type": "Bool",
+        "Optional": true
       },
       "archive_on_destroy": {
         "Type": "Bool",
@@ -1589,14 +1768,12 @@
       "commit_author": {
         "Type": "String",
         "Optional": true,
-        "Description": "The commit author name, defaults to the authenticated user's name",
-        "Computed": true
+        "Description": "The commit author name, defaults to the authenticated user's name. GitHub app users may omit author and email information so GitHub can verify commits as the GitHub App. "
       },
       "commit_email": {
         "Type": "String",
         "Optional": true,
-        "Description": "The commit author email address, defaults to the authenticated user's email address",
-        "Computed": true
+        "Description": "The commit author email address, defaults to the authenticated user's email address. GitHub app users may omit author and email information so GitHub can verify commits as the GitHub App."
       },
       "commit_message": {
         "Type": "String",
@@ -2136,6 +2313,24 @@
         }
       }
     },
+    "github_app": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "node_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "slug": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "github_branch": {
       "branch": {
         "Type": "String",
@@ -2640,6 +2835,43 @@
         }
       }
     },
+    "github_organization_ip_allow_list": {
+      "ip_allow_list": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_list_value": {
+              "Type": "String",
+              "Computed": true
+            },
+            "created_at": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_active": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "updated_at": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "github_organization_team_sync_groups": {
       "groups": {
         "Type": "List",
@@ -2728,16 +2960,8 @@
         }
       }
     },
-    "github_organization_teams": {
-      "root_teams_only": {
-        "Type": "Bool",
-        "Optional": true,
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
-      "teams": {
+    "github_organization_webhooks": {
+      "webhooks": {
         "Type": "List",
         "Computed": true,
         "IsBlock": true,
@@ -2745,8 +2969,8 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "description": {
-              "Type": "String",
+            "active": {
+              "Type": "Bool",
               "Computed": true
             },
             "id": {
@@ -2766,11 +2990,11 @@
               "Type": "String",
               "Computed": true
             },
-            "node_id": {
+            "type": {
               "Type": "String",
               "Computed": true
             },
-            "privacy": {
+            "url": {
               "Type": "String",
               "Computed": true
             },
@@ -3007,14 +3231,6 @@
         "Type": "String",
         "Computed": true
       },
-      "only_protected_branches": {
-        "Type": "Bool",
-        "Optional": true,
-        "Default": {
-          "Type": "bool",
-          "Value": "false"
-        }
-      },
       "pages": {
         "Type": "List",
         "Computed": true,
@@ -3129,6 +3345,61 @@
               "Computed": true
             },
             "protected": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "only_non_protected_branches": {
+        "Type": "Bool",
+        "Optional": true,
+        "ConflictsWith": [
+          "only_protected_branches"
+        ],
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "only_protected_branches": {
+        "Type": "Bool",
+        "Optional": true,
+        "ConflictsWith": [
+          "only_non_protected_branches"
+        ],
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "repository": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "github_repository_deploy_keys": {
+      "keys": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "title": {
+              "Type": "String",
+              "Computed": true
+            },
+            "verified": {
               "Type": "Bool",
               "Computed": true
             }
@@ -3461,6 +3732,43 @@
               "Computed": true
             },
             "slug": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "github_repository_webhooks": {
+      "repository": {
+        "Type": "String",
+        "Required": true
+      },
+      "webhooks": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "active": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "url": {
               "Type": "String",
               "Computed": true
             }

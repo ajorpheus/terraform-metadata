@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "prismacloud",
   "type": "provider",
-  "version": "v1.2.8",
+  "version": "v1.2.10",
   "provider": {
     "customer_name": {
       "Type": "String",
@@ -449,6 +449,221 @@
               }
             }
           }
+        }
+      }
+    },
+    "prismacloud_anomaly_settings": {
+      "alert_disposition": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Alert disposition",
+        "Computed": true
+      },
+      "alert_disposition_description": {
+        "Type": "List",
+        "Description": "Alert disposition info",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aggressive": {
+              "Type": "String",
+              "Description": "Aggressive",
+              "Computed": true
+            },
+            "conservative": {
+              "Type": "String",
+              "Description": "Conservative",
+              "Computed": true
+            },
+            "moderate": {
+              "Type": "String",
+              "Description": "Moderate",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "policy_description": {
+        "Type": "String",
+        "Description": "Policy description",
+        "Computed": true
+      },
+      "policy_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy ID"
+      },
+      "policy_name": {
+        "Type": "String",
+        "Description": "Policy name",
+        "Computed": true
+      },
+      "training_model_description": {
+        "Type": "List",
+        "Description": "Training model info",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "high": {
+              "Type": "String",
+              "Description": "High",
+              "Computed": true
+            },
+            "low": {
+              "Type": "String",
+              "Description": "Low",
+              "Computed": true
+            },
+            "medium": {
+              "Type": "String",
+              "Description": "Medium",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "training_model_threshold": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Training model threshold info",
+        "Computed": true
+      }
+    },
+    "prismacloud_anomaly_trusted_list": {
+      "account_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Anomaly Trusted List account id.",
+        "Default": {
+          "Type": "string",
+          "Value": "any"
+        }
+      },
+      "applicable_policies": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Applicable Policies",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "atl_id": {
+        "Type": "Int",
+        "Description": "Anomaly Trusted List ID",
+        "Computed": true
+      },
+      "created_by": {
+        "Type": "String",
+        "Description": "Created by",
+        "Computed": true
+      },
+      "created_on": {
+        "Type": "Int",
+        "Description": "Created on",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Reason for trusted listing"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Anomaly Trusted List name"
+      },
+      "trusted_list_entries": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "List of network anomalies in the trusted list",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Domain",
+              "Computed": true
+            },
+            "image_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Image ID",
+              "Computed": true
+            },
+            "ip_cidr": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Ip CIDR",
+              "Computed": true
+            },
+            "port": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Port",
+              "Computed": true
+            },
+            "protocol": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Protocol",
+              "Computed": true
+            },
+            "resource_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Resource ID",
+              "Computed": true
+            },
+            "service": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Service",
+              "Computed": true
+            },
+            "subject": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Subject",
+              "Computed": true
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Tag key",
+              "Computed": true
+            },
+            "tag_value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Tag value",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "trusted_list_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Anomaly Trusted List type"
+      },
+      "vpc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "VPC",
+        "Default": {
+          "Type": "string",
+          "Value": "any"
         }
       }
     },
@@ -2381,6 +2596,44 @@
               "Optional": true,
               "Description": "API name"
             },
+            "children": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Children",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "criteria": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Criteria for build policy"
+                  },
+                  "metadata": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "YAML string for code build policy",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "recommendation": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Recommendation"
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Type of build policy"
+                  }
+                }
+              }
+            },
             "cloud_account": {
               "Type": "String",
               "Optional": true,
@@ -3118,6 +3371,11 @@
           "Type": "string",
           "Value": "config"
         }
+      },
+      "skip_result": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Skip search results in response"
       },
       "time_range": {
         "Type": "List",
@@ -4369,6 +4627,435 @@
       "total": {
         "Type": "Int",
         "Description": "Total number of alerts",
+        "Computed": true
+      }
+    },
+    "prismacloud_anomaly_setting": {
+      "alert_disposition": {
+        "Type": "String",
+        "Description": "Alert disposition",
+        "Computed": true
+      },
+      "alert_disposition_description": {
+        "Type": "List",
+        "Description": "Alert Disposition info",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aggressive": {
+              "Type": "String",
+              "Description": "Aggressive",
+              "Computed": true
+            },
+            "conservative": {
+              "Type": "String",
+              "Description": "Conservative",
+              "Computed": true
+            },
+            "moderate": {
+              "Type": "String",
+              "Description": "Moderate",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "policy_description": {
+        "Type": "String",
+        "Description": "Policy description",
+        "Computed": true
+      },
+      "policy_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy ID"
+      },
+      "policy_name": {
+        "Type": "String",
+        "Description": "Policy Name",
+        "Computed": true
+      },
+      "training_model_description": {
+        "Type": "List",
+        "Description": "Training Model Threshold info",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "high": {
+              "Type": "String",
+              "Description": "High",
+              "Computed": true
+            },
+            "low": {
+              "Type": "String",
+              "Description": "Low",
+              "Computed": true
+            },
+            "medium": {
+              "Type": "String",
+              "Description": "Medium",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "training_model_threshold": {
+        "Type": "String",
+        "Description": "Training model threshold",
+        "Computed": true
+      }
+    },
+    "prismacloud_anomaly_settings": {
+      "listing": {
+        "Type": "List",
+        "Description": "List of accounts",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "alert_disposition": {
+              "Type": "String",
+              "Description": "Alert disposition",
+              "Computed": true
+            },
+            "alert_disposition_description": {
+              "Type": "List",
+              "Description": "Alert Disposition info",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "aggressive": {
+                    "Type": "String",
+                    "Description": "Aggressive",
+                    "Computed": true
+                  },
+                  "conservative": {
+                    "Type": "String",
+                    "Description": "Conservative",
+                    "Computed": true
+                  },
+                  "moderate": {
+                    "Type": "String",
+                    "Description": "Moderate",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "policy_description": {
+              "Type": "String",
+              "Description": "Policy description",
+              "Computed": true
+            },
+            "policy_id": {
+              "Type": "String",
+              "Description": "Policy id",
+              "Computed": true
+            },
+            "policy_name": {
+              "Type": "String",
+              "Description": "Policy Name",
+              "Computed": true
+            },
+            "training_model_description": {
+              "Type": "List",
+              "Description": "Training Model Threshold info",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "high": {
+                    "Type": "String",
+                    "Description": "high",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "String",
+                    "Description": "low",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "String",
+                    "Description": "medium",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "training_model_threshold": {
+              "Type": "String",
+              "Description": "Training model threshold",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "total": {
+        "Type": "Int",
+        "Description": "Total number of cloud accounts",
+        "Computed": true
+      },
+      "type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "type"
+      }
+    },
+    "prismacloud_anomaly_trusted_list": {
+      "account_id": {
+        "Type": "String",
+        "Description": "Anomaly Trusted List account id.",
+        "Computed": true
+      },
+      "applicable_policies": {
+        "Type": "Set",
+        "Description": "Applicable Policies",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "atl_id": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "Anomaly Trusted List ID"
+      },
+      "created_by": {
+        "Type": "String",
+        "Description": "Created by",
+        "Computed": true
+      },
+      "created_on": {
+        "Type": "Int",
+        "Description": "Created on",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "Reason for trusted listing",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Anomaly Trusted List name",
+        "Computed": true
+      },
+      "trusted_list_entries": {
+        "Type": "List",
+        "Description": "List of network anomalies in the trusted list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "domain": {
+              "Type": "String",
+              "Description": "Domain",
+              "Computed": true
+            },
+            "image_id": {
+              "Type": "String",
+              "Description": "Image ID",
+              "Computed": true
+            },
+            "ip_cidr": {
+              "Type": "String",
+              "Description": "Ip CIDR",
+              "Computed": true
+            },
+            "port": {
+              "Type": "String",
+              "Description": "Port",
+              "Computed": true
+            },
+            "protocol": {
+              "Type": "String",
+              "Description": "Protocol",
+              "Computed": true
+            },
+            "resource_id": {
+              "Type": "String",
+              "Description": "Resource ID",
+              "Computed": true
+            },
+            "service": {
+              "Type": "String",
+              "Description": "Service",
+              "Computed": true
+            },
+            "subject": {
+              "Type": "String",
+              "Description": "Subject",
+              "Computed": true
+            },
+            "tag_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Tag key"
+            },
+            "tag_value": {
+              "Type": "String",
+              "Description": "Tag value",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "trusted_list_type": {
+        "Type": "String",
+        "Description": "Anomaly Trusted List type",
+        "Computed": true
+      },
+      "vpc": {
+        "Type": "String",
+        "Description": "Anomaly Trusted List name",
+        "Computed": true
+      }
+    },
+    "prismacloud_anomaly_trusted_lists": {
+      "listing": {
+        "Type": "List",
+        "Description": "List of accounts",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "account_id": {
+              "Type": "String",
+              "Description": "Anomaly Trusted List account id",
+              "Computed": true
+            },
+            "applicable_policies": {
+              "Type": "Set",
+              "Description": "Applicable Policies",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "atl_id": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Anomaly Trusted List ID"
+            },
+            "created_by": {
+              "Type": "String",
+              "Description": "Created by",
+              "Computed": true
+            },
+            "created_on": {
+              "Type": "Int",
+              "Description": "Created on",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "Reason for trusted listing",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Anomaly Trusted List name",
+              "Computed": true
+            },
+            "trusted_list_entries": {
+              "Type": "List",
+              "Description": "List of network anomalies in the trusted list",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "domain": {
+                    "Type": "String",
+                    "Description": "Domain",
+                    "Computed": true
+                  },
+                  "image_id": {
+                    "Type": "String",
+                    "Description": "Image ID",
+                    "Computed": true
+                  },
+                  "ip_cidr": {
+                    "Type": "String",
+                    "Description": "Ip CIDR",
+                    "Computed": true
+                  },
+                  "port": {
+                    "Type": "String",
+                    "Description": "Port",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "String",
+                    "Description": "Protocol",
+                    "Computed": true
+                  },
+                  "resource_id": {
+                    "Type": "String",
+                    "Description": "Resource ID",
+                    "Computed": true
+                  },
+                  "service": {
+                    "Type": "String",
+                    "Description": "Service",
+                    "Computed": true
+                  },
+                  "subject": {
+                    "Type": "String",
+                    "Description": "Subject",
+                    "Computed": true
+                  },
+                  "tag_key": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Tag key"
+                  },
+                  "tag_value": {
+                    "Type": "String",
+                    "Description": "Tag value",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "trusted_list_type": {
+              "Type": "String",
+              "Description": "Anomaly Trusted List type",
+              "Computed": true
+            },
+            "vpc": {
+              "Type": "String",
+              "Description": "VPC",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "total": {
+        "Type": "Int",
+        "Description": "Total number of anomaly trusted list",
         "Computed": true
       }
     },
@@ -6725,6 +7412,45 @@
               "Type": "String",
               "Description": "API name",
               "Computed": true
+            },
+            "children": {
+              "Type": "List",
+              "Description": "Children",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "criteria": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Criteria for build policy",
+                    "Computed": true
+                  },
+                  "metadata": {
+                    "Type": "Map",
+                    "Optional": true,
+                    "Description": "YAML string for code build policy",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "recommendation": {
+                    "Type": "String",
+                    "Description": "Recommendation",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Description": "Type of build policy",
+                    "Computed": true
+                  }
+                }
+              }
             },
             "cloud_account": {
               "Type": "String",

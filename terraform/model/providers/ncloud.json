@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ncloud",
   "type": "provider",
-  "version": "v2.2.2",
+  "version": "v2.3.2",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -360,7 +360,7 @@
       },
       "server_instance_no": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "server_name": {
         "Type": "String",
@@ -377,6 +377,14 @@
       "status": {
         "Type": "String",
         "Computed": true
+      },
+      "stop_instance_before_detaching": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "type": {
         "Type": "String",
@@ -1136,6 +1144,36 @@
         "Required": true
       }
     },
+    "ncloud_network_acl_deny_allow_group": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "ip_list": {
+        "Type": "Set",
+        "Required": true,
+        "MaxItems": 100,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "network_acl_deny_allow_group_no": {
+        "Type": "String",
+        "Computed": true
+      },
+      "vpc_no": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "ncloud_network_acl_rule": {
       "inbound": {
         "Type": "Set",
@@ -1144,6 +1182,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "deny_allow_group_no": {
+              "Type": "String",
+              "Optional": true
+            },
             "description": {
               "Type": "String",
               "Optional": true,
@@ -1153,7 +1195,7 @@
             },
             "ip_block": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             },
             "port_range": {
               "Type": "String",
@@ -1188,6 +1230,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "deny_allow_group_no": {
+              "Type": "String",
+              "Optional": true
+            },
             "description": {
               "Type": "String",
               "Optional": true,
@@ -1197,7 +1243,7 @@
             },
             "ip_block": {
               "Type": "String",
-              "Required": true
+              "Optional": true
             },
             "port_range": {
               "Type": "String",
@@ -1224,7 +1270,7 @@
     },
     "ncloud_network_interface": {
       "access_control_groups": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -1308,6 +1354,7 @@
       "log": {
         "Type": "List",
         "Optional": true,
+        "Computed": true,
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -1328,6 +1375,11 @@
       "name": {
         "Type": "String",
         "Required": true
+      },
+      "public_network": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
       },
       "subnet_no_list": {
         "Type": "List",
@@ -1436,7 +1488,8 @@
       "port_forwarding_configuration_no": {
         "Type": "String",
         "Optional": true,
-        "Description": "Port forwarding configuration number."
+        "Description": "Port forwarding configuration number.",
+        "Computed": true
       },
       "port_forwarding_external_port": {
         "Type": "Int",
@@ -1495,8 +1548,7 @@
       },
       "server_instance_no": {
         "Type": "String",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "zone": {
         "Type": "String",
@@ -1787,6 +1839,1109 @@
         "Computed": true
       }
     },
+    "ncloud_sourcebuild_project": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "artifact": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backup": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "object_storage_to_upload": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "bucket": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "filename": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "path": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "path": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "use": {
+              "Type": "Bool",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "build_command": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "docker_image_build": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "dockerfile": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "image": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "latest": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "registry": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "tag": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "use": {
+                    "Type": "Bool",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "in_build": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "post_build": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "pre_build": {
+              "Type": "List",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "build_image_upload": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "container_registry_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "image_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "latest": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            },
+            "use": {
+              "Type": "Bool",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "created": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "timestamp": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "user": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "env": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "compute": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cpu": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "mem": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "docker_engine": {
+              "Type": "List",
+              "Optional": true,
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "use": {
+                    "Type": "Bool",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "env_var": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "platform": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "config": {
+                    "Type": "List",
+                    "Required": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "image": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "os": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "archi": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "id": {
+                                "Type": "Int",
+                                "Optional": true
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "version": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "registry": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "runtime": {
+                          "Type": "List",
+                          "Optional": true,
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "id": {
+                                "Type": "Int",
+                                "Optional": true
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "version": {
+                                "Type": "List",
+                                "Required": true,
+                                "MaxItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "id": {
+                                      "Type": "Int",
+                                      "Optional": true
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "tag": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Computed": true
+            }
+          }
+        }
+      },
+      "last_build": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "timestamp": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "linked": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_log_analytics": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "file_safer": {
+              "Type": "Bool",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_no": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "source": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "config": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "branch": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "repository_name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcecommit_repository": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "creator": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "file_safer": {
+        "Type": "Bool",
+        "Optional": true,
+        "Computed": true
+      },
+      "git_https_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "git_ssh_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "repository_no": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "ncloud_sourcedeploy_project": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "name": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "ncloud_sourcedeploy_project_stage": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "config": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auto_scaling_group_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "auto_scaling_group_no": {
+              "Type": "Int",
+              "Optional": true
+            },
+            "bucket_name": {
+              "Type": "String",
+              "Optional": true
+            },
+            "cluster_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cluster_uuid": {
+              "Type": "String",
+              "Optional": true
+            },
+            "server": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "target_type": {
+        "Type": "String",
+        "Required": true
+      }
+    },
+    "ncloud_sourcedeploy_project_stage_scenario": {
+      "__timeouts__": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "config": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "canary_config": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "analysis_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "delay": {
+                          "Type": "Int",
+                          "Optional": true
+                        },
+                        "duration": {
+                          "Type": "Int",
+                          "Optional": true
+                        },
+                        "interval": {
+                          "Type": "Int",
+                          "Optional": true
+                        },
+                        "step": {
+                          "Type": "Int",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "analysis_type": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "canary_count": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "env": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "baseline": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "canary": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "metrics": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "filter": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "metric": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "query": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "query_type": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "success_criteria": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "weight": {
+                          "Type": "Int",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "pass_score": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "prometheus": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "timeout": {
+                    "Type": "Int",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "deploy_command": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "path": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "deploy_path": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "source_path": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "post_deploy": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "command": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "user": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "pre_deploy": {
+                    "Type": "List",
+                    "Optional": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "command": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "user": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "file": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "object_storage": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "bucket": {
+                          "Type": "String",
+                          "Optional": true
+                        },
+                        "object": {
+                          "Type": "String",
+                          "Optional": true
+                        }
+                      }
+                    }
+                  },
+                  "source_build": {
+                    "Type": "List",
+                    "Optional": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "id": {
+                          "Type": "Int",
+                          "Optional": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "load_balancer": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "delete_server": {
+                    "Type": "Bool",
+                    "Optional": true
+                  },
+                  "load_balancer_target_group_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "load_balancer_target_group_no": {
+                    "Type": "Int",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "manifest": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "branch": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "path": {
+                    "Type": "List",
+                    "Optional": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "repository_name": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "path": {
+              "Type": "List",
+              "Optional": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "deploy_path": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "source_path": {
+                    "Type": "String",
+                    "Optional": true
+                  }
+                }
+              }
+            },
+            "rollback": {
+              "Type": "Bool",
+              "Optional": true
+            },
+            "strategy": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "project_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "stage_id": {
+        "Type": "Int",
+        "Required": true
+      }
+    },
+    "ncloud_sourcepipeline_project": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "task": {
+        "Type": "List",
+        "Required": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "config": {
+              "Type": "List",
+              "Required": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "project_id": {
+                    "Type": "Int",
+                    "Required": true
+                  },
+                  "scenario_id": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "stage_id": {
+                    "Type": "Int",
+                    "Optional": true
+                  },
+                  "target": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Computed": true,
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "file": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "full_manifest": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "manifest": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "project_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "repository_branch": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Computed": true
+                        },
+                        "repository_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "linked_tasks": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "type": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "triggers": {
+        "Type": "List",
+        "Required": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "sourcecommit": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "branch": {
+                    "Type": "String",
+                    "Required": true
+                  },
+                  "repository_name": {
+                    "Type": "String",
+                    "Required": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "ncloud_subnet": {
       "name": {
         "Type": "String",
@@ -1813,10 +2968,7 @@
       "usage_type": {
         "Type": "String",
         "Optional": true,
-        "Default": {
-          "Type": "string",
-          "Value": "GEN"
-        }
+        "Computed": true
       },
       "vpc_no": {
         "Type": "String",
@@ -3485,6 +4637,97 @@
         "Computed": true
       }
     },
+    "ncloud_network_acl_deny_allow_groups": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "network_acl_deny_allow_group_no_list": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "network_acl_deny_allow_groups": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ip_list": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "network_acl_deny_allow_group_no": {
+              "Type": "String",
+              "Computed": true
+            },
+            "vpc_no": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "vpc_no": {
+        "Type": "String",
+        "Optional": true
+      }
+    },
     "ncloud_network_acls": {
       "filter": {
         "Type": "Set",
@@ -3811,6 +5054,10 @@
       },
       "name": {
         "Type": "String",
+        "Computed": true
+      },
+      "public_network": {
+        "Type": "Bool",
         "Computed": true
       },
       "subnet_no_list": {
@@ -5149,6 +6396,1702 @@
         "Optional": true
       }
     },
+    "ncloud_sourcebuild_project": {
+      "artifact": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "backup": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "object_storage_to_upload": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "bucket": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "filename": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "path": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "path": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "use": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "build_command": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "docker_image_build": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "dockerfile": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "image": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "latest": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "registry": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "tag": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "use": {
+                    "Type": "Bool",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "in_build": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "post_build": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "pre_build": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "build_image_upload": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "container_registry_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "image_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "latest": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "tag": {
+              "Type": "String",
+              "Computed": true
+            },
+            "use": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "created": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "timestamp": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "user": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "env": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "compute": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cpu": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "mem": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "docker_engine": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "use": {
+                    "Type": "Bool",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "env_var": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "platform": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "config": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "image": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "os": {
+                          "Type": "List",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "archi": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "id": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "version": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "registry": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "runtime": {
+                          "Type": "List",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "id": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "version": {
+                                "Type": "List",
+                                "Computed": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "ComputedBlock",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "id": {
+                                      "Type": "Int",
+                                      "Computed": true
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "tag": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "timeout": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "last_build": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "timestamp": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "linked": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_log_analytics": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "file_safer": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_no": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "source": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "config": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "branch": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "repository_name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcebuild_project_computes": {
+      "computes": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cpu": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "mem": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcebuild_project_docker_engines": {
+      "docker_engines": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcebuild_project_os": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "os": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "archi": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "version": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcebuild_project_os_runtime_versions": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "os_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "runtime_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "runtime_versions": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcebuild_project_os_runtimes": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "os_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "runtimes": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcebuild_projects": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "project_name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "projects": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "permission": {
+              "Type": "String",
+              "Computed": true
+            },
+            "project_no": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcecommit_repositories": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true
+      },
+      "repositories": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "permission": {
+              "Type": "String",
+              "Computed": true
+            },
+            "repository_no": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcecommit_repository": {
+      "creator": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "file_safer": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "git_https_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "git_ssh_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "repository_no": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "ncloud_sourcedeploy_project_stage": {
+      "config": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "auto_scaling_group_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "auto_scaling_group_no": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "bucket_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cluster_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cluster_uuid": {
+              "Type": "String",
+              "Computed": true
+            },
+            "server": {
+              "Type": "List",
+              "Optional": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "String",
+                    "Optional": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "target_type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "ncloud_sourcedeploy_project_stage_scenario": {
+      "config": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "canary_config": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "analysis_config": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "delay": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "duration": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "interval": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "step": {
+                          "Type": "Int",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "analysis_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "canary_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "env": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "baseline": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "canary": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "metrics": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "filter": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "metric": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "query": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "query_type": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "success_criteria": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "weight": {
+                          "Type": "Int",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "pass_score": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "prometheus": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "timeout": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "deploy_command": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "path": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "deploy_path": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "source_path": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "post_deploy": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "command": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "user": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "pre_deploy": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "command": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "user": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "file": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "object_storage": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "bucket": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "object": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "source_build": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "id": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "load_balancer": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "delete_server": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "load_balancer_target_group_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "load_balancer_target_group_no": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "manifest": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "branch": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "path": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "repository_name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "type": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "path": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "deploy_path": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "source_path": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "rollback": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "strategy": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "project_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "stage_id": {
+        "Type": "Int",
+        "Required": true
+      }
+    },
+    "ncloud_sourcedeploy_project_stage_scenarios": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "project_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "scenarios": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "stage_id": {
+        "Type": "Int",
+        "Required": true
+      }
+    },
+    "ncloud_sourcedeploy_project_stages": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "project_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "stages": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcedeploy_projects": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "projects": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcepipeline_project": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "task": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "config": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "project_id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "scenario_id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "stage_id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "target": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "file": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "full_manifest": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "manifest": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "project_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "repository_branch": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "repository_name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "type": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "linked_tasks": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "triggers": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "sourcecommit": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "branch": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "repository_name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ncloud_sourcepipeline_projects": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true
+            },
+            "regex": {
+              "Type": "Bool",
+              "Optional": true,
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "projects": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "ncloud_subnet": {
       "filter": {
         "Type": "Set",
@@ -5315,6 +8258,10 @@
               "Computed": true
             },
             "subnet_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "usage_type": {
               "Type": "String",
               "Computed": true
             },

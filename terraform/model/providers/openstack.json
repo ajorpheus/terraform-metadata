@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "openstack",
   "type": "provider",
-  "version": "v1.48.0",
+  "version": "v1.49.0",
   "provider": {
     "allow_reauth": {
       "Type": "Bool",
@@ -921,6 +921,10 @@
       }
     },
     "openstack_compute_flavor_v2": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
       "disk": {
         "Type": "Int",
         "Required": true
@@ -1129,6 +1133,10 @@
       "config_drive": {
         "Type": "Bool",
         "Optional": true
+      },
+      "created": {
+        "Type": "String",
+        "Computed": true
       },
       "flavor_id": {
         "Type": "String",
@@ -1358,6 +1366,10 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "updated": {
+        "Type": "String",
+        "Computed": true
       },
       "user_data": {
         "Type": "String",
@@ -2046,8 +2058,7 @@
       },
       "max_node_count": {
         "Type": "Int",
-        "Optional": true,
-        "Computed": true
+        "Optional": true
       },
       "merge_labels": {
         "Type": "Bool",
@@ -2081,6 +2092,7 @@
       },
       "role": {
         "Type": "String",
+        "Optional": true,
         "Computed": true
       },
       "updated_at": {
@@ -2104,6 +2116,10 @@
             "name": {
               "Type": "String",
               "Required": true
+            },
+            "string_type": {
+              "Type": "Bool",
+              "Optional": true
             },
             "value": {
               "Type": "String",
@@ -3200,7 +3216,7 @@
         "Optional": true,
         "Default": {
           "Type": "string",
-          "Value": "/Users/b132ka/.terraform/image_cache"
+          "Value": "/Users/B441OU/.terraform/image_cache"
         }
       },
       "image_id": {
@@ -5817,6 +5833,16 @@
         "Optional": true,
         "Computed": true
       },
+      "service_types": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "subnetpool_id": {
         "Type": "String",
         "Optional": true
@@ -7278,6 +7304,10 @@
       }
     },
     "openstack_compute_flavor_v2": {
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
       "disk": {
         "Type": "Int",
         "Optional": true
@@ -7389,6 +7419,10 @@
         "Type": "String",
         "Computed": true
       },
+      "created": {
+        "Type": "String",
+        "Computed": true
+      },
       "flavor_id": {
         "Type": "String",
         "Computed": true
@@ -7483,6 +7517,10 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "updated": {
+        "Type": "String",
+        "Computed": true
       },
       "user_data": {
         "Type": "String",
@@ -9837,6 +9875,15 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "service_types": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "subnet_id": {
         "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "skytap",
   "type": "provider",
-  "version": "v0.14.5",
+  "version": "v0.15.0",
   "provider": {
     "api_token": {
       "Type": "String",
@@ -29,6 +29,15 @@
         "Type": "String",
         "Required": true,
         "Description": "User-defined description of the environment. Limited to 1000 characters. UTF-8 character type"
+      },
+      "disable_internet": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If true, outbound internet is disabled for VMs in this environment",
+        "Computed": true,
+        "ConflictsWith": [
+          "outbound_traffic"
+        ]
       },
       "label": {
         "Type": "Set",
@@ -64,12 +73,15 @@
       "outbound_traffic": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether networks in the environment can send outbound traffic"
+        "Description": "Indicates whether networks in the environment can send outbound traffic",
+        "Computed": true,
+        "Deprecated": "This attribute has been deprecated, use 'disable_internet' instead"
       },
       "routable": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Indicates whether networks within the environment can route traffic to one another"
+        "Description": "Indicates whether networks within the environment can route traffic to one another",
+        "Computed": true
       },
       "shutdown_at_time": {
         "Type": "String",

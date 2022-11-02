@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "illumio-core",
   "type": "provider",
-  "version": "v1.0.1",
+  "version": "v1.0.2",
   "provider": {
     "api_secret": {
       "Type": "String",
@@ -1111,7 +1111,7 @@
       },
       "description": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "The long description of the label group"
       },
       "external_data_reference": {

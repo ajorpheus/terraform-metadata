@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "boundary",
   "type": "provider",
-  "version": "v1.0.12",
+  "version": "v1.1.2",
   "provider": {
     "addr": {
       "Type": "String",
@@ -24,6 +24,11 @@
       "Type": "String",
       "Optional": true,
       "Description": "The auth method password for password-style auth methods"
+    },
+    "plugin_execution_dir": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Specifies a directory that the Boundary provider can use to write and execute its built-in plugins."
     },
     "recovery_kms_hcl": {
       "Type": "String",
@@ -366,7 +371,44 @@
         }
       }
     },
+    "boundary_credential_json": {
+      "credential_store_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The credential store in which to save this json credential."
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The description of this json credential."
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of this json credential.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of this json credential. Defaults to the resource name."
+      },
+      "object": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The object for the this json credential. Either values encoded with the \"jsonencode\" function, pre-escaped JSON string, or a file"
+      },
+      "object_hmac": {
+        "Type": "String",
+        "Description": "The object hmac.",
+        "Computed": true
+      }
+    },
     "boundary_credential_library_vault": {
+      "credential_mapping_overrides": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "The credential mapping override."
+      },
       "credential_store_id": {
         "Type": "String",
         "Required": true,
@@ -964,11 +1006,6 @@
       }
     },
     "boundary_role": {
-      "default_role": {
-        "Type": "Bool",
-        "Optional": true,
-        "Description": "Indicates that the role containing this value is the default role (that is, has the id 'r_default'), which triggers some specialized behavior to allow it to be imported and managed."
-      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -1053,27 +1090,10 @@
       }
     },
     "boundary_target": {
-      "application_credential_source_ids": {
-        "Type": "Set",
-        "Optional": true,
-        "Description": "A list of application credential source ID's.",
-        "ConflictsWith": [
-          "brokered_credential_source_ids"
-        ],
-        "Deprecated": "Please use 'brokered_credential_source_ids' instead",
-        "ConfigImplicitMode": "Attr",
-        "Elem": {
-          "Type": "SchemaElements",
-          "ElementsType": "String"
-        }
-      },
       "brokered_credential_source_ids": {
         "Type": "Set",
         "Optional": true,
         "Description": "A list of brokered credential source ID's.",
-        "ConflictsWith": [
-          "application_credential_source_ids"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",

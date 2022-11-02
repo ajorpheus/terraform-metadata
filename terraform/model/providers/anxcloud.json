@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "anxcloud",
   "type": "provider",
-  "version": "v0.4.1",
+  "version": "v0.4.2",
   "provider": {
     "token": {
       "Type": "String",
@@ -1009,8 +1009,8 @@
       },
       "identifier": {
         "Type": "String",
-        "Description": "Identifier of the API resource.",
-        "Computed": true
+        "Optional": true,
+        "Description": "Identifier of the API resource."
       },
       "lat": {
         "Type": "String",

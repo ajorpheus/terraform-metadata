@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "opennebula",
   "type": "provider",
-  "version": "v1.0.0-rc2",
+  "version": "v1.0.1-rc1",
   "provider": {
     "default_tags": {
       "Type": "Set",
@@ -375,7 +375,7 @@
         "Description": "Name of the group"
       },
       "users_ids": {
-        "Type": "List",
+        "Type": "Set",
         "Required": true,
         "Description": "List of user IDs admins of the group",
         "ConfigImplicitMode": "Attr",
@@ -1235,7 +1235,7 @@
         "Computed": true
       },
       "groups": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Description": "List of group IDs to add to the user",
         "ConfigImplicitMode": "Attr",
@@ -1460,7 +1460,7 @@
     },
     "opennebula_virtual_data_center": {
       "group_ids": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Description": "List of Group IDs to be added into the VDC",
         "Computed": true,
@@ -1485,7 +1485,7 @@
           "Type": "SchemaInfo",
           "Info": {
             "cluster_ids": {
-              "Type": "List",
+              "Type": "Set",
               "Optional": true,
               "Description": "List of cluster IDs from the Zone to add in the VDC",
               "Computed": true,
@@ -1496,7 +1496,7 @@
               }
             },
             "datastore_ids": {
-              "Type": "List",
+              "Type": "Set",
               "Optional": true,
               "Description": "List of Datastore IDs from the Zone to add in the VDC",
               "Computed": true,
@@ -1507,7 +1507,7 @@
               }
             },
             "host_ids": {
-              "Type": "List",
+              "Type": "Set",
               "Optional": true,
               "Description": "List of Host IDs from the Zone to add in the VDC",
               "Computed": true,
@@ -1527,7 +1527,7 @@
               }
             },
             "vnet_ids": {
-              "Type": "List",
+              "Type": "Set",
               "Optional": true,
               "Description": "List of VNET IDs from the Zone to add in the VDC",
               "Computed": true,
@@ -2328,7 +2328,7 @@
         ]
       },
       "clusters": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Description": "List of cluster IDs hosting the virtual Network, if not set it uses the default cluster",
         "Computed": true,
@@ -2590,7 +2590,7 @@
         ]
       },
       "security_groups": {
-        "Type": "List",
+        "Type": "Set",
         "Optional": true,
         "Description": "List of Security Group IDs to be applied to the VNET",
         "Computed": true,

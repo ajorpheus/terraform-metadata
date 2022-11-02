@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "dome9",
   "type": "provider",
-  "version": "v1.24.5",
+  "version": "v1.28.4",
   "provider": {
     "base_url": {
       "Type": "String",
@@ -25,6 +25,749 @@
     }
   },
   "resources": {
+    "dome9_admission_control_policy": {
+      "action": {
+        "Type": "String",
+        "Required": true
+      },
+      "notification_ids": {
+        "Type": "List",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ruleset_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "target_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "target_type": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "Environment"
+        }
+      }
+    },
+    "dome9_assessment": {
+      "additional_fields": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "assessment_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "assessment_passed": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "bundle_id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "cloud_account_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "cloud_account_type": {
+        "Type": "String",
+        "Required": true
+      },
+      "comparison_custom_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "data_sync_status": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "entities_with_permission_issues": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cloud_vendor_identifier": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "external_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "entity_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "general_fetch_permission_issues": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "recently_successful_sync": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true
+      },
+      "dome9_cloud_account_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "exclusions": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_account_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "comment": {
+              "Type": "String",
+              "Computed": true
+            },
+            "date_range": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "from": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "to": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "logic_expressions": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "organizational_unit_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "platform": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rules": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "logic_hash": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "ruleset_id": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "external_cloud_account_id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "has_data_sync_status_issues": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "has_errors": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
+      "remediations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_account_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "cloud_bots": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "comment": {
+              "Type": "String",
+              "Computed": true
+            },
+            "date_range": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "from": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "to": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "logic_expressions": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "organizational_unit_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "platform": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rules": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "logic_hash": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "ruleset_id": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "request": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_account_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cloud_account_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "dome9_cloud_account_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "external_cloud_account_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "is_template": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "request_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "should_minimize_result": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "request_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "should_minimize_result": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "stats": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "error": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "excluded_failed_tests": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "excluded_rules": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "excluded_rules_by_severity": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "high": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "informational": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "excluded_tests": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "failed": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "failed_entities": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "failed_rules_by_severity": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "high": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "informational": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "failed_tests": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "logically_tested": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "passed": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "passed_rules_by_severity": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "high": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "informational": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "tests": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "entity_results": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "error": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "exclusion_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_excluded": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_relevant": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_valid": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "remediation_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "test_obj": {
+                    "Type": "Set",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "custom_entity_comparison_hash": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "dome9_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "entity_index": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "entity_type": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "id": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "validation_status": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "error": {
+              "Type": "String",
+              "Computed": true
+            },
+            "exclusion_stats": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "non_complying_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "relevant_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "tested_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "non_complying_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "relevant_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "rule": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "category": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "cloudbots": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "compliance_tag": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "control_title": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "domain": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_default": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "labels": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logic": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "logic_hash": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "priority": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "remediation": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "rule_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "severity": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "test_passed": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "tested_count": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "triggered_by": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "dome9_attach_iam_safe": {
       "aws_cloud_account_id": {
         "Type": "String",
@@ -219,6 +962,73 @@
       "vpc_name": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      }
+    },
+    "dome9_aws_unified_onboarding": {
+      "cloud_vendor": {
+        "Type": "String",
+        "Optional": true
+      },
+      "enable_stack_modify": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "full_protection": {
+        "Type": "Bool",
+        "Optional": true
+      },
+      "iam_capabilities": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "intelligence_configurations": {
+        "Type": "Map",
+        "Optional": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "onboard_type": {
+        "Type": "String",
+        "Optional": true
+      },
+      "parameters": {
+        "Type": "Map",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "posture_management_configuration": {
+        "Type": "Map",
+        "Optional": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "serverless_configuration": {
+        "Type": "Map",
+        "Optional": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "stack_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "template_url": {
+        "Type": "String",
         "Computed": true
       }
     },
@@ -997,6 +1807,23 @@
         "Computed": true
       },
       "runtime_protection": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Required": true
+            }
+          }
+        }
+      },
+      "threat_intelligence": {
         "Type": "List",
         "Optional": true,
         "Computed": true,
@@ -2206,6 +3033,787 @@
     }
   },
   "data-sources": {
+    "dome9_admission_control_policy": {
+      "action": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "notification_ids": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ruleset_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "target_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "target_type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "dome9_assessment": {
+      "additional_fields": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "assessment_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "assessment_passed": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "bundle_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "cloud_account_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cloud_account_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "comparison_custom_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "data_sync_status": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "entities_with_permission_issues": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "cloud_vendor_identifier": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "external_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "entity_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "general_fetch_permission_issues": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "recently_successful_sync": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "dome9_cloud_account_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "exclusions": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_account_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "comment": {
+              "Type": "String",
+              "Computed": true
+            },
+            "date_range": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "from": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "to": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "logic_expressions": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "organizational_unit_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "platform": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rules": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "logic_hash": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "ruleset_id": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "external_cloud_account_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "has_data_sync_status_issues": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "has_errors": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "Int",
+        "Required": true
+      },
+      "location_metadata": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "account": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "external_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "srl": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "remediations": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_account_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "cloud_bots": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "comment": {
+              "Type": "String",
+              "Computed": true
+            },
+            "date_range": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "from": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "to": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "logic_expressions": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "organizational_unit_ids": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "platform": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rules": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "id": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "logic_hash": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "ruleset_id": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "request": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cloud_account_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "cloud_account_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "dome9_cloud_account_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "external_cloud_account_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "is_template": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "request_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "should_minimize_result": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "request_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "should_minimize_result": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "stats": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "error": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "excluded_failed_tests": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "excluded_rules": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "excluded_rules_by_severity": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "high": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "informational": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "excluded_tests": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "failed": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "failed_entities": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "failed_rules_by_severity": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "high": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "informational": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "failed_tests": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "logically_tested": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "passed": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "passed_rules_by_severity": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "critical": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "high": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "informational": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "low": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "medium": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "tests": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "entity_results": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "error": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "exclusion_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_excluded": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_relevant": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "is_valid": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "remediation_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "test_obj": {
+                    "Type": "Set",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "custom_entity_comparison_hash": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "dome9_id": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "entity_index": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "entity_type": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "id": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "validation_status": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "error": {
+              "Type": "String",
+              "Computed": true
+            },
+            "exclusion_stats": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "non_complying_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "relevant_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "tested_count": {
+                    "Type": "Int",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "non_complying_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "relevant_count": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "rule": {
+              "Type": "Set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "category": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "cloudbots": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "compliance_tag": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "control_title": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "description": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "domain": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "is_default": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "labels": {
+                    "Type": "List",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "logic": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "logic_hash": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "priority": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "remediation": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "rule_id": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "severity": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "test_passed": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "tested_count": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "triggered_by": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "dome9_aws_security_group": {
       "aws_region_id": {
         "Type": "String",
@@ -2371,6 +3979,122 @@
         "Computed": true
       },
       "vpc_name": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "dome9_aws_unified_onboarding": {
+      "cft_version": {
+        "Type": "String",
+        "Computed": true
+      },
+      "environment_external_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "environment_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "environment_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "initiated_user_id": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "initiated_user_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "onboarding_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "onboarding_request": {
+        "Type": "Map",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "root_stack_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "statuses": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "feature": {
+              "Type": "String",
+              "Computed": true
+            },
+            "module": {
+              "Type": "String",
+              "Computed": true
+            },
+            "remediation_recommendation": {
+              "Type": "String",
+              "Computed": true
+            },
+            "stack_message": {
+              "Type": "String",
+              "Computed": true
+            },
+            "stack_status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Computed": true
+            },
+            "status_message": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "dome9_aws_unified_onboarding_update_version_stack_config": {
+      "iam_capabilities": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "onboarding_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "parameters": {
+        "Type": "Map",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "stack_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "template_url": {
         "Type": "String",
         "Computed": true
       }
@@ -3084,6 +4808,22 @@
         "Computed": true
       },
       "runtime_protection": {
+        "Type": "List",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "threat_intelligence": {
         "Type": "List",
         "Computed": true,
         "MaxItems": 1,

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vra",
   "type": "provider",
-  "version": "v0.5.3",
+  "version": "v0.6.0",
   "provider": {
     "access_token": {
       "Type": "String",
@@ -1470,10 +1470,19 @@
         "Description": "Date when the entity was created. The date is in ISO 8601 and UTC.",
         "Computed": true
       },
+      "dc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "ConflictsWith": [
+          "dcid"
+        ]
+      },
       "dcid": {
         "Type": "String",
         "Optional": true,
-        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure."
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "Deprecated": "Please use `dc_id` instead."
       },
       "description": {
         "Type": "String",
@@ -1660,39 +1669,59 @@
       ],
       "blueprint_content": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The content of the the cloud template to be used to request the deployment.",
+        "ConflictsWith": [
+          "blueprint_id",
+          "catalog_item_id"
+        ]
       },
       "blueprint_id": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Description": "The id of the cloud template to be used to request the deployment.",
+        "Computed": true,
+        "ConflictsWith": [
+          "blueprint_content",
+          "catalog_item_id"
+        ]
       },
       "blueprint_version": {
         "Type": "String",
         "Optional": true,
+        "Description": "The version of the cloud template to be used to request the deployment.",
         "Computed": true
       },
       "catalog_item_id": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Description": "The id of the catalog item to be used to request the deployment.",
+        "Computed": true,
+        "ConflictsWith": [
+          "blueprint_id",
+          "blueprint_content"
+        ]
       },
       "catalog_item_version": {
         "Type": "String",
         "Optional": true,
+        "Description": "The version of the catalog item to be used to request the deployment.",
         "Computed": true
       },
       "created_at": {
         "Type": "String",
+        "Description": "Date when the entity was created. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "created_by": {
         "Type": "String",
+        "Description": "The user the entity was created by.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A human-friendly description."
       },
       "expand_last_request": {
         "Type": "Bool",
@@ -1701,7 +1730,8 @@
       },
       "expand_project": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Flag to indicate whether to expand project information."
       },
       "expand_resources": {
         "Type": "Bool",
@@ -1912,28 +1942,33 @@
       },
       "last_updated_at": {
         "Type": "String",
+        "Description": "Date when the entity was last updated. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "last_updated_by": {
         "Type": "String",
+        "Description": "The user that last updated the deployment.",
         "Computed": true
       },
       "lease_expire_at": {
         "Type": "String",
-        "Optional": true,
+        "Description": "Date when the deployment lease expire. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the deployment."
       },
       "org_id": {
         "Type": "String",
+        "Description": "The Id of the organization this deployment belongs to.",
         "Computed": true
       },
       "owner": {
         "Type": "String",
         "Optional": true,
+        "Description": "The user this deployment belongs to.",
         "Computed": true
       },
       "project": {
@@ -1965,7 +2000,13 @@
       },
       "project_id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The id of the project this deployment belongs to."
+      },
+      "reason": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Reason for requesting/updating a blueprint."
       },
       "resources": {
         "Type": "Set",
@@ -2077,6 +2118,7 @@
       },
       "status": {
         "Type": "String",
+        "Description": "The status of the deployment with respect to its life cycle operations.",
         "Computed": true
       }
     },
@@ -2458,24 +2500,28 @@
     "vra_flavor_profile": {
       "cloud_account_id": {
         "Type": "String",
-        "Description": "The ID of the cloud account this entity belongs to.",
+        "Description": "Id of the cloud account this flavor profile belongs to.",
         "Computed": true
       },
       "created_at": {
         "Type": "String",
+        "Description": "Date when the entity was created. The date is in ISO 8601 and UTC.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A human-friendly description."
       },
       "external_region_id": {
         "Type": "String",
+        "Description": "The id of the region for which this profile is defined.",
         "Computed": true
       },
       "flavor_mapping": {
         "Type": "Set",
         "Optional": true,
+        "Description": "A list of the flavor mappings defined for the corresponding cloud end-point region.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
         "Elem": {
@@ -2483,19 +2529,23 @@
           "Info": {
             "cpu_count": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "Number of CPU cores. Mandatory for private clouds such as vSphere. Only `instance_type` or `cpu_count`/`memory` must be specified."
             },
             "instance_type": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "The value of the instance type in the corresponding cloud. Mandatory for public clouds. Only `instance_type` or `cpu_count`/`memory` must be specified."
             },
             "memory": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Description": "Total amount of memory (in megabytes). Mandatory for private clouds such as vSphere. Only `instance_type` or `cpu_count`/`memory` must be specified."
             },
             "name": {
               "Type": "String",
-              "Required": true
+              "Required": true,
+              "Description": "The name of the flavor mapping."
             }
           }
         }
@@ -2530,22 +2580,27 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "A human-friendly name used as an identifier in APIs that support this option."
       },
       "org_id": {
         "Type": "String",
+        "Description": "The id of the organization this entity belongs to.",
         "Computed": true
       },
       "owner": {
         "Type": "String",
+        "Description": "Email of the user that owns the entity.",
         "Computed": true
       },
       "region_id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The id of the region for which this profile is defined "
       },
       "updated_at": {
         "Type": "String",
+        "Description": "Date when the entity was last updated. The date is ISO 8601 and UTC.",
         "Computed": true
       }
     },
@@ -2667,6 +2722,132 @@
         "Type": "String",
         "Required": true,
         "Description": "The if of the region for which this profile is defined as in vRealize Automation(vRA)."
+      },
+      "updated_at": {
+        "Type": "String",
+        "Description": "Date when the entity was last updated. The date is ISO 8601 and UTC.",
+        "Computed": true
+      }
+    },
+    "vra_integration": {
+      "associated_cloud_account_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Ids of the cloud accounts to associate with this integration.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "certificate": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Certificate to be used to connect to the integration."
+      },
+      "created_at": {
+        "Type": "String",
+        "Description": "Date when the entity was created. The date is in ISO 8601 and UTC.",
+        "Computed": true
+      },
+      "custom_properties": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Additional custom properties that may be used to extend the Integration.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A human-friendly description."
+      },
+      "integration_properties": {
+        "Type": "Map",
+        "Required": true,
+        "Description": "Integration specific properties supplied in as name value pairs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "integration_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Integration type."
+      },
+      "links": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Optional": true
+            },
+            "hrefs": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "rel": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the integration."
+      },
+      "org_id": {
+        "Type": "String",
+        "Description": "The id of the organization this entity belongs to.",
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Description": "Email of the user that owns the entity.",
+        "Computed": true
+      },
+      "private_key": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Secret access key or password to be used to authenticate with the integration."
+      },
+      "private_key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Access key id or username to be used to authenticate with the integration."
+      },
+      "tags": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key": {
+              "Type": "String",
+              "Required": true
+            },
+            "value": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "updated_at": {
         "Type": "String",
@@ -3344,27 +3525,47 @@
     "vra_network_ip_range": {
       "created_at": {
         "Type": "String",
+        "Description": "Date when the entity was created. The date is in ISO 8601 and UTC.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "A human-friendly description."
       },
       "end_ip_address": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "End IP address of the range."
       },
       "external_id": {
         "Type": "String",
+        "Description": "External entity Id on the provider side.",
         "Computed": true
       },
       "fabric_network_id": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The Id of the fabric network.",
+        "Deprecated": "Please use `fabric_network_ids` instead."
+      },
+      "fabric_network_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "The Ids of the fabric networks.",
+        "ConflictsWith": [
+          "fabric_network_id"
+        ],
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "ip_version": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "IP address version: IPv4 or IPv6."
       },
       "links": {
         "Type": "Set",
@@ -3396,15 +3597,23 @@
       },
       "name": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The name of the network IP range."
       },
       "org_id": {
         "Type": "String",
+        "Description": "The id of the organization this entity belongs to.",
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Description": "Email of the user that owns the entity.",
         "Computed": true
       },
       "start_ip_address": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "Start IP address of the range."
       },
       "tags": {
         "Type": "Set",
@@ -3428,6 +3637,7 @@
       },
       "updated_at": {
         "Type": "String",
+        "Description": "Date when the entity was last updated. The date is ISO 8601 and UTC.",
         "Computed": true
       }
     },
@@ -4795,22 +5005,27 @@
     "vra_blueprint": {
       "content": {
         "Type": "String",
+        "Description": "Cloud template YAML content.",
         "Computed": true
       },
       "content_source_id": {
         "Type": "String",
+        "Description": "The id of the content source.",
         "Computed": true
       },
       "content_source_path": {
         "Type": "String",
+        "Description": "The path of the content source.",
         "Computed": true
       },
       "content_source_sync_at": {
         "Type": "String",
+        "Description": "Content source last sync at.",
         "Computed": true
       },
       "content_source_sync_messages": {
         "Type": "Set",
+        "Description": "Content source last sync status.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -4820,77 +5035,101 @@
       },
       "content_source_sync_status": {
         "Type": "String",
+        "Description": "Content source last sync status.",
         "Computed": true
       },
       "content_source_type": {
         "Type": "String",
+        "Description": "The type of the content source.",
         "Computed": true
       },
       "created_at": {
         "Type": "String",
+        "Description": "Date when the entity was created. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "created_by": {
         "Type": "String",
+        "Description": "The user the entity was created by.",
         "Computed": true
       },
       "description": {
         "Type": "String",
+        "Description": "A human-friendly description.",
         "Computed": true
       },
       "id": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Description": "The id of the cloud template.",
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
       },
       "name": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Description": "The name of the cloud template.",
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
       },
       "org_id": {
         "Type": "String",
+        "Description": "The id of the organization this entity belongs to.",
         "Computed": true
       },
       "project_id": {
         "Type": "String",
         "Optional": true,
+        "Description": "The id of the project to narrow the search while looking for cloud templates.",
         "Computed": true
       },
       "project_name": {
         "Type": "String",
+        "Description": "The name of the project the entity belongs to.",
         "Computed": true
       },
       "request_scope_org": {
         "Type": "Bool",
-        "Description": "Flag to indicate blueprint can be requested from any project in org",
+        "Description": "Flag to indicate whether this cloud template can be requested from any project in the organization this entity belongs to.",
         "Computed": true
       },
       "self_link": {
         "Type": "String",
+        "Description": "HATEOAS of the entity.",
         "Computed": true
       },
       "status": {
         "Type": "String",
+        "Description": "Status of the cloud template.",
         "Computed": true
       },
       "total_released_versions": {
         "Type": "Int",
+        "Description": "Total number of released versions.",
         "Computed": true
       },
       "total_versions": {
         "Type": "Int",
+        "Description": "Total number of versions.",
         "Computed": true
       },
       "updated_at": {
         "Type": "String",
+        "Description": "Date when the entity was last updated. The date is ISO 8601 and UTC.",
         "Computed": true
       },
       "updated_by": {
         "Type": "String",
+        "Description": "The user the entity was last updated by.",
         "Computed": true
       },
       "valid": {
         "Type": "Bool",
+        "Description": "Flag to indicate if the current content of the cloud template is valid.",
         "Computed": true
       },
       "validation_messages": {
@@ -4903,11 +5142,13 @@
           "Info": {
             "message": {
               "Type": "String",
+              "Description": "Validation message.",
               "Computed": true
             },
             "metadata": {
               "Type": "Map",
-              "Optional": true,
+              "Description": "Validation metadata.",
+              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -4916,14 +5157,17 @@
             },
             "path": {
               "Type": "String",
+              "Description": "Validation path.",
               "Computed": true
             },
             "resource_name": {
               "Type": "String",
+              "Description": "Name of the resource.",
               "Computed": true
             },
             "type": {
               "Type": "String",
+              "Description": "Message type.",
               "Computed": true
             }
           }
@@ -5003,44 +5247,69 @@
     "vra_catalog_item": {
       "created_at": {
         "Type": "String",
+        "Description": "Date-time when the entity was created.",
         "Computed": true
       },
       "created_by": {
         "Type": "String",
+        "Description": "The user the entity was created by.",
         "Computed": true
       },
       "description": {
         "Type": "String",
+        "Description": "Catalog item description.",
         "Computed": true
       },
       "expand_projects": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Flag to indicate whether to expand detailed project data for the catalog item."
       },
       "expand_versions": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Flag to indicate whether to expand detailed versions of the catalog item."
+      },
+      "form_id": {
+        "Type": "String",
+        "Description": "Form ID.",
+        "Computed": true
+      },
+      "icon_id": {
+        "Type": "String",
+        "Description": "Icon ID.",
+        "Computed": true
       },
       "id": {
         "Type": "String",
         "Optional": true,
+        "Description": "The id of catalog item. One of `id` or `name` must be provided.",
         "Computed": true
       },
       "last_updated_at": {
         "Type": "String",
+        "Description": "Date-time when the entity was last updated.",
         "Computed": true
       },
       "last_updated_by": {
         "Type": "String",
+        "Description": "The user the entity was last updated by.",
         "Computed": true
       },
       "name": {
         "Type": "String",
         "Optional": true,
+        "Description": "The name of the catalog item. One of `id` or `name` must be provided.",
         "Computed": true
+      },
+      "project_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The id of the project to narrow the search while looking for catalog items."
       },
       "project_ids": {
         "Type": "Set",
+        "Description": "List of associated project IDs that can be used for requesting this catalog item.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -5077,14 +5346,17 @@
       },
       "schema": {
         "Type": "String",
+        "Description": "Json schema describing request parameters.",
         "Computed": true
       },
       "source_id": {
         "Type": "String",
+        "Description": "LibraryItem source ID.",
         "Computed": true
       },
       "source_name": {
         "Type": "String",
+        "Description": "LibraryItem source name.",
         "Computed": true
       },
       "type": {
@@ -5124,15 +5396,18 @@
           "Info": {
             "created_at": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Date-time when catalog item version was created at."
             },
             "description": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "A human-friendly description."
             },
             "id": {
               "Type": "String",
-              "Optional": true
+              "Optional": true,
+              "Description": "Id of the catalog item version."
             }
           }
         }
@@ -6087,10 +6362,16 @@
         "Description": "Date when the entity was created. The date is in ISO 8601 and UTC.",
         "Computed": true
       },
-      "dcid": {
+      "dc_id": {
         "Type": "String",
         "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
         "Computed": true
+      },
+      "dcid": {
+        "Type": "String",
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "Computed": true,
+        "Deprecated": "Please use `dc_id` instead."
       },
       "description": {
         "Type": "String",
@@ -6218,57 +6499,67 @@
       }
     },
     "vra_deployment": {
-      "blueprint_content": {
-        "Type": "String",
-        "Optional": true,
-        "Computed": true
-      },
       "blueprint_id": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The id of the cloud template used to request the deployment.",
         "Computed": true
       },
       "blueprint_version": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The version of the cloud template used to request the deployment.",
         "Computed": true
       },
       "catalog_item_id": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The id of the catalog item used to request the deployment.",
         "Computed": true
       },
       "catalog_item_version": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The version of the catalog item used to request the deployment.",
         "Computed": true
       },
       "created_at": {
         "Type": "String",
-        "Optional": true,
+        "Description": "Date when the entity was created. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "created_by": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The user the entity was created by.",
         "Computed": true
       },
       "description": {
         "Type": "String",
-        "Optional": true,
+        "Description": "A human-friendly description.",
         "Computed": true
       },
       "expand_last_request": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Flag to indicate whether to expand last request on the deployment.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "expand_project": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Flag to indicate whether to expand project information.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "expand_resources": {
         "Type": "Bool",
-        "Optional": true
+        "Optional": true,
+        "Description": "Flag to indicate whether to expand resources in the deployment.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "expense": {
         "Type": "Set",
@@ -6329,11 +6620,15 @@
       "id": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Description": "The id of the deployment. One of `id` or `name` must be provided.",
+        "Computed": true,
+        "ConflictsWith": [
+          "name"
+        ]
       },
       "inputs": {
         "Type": "Map",
-        "Optional": true,
+        "Description": "Inputs provided by the user while requesting / updating the deployment.",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -6469,31 +6764,37 @@
       },
       "last_updated_at": {
         "Type": "String",
-        "Optional": true,
+        "Description": "Date when the entity was last updated. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "last_updated_by": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The user that last updated the deployment.",
         "Computed": true
       },
       "lease_expire_at": {
         "Type": "String",
-        "Optional": true,
+        "Description": "Date when the deployment lease expire. The date is in ISO 6801 and UTC.",
         "Computed": true
       },
       "name": {
         "Type": "String",
         "Optional": true,
-        "Computed": true
+        "Description": "The name of the deployment. One of `id` or `name` must be provided.",
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
       },
       "org_id": {
         "Type": "String",
+        "Description": "The Id of the organization this deployment belongs to.",
         "Computed": true
       },
       "owner": {
         "Type": "String",
-        "Optional": true
+        "Description": "The user this deployment belongs to.",
+        "Computed": true
       },
       "project": {
         "Type": "Set",
@@ -6524,7 +6825,7 @@
       },
       "project_id": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The id of the project this deployment belongs to.",
         "Computed": true
       },
       "resources": {
@@ -6637,7 +6938,7 @@
       },
       "status": {
         "Type": "String",
-        "Optional": true,
+        "Description": "The status of the deployment with respect to its life cycle operations.",
         "Computed": true
       }
     },
@@ -7192,32 +7493,104 @@
       }
     },
     "vra_image": {
+      "created_at": {
+        "Type": "String",
+        "Description": "Date when the entity was created. The date is in ISO 8601 and UTC.",
+        "Computed": true
+      },
+      "custom_properties": {
+        "Type": "Map",
+        "Description": "A list of key value pair of custom properties for the image resource.",
+        "Computed": true
+      },
       "description": {
         "Type": "String",
+        "Description": "A human-friendly description.",
         "Computed": true
       },
       "external_id": {
         "Type": "String",
+        "Description": "External entity Id on the provider side.",
         "Computed": true
       },
       "filter": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Description": "Search criteria to narrow down the image resource instance.",
+        "ConflictsWith": [
+          "id"
+        ]
       },
       "id": {
         "Type": "String",
-        "Computed": true
+        "Optional": true,
+        "Description": "The id of the image resource instance.",
+        "Computed": true,
+        "ConflictsWith": [
+          "filter"
+        ]
+      },
+      "links": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "href": {
+              "Type": "String",
+              "Optional": true
+            },
+            "hrefs": {
+              "Type": "Set",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "rel": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
       },
       "name": {
         "Type": "String",
+        "Description": "A human-friendly name used as an identifier for the image resource instance.",
+        "Computed": true
+      },
+      "org_id": {
+        "Type": "String",
+        "Description": "The id of the organization this entity belongs to.",
+        "Computed": true
+      },
+      "os_family": {
+        "Type": "String",
+        "Description": "Operating System family of the image.",
+        "Computed": true
+      },
+      "owner": {
+        "Type": "String",
+        "Description": "Email of the user that owns the entity.",
         "Computed": true
       },
       "private": {
         "Type": "Bool",
+        "Description": "Indicates whether this image is private. For vSphere, private images are considered to be templates and snapshots and public are Content Library Items.",
         "Computed": true
       },
       "region": {
         "Type": "String",
+        "Description": "The region of the image.",
+        "Computed": true
+      },
+      "updated_at": {
+        "Type": "String",
+        "Description": "Date when the entity was last updated. The date is ISO 8601 and UTC.",
         "Computed": true
       }
     },
@@ -8230,10 +8603,19 @@
           "Value": "false"
         }
       },
+      "dc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "ConflictsWith": [
+          "dcid"
+        ]
+      },
       "dcid": {
         "Type": "String",
         "Optional": true,
-        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure."
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "Deprecated": "Please use `dc_id` instead."
       },
       "hostname": {
         "Type": "String",
@@ -8413,10 +8795,19 @@
           "Value": "false"
         }
       },
+      "dc_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "ConflictsWith": [
+          "dcid"
+        ]
+      },
       "dcid": {
         "Type": "String",
         "Optional": true,
-        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure."
+        "Description": "Identifier of a data collector vm deployed in the on premise infrastructure.",
+        "Deprecated": "Please use `dc_id` instead."
       },
       "hostname": {
         "Type": "String",

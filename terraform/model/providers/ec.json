@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ec",
   "type": "provider",
-  "version": "v0.4.1",
+  "version": "v0.5.0",
   "provider": {
     "apikey": {
       "Type": "String",
@@ -170,6 +170,7 @@
               "Type": "List",
               "Optional": true,
               "Computed": true,
+              "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -408,6 +409,24 @@
                     "Type": "String",
                     "Required": true,
                     "Description": "ID of the Elasticsearch cluster that will be used as the source of the snapshot"
+                  }
+                }
+              }
+            },
+            "strategy": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Configuration strategy settings.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Configuration strategy type autodetect, grow_and_shrink, rolling_grow_and_shrink, rolling_all"
                   }
                 }
               }
@@ -739,6 +758,7 @@
               "Type": "List",
               "Optional": true,
               "Computed": true,
+              "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -796,6 +816,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "apm_https_endpoint": {
+              "Type": "String",
+              "Computed": true
+            },
             "config": {
               "Type": "List",
               "Optional": true,
@@ -851,6 +875,10 @@
                 "Value": "main-elasticsearch"
               }
             },
+            "fleet_https_endpoint": {
+              "Type": "String",
+              "Computed": true
+            },
             "http_endpoint": {
               "Type": "String",
               "Computed": true
@@ -879,6 +907,7 @@
               "Type": "List",
               "Optional": true,
               "Computed": true,
+              "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -998,6 +1027,7 @@
               "Type": "List",
               "Optional": true,
               "Computed": true,
+              "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
               "Elem": {
@@ -1279,6 +1309,49 @@
     }
   },
   "data-sources": {
+    "ec_aws_privatelink_endpoint": {
+      "__timeouts__": [
+        "default"
+      ],
+      "domain_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "vpc_service_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "zone_ids": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "ec_azure_privatelink_endpoint": {
+      "__timeouts__": [
+        "default"
+      ],
+      "domain_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_alias": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "ec_deployment": {
       "__timeouts__": [
         "default"
@@ -2000,6 +2073,23 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "ec_gcp_private_service_connect_endpoint": {
+      "__timeouts__": [
+        "default"
+      ],
+      "domain_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "region": {
+        "Type": "String",
+        "Required": true
+      },
+      "service_attachment_uri": {
+        "Type": "String",
+        "Computed": true
       }
     },
     "ec_stack": {

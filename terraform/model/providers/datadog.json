@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "datadog",
   "type": "provider",
-  "version": "v3.15.1",
+  "version": "v3.17.0",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -1341,6 +1341,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -3190,6 +3195,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -3532,7 +3542,7 @@
                   },
                   "widget": {
                     "Type": "List",
-                    "Required": true,
+                    "Optional": true,
                     "Description": "The list of widgets in this group.",
                     "IsBlock": true,
                     "ConfigImplicitMode": "Block",
@@ -4383,6 +4393,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -6232,6 +6247,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -8684,6 +8704,11 @@
                                             "Type": "String",
                                             "Optional": true,
                                             "Description": "Widget query."
+                                          },
+                                          "storage": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "Storage location (private beta)."
                                           }
                                         }
                                       }
@@ -9834,6 +9859,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -11155,6 +11185,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -11970,6 +12005,11 @@
                                                             }
                                                           }
                                                         }
+                                                      },
+                                                      "storage": {
+                                                        "Type": "String",
+                                                        "Optional": true,
+                                                        "Description": "Storage location (private beta)."
                                                       }
                                                     }
                                                   }
@@ -13463,6 +13503,80 @@
                             }
                           }
                         },
+                        "slo_list_definition": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The definition for an SLO (Service Level Objective) List widget.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "request": {
+                                "Type": "List",
+                                "Required": true,
+                                "Description": "A nested block describing the request to use when displaying the widget. Exactly one `request` block is allowed.",
+                                "MaxItems": 1,
+                                "MinItems": 1,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "query": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "Updated SLO List widget.",
+                                      "MaxItems": 1,
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "limit": {
+                                            "Type": "Int",
+                                            "Optional": true,
+                                            "Description": "Maximum number of results to display in the table.",
+                                            "Default": {
+                                              "Type": "int",
+                                              "Value": "100"
+                                            }
+                                          },
+                                          "query_string": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "Widget query."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "request_type": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The request type for the SLO List request."
+                                    }
+                                  }
+                                }
+                              },
+                              "title": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The title of the widget."
+                              },
+                              "title_align": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The alignment of the widget's title."
+                              },
+                              "title_size": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The size of the widget's title (defaults to 16)."
+                              }
+                            }
+                          }
+                        },
                         "sunburst_definition": {
                           "Type": "List",
                           "Optional": true,
@@ -14498,6 +14612,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -15971,6 +16090,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -17381,6 +17505,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -17765,6 +17894,115 @@
                                           }
                                         }
                                       }
+                                    }
+                                  }
+                                }
+                              },
+                              "title": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The title of the widget."
+                              },
+                              "title_align": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The alignment of the widget's title."
+                              },
+                              "title_size": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "The size of the widget's title (defaults to 16)."
+                              }
+                            }
+                          }
+                        },
+                        "topology_map_definition": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "The definition for a Topology Map widget.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "custom_link": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A nested block describing a custom link. Multiple `custom_link` blocks are allowed using the structure below.",
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "is_hidden": {
+                                      "Type": "Bool",
+                                      "Optional": true,
+                                      "Description": "The flag for toggling context menu link visibility."
+                                    },
+                                    "label": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The label for the custom link URL."
+                                    },
+                                    "link": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The URL of the custom link."
+                                    },
+                                    "override_label": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "The label id that refers to a context menu link item. When override_label is provided, the client request omits the label field."
+                                    }
+                                  }
+                                }
+                              },
+                              "request": {
+                                "Type": "List",
+                                "Optional": true,
+                                "Description": "A nested block describing the request to use when displaying the widget. Multiple request blocks are allowed using the structure below (`query` and `request_type` are required within the request).",
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "Block",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "query": {
+                                      "Type": "List",
+                                      "Required": true,
+                                      "Description": "The query for a Topology request.",
+                                      "IsBlock": true,
+                                      "ConfigImplicitMode": "Block",
+                                      "Elem": {
+                                        "Type": "SchemaInfo",
+                                        "Info": {
+                                          "data_source": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The data source for the Topology request ('service_map' or 'data_streams')."
+                                          },
+                                          "filters": {
+                                            "Type": "List",
+                                            "Required": true,
+                                            "Description": "Your environment and primary tag (or `*` if enabled for your account).",
+                                            "ConfigImplicitMode": "Attr",
+                                            "Elem": {
+                                              "Type": "SchemaElements",
+                                              "ElementsType": "String"
+                                            }
+                                          },
+                                          "service": {
+                                            "Type": "String",
+                                            "Required": true,
+                                            "Description": "The ID of the service to map."
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "request_type": {
+                                      "Type": "String",
+                                      "Required": true,
+                                      "Description": "The request type for the Topology request ('topology')."
                                     }
                                   }
                                 }
@@ -18267,6 +18505,11 @@
                                                       }
                                                     }
                                                   }
+                                                },
+                                                "storage": {
+                                                  "Type": "String",
+                                                  "Optional": true,
+                                                  "Description": "Storage location (private beta)."
                                                 }
                                               }
                                             }
@@ -20584,6 +20827,11 @@
                                 "Type": "String",
                                 "Optional": true,
                                 "Description": "Widget query."
+                              },
+                              "storage": {
+                                "Type": "String",
+                                "Optional": true,
+                                "Description": "Storage location (private beta)."
                               }
                             }
                           }
@@ -21734,6 +21982,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -23055,6 +23308,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -23870,6 +24128,11 @@
                                                 }
                                               }
                                             }
+                                          },
+                                          "storage": {
+                                            "Type": "String",
+                                            "Optional": true,
+                                            "Description": "Storage location (private beta)."
                                           }
                                         }
                                       }
@@ -25363,6 +25626,80 @@
                 }
               }
             },
+            "slo_list_definition": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The definition for an SLO (Service Level Objective) List widget.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "request": {
+                    "Type": "List",
+                    "Required": true,
+                    "Description": "A nested block describing the request to use when displaying the widget. Exactly one `request` block is allowed.",
+                    "MaxItems": 1,
+                    "MinItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query": {
+                          "Type": "List",
+                          "Required": true,
+                          "Description": "Updated SLO List widget.",
+                          "MaxItems": 1,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "limit": {
+                                "Type": "Int",
+                                "Optional": true,
+                                "Description": "Maximum number of results to display in the table.",
+                                "Default": {
+                                  "Type": "int",
+                                  "Value": "100"
+                                }
+                              },
+                              "query_string": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "Widget query."
+                              }
+                            }
+                          }
+                        },
+                        "request_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The request type for the SLO List request."
+                        }
+                      }
+                    }
+                  },
+                  "title": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The title of the widget."
+                  },
+                  "title_align": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The alignment of the widget's title."
+                  },
+                  "title_size": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The size of the widget's title (defaults to 16)."
+                  }
+                }
+              }
+            },
             "sunburst_definition": {
               "Type": "List",
               "Optional": true,
@@ -26398,6 +26735,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -27871,6 +28213,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -29281,6 +29628,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -29665,6 +30017,115 @@
                               }
                             }
                           }
+                        }
+                      }
+                    }
+                  },
+                  "title": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The title of the widget."
+                  },
+                  "title_align": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The alignment of the widget's title."
+                  },
+                  "title_size": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The size of the widget's title (defaults to 16)."
+                  }
+                }
+              }
+            },
+            "topology_map_definition": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "The definition for a Topology Map widget.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "custom_link": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "A nested block describing a custom link. Multiple `custom_link` blocks are allowed using the structure below.",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "is_hidden": {
+                          "Type": "Bool",
+                          "Optional": true,
+                          "Description": "The flag for toggling context menu link visibility."
+                        },
+                        "label": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The label for the custom link URL."
+                        },
+                        "link": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The URL of the custom link."
+                        },
+                        "override_label": {
+                          "Type": "String",
+                          "Optional": true,
+                          "Description": "The label id that refers to a context menu link item. When override_label is provided, the client request omits the label field."
+                        }
+                      }
+                    }
+                  },
+                  "request": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "A nested block describing the request to use when displaying the widget. Multiple request blocks are allowed using the structure below (`query` and `request_type` are required within the request).",
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "query": {
+                          "Type": "List",
+                          "Required": true,
+                          "Description": "The query for a Topology request.",
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "data_source": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The data source for the Topology request ('service_map' or 'data_streams')."
+                              },
+                              "filters": {
+                                "Type": "List",
+                                "Required": true,
+                                "Description": "Your environment and primary tag (or `*` if enabled for your account).",
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "service": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The ID of the service to map."
+                              }
+                            }
+                          }
+                        },
+                        "request_type": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The request type for the Topology request ('topology')."
                         }
                       }
                     }
@@ -30167,6 +30628,11 @@
                                           }
                                         }
                                       }
+                                    },
+                                    "storage": {
+                                      "Type": "String",
+                                      "Optional": true,
+                                      "Description": "Storage location (private beta)."
                                     }
                                   }
                                 }
@@ -32757,6 +33223,16 @@
         "Optional": true,
         "Description": "A boolean indicating whether tagged users will be notified on changes to this monitor. Defaults to `false`."
       },
+      "notify_by": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Controls what granularity a monitor alerts on. Only available for monitors with groupings. For instance, a monitor grouped by `cluster`, `namespace`, and `pod` can be configured to only notify on each new `cluster` violating the alert conditions by setting `notify_by` to `['cluster']`. Tags mentioned in `notify_by` must be a subset of the grouping tags in the query. For example, a query grouped by `cluster` and `namespace` cannot notify on `region`. Setting `notify_by` to `[*]` configures the monitor to notify as a simple-alert.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "notify_no_data": {
         "Type": "Bool",
         "Optional": true,
@@ -33311,6 +33787,11 @@
             }
           }
         }
+      },
+      "type": {
+        "Type": "String",
+        "Description": "The rule type.",
+        "Computed": true
       }
     },
     "datadog_security_monitoring_filter": {
@@ -33501,7 +33982,7 @@
                   "baseline_user_locations": {
                     "Type": "Bool",
                     "Optional": true,
-                    "Description": "If true, signals are suppressed for the first 24 hours. In that time, Datadog learns the user's regular access locations. This can be helpful to reduce noise and infer VPN usage or credentialed API access.",
+                    "Description": "If true, signals are suppressed for the first 24 hours. During that time, Datadog learns the user's regular access locations. This can be helpful to reduce noise and infer VPN usage or credentialed API access.",
                     "Default": {
                       "Type": "bool",
                       "Value": "false"
@@ -33570,7 +34051,7 @@
       },
       "query": {
         "Type": "List",
-        "Required": true,
+        "Optional": true,
         "Description": "Queries for selecting logs which are part of the rule.",
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -33603,7 +34084,7 @@
             "aggregation": {
               "Type": "String",
               "Optional": true,
-              "Description": "The aggregation type.",
+              "Description": "The aggregation type. For Signal Correlation rules, it must be event_count.",
               "Default": {
                 "Type": "datadogV2.SecurityMonitoringRuleQueryAggregation",
                 "Value": "count"
@@ -33632,12 +34113,13 @@
             "metric": {
               "Type": "String",
               "Optional": true,
-              "Description": "The target field to aggregate over when using the `sum`, `max`, or `new_value` aggregations."
+              "Description": "The target field to aggregate over when using the `sum`, `max`, or `geo_data` aggregations.",
+              "Deprecated": "Configure `metrics` instead. This attribute will be removed in the next major version of the provider."
             },
             "metrics": {
               "Type": "List",
               "Optional": true,
-              "Description": "Group of target fields to aggregate over when using the new value aggregations.",
+              "Description": "Group of target fields to aggregate over when using the `sum`, `max`, `geo_data`, or `new_value` aggregations. The `sum`, `max`, and `geo_data` aggregations only accept one value in this list, whereas the `new_value` aggregation accepts up to five values.",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -33654,6 +34136,60 @@
               "Type": "String",
               "Required": true,
               "Description": "Query to run on logs."
+            }
+          }
+        }
+      },
+      "signal_query": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Queries for selecting logs which are part of the rule.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "aggregation": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The aggregation type. For Signal Correlation rules, it must be event_count.",
+              "Default": {
+                "Type": "datadogV2.SecurityMonitoringRuleQueryAggregation",
+                "Value": "event_count"
+              }
+            },
+            "correlated_by_fields": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Fields to correlate by.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "correlated_query_index": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Index of the rule query used to retrieve the correlated field. An empty string applies correlation on the non-projected per query attributes of the rule.",
+              "Default": {
+                "Type": "string"
+              }
+            },
+            "default_rule_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Default Rule ID of the signal to correlate. This value is READ-ONLY."
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Name of the query. Not compatible with `new_value` aggregations."
+            },
+            "rule_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Rule ID of the signal to correlate."
             }
           }
         }
@@ -33676,6 +34212,13 @@
           "Type": "string",
           "Value": "log_detection"
         }
+      }
+    },
+    "datadog_service_definition_yaml": {
+      "service_definition": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The YAML/JSON formatted definition of the service"
       }
     },
     "datadog_service_level_objective": {
@@ -33882,9 +34425,14 @@
               "Optional": true,
               "Description": "Required when type = `http_header`. Defines the header to use to extract the value"
             },
+            "local_variable_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "When type is `local_variable`, name of the local variable to use to extract the value."
+            },
             "parser": {
               "Type": "List",
-              "Required": true,
+              "Optional": true,
               "MaxItems": 1,
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -34281,6 +34829,16 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "The request body."
+                  },
+                  "certificate_domains": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "By default, the client certificate is applied on the domain of the starting URL for browser tests. If you want your client certificate to be applied on other domains instead, add them in `certificate_domains`.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
                   },
                   "dns_server": {
                     "Type": "String",
@@ -34867,10 +35425,30 @@
                 }
               }
             },
+            "disable_cors": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Disable Cross-Origin Resource Sharing for browser tests."
+            },
+            "disable_csp": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Disable Content Security Policy for browser tests."
+            },
             "follow_redirects": {
               "Type": "Bool",
               "Optional": true,
               "Description": "Determines whether or not the API HTTP test should follow redirects."
+            },
+            "ignore_server_certificate_error": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Ignore server certificate error."
+            },
+            "initial_navigation_timeout": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Timeout before declaring the initial step as failed (in seconds) for browser tests."
             },
             "min_failure_duration": {
               "Type": "Int",
@@ -35143,6 +35721,16 @@
               "Type": "String",
               "Optional": true,
               "Description": "The request body."
+            },
+            "certificate_domains": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "By default, the client certificate is applied on the domain of the starting URL for browser tests. If you want your client certificate to be applied on other domains instead, add them in `certificate_domains`.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "dns_server": {
               "Type": "String",
@@ -35728,6 +36316,67 @@
         }
       }
     },
+    "datadog_logs_pipelines": {
+      "is_read_only": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Filter parameter for retrieved pipelines"
+      },
+      "logs_pipelines": {
+        "Type": "List",
+        "Description": "List of logs pipelines",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "filter": {
+              "Type": "List",
+              "Description": "Pipelines filter",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "query": {
+                    "Type": "String",
+                    "Description": "Pipeline filter criteria.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Description": "ID of the pipeline",
+              "Computed": true
+            },
+            "is_enabled": {
+              "Type": "Bool",
+              "Description": "Whether or not the pipeline is enabled.",
+              "Computed": true
+            },
+            "is_read_only": {
+              "Type": "Bool",
+              "Description": "Whether or not the pipeline can be edited.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "The name of the pipeline.",
+              "Computed": true
+            },
+            "type": {
+              "Type": "String",
+              "Description": "Whether or not the pipeline can be edited.",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
     "datadog_monitor": {
       "enable_logs_sample": {
         "Type": "Bool",
@@ -35864,6 +36513,16 @@
         "Type": "Bool",
         "Description": "Whether or not tagged users are notified on changes to the monitor.",
         "Computed": true
+      },
+      "notify_by": {
+        "Type": "Set",
+        "Description": "Controls what granularity a monitor alerts on. Only available for monitors with groupings. For instance, a monitor grouped by `cluster`, `namespace`, and `pod` can be configured to only notify on each new `cluster` violating the alert conditions by setting `notify_by` to `['cluster']`. Tags mentioned in `notify_by` must be a subset of the grouping tags in the query. For example, a query grouped by `cluster` and `namespace` cannot notify on `region`. Setting `notify_by` to `[*]` configures the monitor to notify as a simple-alert.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "notify_no_data": {
         "Type": "Bool",
@@ -36301,7 +36960,7 @@
                         "baseline_user_locations": {
                           "Type": "Bool",
                           "Optional": true,
-                          "Description": "If true, signals are suppressed for the first 24 hours. In that time, Datadog learns the user's regular access locations. This can be helpful to reduce noise and infer VPN usage or credentialed API access.",
+                          "Description": "If true, signals are suppressed for the first 24 hours. During that time, Datadog learns the user's regular access locations. This can be helpful to reduce noise and infer VPN usage or credentialed API access.",
                           "Default": {
                             "Type": "bool",
                             "Value": "false"
@@ -36370,7 +37029,7 @@
             },
             "query": {
               "Type": "List",
-              "Required": true,
+              "Optional": true,
               "Description": "Queries for selecting logs which are part of the rule.",
               "IsBlock": true,
               "ConfigImplicitMode": "Block",
@@ -36403,7 +37062,7 @@
                   "aggregation": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The aggregation type.",
+                    "Description": "The aggregation type. For Signal Correlation rules, it must be event_count.",
                     "Default": {
                       "Type": "datadogV2.SecurityMonitoringRuleQueryAggregation",
                       "Value": "count"
@@ -36432,12 +37091,13 @@
                   "metric": {
                     "Type": "String",
                     "Optional": true,
-                    "Description": "The target field to aggregate over when using the `sum`, `max`, or `new_value` aggregations."
+                    "Description": "The target field to aggregate over when using the `sum`, `max`, or `geo_data` aggregations.",
+                    "Deprecated": "Configure `metrics` instead. This attribute will be removed in the next major version of the provider."
                   },
                   "metrics": {
                     "Type": "List",
                     "Optional": true,
-                    "Description": "Group of target fields to aggregate over when using the new value aggregations.",
+                    "Description": "Group of target fields to aggregate over when using the `sum`, `max`, `geo_data`, or `new_value` aggregations. The `sum`, `max`, and `geo_data` aggregations only accept one value in this list, whereas the `new_value` aggregation accepts up to five values.",
                     "Computed": true,
                     "ConfigImplicitMode": "Attr",
                     "Elem": {
@@ -36454,6 +37114,60 @@
                     "Type": "String",
                     "Required": true,
                     "Description": "Query to run on logs."
+                  }
+                }
+              }
+            },
+            "signal_query": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Queries for selecting logs which are part of the rule.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "aggregation": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "The aggregation type. For Signal Correlation rules, it must be event_count.",
+                    "Default": {
+                      "Type": "datadogV2.SecurityMonitoringRuleQueryAggregation",
+                      "Value": "event_count"
+                    }
+                  },
+                  "correlated_by_fields": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Fields to correlate by.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "correlated_query_index": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Index of the rule query used to retrieve the correlated field. An empty string applies correlation on the non-projected per query attributes of the rule.",
+                    "Default": {
+                      "Type": "string"
+                    }
+                  },
+                  "default_rule_id": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Default Rule ID of the signal to correlate. This value is READ-ONLY."
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Name of the query. Not compatible with `new_value` aggregations."
+                  },
+                  "rule_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Rule ID of the signal to correlate."
                   }
                 }
               }

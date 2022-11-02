@@ -3,8 +3,14 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "civo",
   "type": "provider",
-  "version": "v1.0.23",
+  "version": "v1.0.25",
   "provider": {
+    "api_endpoint": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The Base URL to use for CIVO API.",
+      "DefaultFunc": "ENV(CIVO_API_URL)"
+    },
     "region": {
       "Type": "String",
       "Optional": true,
@@ -206,7 +212,8 @@
       "region": {
         "Type": "String",
         "Optional": true,
-        "Description": "The firewall region, if is not defined we use the global defined in the provider"
+        "Description": "The firewall region, if is not defined we use the global defined in the provider",
+        "Computed": true
       }
     },
     "civo_firewall_rule": {

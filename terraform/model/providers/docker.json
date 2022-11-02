@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "docker",
   "type": "provider",
-  "version": "v2.21.0",
+  "version": "v2.22.0",
   "provider": {
     "ca_material": {
       "Type": "String",
@@ -162,6 +162,15 @@
         "Type": "String",
         "Description": "The logs of the container if its execution is done (`attach` must be disabled).",
         "Computed": true
+      },
+      "container_read_refresh_timeout_milliseconds": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The total number of milliseconds to wait for the container to reach status 'running'",
+        "Default": {
+          "Type": "int",
+          "Value": "15000"
+        }
       },
       "cpu_set": {
         "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "baiducloud",
   "type": "provider",
-  "version": "v1.15.8",
+  "version": "v1.16.3",
   "provider": {
     "access_key": {
       "Type": "String",
@@ -160,6 +160,13 @@
             "Type": "String",
             "Optional": true,
             "Description": "Use this to override the default endpoint URL constructed from the `region`. It's typically used to connect to custom VPC endpoints.",
+            "Default": {
+              "Type": "string"
+            }
+          },
+          "vpn": {
+            "Type": "String",
+            "Optional": true,
             "Default": {
               "Type": "string"
             }
@@ -1183,6 +1190,45 @@
         "Computed": true
       }
     },
+    "baiducloud_blb_backend_server": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "backend_server_list": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Server group bound backend server list",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "instance_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Backend server instance ID"
+            },
+            "private_ip": {
+              "Type": "String",
+              "Description": "Backend server instance bind private ip",
+              "Computed": true
+            },
+            "weight": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Backend server instance weight in this group, range from 0-100"
+            }
+          }
+        }
+      },
+      "blb_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the lication LoadBalance instance"
+      }
+    },
     "baiducloud_blb_listener": {
       "__timeouts__": [
         "create",
@@ -1383,6 +1429,109 @@
         "Optional": true,
         "Description": "Listener xForwardedFor, determine get client real ip or not, default false",
         "Computed": true
+      }
+    },
+    "baiducloud_blb_securitygroup": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "bind_security_groups": {
+        "Type": "List",
+        "Description": "blb bind security_groups",
+        "Computed": true,
+        "MinItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "security_group_desc": {
+              "Type": "String",
+              "Description": "desc of security group",
+              "Computed": true
+            },
+            "security_group_id": {
+              "Type": "String",
+              "Description": "bind security id",
+              "Computed": true
+            },
+            "security_group_name": {
+              "Type": "String",
+              "Description": "name of security group",
+              "Computed": true
+            },
+            "security_group_rules": {
+              "Type": "List",
+              "Description": "rules of security groups",
+              "Computed": true,
+              "MinItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "dest_group_id": {
+                    "Type": "String",
+                    "Description": "dest group id",
+                    "Computed": true
+                  },
+                  "dest_ip": {
+                    "Type": "String",
+                    "Description": "dest ip",
+                    "Computed": true
+                  },
+                  "direction": {
+                    "Type": "String",
+                    "Description": "direction",
+                    "Computed": true
+                  },
+                  "ethertype": {
+                    "Type": "String",
+                    "Description": "ethertype",
+                    "Computed": true
+                  },
+                  "port_range": {
+                    "Type": "String",
+                    "Description": "portRange",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "String",
+                    "Description": "protocol",
+                    "Computed": true
+                  },
+                  "security_group_rule_id": {
+                    "Type": "String",
+                    "Description": "id of security group rule",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "vpc_name": {
+              "Type": "String",
+              "Description": "name of vpc",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "blb_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "id of the blb"
+      },
+      "security_group_ids": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "ids of the security.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       }
     },
     "baiducloud_bos_bucket": {
@@ -6995,6 +7144,250 @@
         }
       }
     },
+    "baiducloud_cdn_domain_config_advanced": {
+      "compress": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Page compression configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether page compression is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Compression type. Defaults to `gzip`. Other valid values: `br`, `all`(br + gzip)",
+              "Default": {
+                "Type": "string",
+                "Value": "gzip"
+              }
+            }
+          }
+        }
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      },
+      "file_trim": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether page optimization is enabled. Defaults to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "http_header": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Http header configuration of the acceleration domain.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Indicates whether to delete or add the header. Valid values: `add`, `remove`"
+            },
+            "describe": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Description. Length cannot exceed 100 characters."
+            },
+            "header": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Http header field. Can be a standard Header of HTTP, or a user-defined one, such as `x-bce-authorization`."
+            },
+            "type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Header type. Valid values: `origin`(forwards to origin), `response`(responds to the user)."
+            },
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Value of the header field. A limited number of variables are supported."
+            }
+          }
+        }
+      },
+      "ipv6_dispatch": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IPv6 configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether supporting for accessing cdn via ipv6 is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "media_drag": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Video dragging configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "flv": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Configuration of pseudo-streaming in flv type.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "drag_mode": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Drag in seconds for mp4 type or in bytes for flv type. Valid value for mp4: `second`. Valid value for flv: `byteAV`, `byte`."
+                  },
+                  "end_arg_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Name of the start parameter. Defaults to `end`. Cannot be the same as `start_arg_name`.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "end"
+                    }
+                  },
+                  "file_suffix": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "Video file extensions. For example, mp4 type may use [`mp4`, `m4v`, `m4a`], flv type may use `flv`.",
+                    "MinItems": 1,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "start_arg_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Name of the start parameter. Defaults to `start`. Cannot be the same as `end_arg_name`.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "start"
+                    }
+                  }
+                }
+              }
+            },
+            "mp4": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Configuration of pseudo-streaming in mp4 type.",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "drag_mode": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Drag in seconds for mp4 type or in bytes for flv type. Valid value for mp4: `second`. Valid value for flv: `byteAV`, `byte`."
+                  },
+                  "end_arg_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Name of the start parameter. Defaults to `end`. Cannot be the same as `start_arg_name`.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "end"
+                    }
+                  },
+                  "file_suffix": {
+                    "Type": "Set",
+                    "Optional": true,
+                    "Description": "Video file extensions. For example, mp4 type may use [`mp4`, `m4v`, `m4a`], flv type may use `flv`.",
+                    "MinItems": 1,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  },
+                  "start_arg_name": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "Name of the start parameter. Defaults to `start`. Cannot be the same as `end_arg_name`.",
+                    "Default": {
+                      "Type": "string",
+                      "Value": "start"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "quic": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether QUIC protocol is enabled. Defaults to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "seo_switch": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "SEO optimization configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "directly_origin": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Whether SEO optimization is enabled. Defaults to `OFF`. Other valid value: `ON`",
+              "Default": {
+                "Type": "string",
+                "Value": "OFF"
+              }
+            }
+          }
+        }
+      }
+    },
     "baiducloud_cdn_domain_config_cache": {
       "cache_share": {
         "Type": "List",
@@ -7138,6 +7531,187 @@
               }
             }
           }
+        }
+      }
+    },
+    "baiducloud_cdn_domain_config_https": {
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      },
+      "https": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Https configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cert_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "SSL Certificate ID. Can be obtained through data source `baiducloud_cdn_domain_certificate`"
+            },
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether https acceleration is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "http2_enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether HTTP2 feature is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "http_redirect": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether redirecting HTTP requests to HTTPS is enabled. Defaults to `false`. Cannot be true at the same time as `https_redirect`",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "http_redirect_code": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "HTTP redirection status code. Defaults to `302`. Other valid value: `301`.",
+              "Default": {
+                "Type": "int",
+                "Value": "302"
+              }
+            },
+            "https_redirect": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether redirecting HTTPS requests to HTTP is enabled. Defaults to `false`. Cannot be true at the same time as `http_redirect`",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "https_redirect_code": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "HTTPS redirection status code. Defaults to `302`. Other valid value: `301`.",
+              "Default": {
+                "Type": "int",
+                "Value": "302"
+              }
+            },
+            "ssl_protocols": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Supported TLS Versions. Valid values: `TLSv1.0`, `TLSv1.1`, `TLSv1.2`, `TLSv1.3`",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "verify_client": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether HTTPS two-way authentication is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            }
+          }
+        }
+      },
+      "ocsp": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether OCSP stapling is enabled. Defaults to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      }
+    },
+    "baiducloud_cdn_domain_config_origin": {
+      "client_ip": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Getting user's real IP configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enabled": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Whether getting user's real IP is enabled. Defaults to `false`.",
+              "Default": {
+                "Type": "bool",
+                "Value": "false"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "IP type. Valid values: `True-Client-Ip`, `X-Real-IP`."
+            }
+          }
+        }
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      },
+      "offline_mode": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether offline mode is enabled. Defaults to `false`.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "origin_protocol": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Forward-to-origin protocol configuration of the acceleration domain.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "value": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Protocol value. Defaults to `http`. Other valid values: `https`, `*`",
+              "Default": {
+                "Type": "string",
+                "Value": "http"
+              }
+            }
+          }
+        }
+      },
+      "range_switch": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Whether range forwarding to origin is enabled. Defaults to `off`. Other valid value: `on`",
+        "Default": {
+          "Type": "string",
+          "Value": "off"
         }
       }
     },
@@ -7845,6 +8419,105 @@
         }
       }
     },
+    "baiducloud_deployset": {
+      "az_intstance_statis_list": {
+        "Type": "List",
+        "Description": "Availability Zone Instance Statistics List.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "bbc_instance_cnt": {
+              "Type": "Int",
+              "Description": "Count of BBC instance which is in the deployset.",
+              "Computed": true
+            },
+            "bbc_instance_ids": {
+              "Type": "Set",
+              "Description": "IDs of BBC instance which is in the deployset..",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "bcc_instance_cnt": {
+              "Type": "Int",
+              "Description": "Count of BCC instance which is in the deployset.",
+              "Computed": true
+            },
+            "bcc_instance_ids": {
+              "Type": "Set",
+              "Description": "IDs of BCC instance which is in the deployset.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "instance_count": {
+              "Type": "Int",
+              "Description": "Count of instance which is in the deployset.",
+              "Computed": true
+            },
+            "instance_ids": {
+              "Type": "Set",
+              "Description": "IDs of instance which is in the deployset.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "instance_total": {
+              "Type": "Int",
+              "Description": "Total of instance which is in the deployset.",
+              "Computed": true
+            },
+            "zone_name": {
+              "Type": "String",
+              "Description": "Zone name of deployset.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "concurrency": {
+        "Type": "Int",
+        "Description": "concurrency of deployset.",
+        "Computed": true
+      },
+      "desc": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the deployset."
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the deployset. Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as \"-\",\"_\",\"/\",\".\", the value must start with a letter, length 1-65."
+      },
+      "short_id": {
+        "Type": "String",
+        "Description": "deployset short id.",
+        "Computed": true
+      },
+      "strategy": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Strategy of deployset.Available values are HOST_HA, RACK_HA and TOR_HA"
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "deployset uuid.",
+        "Computed": true
+      }
+    },
     "baiducloud_dts": {
       "__timeouts__": [
         "create",
@@ -8275,6 +8948,122 @@
         "Description": "Instance type which need to associate with EIP, support BCC/BLB/NAT/VPN"
       }
     },
+    "baiducloud_eni": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "created_time": {
+        "Type": "String",
+        "Description": "ENI create time",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the ENI"
+      },
+      "enterprise_security_group_ids": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Specifies the set of bound enterprise security group IDs",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "instance_id": {
+        "Type": "String",
+        "Description": "Instance ID the ENI bind",
+        "Computed": true
+      },
+      "mac_address": {
+        "Type": "String",
+        "Description": "Mac address of the ENI",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the ENI. Support for uppercase and lowercase letters, numbers, Chinese and special characters, such as \"-\",\"_\",\"/\",\".\", the value must start with a letter, length 1-65."
+      },
+      "private_ip": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Specified intranet IP information",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "primary": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "True or false, true mean it is primary IP, it's private IP address can not modify, only one primary IP in a ENI"
+            },
+            "private_ip_address": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Intranet IP address of the ENI"
+            },
+            "public_ip_address": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The public IP address of the ENI, that is, the eip address"
+            }
+          }
+        }
+      },
+      "security_group_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Specifies the set of bound security group IDs",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "Status of ENI, may be inuse, binding, unbinding, available",
+        "Computed": true
+      },
+      "subnet_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Subnet ID which ENI belong to"
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Description": "VPC id which the ENI belong to",
+        "Computed": true
+      },
+      "zone_name": {
+        "Type": "String",
+        "Description": "Availability zone name which ENI belong to",
+        "Computed": true
+      }
+    },
+    "baiducloud_eni_attachment": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "eni_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Eni ID"
+      },
+      "instance_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Instance ID"
+      }
+    },
     "baiducloud_iam_group": {
       "__timeouts__": [
         "create",
@@ -8569,6 +9358,16 @@
         "Default": {
           "Type": "bool",
           "Value": "false"
+        }
+      },
+      "deploy_set_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Deploy set ids the instance belong to",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
       "description": {
@@ -9668,7 +10467,7 @@
       "disk_flavor": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Storage size(GB) when use PegaDB. Must be between `50` and `160`"
+        "Description": "Storage size(GB) when use PegaDB."
       },
       "disk_type": {
         "Type": "String",
@@ -9998,6 +10797,58 @@
         ]
       }
     },
+    "baiducloud_sms_signature": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "content": {
+        "Type": "String",
+        "Required": true,
+        "Description": "signature content of sms"
+      },
+      "content_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "type of content"
+      },
+      "country_type": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "signature type of country"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "LoadBalance instance's status"
+      },
+      "review": {
+        "Type": "String",
+        "Description": "commit review",
+        "Computed": true
+      },
+      "signature_file_base64": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "base64 of signature file"
+      },
+      "signature_file_format": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Format of signature file"
+      },
+      "status": {
+        "Type": "String",
+        "Description": "status",
+        "Computed": true
+      },
+      "user_id": {
+        "Type": "String",
+        "Description": "User id",
+        "Computed": true
+      }
+    },
     "baiducloud_snapshot": {
       "__timeouts__": [
         "create",
@@ -10132,6 +10983,209 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "baiducloud_vpn_conn": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of VPN conn."
+      },
+      "ike_config": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "IKE config.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ike_auth_alg": {
+              "Type": "String",
+              "Required": true,
+              "Description": "IKE Authenticate Algorithm"
+            },
+            "ike_enc_alg": {
+              "Type": "String",
+              "Required": true,
+              "Description": "IKE Encryption Algorithm."
+            },
+            "ike_life_time": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "IKE life time."
+            },
+            "ike_mode": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Negotiation mode."
+            },
+            "ike_pfs": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Diffie-Hellman key exchange algorithm."
+            },
+            "ike_version": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Version of IKE."
+            }
+          }
+        }
+      },
+      "ipsec_config": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Ipsec config details.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ipsec_auth_alg": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Ipsec Authenticate Algorithm."
+            },
+            "ipsec_enc_alg": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Ipsec Encryption Algorithm."
+            },
+            "ipsec_life_time": {
+              "Type": "Int",
+              "Required": true,
+              "Description": "Ipsec life time."
+            },
+            "ipsec_pfs": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Diffie-Hellman key exchange algorithm."
+            }
+          }
+        }
+      },
+      "local_ip": {
+        "Type": "String",
+        "Description": "Public IP of the VPN gateway.",
+        "Computed": true
+      },
+      "local_subnets": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Local network cidr list.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "remote_ip": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Public IP of the peer VPN gateway."
+      },
+      "remote_subnets": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Peer network cidr list.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "secret_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Shared secret key, 8 to 17 characters, English, numbers and symbols must exist at the same time, the symbols are limited to !@#$%^*()_."
+      },
+      "vpn_conn_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of vpn conn.",
+        "Computed": true
+      },
+      "vpn_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "VPN id which vpn conn belong to."
+      }
+    },
+    "baiducloud_vpn_gateway": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "bandwidth_in_mbps": {
+        "Type": "String",
+        "Description": "Eip bandwidth(Mbps), if payment_timing is Prepaid or billing_method is ByBandWidth, support between 1 and 200, if billing_method is ByTraffic, support between 1 and 1000",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description of the VPN. The value is no more than 200 characters."
+      },
+      "eip": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Eip address."
+      },
+      "expired_time": {
+        "Type": "String",
+        "Description": "Expired time of VPN gateway.",
+        "Computed": true
+      },
+      "payment_timing": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Payment timing of billing, which can be Prepaid or Postpaid. The default is Postpaid."
+      },
+      "reservation": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Reservation of the VPN gateway.",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "status": {
+        "Type": "String",
+        "Description": "VPN gateway status.",
+        "Computed": true
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the VPC which vpn gateway belong to."
+      },
+      "vpn_conn_num": {
+        "Type": "Int",
+        "Description": "Number of VPN tunnels.",
+        "Computed": true
+      },
+      "vpn_conns": {
+        "Type": "List",
+        "Description": "ID list of VPN tunnels.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "vpn_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the VPN gateway, which cannot take the value \"default\", the length is no more than 65 characters, and the value can be composed of numbers, characters and underscores."
       }
     }
   },
@@ -11386,6 +12440,72 @@
         "Description": "bbc vpc id."
       }
     },
+    "baiducloud_blb_backend_servers": {
+      "backend_server_list": {
+        "Type": "List",
+        "Description": "backend server list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "instance_id": {
+              "Type": "String",
+              "Description": "Backend server instance ID",
+              "Computed": true
+            },
+            "private_ip": {
+              "Type": "String",
+              "Description": "Backend server instance bind private ip",
+              "Computed": true
+            },
+            "weight": {
+              "Type": "Int",
+              "Description": "Backend server instance weight in this group, range from 0-100",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "blb_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the LoadBalance instance to be queried"
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Query result output file path"
+      }
+    },
     "baiducloud_blb_listeners": {
       "blb_id": {
         "Type": "String",
@@ -11615,6 +12735,124 @@
         "Type": "String",
         "Optional": true,
         "Description": "Protocol of the Listener to be queried"
+      }
+    },
+    "baiducloud_blb_securitygroups": {
+      "bind_security_groups": {
+        "Type": "List",
+        "Description": "blb bind security_groups",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "security_group_desc": {
+              "Type": "String",
+              "Description": "desc of security group",
+              "Computed": true
+            },
+            "security_group_id": {
+              "Type": "String",
+              "Description": "bind security id",
+              "Computed": true
+            },
+            "security_group_name": {
+              "Type": "String",
+              "Description": "name of security group",
+              "Computed": true
+            },
+            "security_group_rules": {
+              "Type": "List",
+              "Description": "rules of security groups",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "dest_group_id": {
+                    "Type": "String",
+                    "Description": "dest group id",
+                    "Computed": true
+                  },
+                  "dest_ip": {
+                    "Type": "String",
+                    "Description": "dest ip",
+                    "Computed": true
+                  },
+                  "direction": {
+                    "Type": "String",
+                    "Description": "direction",
+                    "Computed": true
+                  },
+                  "ethertype": {
+                    "Type": "String",
+                    "Description": "ethertype",
+                    "Computed": true
+                  },
+                  "port_range": {
+                    "Type": "String",
+                    "Description": "portRange",
+                    "Computed": true
+                  },
+                  "protocol": {
+                    "Type": "String",
+                    "Description": "protocol",
+                    "Computed": true
+                  },
+                  "security_group_rule_id": {
+                    "Type": "String",
+                    "Description": "id of security group rule",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "vpc_name": {
+              "Type": "String",
+              "Description": "name of vpc",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "blb_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "id of the blb"
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "blb securitygroup search result output file"
       }
     },
     "baiducloud_blbs": {
@@ -15243,6 +16481,65 @@
         "Computed": true
       }
     },
+    "baiducloud_cdn_domain_certificate": {
+      "certificate": {
+        "Type": "List",
+        "Description": "Certificate information.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cert_common_name": {
+              "Type": "String",
+              "Description": "Common name of the certificate.",
+              "Computed": true
+            },
+            "cert_create_time": {
+              "Type": "String",
+              "Description": "Creation time of certificate.",
+              "Computed": true
+            },
+            "cert_dns_names": {
+              "Type": "String",
+              "Description": "Other DNS name of Certificate.",
+              "Computed": true
+            },
+            "cert_id": {
+              "Type": "String",
+              "Description": "Certificate ID.",
+              "Computed": true
+            },
+            "cert_name": {
+              "Type": "String",
+              "Description": "Certificate name.",
+              "Computed": true
+            },
+            "cert_start_time": {
+              "Type": "String",
+              "Description": "Effective time of certificate.",
+              "Computed": true
+            },
+            "cert_stop_time": {
+              "Type": "String",
+              "Description": "Expiration time of certificate.",
+              "Computed": true
+            },
+            "cert_update_time": {
+              "Type": "String",
+              "Description": "Update time of certificate.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "domain": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the acceleration domain."
+      }
+    },
     "baiducloud_cdn_domains": {
       "domains": {
         "Type": "List",
@@ -15795,6 +17092,114 @@
         }
       }
     },
+    "baiducloud_deploysets": {
+      "deploy_sets": {
+        "Type": "List",
+        "Description": "Image list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "az_intstance_statis_list": {
+              "Type": "List",
+              "Description": "Availability Zone Instance Statistics List.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "bbc_instance_cnt": {
+                    "Type": "Int",
+                    "Description": "Count of BBC instance which is in the deployset.",
+                    "Computed": true
+                  },
+                  "bcc_instance_cnt": {
+                    "Type": "Int",
+                    "Description": "Count of BCC instance which is in the deployset.",
+                    "Computed": true
+                  },
+                  "instance_count": {
+                    "Type": "Int",
+                    "Description": "Count of instance which is in the deployset.",
+                    "Computed": true
+                  },
+                  "instance_total": {
+                    "Type": "Int",
+                    "Description": "Total of instance which is in the deployset.",
+                    "Computed": true
+                  },
+                  "zone_name": {
+                    "Type": "String",
+                    "Description": "Zone name of deployset.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "concurrency": {
+              "Type": "Int",
+              "Description": "concurrency of deployset.",
+              "Computed": true
+            },
+            "deployset_id": {
+              "Type": "String",
+              "Description": "Id of deployset.",
+              "Computed": true
+            },
+            "desc": {
+              "Type": "String",
+              "Description": "Description of the deployset.",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of the deployset.",
+              "Computed": true
+            },
+            "strategy": {
+              "Type": "String",
+              "Description": "Strategy of deployset.Available values are HOST_HA, RACK_HA and TOR_HA",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "deployset search result output file"
+      }
+    },
     "baiducloud_dtss": {
       "dts_name": {
         "Type": "String",
@@ -16235,6 +17640,169 @@
         "Description": "Eip status"
       }
     },
+    "baiducloud_enis": {
+      "enis": {
+        "Type": "List",
+        "Description": "ENI list",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_time": {
+              "Type": "String",
+              "Description": "ENI create time",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "Description of ENI",
+              "Computed": true
+            },
+            "eni_id": {
+              "Type": "String",
+              "Description": "ENI ID",
+              "Computed": true
+            },
+            "enterprise_security_group_ids": {
+              "Type": "List",
+              "Description": "ENI enterprise security group IDs",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "instance_id": {
+              "Type": "String",
+              "Description": "Instance id which ENI bind",
+              "Computed": true
+            },
+            "mac_address": {
+              "Type": "String",
+              "Description": "ENI Mac Address",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Description": "Name of ENI",
+              "Computed": true
+            },
+            "private_ip_set": {
+              "Type": "List",
+              "Description": "ENI private ip set",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "primary": {
+                    "Type": "Bool",
+                    "Description": "True or false, true mean it is primary IP, it's private IP address can not modify, only one primary IP in a ENI",
+                    "Computed": true
+                  },
+                  "private_ip_address": {
+                    "Type": "String",
+                    "Description": "Private IP address",
+                    "Computed": true
+                  },
+                  "public_ip_address": {
+                    "Type": "String",
+                    "Description": "Public IP address",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "security_group_ids": {
+              "Type": "List",
+              "Description": "ENI security group IDs",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Status of ENI",
+              "Computed": true
+            },
+            "subnet_id": {
+              "Type": "String",
+              "Description": "Subnet ID which ENI belong to",
+              "Computed": true
+            },
+            "zone_name": {
+              "Type": "String",
+              "Description": "ENI Availability Zone Name",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "instance_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Instance id the ENI bind"
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of ENI"
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "ENI list result output file"
+      },
+      "private_ip_address": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Eni private IP address",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Vpc id which ENI belong to"
+      }
+    },
     "baiducloud_images": {
       "filter": {
         "Type": "Set",
@@ -16422,6 +17990,16 @@
               "Type": "String",
               "Description": "The dedicated host id of the instance.",
               "Computed": true
+            },
+            "deploy_set_ids": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Deploy set ids the instance belong to",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
             },
             "description": {
               "Type": "String",
@@ -17864,6 +19442,54 @@
         "Description": "Security Group attached vpc id"
       }
     },
+    "baiducloud_sms_signature": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Query result output file path"
+      },
+      "signature_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "signature id"
+      },
+      "signature_info": {
+        "Type": "Map",
+        "Description": "signature content of sms",
+        "Computed": true,
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "baiducloud_snapshots": {
       "filter": {
         "Type": "Set",
@@ -17956,11 +19582,6 @@
       }
     },
     "baiducloud_specs": {
-      "cpu_count": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Useful cpu count of the search spec"
-      },
       "filter": {
         "Type": "Set",
         "Optional": true,
@@ -17988,29 +19609,14 @@
           }
         }
       },
-      "instance_type": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Instance type of the search spec"
-      },
-      "memory_size_in_gb": {
-        "Type": "Int",
-        "Optional": true,
-        "Description": "Useful memory size in GB of the search spec"
-      },
-      "name_regex": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "Regex pattern of the search spec name"
-      },
       "output_file": {
         "Type": "String",
         "Optional": true,
-        "Description": "Output file for saving result."
+        "Description": "BCC Flavor search result output file"
       },
       "specs": {
         "Type": "List",
-        "Description": "Useful spec list, when create a bcc instance, suggest use instance_type/cpu_count/memory_capacity_in_gb as bcc instance parameters",
+        "Description": "Specs list",
         "Computed": true,
         "IsBlock": true,
         "ConfigImplicitMode": "ComputedBlock",
@@ -18019,31 +19625,101 @@
           "Info": {
             "cpu_count": {
               "Type": "Int",
-              "Description": "Useful cpu count",
+              "Description": "CPU count",
               "Computed": true
             },
-            "instance_type": {
+            "cpu_ghz": {
               "Type": "String",
-              "Description": "Useful instance type",
+              "Description": "CPU frequency",
               "Computed": true
             },
-            "local_disk_size_in_gb": {
+            "cpu_model": {
+              "Type": "String",
+              "Description": "CPU model name",
+              "Computed": true
+            },
+            "ephemeral_disk_count": {
               "Type": "Int",
-              "Description": "Useful local disk size in GB",
+              "Description": "Count of ephemeral disk",
               "Computed": true
             },
-            "memory_size_in_gb": {
+            "ephemeral_disk_in_gb": {
               "Type": "Int",
-              "Description": "Useful memory size in GB",
+              "Description": "Ephemeral disk size in gb",
               "Computed": true
             },
-            "name": {
+            "ephemeral_disk_type": {
+              "Type": "String",
+              "Description": "Type of ephemeral disk",
+              "Computed": true
+            },
+            "fpga_card_count": {
+              "Type": "Int",
+              "Description": "Count of FPGA card",
+              "Computed": true
+            },
+            "fpga_card_type": {
+              "Type": "String",
+              "Description": "Type of FPGA card",
+              "Computed": true
+            },
+            "gpu_card_count": {
+              "Type": "Int",
+              "Description": "Count of gpu card",
+              "Computed": true
+            },
+            "gpu_card_type": {
+              "Type": "String",
+              "Description": "Type of gpu card",
+              "Computed": true
+            },
+            "group_id": {
+              "Type": "String",
+              "Description": "Group id",
+              "Computed": true
+            },
+            "memory_capacity_in_gb": {
+              "Type": "Int",
+              "Description": "Memory capacity in GB",
+              "Computed": true
+            },
+            "network_bandwidth": {
+              "Type": "String",
+              "Description": "Network bandwidth",
+              "Computed": true
+            },
+            "network_package": {
+              "Type": "String",
+              "Description": "Network package",
+              "Computed": true
+            },
+            "product_type": {
+              "Type": "String",
+              "Description": "Product type",
+              "Computed": true
+            },
+            "spec": {
               "Type": "String",
               "Description": "Spec name",
+              "Computed": true
+            },
+            "spec_id": {
+              "Type": "String",
+              "Description": "Spec id",
+              "Computed": true
+            },
+            "zone_name": {
+              "Type": "String",
+              "Description": "Zone name",
               "Computed": true
             }
           }
         }
+      },
+      "zone_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Zone name"
       }
     },
     "baiducloud_subnets": {
@@ -18262,6 +19938,266 @@
             "vpc_id": {
               "Type": "String",
               "Description": "ID of the VPC.",
+              "Computed": true
+            }
+          }
+        }
+      }
+    },
+    "baiducloud_vpn_conns": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Output file for saving result."
+      },
+      "vpn_conns": {
+        "Type": "List",
+        "Description": "Result of VPN conns.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_time": {
+              "Type": "String",
+              "Description": "Create time of VPN conn.",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Description of VPN conn."
+            },
+            "health_status": {
+              "Type": "String",
+              "Description": "Health status of the vpn conn.",
+              "Computed": true
+            },
+            "ike_config": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "IKE config detail.",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "ipsec_config": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Ipsec config of vpn conn.",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "local_ip": {
+              "Type": "String",
+              "Description": "Public IP of the VPN gateway.",
+              "Computed": true
+            },
+            "local_subnets": {
+              "Type": "List",
+              "Description": "Local network cidr list.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "remote_ip": {
+              "Type": "String",
+              "Description": "Public IP of the peer VPN gateway.",
+              "Computed": true
+            },
+            "remote_subnets": {
+              "Type": "List",
+              "Description": "Peer network cidr list.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "secret_key": {
+              "Type": "String",
+              "Description": "Shared secret key, 8 to 17 characters, English, numbers and symbols must exist at the same time, the symbols are limited to !@#$%^*()_.",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Status of the vpn conn.",
+              "Computed": true
+            },
+            "vpn_conn_id": {
+              "Type": "String",
+              "Description": "ID of the VPN conn.",
+              "Computed": true
+            },
+            "vpn_conn_name": {
+              "Type": "String",
+              "Description": "Name of vpn conn.",
+              "Computed": true
+            },
+            "vpn_id": {
+              "Type": "String",
+              "Description": "VPN id which vpn conn belong to.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "vpn_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "VPN id which vpn conn belong to."
+      }
+    },
+    "baiducloud_vpn_gateways": {
+      "filter": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "only support filter string/int/bool value",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "filter variable name"
+            },
+            "values": {
+              "Type": "List",
+              "Required": true,
+              "Description": "filter variable value list",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "output_file": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Output file for saving result."
+      },
+      "vpc_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the VPC which vpn gateway belong to."
+      },
+      "vpn_gateways": {
+        "Type": "List",
+        "Description": "Result of VPCs.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "band_width_in_mbps": {
+              "Type": "Int",
+              "Description": "Eip bandwidth(Mbps), if payment_timing is Prepaid or billing_method is ByBandWidth, support between 1 and 200, if billing_method is ByTraffic, support between 1 and 1000",
+              "Computed": true
+            },
+            "create_time": {
+              "Type": "String",
+              "Description": "Create time of VPN gateway.",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Description": "Description of the VPN.",
+              "Computed": true
+            },
+            "eip": {
+              "Type": "String",
+              "Description": "Eip address.",
+              "Computed": true
+            },
+            "expired_time": {
+              "Type": "String",
+              "Description": "Expired time.",
+              "Computed": true
+            },
+            "max_connection": {
+              "Type": "String",
+              "Description": "Max connection of VPN gateway.",
+              "Computed": true
+            },
+            "payment_timing": {
+              "Type": "String",
+              "Description": "Payment timing of billing, which can be Prepaid or Postpaid. The default is Postpaid.",
+              "Computed": true
+            },
+            "status": {
+              "Type": "String",
+              "Description": "Status of the VPN.",
+              "Computed": true
+            },
+            "vpc_id": {
+              "Type": "String",
+              "Description": "ID of the VPC which vpn gateway belong to.",
+              "Computed": true
+            },
+            "vpn_conn_num": {
+              "Type": "Int",
+              "Description": "Number of VPN tunnels.",
+              "Computed": true
+            },
+            "vpn_conns": {
+              "Type": "List",
+              "Description": "ID List of the VPN gateway tunnels.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "vpn_id": {
+              "Type": "String",
+              "Description": "ID of the VPN gateway.",
+              "Computed": true
+            },
+            "vpn_name": {
+              "Type": "String",
+              "Description": "Name of the VPN gateway.",
               "Computed": true
             }
           }

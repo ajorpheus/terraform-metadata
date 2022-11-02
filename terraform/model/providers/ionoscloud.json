@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "ionoscloud",
   "type": "provider",
-  "version": "v6.3.1",
+  "version": "v6.3.2",
   "provider": {
     "endpoint": {
       "Type": "String",
@@ -257,6 +257,34 @@
         "Type": "String",
         "Required": true,
         "Description": "The password you want assigned to the backup unit."
+      }
+    },
+    "ionoscloud_certificate": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "certificate": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The certificate body in PEM format. This attribute is immutable."
+      },
+      "certificate_chain": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The certificate chain. This attribute is immutable."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The certificate name"
+      },
+      "private_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The private key blob. This attribute is immutable."
       }
     },
     "ionoscloud_datacenter": {
@@ -972,6 +1000,167 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "ionoscloud_mongo_cluster": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "connection_string": {
+        "Type": "String",
+        "Description": "The connection string for your cluster.",
+        "Computed": true
+      },
+      "connections": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Details about the network connection for your cluster.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cidr_list": {
+              "Type": "List",
+              "Required": true,
+              "Description": "The list of IPs and subnet for your cluster.\n          Note the following unavailable IP ranges:\n          10.233.64.0/18\n          10.233.0.0/18\n          10.233.114.0/24 \t\t\n example: [192.168.1.100/24, 192.168.1.101/24]",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "datacenter_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The datacenter to connect your cluster to."
+            },
+            "lan_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The LAN to connect your cluster to."
+            }
+          }
+        }
+      },
+      "credentials": {
+        "Type": "List",
+        "Required": true,
+        "Description": "Credentials for the database user to be created.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Required": true
+            },
+            "username": {
+              "Type": "String",
+              "Required": true,
+              "Description": "the username for the initial mongoDB user."
+            }
+          }
+        }
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of your cluster."
+      },
+      "instances": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "The total number of instances in the cluster (one master and n-1 standbys)"
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The physical location where the cluster will be created. This will be where all of your instances live. Property cannot be modified after datacenter creation (disallowed in update requests). Available locations: de/txl, gb/lhr, es/vit"
+      },
+      "maintenance_window": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "a weekly 4 hour-long window, during which maintenance might occur",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_the_week": {
+              "Type": "String",
+              "Required": true
+            },
+            "time": {
+              "Type": "String",
+              "Required": true
+            }
+          }
+        }
+      },
+      "mongodb_version": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The MongoDB version of your cluster."
+      },
+      "template_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The unique ID of the template, which specifies the number of cores, storage size, and memory."
+      }
+    },
+    "ionoscloud_mongo_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true
+      },
+      "database": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user database to use for authentication"
+      },
+      "password": {
+        "Type": "String",
+        "Required": true
+      },
+      "roles": {
+        "Type": "List",
+        "Optional": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "database": {
+              "Type": "String",
+              "Optional": true
+            },
+            "role": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A list of mongodb user roles. Examples: read, readWrite, readAnyDatabase"
+            }
+          }
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The user database uses for authentication"
       }
     },
     "ionoscloud_natgateway": {
@@ -1811,6 +2000,7 @@
         "ConflictsWith": [
           "volume.0.ssh_key_path"
         ],
+        "Deprecated": "Will be renamed to ssk_keys in the future, to allow users to set both the ssh key path or directly the ssh key",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -1824,6 +2014,7 @@
       "type": {
         "Type": "String",
         "Optional": true,
+        "Description": "server usages: ENTERPRISE or CUBE",
         "Computed": true
       },
       "volume": {
@@ -2596,6 +2787,32 @@
         "Type": "String",
         "Optional": true,
         "Description": "Alphanumeric name you want assigned to the backup unit."
+      }
+    },
+    "ionoscloud_certificate": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "certificate": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "certificate_chain": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Optional": true
       }
     },
     "ionoscloud_datacenter": {
@@ -3605,6 +3822,174 @@
       "name": {
         "Type": "String",
         "Optional": true
+      }
+    },
+    "ionoscloud_mongo_cluster": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "connection_string": {
+        "Type": "String",
+        "Description": "The connection string for your cluster.",
+        "Computed": true
+      },
+      "connections": {
+        "Type": "List",
+        "Description": "Details about the network connection for your cluster.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "cidr_list": {
+              "Type": "List",
+              "Description": "The list of IPs and subnet for your cluster.\n          Note the following unavailable IP ranges:\n          10.233.64.0/18\n          10.233.0.0/18\n          10.233.114.0/24 \t\t\n example: [192.168.1.100/24, 192.168.1.101/24]",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "datacenter_id": {
+              "Type": "String",
+              "Description": "The datacenter to connect your cluster to.",
+              "Computed": true
+            },
+            "lan_id": {
+              "Type": "String",
+              "Description": "The LAN to connect your cluster to.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "credentials": {
+        "Type": "List",
+        "Description": "Credentials for the database user to be created.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Computed": true
+            },
+            "username": {
+              "Type": "String",
+              "Description": "the username for the initial mongoDB user.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The friendly name of your cluster."
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The id of your cluster."
+      },
+      "instances": {
+        "Type": "Int",
+        "Description": "The total number of instances in the cluster (one master and n-1 standbys)",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Description": "The physical location where the cluster will be created. This will be where all of your instances live. Property cannot be modified after datacenter creation (disallowed in update requests).Available locations: de/txl, gb/lhr, es/vit",
+        "Computed": true
+      },
+      "maintenance_window": {
+        "Type": "List",
+        "Description": "a weekly 4 hour-long window, during which maintenance might occur",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "day_of_the_week": {
+              "Type": "String",
+              "Computed": true
+            },
+            "time": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "mongodb_version": {
+        "Type": "String",
+        "Description": "The MongoDB version of your cluster.",
+        "Computed": true
+      },
+      "template_id": {
+        "Type": "String",
+        "Description": "The unique ID of the template, which specifies the number of cores, storage size, and memory.",
+        "Computed": true
+      }
+    },
+    "ionoscloud_mongo_user": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete",
+        "default"
+      ],
+      "cluster_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of your cluster."
+      },
+      "database": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The database",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Id of the backup unit."
+      },
+      "roles": {
+        "Type": "List",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "database": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "role": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "A list of mongodb user roles. Examples: read, readWrite, readAnyDatabase",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "username": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The username to search for"
       }
     },
     "ionoscloud_natgateway": {

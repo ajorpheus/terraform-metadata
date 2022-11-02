@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "lacework",
   "type": "provider",
-  "version": "v0.25.0",
+  "version": "v0.27.0",
   "provider": {
     "account": {
       "Type": "String",
@@ -1349,6 +1349,52 @@
         "Computed": true
       }
     },
+    "lacework_data_export_rule": {
+      "created_or_updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_or_updated_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The summary of the data export rule."
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "guid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "integration_ids": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The list alert channel ids for the rule to use.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the data export rule."
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "lacework_integration_aws_agentless_scanning": {
       "account_id": {
         "Type": "String",
@@ -1859,6 +1905,140 @@
         "Computed": true
       }
     },
+    "lacework_integration_aws_org_agentless_scanning": {
+      "account_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The aws account id"
+      },
+      "bucket_arn": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The bucket arn"
+      },
+      "created_or_updated_by": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_or_updated_time": {
+        "Type": "String",
+        "Computed": true
+      },
+      "credentials": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The credentials needed by the integration",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "external_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The external id"
+            },
+            "role_arn": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The role arn"
+            }
+          }
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "The state of the external integration.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "intg_guid": {
+        "Type": "String",
+        "Computed": true
+      },
+      "management_account": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The scanning aws account id"
+      },
+      "monitored_accounts": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The list of monitored aws accounts ids or OUs",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The integration name."
+      },
+      "org_level": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "query_text": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The LQL query text"
+      },
+      "retries": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of attempts to create the external integration.",
+        "Default": {
+          "Type": "int",
+          "Value": "5"
+        }
+      },
+      "scan_containers": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to includes scanning for containers.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "scan_frequency": {
+        "Type": "Int",
+        "Required": true,
+        "Description": "How often in hours the scan will run in hours."
+      },
+      "scan_host_vulnerabilities": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether to includes scanning for host vulnerabilities.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "scanning_account": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The scanning aws account id"
+      },
+      "server_token": {
+        "Type": "String",
+        "Computed": true
+      },
+      "type_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "uri": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
     "lacework_integration_azure_al": {
       "created_or_updated_by": {
         "Type": "String",
@@ -2319,74 +2499,30 @@
         "Type": "String",
         "Computed": true
       },
-      "limit_by_label": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A comma-separated list of image labels to limit the assessment of images with matching labels",
-        "ConflictsWith": [
-          "limit_by_labels"
-        ],
-        "Deprecated": "This attribute will be replaced by a new attribute `limit_by_labels` in version 1.0 of the Lacework provider",
-        "Default": {
-          "Type": "string",
-          "Value": "*"
-        }
-      },
       "limit_by_labels": {
         "Type": "Map",
         "Optional": true,
         "Description": "A key based map of labels to limit the assessment of images with matching key:value labels",
-        "ConflictsWith": [
-          "limit_by_label"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "limit_by_repos": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A comma-separated list of repositories to assess",
-        "ConflictsWith": [
-          "limit_by_repositories"
-        ],
-        "Deprecated": "This attribute will be replaced by a new attribute `limit_by_repositories` in version 1.0 of the Lacework provider"
       },
       "limit_by_repositories": {
         "Type": "List",
         "Optional": true,
         "Description": "A list of repositories to assess",
-        "ConflictsWith": [
-          "limit_by_repos"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
-        }
-      },
-      "limit_by_tag": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A comma-separated list of image tags to limit the assessment of images with matching tags",
-        "ConflictsWith": [
-          "limit_by_tags"
-        ],
-        "Deprecated": "This attribute will be replaced by a new attribute `limit_by_tags` in version 1.0 of the Lacework provider",
-        "Default": {
-          "Type": "string",
-          "Value": "*"
         }
       },
       "limit_by_tags": {
         "Type": "List",
         "Optional": true,
         "Description": "A list of image tags to limit the assessment of images with matching tags",
-        "ConflictsWith": [
-          "limit_by_tag"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -2418,7 +2554,7 @@
       },
       "org_level": {
         "Type": "Bool",
-        "Description": "Wheter or not this integration is configured at the Organization level",
+        "Description": "Whether or not this integration is configured at the Organization level",
         "Computed": true
       },
       "registry_domain": {
@@ -2862,74 +2998,30 @@
         "Type": "String",
         "Computed": true
       },
-      "limit_by_label": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A comma-separated list of image labels to limit the assessment of images with matching labels",
-        "ConflictsWith": [
-          "limit_by_labels"
-        ],
-        "Deprecated": "This attribute will be replaced by a new attribute `limit_by_labels` in version 1.0 of the Lacework provider",
-        "Default": {
-          "Type": "string",
-          "Value": "*"
-        }
-      },
       "limit_by_labels": {
         "Type": "Map",
         "Optional": true,
         "Description": "A key based map of labels to limit the assessment of images with matching key:value labels",
-        "ConflictsWith": [
-          "limit_by_label"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
-      },
-      "limit_by_repos": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A comma-separated list of repositories to assess",
-        "ConflictsWith": [
-          "limit_by_repositories"
-        ],
-        "Deprecated": "This attribute will be replaced by a new attribute `limit_by_repositories` in version 1.0 of the Lacework provider"
       },
       "limit_by_repositories": {
         "Type": "List",
         "Optional": true,
         "Description": "A list of repositories to assess",
-        "ConflictsWith": [
-          "limit_by_repos"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
           "ElementsType": "String"
-        }
-      },
-      "limit_by_tag": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "A comma-separated list of image tags to limit the assessment of images with matching tags",
-        "ConflictsWith": [
-          "limit_by_tags"
-        ],
-        "Deprecated": "This attribute will be replaced by a new attribute `limit_by_tags` in version 1.0 of the Lacework provider",
-        "Default": {
-          "Type": "string",
-          "Value": "*"
         }
       },
       "limit_by_tags": {
         "Type": "List",
         "Optional": true,
         "Description": "A list of image tags to limit the assessment of images with matching tags",
-        "ConflictsWith": [
-          "limit_by_tag"
-        ],
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -4456,7 +4548,7 @@
       "reason": {
         "Type": "String",
         "Optional": true,
-        "Description": "List of severities for the vulnerability exception. Valid severities are: [Compensating Controls Fix Pending Other Unknown Accepted Risk False Positive]",
+        "Description": "List of severities for the vulnerability exception. Valid severities are: [False Positive Compensating Controls Fix Pending Other Unknown Accepted Risk]",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "signalfx",
   "type": "provider",
-  "version": "v6.17.0",
+  "version": "v6.18.0",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -1769,6 +1769,15 @@
         "Type": "Bool",
         "Required": true,
         "Description": "Whether the integration is enabled or not"
+      },
+      "import_gcp_metrics": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If enabled, SignalFx will sync also Google Cloud Metrics data. If disabled, SignalFx will import only metadata. Defaults to true.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
       },
       "name": {
         "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vault",
   "type": "provider",
-  "version": "v3.8.2",
+  "version": "v3.10.0",
   "provider": {
     "add_address_to_env": {
       "Type": "String",
@@ -24,6 +24,19 @@
       "Type": "List",
       "Optional": true,
       "Description": "Login to vault with an existing auth method using auth/\u003cmount\u003e/login",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
       "IsBlock": true,
       "ConfigImplicitMode": "Block",
       "Elem": {
@@ -53,6 +66,719 @@
         }
       }
     },
+    "auth_login_aws": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the AWS method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "aws_access_key_id": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The AWS access key ID.",
+            "DefaultFunc": "ENV(AWS_ACCESS_KEY_ID)"
+          },
+          "aws_iam_endpoint": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The IAM endpoint URL."
+          },
+          "aws_profile": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The name of the AWS profile.",
+            "DefaultFunc": "ENV(AWS_PROFILE)"
+          },
+          "aws_region": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The AWS region.",
+            "DefaultFunc": "MENV(AWS_REGION,AWS_DEFAULT_REGION)"
+          },
+          "aws_role_arn": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The ARN of the AWS Role to assume.Used during STS AssumeRole",
+            "DefaultFunc": "ENV(AWS_ROLE_ARN)"
+          },
+          "aws_role_session_name": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Specifies the name to attach to the AWS role session. Used during STS AssumeRole",
+            "DefaultFunc": "ENV(AWS_ROLE_SESSION_NAME)"
+          },
+          "aws_secret_access_key": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The AWS secret access key.",
+            "DefaultFunc": "ENV(AWS_SECRET_ACCESS_KEY)"
+          },
+          "aws_session_token": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The AWS session token.",
+            "DefaultFunc": "ENV(AWS_SESSION_TOKEN)"
+          },
+          "aws_shared_credentials_file": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Path to the AWS shared credentials file.",
+            "DefaultFunc": "ENV(AWS_SHARED_CREDENTIALS_FILE)"
+          },
+          "aws_sts_endpoint": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The STS endpoint URL."
+          },
+          "aws_web_identity_token_file": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Path to the file containing an OAuth 2.0 access token or OpenID Connect ID token.",
+            "DefaultFunc": "ENV(AWS_WEB_IDENTITY_TOKEN_FILE)"
+          },
+          "header_value": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The Vault header value to include in the STS signing request."
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "aws"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "role": {
+            "Type": "String",
+            "Required": true,
+            "Description": "The Vault role to use when logging into Vault."
+          }
+        }
+      }
+    },
+    "auth_login_azure": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the azure method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "client_id": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The identity's client ID.",
+            "ConflictsWith": [
+              "auth_login_azure.0.jwt"
+            ]
+          },
+          "jwt": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "A signed JSON Web Token. If not specified on will be created automatically",
+            "DefaultFunc": "ENV(TERRAFORM_VAULT_AZURE_AUTH_JWT)"
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "azure"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "resource_group_name": {
+            "Type": "String",
+            "Required": true,
+            "Description": "The resource group for the machine that generated the MSI token. This information can be obtained through instance metadata."
+          },
+          "role": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Name of the login role."
+          },
+          "scope": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The scopes to include in the token request.",
+            "ConflictsWith": [
+              "auth_login_azure.0.jwt"
+            ],
+            "Default": {
+              "Type": "string",
+              "Value": "https://management.azure.com/"
+            }
+          },
+          "subscription_id": {
+            "Type": "String",
+            "Required": true,
+            "Description": "The subscription ID for the machine that generated the MSI token. This information can be obtained through instance metadata."
+          },
+          "tenant_id": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Provides the tenant ID to use in a multi-tenant authentication scenario.",
+            "ConflictsWith": [
+              "auth_login_azure.0.jwt"
+            ]
+          },
+          "vm_name": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The virtual machine name for the machine that generated the MSI token. This information can be obtained through instance metadata."
+          },
+          "vmss_name": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The virtual machine scale set name for the machine that generated the MSI token. This information can be obtained through instance metadata.",
+            "ConflictsWith": [
+              "auth_login_azure.0.vm_name"
+            ]
+          }
+        }
+      }
+    },
+    "auth_login_cert": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the cert method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "cert_file": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Path to a file containing the client certificate."
+          },
+          "key_file": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Path to a file containing the private key that the certificate was issued for."
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "cert"
+            }
+          },
+          "name": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Name of the certificate's role"
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          }
+        }
+      }
+    },
+    "auth_login_gcp": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the gcp method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "credentials": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Path to the Google Cloud credentials file.",
+            "DefaultFunc": "ENV(GOOGLE_APPLICATION_CREDENTIALS)",
+            "ConflictsWith": [
+              "auth_login_gcp.0.jwt"
+            ]
+          },
+          "jwt": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "A signed JSON Web Token.",
+            "DefaultFunc": "ENV(TERRAFORM_VAULT_GCP_AUTH_JWT)",
+            "ConflictsWith": [
+              "auth_login_gcp.0.credentials"
+            ]
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "gcp"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "role": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Name of the login role."
+          },
+          "service_account": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "IAM service account.",
+            "ConflictsWith": [
+              "auth_login_gcp.0.jwt"
+            ]
+          }
+        }
+      }
+    },
+    "auth_login_jwt": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the jwt method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "jwt": {
+            "Type": "String",
+            "Required": true,
+            "Description": "A signed JSON Web Token.",
+            "DefaultFunc": "ENV(TERRAFORM_VAULT_AUTH_JWT)"
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "jwt"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "role": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Name of the login role."
+          }
+        }
+      }
+    },
+    "auth_login_kerberos": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the kerberos method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "disable_fast_negotiation": {
+            "Type": "Bool",
+            "Optional": true,
+            "Description": "Disable the Kerberos FAST negotiation.",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ],
+            "Default": {
+              "Type": "bool",
+              "Value": "false"
+            }
+          },
+          "keytab_path": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The Kerberos keytab file containing the entry of the login entity.",
+            "DefaultFunc": "ENV(KRB_KEYTAB)",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ]
+          },
+          "krb5conf_path": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "A valid Kerberos configuration file e.g. /etc/krb5.conf.",
+            "DefaultFunc": "ENV(KRB5_CONFIG)",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ]
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "kerberos"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "realm": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The Kerberos server's authoritative authentication domain",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ]
+          },
+          "remove_instance_name": {
+            "Type": "Bool",
+            "Optional": true,
+            "Description": "Strip the host from the username found in the keytab.",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ],
+            "Default": {
+              "Type": "bool",
+              "Value": "false"
+            }
+          },
+          "service": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The service principle name.",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ]
+          },
+          "token": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Simple and Protected GSSAPI Negotiation Mechanism (SPNEGO) token",
+            "DefaultFunc": "ENV(KRB_SPNEGO_TOKEN)"
+          },
+          "username": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The username to login into Kerberos with.",
+            "ConflictsWith": [
+              "auth_login_kerberos.0.token"
+            ]
+          }
+        }
+      }
+    },
+    "auth_login_oci": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the OCI method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "auth_type": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Authentication type to use when getting OCI credentials."
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "oci"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "role": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Name of the login role."
+          }
+        }
+      }
+    },
+    "auth_login_oidc": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the oidc method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "callback_address": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The callback address. Must be a valid URI without the path."
+          },
+          "callback_listener_address": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The callback listener's address. Must be a valid URI without the path."
+          },
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "oidc"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "role": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Name of the login role."
+          }
+        }
+      }
+    },
+    "auth_login_radius": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the radius method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_userpass",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "radius"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "password": {
+            "Type": "String",
+            "Required": true,
+            "Description": "The Radius password for username.",
+            "DefaultFunc": "ENV(RADIUS_PASSWORD)"
+          },
+          "username": {
+            "Type": "String",
+            "Required": true,
+            "Description": "The Radius username.",
+            "DefaultFunc": "ENV(RADIUS_USERNAME)"
+          }
+        }
+      }
+    },
+    "auth_login_userpass": {
+      "Type": "List",
+      "Optional": true,
+      "Description": "Login to vault using the userpass method",
+      "MaxItems": 1,
+      "ConflictsWith": [
+        "auth_login",
+        "auth_login_aws",
+        "auth_login_cert",
+        "auth_login_gcp",
+        "auth_login_kerberos",
+        "auth_login_radius",
+        "auth_login_oci",
+        "auth_login_oidc",
+        "auth_login_jwt",
+        "auth_login_azure"
+      ],
+      "IsBlock": true,
+      "ConfigImplicitMode": "Block",
+      "Elem": {
+        "Type": "SchemaInfo",
+        "Info": {
+          "mount": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The path where the authentication engine is mounted.",
+            "Default": {
+              "Type": "string",
+              "Value": "userpass"
+            }
+          },
+          "namespace": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "The authentication engine's namespace."
+          },
+          "password": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Login with password",
+            "DefaultFunc": "ENV(TERRAFORM_VAULT_PASSWORD)"
+          },
+          "password_file": {
+            "Type": "String",
+            "Optional": true,
+            "Description": "Login with password from a file",
+            "DefaultFunc": "ENV(TERRAFORM_VAULT_PASSWORD_FILE)",
+            "ConflictsWith": [
+              "auth_login_userpass.0.password"
+            ]
+          },
+          "username": {
+            "Type": "String",
+            "Required": true,
+            "Description": "Login with username",
+            "DefaultFunc": "ENV(TERRAFORM_VAULT_USERNAME)"
+          }
+        }
+      }
+    },
     "ca_cert_dir": {
       "Type": "String",
       "Optional": true,
@@ -69,6 +795,7 @@
       "Type": "List",
       "Optional": true,
       "Description": "Client authentication credentials.",
+      "MaxItems": 1,
       "IsBlock": true,
       "ConfigImplicitMode": "Block",
       "Elem": {
@@ -141,6 +868,15 @@
       "Description": "Set this to true to prevent the creation of ephemeral child token used by this provider.",
       "DefaultFunc": "ENV(TERRAFORM_VAULT_SKIP_CHILD_TOKEN)"
     },
+    "skip_get_vault_version": {
+      "Type": "Bool",
+      "Optional": true,
+      "Description": "Skip the dynamic fetching of the Vault server version.",
+      "Default": {
+        "Type": "bool",
+        "Value": "false"
+      }
+    },
     "skip_tls_verify": {
       "Type": "Bool",
       "Optional": true,
@@ -164,6 +900,11 @@
       "Optional": true,
       "Description": "Token name to use for creating the Vault child token.",
       "DefaultFunc": "ENV(VAULT_TOKEN_NAME)"
+    },
+    "vault_version_override": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Override the Vault server version, which is normally determined dynamically from the target Vault server"
     }
   },
   "resources": {
@@ -227,6 +968,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "discoverdn": {
         "Type": "Bool",
@@ -832,6 +1582,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "The description of the auth backend"
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "local": {
         "Type": "Bool",
@@ -1505,6 +2264,15 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "iam_endpoint": {
         "Type": "String",
         "Optional": true,
@@ -1829,6 +2597,15 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "environment": {
         "Type": "String",
         "Optional": true,
@@ -1904,11 +2681,13 @@
           "Info": {
             "role_id": {
               "Type": "String",
+              "Optional": true,
               "Computed": true
             },
             "role_name": {
               "Type": "String",
-              "Required": true
+              "Optional": true,
+              "Computed": true
             },
             "scope": {
               "Type": "String",
@@ -2178,6 +2957,15 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "local": {
         "Type": "Bool",
         "Optional": true,
@@ -2383,6 +3171,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -2488,6 +3277,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -2576,6 +3366,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -2660,6 +3451,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -2729,6 +3521,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -2825,6 +3618,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3055,6 +3849,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3100,8 +3895,88 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
+          "redshift"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "connection_url": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Connection string to use to connect to the database."
+            },
+            "contained_db": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Set to true when the target is a Contained Database, e.g. AzureSQL."
+            },
+            "disable_escaping": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Disable special character escaping in username and password"
+            },
+            "max_connection_lifetime": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of seconds a connection may be reused."
+            },
+            "max_idle_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of idle connections to the database."
+            },
+            "max_open_connections": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Maximum number of open connections to the database.",
+              "Default": {
+                "Type": "int",
+                "Value": "2"
+              }
+            },
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The root credential password used in the connection URL"
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The root credential username used in the connection URL"
+            },
+            "username_template": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Username generation template."
+            }
+          }
+        }
+      },
+      "mysql": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the mysql-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
           "elasticsearch",
-          "snowflake"
+          "hana",
+          "influxdb",
+          "mssql",
+          "mongodb",
+          "mongodbatlas",
+          "mysql_aurora",
+          "mysql_legacy",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake",
+          "redis_elasticache",
+          "redshift"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3180,6 +4055,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3407,6 +4283,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3476,6 +4353,7 @@
           "postgresql",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3555,6 +4433,7 @@
           "mysql_rds",
           "postgresql",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3630,6 +4509,7 @@
           "mysql_rds",
           "oracle",
           "snowflake",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3684,6 +4564,57 @@
           }
         }
       },
+      "redis_elasticache": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the redis-elasticache-database-plugin plugin.",
+        "MaxItems": 1,
+        "ConflictsWith": [
+          "cassandra",
+          "couchbase",
+          "elasticsearch",
+          "hana",
+          "influxdb",
+          "mssql",
+          "mongodb",
+          "mongodbatlas",
+          "mysql",
+          "mysql_aurora",
+          "mysql_legacy",
+          "mysql_rds",
+          "postgresql",
+          "oracle",
+          "snowflake",
+          "redshift"
+        ],
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS secret key id to use to talk to ElastiCache. If omitted the credentials chain provider is used instead."
+            },
+            "region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS region where the ElastiCache cluster is hosted. If omitted the plugin tries to infer the region from the environment."
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The configuration endpoint for the ElastiCache cluster to connect to."
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS access key id to use to talk to ElastiCache. If omitted the credentials chain provider is used instead."
+            }
+          }
+        }
+      },
       "redshift": {
         "Type": "List",
         "Optional": true,
@@ -3704,7 +4635,8 @@
           "mysql_rds",
           "postgresql",
           "oracle",
-          "snowflake"
+          "snowflake",
+          "redis_elasticache"
         ],
         "IsBlock": true,
         "ConfigImplicitMode": "Block",
@@ -3788,6 +4720,7 @@
           "mysql_rds",
           "postgresql",
           "oracle",
+          "redis_elasticache",
           "redshift"
         ],
         "IsBlock": true,
@@ -3966,6 +4899,16 @@
         "Type": "String",
         "Description": "Accessor of the mount",
         "Computed": true
+      },
+      "allowed_managed_keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of managed key registry entry names that the mount in question is allowed to access",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "audit_non_hmac_request_keys": {
         "Type": "List",
@@ -5477,6 +6420,83 @@
           }
         }
       },
+      "redis_elasticache": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Connection parameters for the redis-elasticache-database-plugin plugin.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allowed_roles": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A list of roles that are allowed to use this connection.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "data": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "A map of sensitive data to pass to the endpoint. Useful for templated connection strings."
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Name of the database connection."
+            },
+            "password": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS secret key id to use to talk to ElastiCache. If omitted the credentials chain provider is used instead."
+            },
+            "plugin_name": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Specifies the name of the plugin to use for this connection. Must be prefixed with the name of one of the supported database engine types.",
+              "Computed": true
+            },
+            "region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS region where the ElastiCache cluster is hosted. If omitted the plugin tries to infer the region from the environment."
+            },
+            "root_rotation_statements": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "A list of database statements to be executed to rotate the root user's credentials.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "url": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The configuration endpoint for the ElastiCache cluster to connect to."
+            },
+            "username": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS access key id to use to talk to ElastiCache. If omitted the credentials chain provider is used instead."
+            },
+            "verify_connection": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Specifies if the connection is verified during initial configuration.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
+            }
+          }
+        }
+      },
       "redshift": {
         "Type": "List",
         "Optional": true,
@@ -5765,6 +6785,15 @@
         "Type": "String",
         "Optional": true
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "local": {
         "Type": "Bool",
         "Optional": true,
@@ -5968,6 +6997,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "local": {
         "Type": "Bool",
@@ -6262,6 +7300,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "Specifies the description of the mount. This overrides the current stored value, if any."
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "namespace": {
         "Type": "String",
@@ -6601,7 +7648,16 @@
       "external_member_entity_ids": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Manage member entities externally through `vault_identity_group_policies_member_entity_ids`",
+        "Description": "Manage member entities externally through `vault_identity_group_member_entity_ids`",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "external_member_group_ids": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Manage member groups externally through `vault_identity_group_member_group_ids`",
         "Default": {
           "Type": "bool",
           "Value": "false"
@@ -6703,7 +7759,7 @@
       "exclusive": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Should the resource manage member entity ids \nexclusively? Beware of race conditions when disabling exclusive management",
+        "Description": "If set to true, allows the resource to manage member entity ids\nexclusively. Beware of race conditions when disabling exclusive management",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -6724,6 +7780,37 @@
         "Type": "Set",
         "Optional": true,
         "Description": "Entity IDs to be assigned as group members.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      }
+    },
+    "vault_identity_group_member_group_ids": {
+      "exclusive": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set to true, allows the resource to manage member group ids\nexclusively. Beware of race conditions when disabling exclusive management",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "group_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "ID of the group."
+      },
+      "member_group_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Group IDs to be assigned as group members.",
         "ConfigImplicitMode": "Attr",
         "Elem": {
           "Type": "SchemaElements",
@@ -6770,6 +7857,413 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "vault_identity_mfa_duo": {
+      "api_hostname": {
+        "Type": "String",
+        "Required": true,
+        "Description": "API hostname for Duo"
+      },
+      "integration_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Integration key for Duo"
+      },
+      "method_id": {
+        "Type": "String",
+        "Description": "Method ID.",
+        "Computed": true
+      },
+      "mount_accessor": {
+        "Type": "String",
+        "Description": "Mount accessor.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Method name.",
+        "Computed": true
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      },
+      "namespace_id": {
+        "Type": "String",
+        "Description": "Method's namespace ID.",
+        "Computed": true
+      },
+      "namespace_path": {
+        "Type": "String",
+        "Description": "Method's namespace path.",
+        "Computed": true
+      },
+      "push_info": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Push information for Duo."
+      },
+      "secret_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Secret key for Duo"
+      },
+      "type": {
+        "Type": "String",
+        "Description": "MFA type.",
+        "Computed": true
+      },
+      "use_passcode": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Require passcode upon MFA validation.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "username_format": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A template string for mapping Identity names to MFA methods."
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "Resource UUID.",
+        "Computed": true
+      }
+    },
+    "vault_identity_mfa_login_enforcement": {
+      "auth_method_accessors": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of auth method accessor IDs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "auth_method_types": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of auth method types.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "identity_entity_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of identity entity IDs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "identity_group_ids": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of identity group IDs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "mfa_method_ids": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Set of MFA method UUIDs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Login enforcement name."
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      },
+      "namespace_id": {
+        "Type": "String",
+        "Description": "Method's namespace ID.",
+        "Computed": true
+      },
+      "namespace_path": {
+        "Type": "String",
+        "Description": "Method's namespace path.",
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "Resource UUID.",
+        "Computed": true
+      }
+    },
+    "vault_identity_mfa_okta": {
+      "api_token": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Okta API token."
+      },
+      "base_url": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The base domain to use for API requests."
+      },
+      "method_id": {
+        "Type": "String",
+        "Description": "Method ID.",
+        "Computed": true
+      },
+      "mount_accessor": {
+        "Type": "String",
+        "Description": "Mount accessor.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Method name.",
+        "Computed": true
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      },
+      "namespace_id": {
+        "Type": "String",
+        "Description": "Method's namespace ID.",
+        "Computed": true
+      },
+      "namespace_path": {
+        "Type": "String",
+        "Description": "Method's namespace path.",
+        "Computed": true
+      },
+      "org_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the organization to be used in the Okta API."
+      },
+      "primary_email": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Only match the primary email for the account.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Description": "MFA type.",
+        "Computed": true
+      },
+      "username_format": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A template string for mapping Identity names to MFA methods."
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "Resource UUID.",
+        "Computed": true
+      }
+    },
+    "vault_identity_mfa_pingid": {
+      "admin_url": {
+        "Type": "String",
+        "Description": "The admin URL, derived from \"settings_file_base64\"",
+        "Computed": true
+      },
+      "authenticator_url": {
+        "Type": "String",
+        "Description": "A unique identifier of the organization, derived from \"settings_file_base64\"",
+        "Computed": true
+      },
+      "idp_url": {
+        "Type": "String",
+        "Description": "The IDP URL, derived from \"settings_file_base64\"",
+        "Computed": true
+      },
+      "method_id": {
+        "Type": "String",
+        "Description": "Method ID.",
+        "Computed": true
+      },
+      "mount_accessor": {
+        "Type": "String",
+        "Description": "Mount accessor.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Method name.",
+        "Computed": true
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      },
+      "namespace_id": {
+        "Type": "String",
+        "Description": "Method's namespace ID.",
+        "Computed": true
+      },
+      "namespace_path": {
+        "Type": "String",
+        "Description": "Method's namespace path.",
+        "Computed": true
+      },
+      "org_alias": {
+        "Type": "String",
+        "Description": "The name of the PingID client organization, derived from \"settings_file_base64\"",
+        "Computed": true
+      },
+      "settings_file_base64": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A base64-encoded third-party settings contents as retrieved from PingID's configuration page."
+      },
+      "type": {
+        "Type": "String",
+        "Description": "MFA type.",
+        "Computed": true
+      },
+      "use_signature": {
+        "Type": "Bool",
+        "Description": "Use signature value, derived from \"settings_file_base64\"",
+        "Computed": true
+      },
+      "username_format": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "A template string for mapping Identity names to MFA methods."
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "Resource UUID.",
+        "Computed": true
+      }
+    },
+    "vault_identity_mfa_totp": {
+      "algorithm": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specifies the hashing algorithm used to generate the TOTP code. Options include SHA1, SHA256, SHA512.",
+        "Default": {
+          "Type": "string",
+          "Value": "SHA256"
+        }
+      },
+      "digits": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of digits in the generated TOTP token. This value can either be 6 or 8",
+        "Default": {
+          "Type": "int",
+          "Value": "6"
+        }
+      },
+      "issuer": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the key's issuing organization."
+      },
+      "key_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Specifies the size in bytes of the generated key.",
+        "Default": {
+          "Type": "int",
+          "Value": "20"
+        }
+      },
+      "max_validation_attempts": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The maximum number of consecutive failed validation attempts allowed.",
+        "Default": {
+          "Type": "int",
+          "Value": "5"
+        }
+      },
+      "method_id": {
+        "Type": "String",
+        "Description": "Method ID.",
+        "Computed": true
+      },
+      "mount_accessor": {
+        "Type": "String",
+        "Description": "Mount accessor.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Method name.",
+        "Computed": true
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      },
+      "namespace_id": {
+        "Type": "String",
+        "Description": "Method's namespace ID.",
+        "Computed": true
+      },
+      "namespace_path": {
+        "Type": "String",
+        "Description": "Method's namespace path.",
+        "Computed": true
+      },
+      "period": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The length of time in seconds used to generate a counter for the TOTP token calculation.",
+        "Default": {
+          "Type": "int",
+          "Value": "30"
+        }
+      },
+      "qr_size": {
+        "Type": "Int",
+        "Description": "The pixel size of the generated square QR code.",
+        "Computed": true
+      },
+      "skew": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "The number of delay periods that are allowed when validating a TOTP token. This value can either be 0 or 1.",
+        "Default": {
+          "Type": "int",
+          "Value": "1"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Description": "MFA type.",
+        "Computed": true
+      },
+      "uuid": {
+        "Type": "String",
+        "Description": "Resource UUID.",
+        "Computed": true
       }
     },
     "vault_identity_oidc": {
@@ -7126,6 +8620,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "The description of the auth backend"
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "jwks_ca_pem": {
         "Type": "String",
@@ -7557,6 +9060,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend"
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "listen_addrs": {
         "Type": "Set",
@@ -8167,6 +9679,16 @@
         "Description": "Accessor of the mount",
         "Computed": true
       },
+      "allowed_managed_keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of managed key registry entry names that the mount in question is allowed to access",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "audit_non_hmac_request_keys": {
         "Type": "List",
         "Optional": true,
@@ -8527,6 +10049,15 @@
         "Optional": true,
         "Computed": true
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "discoverdn": {
         "Type": "Bool",
         "Optional": true,
@@ -8750,6 +10281,289 @@
       "username": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "vault_managed_keys": {
+      "aws": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Configuration block for AWS Managed Keys",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "access_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The AWS access key to use"
+            },
+            "allow_generate_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If no existing key can be found in the referenced backend, instructs Vault to generate a key within the backend",
+              "Computed": true
+            },
+            "allow_replace_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Controls the ability for Vault to replace through generation or importing a key into the configured backend even if a key is present, if set to false those operations are forbidden if a key exists.",
+              "Computed": true
+            },
+            "allow_store_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Controls the ability for Vault to import a key to the configured backend, if 'false', those operations will be forbidden",
+              "Computed": true
+            },
+            "any_mount": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow usage from any mount point within the namespace if 'true'",
+              "Computed": true
+            },
+            "curve": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The curve to use for an ECDSA key. Used when key_type is 'ECDSA'. Required if 'allow_generate_key' is true"
+            },
+            "endpoint": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Used to specify a custom AWS endpoint"
+            },
+            "key_bits": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The size in bits for an RSA key. This field is required when 'key_type' is 'RSA'"
+            },
+            "key_type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of key to use"
+            },
+            "kms_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "An identifier for the key"
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique lowercase name that serves as identifying the key"
+            },
+            "region": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The AWS region where the keys are stored (or will be stored)",
+              "Computed": true
+            },
+            "secret_key": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The AWS secret key to use"
+            },
+            "uuid": {
+              "Type": "String",
+              "Description": "ID of the managed key read from Vault",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "azure": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Configuration block for Azure Managed Keys",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_generate_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If no existing key can be found in the referenced backend, instructs Vault to generate a key within the backend",
+              "Computed": true
+            },
+            "allow_replace_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Controls the ability for Vault to replace through generation or importing a key into the configured backend even if a key is present, if set to false those operations are forbidden if a key exists.",
+              "Computed": true
+            },
+            "allow_store_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Controls the ability for Vault to import a key to the configured backend, if 'false', those operations will be forbidden",
+              "Computed": true
+            },
+            "any_mount": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow usage from any mount point within the namespace if 'true'",
+              "Computed": true
+            },
+            "client_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The client id for credentials to query the Azure APIs"
+            },
+            "client_secret": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The client secret for credentials to query the Azure APIs"
+            },
+            "environment": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The Azure Cloud environment API endpoints to use",
+              "Computed": true
+            },
+            "key_bits": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The size in bits for an RSA key. This field is required when 'key_type' is 'RSA' or when 'allow_generate_key' is true"
+            },
+            "key_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Key Vault key to use for encryption and decryption"
+            },
+            "key_type": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The type of key to use"
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique lowercase name that serves as identifying the key"
+            },
+            "resource": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The Azure Key Vault resource's DNS Suffix to connect to",
+              "Computed": true
+            },
+            "tenant_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The tenant id for the Azure Active Directory organization"
+            },
+            "uuid": {
+              "Type": "String",
+              "Description": "ID of the managed key read from Vault",
+              "Computed": true
+            },
+            "vault_name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Key Vault vault to use the encryption keys for encryption and decryption"
+            }
+          }
+        }
+      },
+      "namespace": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Target namespace. (requires Enterprise)"
+      },
+      "pkcs": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Configuration block for PKCS Managed Keys",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_generate_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If no existing key can be found in the referenced backend, instructs Vault to generate a key within the backend",
+              "Computed": true
+            },
+            "allow_replace_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Controls the ability for Vault to replace through generation or importing a key into the configured backend even if a key is present, if set to false those operations are forbidden if a key exists.",
+              "Computed": true
+            },
+            "allow_store_key": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Controls the ability for Vault to import a key to the configured backend, if 'false', those operations will be forbidden",
+              "Computed": true
+            },
+            "any_mount": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Allow usage from any mount point within the namespace if 'true'",
+              "Computed": true
+            },
+            "curve": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Supplies the curve value when using the 'CKM_ECDSA' mechanism. Required if 'allow_generate_key' is true"
+            },
+            "force_rw_session": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Force all operations to open up a read-write session to the HSM"
+            },
+            "key_bits": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Supplies the size in bits of the key when using 'CKM_RSA_PKCS_PSS', 'CKM_RSA_PKCS_OAEP' or 'CKM_RSA_PKCS' as a value for 'mechanism'. Required if 'allow_generate_key' is true"
+            },
+            "key_id": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The id of a PKCS#11 key to use"
+            },
+            "key_label": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The label of the key to use"
+            },
+            "library": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the kms_library stanza to use from Vault's config to lookup the local library path"
+            },
+            "mechanism": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The encryption/decryption mechanism to use, specified as a hexadecimal (prefixed by 0x) string."
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A unique lowercase name that serves as identifying the key"
+            },
+            "pin": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The PIN for login"
+            },
+            "slot": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The slot number to use, specified as a string in a decimal format (e.g. '2305843009213693953')"
+            },
+            "token_label": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The slot token label to use"
+            },
+            "uuid": {
+              "Type": "String",
+              "Description": "ID of the managed key read from Vault",
+              "Computed": true
+            }
+          }
+        }
       }
     },
     "vault_mfa_duo": {
@@ -9187,6 +11001,16 @@
         "Description": "Accessor of the mount",
         "Computed": true
       },
+      "allowed_managed_keys": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "List of managed key registry entry names that the mount in question is allowed to access",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "audit_non_hmac_request_keys": {
         "Type": "List",
         "Optional": true,
@@ -9330,6 +11154,15 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "local": {
         "Type": "Bool",
         "Optional": true,
@@ -9430,6 +11263,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "The description of the auth backend"
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "group": {
         "Type": "Set",
@@ -9664,7 +11506,7 @@
       },
       "expiration": {
         "Type": "Int",
-        "Description": "The certificate expiration.",
+        "Description": "The certificate expiration as a Unix-style timestamp.",
         "Computed": true
       },
       "format": {
@@ -9737,6 +11579,11 @@
       "private_key_type": {
         "Type": "String",
         "Description": "The private key type.",
+        "Computed": true
+      },
+      "renew_pending": {
+        "Type": "Bool",
+        "Description": "Initially false, and then set to true during refresh once the expiration is less than min_seconds_remaining in the future.",
         "Computed": true
       },
       "revoke": {
@@ -9927,6 +11774,22 @@
         "Type": "String",
         "Optional": true,
         "Description": "The locality."
+      },
+      "managed_key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the previously configured managed key.",
+        "ConflictsWith": [
+          "managed_key_name"
+        ]
+      },
+      "managed_key_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the previously configured managed key.",
+        "ConflictsWith": [
+          "managed_key_id"
+        ]
       },
       "namespace": {
         "Type": "String",
@@ -10492,6 +12355,24 @@
         "Optional": true,
         "Description": "The locality."
       },
+      "managed_key_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the previously configured managed key.",
+        "Computed": true,
+        "ConflictsWith": [
+          "managed_key_name"
+        ]
+      },
+      "managed_key_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The name of the previously configured managed key.",
+        "Computed": true,
+        "ConflictsWith": [
+          "managed_key_id"
+        ]
+      },
       "max_path_length": {
         "Type": "Int",
         "Optional": true,
@@ -10838,7 +12719,7 @@
       },
       "expiration": {
         "Type": "Int",
-        "Description": "The certificate expiration.",
+        "Description": "The certificate expiration as a Unix-style timestamp.",
         "Computed": true
       },
       "format": {
@@ -10893,6 +12774,11 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      },
+      "renew_pending": {
+        "Type": "Bool",
+        "Description": "Initially false, and then set to true during refresh once the expiration is less than min_seconds_remaining in the future.",
+        "Computed": true
       },
       "serial": {
         "Type": "String",
@@ -11009,6 +12895,15 @@
         "Type": "String",
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
+      },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
       },
       "max_lease_ttl_seconds": {
         "Type": "Int",
@@ -11776,6 +13671,15 @@
         "Optional": true,
         "Description": "Human-friendly description of the mount for the backend."
       },
+      "disable_remount": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "If set, opts out of mount migration on path updates.",
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "max_lease_ttl_seconds": {
         "Type": "Int",
         "Optional": true,
@@ -12532,7 +14436,7 @@
       "environment": {
         "Type": "String",
         "Optional": true,
-        "Description": "The Azure environment to use during credential validation.\nDefaults to the environment configured in the Vault backend.\nSome possible values: AzurePublicCloud, AzureGovernmentCloud"
+        "Description": "The Azure environment to use during credential validation.\nDefaults to the environment configured in the Vault backend.\nSome possible values: AzurePublicCloud, AzureUSGovernmentCloud"
       },
       "lease_duration": {
         "Type": "Int",

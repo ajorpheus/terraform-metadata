@@ -7,10 +7,14 @@ How to Use
 
 2. Run `make`
 
-3. You'll see `schemas` directory with schemas and 'failure.txt' file with list of failed providers
+3. If Check providers failed, you need to append "providers.base.new.json" entries to "providers.base.json"
 
-4. Copy all json files from `schemas` directory to `/REPO_ROOT/terraform/model/providers/`
-5. Copy providers.list to `/REPO_ROOT/terraform/model/`
+4. If Cloning failed, remove entry in "providers.base.json" and rerun make
+
+5. You'll see `schemas` directory with schemas and 'failure.txt' file with list of failed providers
+
+6. Copy all json files from `schemas` directory to `/REPO_ROOT/terraform/model/providers/`
+7. Copy providers.list to `/REPO_ROOT/terraform/model/`
 
 
 Flags and Parameters

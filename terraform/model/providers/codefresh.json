@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "codefresh",
   "type": "provider",
-  "version": "0.0.24",
+  "version": "v0.1.2",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -845,6 +845,20 @@
           "Type": "SchemaElements",
           "ElementsType": "String"
         }
+      }
+    },
+    "codefresh_pipeline_cron_trigger": {
+      "expression": {
+        "Type": "String",
+        "Required": true
+      },
+      "message": {
+        "Type": "String",
+        "Required": true
+      },
+      "pipeline_id": {
+        "Type": "String",
+        "Required": true
       }
     },
     "codefresh_project": {

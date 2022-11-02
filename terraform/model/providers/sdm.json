@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "sdm",
   "type": "provider",
-  "version": "v3.3.0",
+  "version": "v3.3.3",
   "provider": {
     "api_access_key": {
       "Type": "String",
@@ -5224,7 +5224,6 @@
       "oracle": {
         "Type": "List",
         "Optional": true,
-        "Description": "Oracle is currently unstable, and its API may change, or it may be removed, without a major version bump.",
         "MaxItems": 1,
         "IsBlock": true,
         "ConfigImplicitMode": "Block",

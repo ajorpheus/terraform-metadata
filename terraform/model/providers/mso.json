@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "mso",
   "type": "provider",
-  "version": "v0.7.0",
+  "version": "v0.7.1",
   "provider": {
     "domain": {
       "Type": "String",

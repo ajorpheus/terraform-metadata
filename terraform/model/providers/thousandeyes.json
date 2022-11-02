@@ -3,13 +3,19 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "thousandeyes",
   "type": "provider",
-  "version": "v1.1.2",
+  "version": "v1.3.1",
   "provider": {
     "account_group_id": {
       "Type": "String",
       "Optional": true,
       "Description": "The ThousandEyes account group's unique ID.",
       "DefaultFunc": "ENV(TE_AID)"
+    },
+    "api_endpoint": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "The ThousandEyes API Endpoint's URL. E.g. https://api.thousandeyes.com/v6",
+      "DefaultFunc": "ENV(TE_API_ENDPOINT)"
     },
     "timeout": {
       "Type": "Int",
@@ -1257,7 +1263,7 @@
                     "Description": "The contents of the email, as a string."
                   },
                   "recipient": {
-                    "Type": "List",
+                    "Type": "Set",
                     "Optional": true,
                     "Description": "The email addresses to send the notification to.",
                     "ConfigImplicitMode": "Attr",
@@ -1265,6 +1271,28 @@
                       "Type": "SchemaElements",
                       "ElementsType": "String"
                     }
+                  }
+                }
+              }
+            },
+            "third_party": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Third party notification.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "integration_id": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The integration ID, as a string."
+                  },
+                  "integration_type": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "The integration type, as a string."
                   }
                 }
               }

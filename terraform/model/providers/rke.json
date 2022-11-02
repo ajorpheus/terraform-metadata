@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "rke",
   "type": "provider",
-  "version": "v1.3.3",
+  "version": "v1.3.4",
   "provider": {
     "debug": {
       "Type": "Bool",

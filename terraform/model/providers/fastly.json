@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "fastly",
   "type": "provider",
-  "version": "v2.3.2",
+  "version": "v2.4.0",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -427,6 +427,11 @@
         "ConflictsWith": [
           "reuse"
         ]
+      },
+      "imported": {
+        "Type": "Bool",
+        "Description": "Used internally by the provider to temporarily indicate if the service is being imported, and is reset to false once the import is finished",
+        "Computed": true
       },
       "logging_bigquery": {
         "Type": "Set",
@@ -2781,6 +2786,16 @@
                 "Value": "200"
               }
             },
+            "headers": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Custom health check HTTP headers (e.g. if your health check requires an API key to be provided). This feature is part of an alpha release, which may be subject to breaking changes and improvements over time",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
             "host": {
               "Type": "String",
               "Required": true,
@@ -2852,6 +2867,11 @@
             }
           }
         }
+      },
+      "imported": {
+        "Type": "Bool",
+        "Description": "Used internally by the provider to temporarily indicate if the service is being imported, and is reset to false once the import is finished",
+        "Computed": true
       },
       "logging_bigquery": {
         "Type": "Set",

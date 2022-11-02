@@ -3,12 +3,12 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "upcloud",
   "type": "provider",
-  "version": "v2.5.0",
+  "version": "v2.6.1",
   "provider": {
     "password": {
       "Type": "String",
-      "Required": true,
-      "Description": "Password for UpCloud API user",
+      "Optional": true,
+      "Description": "Password for UpCloud API user. Can also be configured using the `UPCLOUD_PASSWORD` environment variable.",
       "DefaultFunc": "ENV(UPCLOUD_PASSWORD)"
     },
     "retry_max": {
@@ -40,8 +40,8 @@
     },
     "username": {
       "Type": "String",
-      "Required": true,
-      "Description": "UpCloud username with API access",
+      "Optional": true,
+      "Description": "UpCloud username with API access. Can also be configured using the `UPCLOUD_USERNAME` environment variable.",
       "DefaultFunc": "ENV(UPCLOUD_USERNAME)"
     }
   },
@@ -170,6 +170,119 @@
         "Optional": true,
         "Description": "Zone of address, required when assigning a detached floating IP address",
         "Computed": true
+      }
+    },
+    "upcloud_kubernetes_cluster": {
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster name. Needs to be unique within the account."
+      },
+      "network": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Network ID for the cluster to run in."
+      },
+      "network_cidr": {
+        "Type": "String",
+        "Description": "Network CIDR for the given network. Computed automatically.",
+        "Computed": true
+      },
+      "node_group": {
+        "Type": "Set",
+        "Required": true,
+        "Description": "Node groups for workloads. Currently not available in state, although created.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "count": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Amount of nodes to provision in the node group.",
+              "Computed": true
+            },
+            "kubelet_args": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Additional arguments for kubelet for the nodes in this group. WARNING - those arguments will be passed directly to kubelet CLI on each worker node without any validation. Passing invalid arguments can break your whole cluster. Be extra careful when adding kubelet args.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "labels": {
+              "Type": "Map",
+              "Optional": true,
+              "Description": "Key-value pairs to classify the node group.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "name": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the node group. Needs to be unique within a cluster."
+            },
+            "plan": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The pricing plan used for the node group. Valid values available via `upcloud_kubernetes_plan` datasource field `description`.",
+              "Computed": true
+            },
+            "ssh_keys": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "You can optionally select SSH keys to be added as authorized keys to the nodes in this node group. This allows you to connect to the nodes via SSH once they are running.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "taint": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Taints for the nodes in this group.",
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "effect": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Taint effect."
+                  },
+                  "key": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Taint key."
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Required": true,
+                    "Description": "Taint value."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Description": "Operational state of the cluster.",
+        "Computed": true
+      },
+      "zone": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Zone in which the Kubernetes cluster will be hosted, e.g. `de-fra1`."
       }
     },
     "upcloud_loadbalancer": {
@@ -1381,79 +1494,79 @@
             "connect_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "connect_timeout",
+              "Description": "The number of seconds that the mysqld server waits for a connect packet before responding with Bad handshake",
               "Computed": true
             },
             "default_time_zone": {
               "Type": "String",
               "Optional": true,
-              "Description": "default_time_zone",
+              "Description": "Default server time zone as an offset from UTC (from -12:00 to +12:00), a time zone name, or `SYSTEM` to use the MySQL server default.",
               "Computed": true
             },
             "group_concat_max_len": {
               "Type": "Int",
               "Optional": true,
-              "Description": "group_concat_max_len",
+              "Description": "The maximum permitted result length in bytes for the `GROUP_CONCAT()` function.",
               "Computed": true
             },
             "information_schema_stats_expiry": {
               "Type": "Int",
               "Optional": true,
-              "Description": "information_schema_stats_expiry",
+              "Description": "The time, in seconds, before cached statistics expire.",
               "Computed": true
             },
             "innodb_ft_min_token_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "innodb_ft_min_token_size",
+              "Description": "Minimum length of words that are stored in an InnoDB `FULLTEXT` index.",
               "Computed": true
             },
             "innodb_ft_server_stopword_table": {
               "Type": "String",
               "Optional": true,
-              "Description": "innodb_ft_server_stopword_table",
+              "Description": "This option is used to specify your own InnoDB `FULLTEXT` index stopword list for all InnoDB tables.",
               "Computed": true
             },
             "innodb_lock_wait_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "innodb_lock_wait_timeout",
+              "Description": "The length of time in seconds an InnoDB transaction waits for a row lock before giving up.",
               "Computed": true
             },
             "innodb_log_buffer_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "innodb_log_buffer_size",
+              "Description": "The size in bytes of the buffer that InnoDB uses to write to the log files on disk.",
               "Computed": true
             },
             "innodb_online_alter_log_max_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "innodb_online_alter_log_max_size",
+              "Description": "The upper limit in bytes on the size of the temporary log files used during online DDL operations for InnoDB tables.",
               "Computed": true
             },
             "innodb_print_all_deadlocks": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "innodb_print_all_deadlocks",
+              "Description": "When enabled, information about all deadlocks in InnoDB user transactions is recorded in the error log. Disabled by default.",
               "Computed": true
             },
             "innodb_rollback_on_timeout": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "innodb_rollback_on_timeout",
+              "Description": "When enabled a transaction timeout causes InnoDB to abort and roll back the entire transaction.",
               "Computed": true
             },
             "interactive_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "interactive_timeout",
+              "Description": "The number of seconds the server waits for activity on an interactive connection before closing it.",
               "Computed": true
             },
             "internal_tmp_mem_storage_engine": {
               "Type": "String",
               "Optional": true,
-              "Description": "internal_tmp_mem_storage_engine",
+              "Description": "The storage engine for in-memory internal temporary tables.",
               "Computed": true
             },
             "ip_filter": {
@@ -1470,19 +1583,19 @@
             "long_query_time": {
               "Type": "Int",
               "Optional": true,
-              "Description": "long_query_time",
+              "Description": "The `slow_query_logs` work as SQL statements that take more than `long_query_time` seconds to execute. Default is `10s`",
               "Computed": true
             },
             "max_allowed_packet": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_allowed_packet",
+              "Description": "Size of the largest message in bytes that can be received by the server. Default is `67108864` (64M)",
               "Computed": true
             },
             "max_heap_table_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_heap_table_size",
+              "Description": "Limits the size of internal in-memory tables. Also set `tmp_table_size`. Default is `16777216` (16M)",
               "Computed": true
             },
             "migration": {
@@ -1547,19 +1660,19 @@
             "net_read_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "net_read_timeout",
+              "Description": "The number of seconds to wait for more data from a connection before aborting the read.",
               "Computed": true
             },
             "net_write_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "net_write_timeout",
+              "Description": "The number of seconds to wait for a block to be written to a connection before aborting the write.",
               "Computed": true
             },
             "public_access": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Public Access",
+              "Description": "Public access allows connections to your Managed Database services via the public internet.",
               "Default": {
                 "Type": "bool",
                 "Value": "false"
@@ -1568,31 +1681,31 @@
             "slow_query_log": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "slow_query_log",
+              "Description": "Slow query log enables capturing of slow queries. Setting `slow_query_log` to false also truncates the `mysql.slow_log` table. Default is off",
               "Computed": true
             },
             "sort_buffer_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "sort_buffer_size",
+              "Description": "Sort buffer size in bytes for `ORDER BY` optimization. Default is `262144` (256K)",
               "Computed": true
             },
             "sql_mode": {
               "Type": "String",
               "Optional": true,
-              "Description": "sql_mode",
+              "Description": "Global SQL mode. Set to empty to use MySQL server defaults. \n\t\t\tWhen creating a new service and not setting this field default SQL mode (strict, SQL standard compliant) will be assigned.",
               "Computed": true
             },
             "sql_require_primary_key": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "sql_require_primary_key",
+              "Description": "Require primary key to be defined for new tables or old tables modified with ALTER TABLE and fail if missing. \n\t\t\tIt is recommended to always have primary keys because various functionality may break if any large table is missing them.",
               "Computed": true
             },
             "tmp_table_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "tmp_table_size",
+              "Description": "Limits the size of internal in-memory tables. Also set `max_heap_table_size`. Default is `16777216` (16M)",
               "Computed": true
             },
             "version": {
@@ -1604,7 +1717,7 @@
             "wait_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "wait_timeout",
+              "Description": "The number of seconds the server waits for activity on a noninteractive connection before closing it.",
               "Computed": true
             }
           }
@@ -1790,57 +1903,57 @@
               }
             },
             "autovacuum_analyze_scale_factor": {
-              "Type": "Int",
+              "Type": "Float",
               "Optional": true,
-              "Description": "autovacuum_analyze_scale_factor",
+              "Description": "Specifies a fraction of the table size to add to `autovacuum_analyze_threshold` when deciding whether to trigger an `ANALYZE`. The default is `0.2` (20% of table size)",
               "Computed": true
             },
             "autovacuum_analyze_threshold": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_analyze_threshold",
+              "Description": "Specifies the minimum number of inserted, updated or deleted tuples needed to trigger an ANALYZE in any one table. The default is `50` tuples.",
               "Computed": true
             },
             "autovacuum_freeze_max_age": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_freeze_max_age",
+              "Description": "Specifies the maximum age (in transactions) that a table's `pg_class.relfrozenxid` field can attain before a `VACUUM` operation is forced to prevent transaction ID wraparound within the table. \n\t\t\t\tNote that the system will launch autovacuum processes to prevent wraparound even when autovacuum is otherwise disabled. \n\t\t\t\tThis parameter will cause the server to be restarted.",
               "Computed": true
             },
             "autovacuum_max_workers": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_max_workers",
+              "Description": "Specifies the maximum number of autovacuum processes (other than the autovacuum launcher) that may be running at any one time. The default is `3`. This parameter can only be set at server start.",
               "Computed": true
             },
             "autovacuum_naptime": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_naptime",
+              "Description": "Specifies the minimum delay between autovacuum runs on any given database. The delay is measured in seconds, and the default is `1` minute",
               "Computed": true
             },
             "autovacuum_vacuum_cost_delay": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_vacuum_cost_delay",
+              "Description": "Specifies the cost delay value that will be used in automatic VACUUM operations. If `-1` is specified, the regular `vacuum_cost_delay` value will be used. The default value is `20` milliseconds",
               "Computed": true
             },
             "autovacuum_vacuum_cost_limit": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_vacuum_cost_limit",
+              "Description": "Specifies the cost limit value that will be used in automatic `VACUUM` operations. If `-1` is specified (which is the default), the regular `vacuum_cost_limit` value will be used.",
               "Computed": true
             },
             "autovacuum_vacuum_scale_factor": {
-              "Type": "Int",
+              "Type": "Float",
               "Optional": true,
-              "Description": "autovacuum_vacuum_scale_factor",
+              "Description": "Specifies a fraction of the table size to add to autovacuum_vacuum_threshold when deciding whether to trigger a `VACUUM`. The default is `0.2` (20% of table size)",
               "Computed": true
             },
             "autovacuum_vacuum_threshold": {
               "Type": "Int",
               "Optional": true,
-              "Description": "autovacuum_vacuum_threshold",
+              "Description": "Specifies the minimum number of updated or deleted tuples needed to trigger a `VACUUM` in any one table. The default is `50` tuples",
               "Computed": true
             },
             "backup_hour": {
@@ -1858,37 +1971,43 @@
             "bgwriter_delay": {
               "Type": "Int",
               "Optional": true,
-              "Description": "bgwriter_delay",
+              "Description": "Specifies the delay between activity rounds for the background writer in milliseconds. Default is `200`.",
               "Computed": true
             },
             "bgwriter_flush_after": {
               "Type": "Int",
               "Optional": true,
-              "Description": "bgwriter_flush_after",
+              "Description": "Whenever more than `bgwriter_flush_after` bytes have been written by the background writer, attempt to force the OS to issue these writes to the underlying storage. Specified in kilobytes, default is `512`. Setting of `0` disables forced writeback.",
               "Computed": true
             },
             "bgwriter_lru_maxpages": {
               "Type": "Int",
               "Optional": true,
-              "Description": "bgwriter_lru_maxpages",
+              "Description": "In each round, no more than this many buffers will be written by the background writer. Setting this to zero disables background writing. Default is `100`.",
               "Computed": true
             },
             "bgwriter_lru_multiplier": {
-              "Type": "Int",
+              "Type": "Float",
               "Optional": true,
-              "Description": "bgwriter_lru_multiplier",
+              "Description": "The average recent need for new buffers is multiplied by `bgwriter_lru_multiplier` to arrive at an estimate of the number that will be needed during the next round (up to `bgwriter_lru_maxpages`). `1.0` represents a \"just in time\" policy of writing exactly the number of buffers predicted to be needed. Larger values provide some cushion against spikes in demand, while smaller values intentionally leave writes to be done by server processes. The default is `2.0`.",
               "Computed": true
             },
             "deadlock_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "deadlock_timeout",
+              "Description": "This is the amount of time, in milliseconds, to wait on a lock before checking to see if there is a deadlock condition.",
+              "Computed": true
+            },
+            "default_toast_compression": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Controls the amount of detail written in the server log for each message that is logged.",
               "Computed": true
             },
             "idle_in_transaction_session_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "idle_in_transaction_session_timeout",
+              "Description": "Time out sessions with open transactions after this number of milliseconds.",
               "Computed": true
             },
             "ip_filter": {
@@ -1905,109 +2024,115 @@
             "jit": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "jit",
+              "Description": "Controls system-wide use of Just-in-Time Compilation (JIT).",
               "Computed": true
             },
             "log_autovacuum_min_duration": {
               "Type": "Int",
               "Optional": true,
-              "Description": "log_autovacuum_min_duration",
+              "Description": "Causes each action executed by autovacuum to be logged if it ran for at least the specified number of milliseconds. Setting this to `0` logs all autovacuum actions. The default `-1` disables logging autovacuum actions.",
               "Computed": true
             },
             "log_error_verbosity": {
               "Type": "String",
               "Optional": true,
-              "Description": "log_error_verbosity",
+              "Description": "Controls the amount of detail written in the server log for each message that is logged.",
               "Computed": true
             },
             "log_line_prefix": {
               "Type": "String",
               "Optional": true,
-              "Description": "log_line_prefix",
+              "Description": "Choose from one of the available log-formats. These can support popular log analyzers like pgbadger, pganalyze etc.",
               "Computed": true
             },
             "log_min_duration_statement": {
               "Type": "Int",
               "Optional": true,
-              "Description": "log_min_duration_statement",
+              "Description": "Log statements that take more than this number of milliseconds to run, `-1` disables",
               "Computed": true
             },
             "max_files_per_process": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_files_per_process",
+              "Description": "PostgreSQL maximum number of files that can be open per process.",
               "Computed": true
             },
             "max_locks_per_transaction": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_locks_per_transaction",
+              "Description": "PostgreSQL maximum locks per transaction.",
               "Computed": true
             },
             "max_logical_replication_workers": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_logical_replication_workers",
+              "Description": "PostgreSQL maximum logical replication workers (taken from the pool of `max_parallel_workers`).",
               "Computed": true
             },
             "max_parallel_workers": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_parallel_workers",
+              "Description": "Sets the maximum number of workers that the system can support for parallel queries.",
               "Computed": true
             },
             "max_parallel_workers_per_gather": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_parallel_workers_per_gather",
+              "Description": "Sets the maximum number of workers that can be started by a single Gather or Gather Merge node.",
               "Computed": true
             },
             "max_pred_locks_per_transaction": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_pred_locks_per_transaction",
+              "Description": "PostgreSQL maximum predicate locks per transaction.",
               "Computed": true
             },
             "max_prepared_transactions": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_prepared_transactions",
+              "Description": "PostgreSQL maximum prepared transactions",
               "Computed": true
             },
             "max_replication_slots": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_replication_slots",
+              "Description": "PostgreSQL maximum replication slots.",
+              "Computed": true
+            },
+            "max_slot_wal_keep_size": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "PostgreSQL maximum WAL size (MB) reserved for replication slots. Default is `-1` (unlimited). `wal_keep_size` minimum WAL size setting takes precedence over this.",
               "Computed": true
             },
             "max_stack_depth": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_stack_depth",
+              "Description": "Maximum depth of the stack in bytes.",
               "Computed": true
             },
             "max_standby_archive_delay": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_standby_archive_delay",
+              "Description": "Max standby archive delay in milliseconds.",
               "Computed": true
             },
             "max_standby_streaming_delay": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_standby_streaming_delay",
+              "Description": "Max standby streaming delay in milliseconds.",
               "Computed": true
             },
             "max_wal_senders": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_wal_senders",
+              "Description": "PostgreSQL maximum WAL senders.",
               "Computed": true
             },
             "max_worker_processes": {
               "Type": "Int",
               "Optional": true,
-              "Description": "max_worker_processes",
+              "Description": "Sets the maximum number of background processes that the system can support.",
               "Computed": true
             },
             "migration": {
@@ -2072,20 +2197,21 @@
             "pg_partman_bgw_interval": {
               "Type": "Int",
               "Optional": true,
-              "Description": "pg_partman_bgw.interval",
+              "Description": "Sets the time interval to run pg_partman's scheduled tasks.",
               "Computed": true
             },
             "pg_partman_bgw_role": {
               "Type": "String",
               "Optional": true,
-              "Description": "pg_partman_bgw.role",
+              "Description": "Controls which role to use for pg_partman's scheduled background tasks.",
               "Computed": true
             },
             "pg_read_replica": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Should the service which is being forked be a read replica",
-              "Computed": true
+              "Description": "Should the service which is being forked be a read replica (deprecated, use read_replica service integration instead).",
+              "Computed": true,
+              "Deprecated": "Use read_replica service integration instead"
             },
             "pg_service_to_fork_from": {
               "Type": "String",
@@ -2096,7 +2222,7 @@
             "pg_stat_statements_track": {
               "Type": "String",
               "Optional": true,
-              "Description": "pg_stat_statements.track",
+              "Description": "Controls which statements are counted. \n\t\t\tSpecify top to track top-level statements (those issued directly by clients), all to also track nested statements (such as statements invoked within functions), \n\t\t\tor none to disable statement statistics collection.The default value is `top`.",
               "Computed": true
             },
             "pgbouncer": {
@@ -2166,7 +2292,7 @@
                   "server_reset_query_always": {
                     "Type": "Bool",
                     "Optional": true,
-                    "Description": "Run server_reset_query (DISCARD ALL) in all pooling modes",
+                    "Description": "Run server_reset_query (`DISCARD ALL`) in all pooling modes",
                     "Computed": true
                   }
                 }
@@ -2186,7 +2312,7 @@
                   "max_failover_replication_time_lag": {
                     "Type": "Int",
                     "Optional": true,
-                    "Description": "max_failover_replication_time_lag",
+                    "Description": "Number of seconds of master unavailability before triggering database failover to standby",
                     "Default": {
                       "Type": "int",
                       "Value": "60"
@@ -2198,7 +2324,7 @@
             "public_access": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Public Access",
+              "Description": "Public access allows connections to your Managed Database services via the public internet.",
               "Default": {
                 "Type": "bool",
                 "Value": "false"
@@ -2207,7 +2333,7 @@
             "shared_buffers_percentage": {
               "Type": "Int",
               "Optional": true,
-              "Description": "shared_buffers_percentage",
+              "Description": "Percentage of total RAM that the database server uses for shared memory buffers. \n\t\t\t\tValid range is 20-60 (float), which corresponds to 20% - 60%. This setting adjusts the `shared_buffers` configuration value.",
               "Computed": true
             },
             "synchronous_replication": {
@@ -2219,7 +2345,7 @@
             "temp_file_limit": {
               "Type": "Int",
               "Optional": true,
-              "Description": "temp_file_limit",
+              "Description": "PostgreSQL temporary file limit in KiB, -1 for unlimited",
               "Computed": true
             },
             "timescaledb": {
@@ -2236,7 +2362,7 @@
                   "max_background_workers": {
                     "Type": "Int",
                     "Optional": true,
-                    "Description": "timescaledb.max_background_workers",
+                    "Description": "The number of background workers for timescaledb operations. \n\t\t\t\t\t\tYou should configure this setting to the sum of your number of databases and the total number of concurrent background workers you want running at any given point in time.",
                     "Computed": true
                   }
                 }
@@ -2251,25 +2377,25 @@
             "track_activity_query_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "track_activity_query_size",
+              "Description": "Specifies the number of bytes reserved to track the currently executing command for each active session.",
               "Computed": true
             },
             "track_commit_timestamp": {
               "Type": "String",
               "Optional": true,
-              "Description": "track_commit_timestamp",
+              "Description": "Record commit time of transactions.",
               "Computed": true
             },
             "track_functions": {
               "Type": "String",
               "Optional": true,
-              "Description": "track_functions",
+              "Description": "Enables tracking of function call counts and time used.",
               "Computed": true
             },
             "track_io_timing": {
               "Type": "String",
               "Optional": true,
-              "Description": "track_io_timing",
+              "Description": "Enables timing of database I/O calls. \n\t\t\tThis parameter is off by default, because it will repeatedly query the operating system for the current time, which may cause significant overhead on some platforms.",
               "Computed": true
             },
             "variant": {
@@ -2287,19 +2413,19 @@
             "wal_sender_timeout": {
               "Type": "Int",
               "Optional": true,
-              "Description": "wal_sender_timeout",
+              "Description": "Terminate replication connections that are inactive for longer than this amount of time, in milliseconds. Setting this value to `0` disables the timeout.",
               "Computed": true
             },
             "wal_writer_delay": {
               "Type": "Int",
               "Optional": true,
-              "Description": "wal_writer_delay",
+              "Description": "WAL flush interval in milliseconds. Note that setting this value to lower than the default `200`ms may negatively impact performance",
               "Computed": true
             },
             "work_mem": {
               "Type": "Int",
               "Optional": true,
-              "Description": "work_mem",
+              "Description": "Sets the maximum amount of memory to be used by a query operation (such as a sort or hash table) before writing to temporary disk files, \n\t\t\tin MB. Default is 1MB + 0.075% of total RAM (up to 32MB).",
               "Computed": true
             }
           }
@@ -2565,6 +2691,15 @@
         "Required": true,
         "Description": "A valid domain name"
       },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Labels contain key-value pairs to classify the server",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Value": "String"
+        }
+      },
       "login": {
         "Type": "Set",
         "Optional": true,
@@ -2597,7 +2732,7 @@
             "password_delivery": {
               "Type": "String",
               "Optional": true,
-              "Description": "The delivery method for the server’s root password",
+              "Description": "The delivery method for the server's root password (one of `none`, `email` or `sms`)",
               "Default": {
                 "Type": "string",
                 "Value": "none"
@@ -3110,6 +3245,55 @@
             }
           }
         }
+      }
+    },
+    "upcloud_kubernetes_cluster": {
+      "client_certificate": {
+        "Type": "String",
+        "Description": "TLS authentication client certificate, encoded (PEM).",
+        "Computed": true
+      },
+      "client_key": {
+        "Type": "String",
+        "Description": "Key to pair with `client_certificate`, encoded (PEM).",
+        "Computed": true
+      },
+      "cluster_ca_certificate": {
+        "Type": "String",
+        "Description": "TLS authentication root certificate bundle, encoded (PEM).",
+        "Computed": true
+      },
+      "host": {
+        "Type": "String",
+        "Description": "Hostname of the cluster API. Defined as URI.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Cluster ID."
+      },
+      "kubeconfig": {
+        "Type": "String",
+        "Description": "Kubernetes config file contents for the cluster.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "Cluster name. Needs to be unique within the account.",
+        "Computed": true
+      }
+    },
+    "upcloud_kubernetes_plan": {
+      "description": {
+        "Type": "String",
+        "Description": "The description of a pricing plan. e.g. `K8S-2xCPU-4GB`.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name used to identify a pricing plan, e.g. `large`."
       }
     },
     "upcloud_networks": {

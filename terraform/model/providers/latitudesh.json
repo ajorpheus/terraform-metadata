@@ -1,0 +1,178 @@
+{
+  ".schema_version": "2",
+  ".sdk_type": "terraform-plugin-sdk-v2",
+  "name": "latitudesh",
+  "type": "provider",
+  "version": "v0.1.5",
+  "provider": {
+    "auth_token": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "ENV(LATITUDESH_AUTH_TOKEN)"
+    }
+  },
+  "resources": {
+    "latitudesh_project": {
+      "created": {
+        "Type": "String",
+        "Description": "The timestamp for when the project was created",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The description of the project"
+      },
+      "environment": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the project"
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the project"
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "The timestamp for the last time the project was updated",
+        "Computed": true
+      }
+    },
+    "latitudesh_server": {
+      "created": {
+        "Type": "String",
+        "Description": "The timestamp for when the server was created",
+        "Computed": true
+      },
+      "hostname": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The server hostname"
+      },
+      "operating_system": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The server OS"
+      },
+      "plan": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The server plan"
+      },
+      "primary_ip_v4": {
+        "Type": "String",
+        "Description": "The server IP address",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id or slug of the project"
+      },
+      "site": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The server site"
+      },
+      "ssh_keys": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "List of server SSH key ids",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "Int"
+        }
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "The timestamp for the last time the server was updated",
+        "Computed": true
+      }
+    },
+    "latitudesh_ssh_key": {
+      "created": {
+        "Type": "String",
+        "Description": "The timestamp for when the SSH key was created",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The SSH key name"
+      },
+      "project": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id or slug of the project"
+      },
+      "public_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The SSH public key"
+      },
+      "updated": {
+        "Type": "String",
+        "Description": "The timestamp for the last time the SSH key was updated",
+        "Computed": true
+      }
+    }
+  },
+  "data-sources": {
+    "latitudesh_plan": {
+      "id": {
+        "Type": "String",
+        "Description": "The ID of this Plan.",
+        "Computed": true
+      },
+      "line": {
+        "Type": "String",
+        "Description": "The line of this Plan.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the Plan to match"
+      },
+      "slug": {
+        "Type": "String",
+        "Description": "The slug of this Plan.",
+        "Computed": true
+      }
+    },
+    "latitudesh_region": {
+      "country_name": {
+        "Type": "String",
+        "Description": "The country name of this Region.",
+        "Computed": true
+      },
+      "country_slug": {
+        "Type": "String",
+        "Description": "The country slug of this Region.",
+        "Computed": true
+      },
+      "facility": {
+        "Type": "String",
+        "Description": "The facility of this Region.",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Description": "The ID of this Region.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The name of the Region",
+        "Computed": true
+      },
+      "slug": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The slug of this Region to match."
+      }
+    }
+  }
+}

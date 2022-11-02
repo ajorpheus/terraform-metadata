@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "gridscale",
   "type": "provider",
-  "version": "v1.15.0",
+  "version": "v1.16.1",
   "provider": {
     "api_url": {
       "Type": "String",
@@ -872,6 +872,11 @@
         "Description": "Time this service was created.",
         "Computed": true
       },
+      "gsk_version": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The gridscale k8s PaaS version (issued by gridscale) of this instance."
+      },
       "kubeconfig": {
         "Type": "String",
         "Description": "K8s config data",
@@ -956,13 +961,22 @@
               "Type": "String",
               "Required": true,
               "Description": "Storage type."
+            },
+            "surge_node": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "Enable surge node to avoid resources shortage during the cluster upgrade.",
+              "Default": {
+                "Type": "bool",
+                "Value": "true"
+              }
             }
           }
         }
       },
       "release": {
         "Type": "String",
-        "Required": true,
+        "Optional": true,
         "Description": "The k8s release of this instance."
       },
       "security_zone_uuid": {
@@ -2109,6 +2123,36 @@
         "Type": "String",
         "Description": "The object storage access_key.",
         "Computed": true
+      }
+    },
+    "gridscale_object_storage_bucket": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "access_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The object storage secret_key."
+      },
+      "bucket_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the bucket."
+      },
+      "s3_host": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The S3 host.",
+        "Default": {
+          "Type": "string",
+          "Value": "gos3.io"
+        }
+      },
+      "secret_key": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The object storage access_key."
       }
     },
     "gridscale_paas": {

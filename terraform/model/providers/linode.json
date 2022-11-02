@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "linode",
   "type": "provider",
-  "version": "v1.29.2",
+  "version": "v1.29.4",
   "provider": {
     "api_version": {
       "Type": "String",

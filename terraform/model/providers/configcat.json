@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "configcat",
   "type": "provider",
-  "version": "v1.3.2",
+  "version": "v1.3.3",
   "provider": {
     "base_path": {
       "Type": "String",

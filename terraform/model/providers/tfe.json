@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "tfe",
   "type": "provider",
-  "version": "v0.36.1",
+  "version": "v0.38.0",
   "provider": {
     "hostname": {
       "Type": "String",
@@ -164,6 +164,10 @@
       }
     },
     "tfe_organization": {
+      "assessments_enforced": {
+        "Type": "Bool",
+        "Optional": true
+      },
       "collaborator_auth_policy": {
         "Type": "String",
         "Optional": true,
@@ -213,6 +217,10 @@
         "Required": true
       },
       "user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "username": {
         "Type": "String",
         "Computed": true
       }
@@ -383,6 +391,7 @@
       "workspace_ids": {
         "Type": "Set",
         "Optional": true,
+        "Computed": true,
         "ConflictsWith": [
           "global"
         ],
@@ -722,6 +731,21 @@
         "Required": true
       }
     },
+    "tfe_team_organization_members": {
+      "organization_membership_ids": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "team_id": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "tfe_team_token": {
       "force_regenerate": {
         "Type": "Bool",
@@ -875,7 +899,10 @@
         "Optional": true,
         "ConflictsWith": [
           "operations"
-        ]
+        ],
+        "Default": {
+          "Type": "string"
+        }
       },
       "allow_destroy_plan": {
         "Type": "Bool",
@@ -884,6 +911,10 @@
           "Type": "bool",
           "Value": "true"
         }
+      },
+      "assessments_enabled": {
+        "Type": "Bool",
+        "Optional": true
       },
       "auto_apply": {
         "Type": "Bool",
@@ -929,7 +960,8 @@
         "ConflictsWith": [
           "execution_mode",
           "agent_pool_id"
-        ]
+        ],
+        "Deprecated": "Use execution_mode instead."
       },
       "organization": {
         "Type": "String",
@@ -1064,18 +1096,40 @@
         }
       }
     },
-    "tfe_workspace_run_task": {
-      "enforcement_level": {
-        "Type": "String",
-        "Required": true
-      },
-      "task_id": {
+    "tfe_workspace_policy_set": {
+      "policy_set_id": {
         "Type": "String",
         "Required": true
       },
       "workspace_id": {
         "Type": "String",
         "Required": true
+      }
+    },
+    "tfe_workspace_run_task": {
+      "enforcement_level": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The enforcement level of the task. Valid values are `advisory` and `mandatory`."
+      },
+      "stage": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "This is currently in BETA. The stage to run the task in. Valid values are `pre_plan`, `post_plan` and `pre_apply`.",
+        "Default": {
+          "Type": "tfe.Stage",
+          "Value": "post_plan"
+        }
+      },
+      "task_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of the Run task to associate to the Workspace."
+      },
+      "workspace_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The id of the workspace to associate the Run task to."
       }
     },
     "tfe_workspace_variable_set": {
@@ -1143,20 +1197,48 @@
         "Type": "String",
         "Computed": true
       },
+      "callback_url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_at": {
+        "Type": "String",
+        "Computed": true
+      },
       "http_url": {
         "Type": "String",
         "Computed": true
       },
+      "name": {
+        "Type": "String",
+        "Optional": true
+      },
       "oauth_client_id": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "oauth_token_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "organization": {
+        "Type": "String",
+        "Optional": true
+      },
+      "service_provider": {
+        "Type": "String",
+        "Optional": true
+      },
+      "service_provider_display_name": {
         "Type": "String",
         "Computed": true
       }
     },
     "tfe_organization": {
+      "assessments_enforced": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "collaborator_auth_policy": {
         "Type": "String",
         "Computed": true
@@ -1190,10 +1272,54 @@
         "Computed": true
       }
     },
+    "tfe_organization_members": {
+      "members": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "organization_membership_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "members_waiting": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "organization_membership_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "user_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "organization": {
+        "Type": "String",
+        "Required": true
+      }
+    },
     "tfe_organization_membership": {
       "email": {
         "Type": "String",
-        "Required": true
+        "Optional": true
       },
       "organization": {
         "Type": "String",
@@ -1201,6 +1327,11 @@
       },
       "user_id": {
         "Type": "String",
+        "Computed": true
+      },
+      "username": {
+        "Type": "String",
+        "Optional": true,
         "Computed": true
       }
     },
@@ -1245,6 +1376,73 @@
       },
       "names": {
         "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "tfe_policy_set": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "global": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "organization": {
+        "Type": "String",
+        "Required": true
+      },
+      "policies_path": {
+        "Type": "String",
+        "Computed": true
+      },
+      "policy_ids": {
+        "Type": "Set",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "vcs_repo": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "branch": {
+              "Type": "String",
+              "Computed": true
+            },
+            "identifier": {
+              "Type": "String",
+              "Computed": true
+            },
+            "ingress_submodules": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "oauth_token_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "workspace_ids": {
+        "Type": "Set",
         "Computed": true,
         "ConfigImplicitMode": "Attr",
         "Elem": {
@@ -1601,6 +1799,10 @@
         "Type": "Bool",
         "Computed": true
       },
+      "assessments_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
       "auto_apply": {
         "Type": "Bool",
         "Computed": true
@@ -1807,15 +2009,23 @@
     "tfe_workspace_run_task": {
       "enforcement_level": {
         "Type": "String",
+        "Description": "The enforcement level of the task.",
+        "Computed": true
+      },
+      "stage": {
+        "Type": "String",
+        "Description": "Which stage the task will run in.",
         "Computed": true
       },
       "task_id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The id of the run task."
       },
       "workspace_id": {
         "Type": "String",
-        "Required": true
+        "Required": true,
+        "Description": "The id of the workspace."
       }
     }
   }

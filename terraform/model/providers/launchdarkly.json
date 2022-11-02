@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "launchdarkly",
   "type": "provider",
-  "version": "v2.9.2",
+  "version": "v2.9.4",
   "provider": {
     "access_token": {
       "Type": "String",

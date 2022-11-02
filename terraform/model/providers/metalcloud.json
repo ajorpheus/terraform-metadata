@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "metalcloud",
   "type": "provider",
-  "version": "v2.3.8",
+  "version": "v2.4.0-pre",
   "provider": {
     "api_key": {
       "Type": "String",

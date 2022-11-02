@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "infoblox",
   "type": "provider",
-  "version": "v2.1.6",
+  "version": "v2.1.12",
   "provider": {
     "connect_timeout": {
       "Type": "Int",
@@ -343,8 +343,8 @@
       },
       "internal_id": {
         "Type": "String",
-        "Required": true,
-        "Description": "This value must point to the ID of the appropriate allocation resource."
+        "Optional": true,
+        "Description": "This value must point to the ID of the appropriate allocation resource. Required on resource creation."
       },
       "mac_addr": {
         "Type": "String",
@@ -563,19 +563,13 @@
         "Type": "Int",
         "Optional": true,
         "Description": "The number of IP's you want to reserve in IPv4 Network.",
-        "Default": {
-          "Type": "int",
-          "Value": "0"
-        }
+        "Computed": true
       },
       "reserve_ipv6": {
         "Type": "Int",
         "Optional": true,
         "Description": "The number of IP's you want to reserve in IPv6 Network",
-        "Default": {
-          "Type": "int",
-          "Value": "0"
-        }
+        "Computed": true
       }
     },
     "infoblox_ipv4_network_container": {
@@ -602,8 +596,12 @@
       },
       "network_view": {
         "Type": "String",
-        "Required": true,
-        "Description": "The name of network view for the network container."
+        "Optional": true,
+        "Description": "The name of network view for the network container.",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
       }
     },
     "infoblox_ipv6_allocation": {
@@ -817,19 +815,13 @@
         "Type": "Int",
         "Optional": true,
         "Description": "The number of IP's you want to reserve in IPv4 Network.",
-        "Default": {
-          "Type": "int",
-          "Value": "0"
-        }
+        "Computed": true
       },
       "reserve_ipv6": {
         "Type": "Int",
         "Optional": true,
         "Description": "The number of IP's you want to reserve in IPv6 Network",
-        "Default": {
-          "Type": "int",
-          "Value": "0"
-        }
+        "Computed": true
       }
     },
     "infoblox_ipv6_network_container": {
@@ -856,8 +848,12 @@
       },
       "network_view": {
         "Type": "String",
-        "Required": true,
-        "Description": "The name of network view for the network container."
+        "Optional": true,
+        "Description": "The name of network view for the network container.",
+        "Default": {
+          "Type": "string",
+          "Value": "default"
+        }
       }
     },
     "infoblox_network_view": {
@@ -938,9 +934,7 @@
         "Type": "String",
         "Optional": true,
         "Description": "The name of the DNS PTR record in FQDN format",
-        "Default": {
-          "Type": "string"
-        }
+        "Computed": true
       },
       "ttl": {
         "Type": "Int",
@@ -1182,7 +1176,7 @@
       "record_name": {
         "Type": "String",
         "Optional": true,
-        "Description": "The name of the DNS PTR record in FQDN format",
+        "Description": "The name of the DNS PTR-record in FQDN format",
         "Default": {
           "Type": "string"
         }

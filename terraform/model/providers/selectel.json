@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "selectel",
   "type": "provider",
-  "version": "v3.8.4",
+  "version": "v3.8.5",
   "provider": {
     "endpoint": {
       "Type": "String",
@@ -467,6 +467,14 @@
         "Optional": true,
         "Computed": true
       },
+      "private_kube_api": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "false"
+        }
+      },
       "project_id": {
         "Type": "String",
         "Required": true
@@ -553,6 +561,10 @@
           "Type": "bool",
           "Value": "false"
         }
+      },
+      "nodegroup_type": {
+        "Type": "String",
+        "Computed": true
       },
       "nodes": {
         "Type": "List",

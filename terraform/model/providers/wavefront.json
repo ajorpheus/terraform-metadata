@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "wavefront",
   "type": "provider",
-  "version": "v3.2.0",
+  "version": "v3.3.0",
   "provider": {
     "address": {
       "Type": "String",
@@ -79,6 +79,10 @@
         "Required": true
       },
       "notification_resend_frequency_minutes": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "process_rate_minutes": {
         "Type": "Int",
         "Optional": true
       },
@@ -1406,6 +1410,38 @@
         }
       }
     },
+    "wavefront_event": {
+      "annotations": {
+        "Type": "Map",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "endtime_key": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "start_time": {
+        "Type": "Int",
+        "Optional": true
+      },
+      "tags": {
+        "Type": "List",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "wavefront_external_link": {
       "description": {
         "Type": "String",
@@ -1447,6 +1483,10 @@
         "Required": true
       },
       "name": {
+        "Type": "String",
+        "Required": true
+      },
+      "scope": {
         "Type": "String",
         "Required": true
       }
@@ -1721,10 +1761,2316 @@
     }
   },
   "data-sources": {
+    "wavefront_alert": {
+      "additional_information": {
+        "Type": "String",
+        "Computed": true
+      },
+      "alert_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "can_modify": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "can_view": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "condition": {
+        "Type": "String",
+        "Computed": true
+      },
+      "conditions": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "display_expression": {
+        "Type": "String",
+        "Computed": true
+      },
+      "evaluate_realtime_data": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "failing_host_label_pairs": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "firing": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "host": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "in_maintenance_host_label_pairs": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "firing": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "host": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "include_obsolete_metrics": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "notification_resend_frequency_minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "process_rate_minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "resolve_after_minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "severity": {
+        "Type": "String",
+        "Computed": true
+      },
+      "severity_list": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "status": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "target": {
+        "Type": "String",
+        "Computed": true
+      },
+      "targets": {
+        "Type": "Map",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "wavefront_alerts": {
+      "alerts": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "additional_information": {
+              "Type": "String",
+              "Computed": true
+            },
+            "alert_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "can_modify": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "can_view": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "condition": {
+              "Type": "String",
+              "Computed": true
+            },
+            "conditions": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "display_expression": {
+              "Type": "String",
+              "Computed": true
+            },
+            "evaluate_realtime_data": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "failing_host_label_pairs": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "firing": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "host": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "in_maintenance_host_label_pairs": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "firing": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "host": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "include_obsolete_metrics": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "minutes": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "notification_resend_frequency_minutes": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "process_rate_minutes": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "resolve_after_minutes": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "severity": {
+              "Type": "String",
+              "Computed": true
+            },
+            "severity_list": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "status": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tags": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "target": {
+              "Type": "String",
+              "Computed": true
+            },
+            "targets": {
+              "Type": "Map",
+              "Optional": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      }
+    },
+    "wavefront_dashboard": {
+      "can_modify": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "can_view": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "chart_title_bg_color": {
+        "Type": "String",
+        "Computed": true
+      },
+      "chart_title_color": {
+        "Type": "String",
+        "Computed": true
+      },
+      "chart_title_scalar": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "created_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "creator_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "customer": {
+        "Type": "String",
+        "Computed": true
+      },
+      "default_end_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "default_start_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "default_time_window": {
+        "Type": "String",
+        "Computed": true
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "display_description": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "display_query_parameters": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "display_section_table_of_contents": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "event_filter_type": {
+        "Type": "String",
+        "Computed": true
+      },
+      "event_query": {
+        "Type": "String",
+        "Computed": true
+      },
+      "favorite": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "hidden": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "num_charts": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "num_favorites": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "parameter_details": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "default_value": {
+              "Type": "String",
+              "Computed": true
+            },
+            "dynamic_field_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "hide_from_view": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "label": {
+              "Type": "String",
+              "Computed": true
+            },
+            "parameter_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "query_value": {
+              "Type": "String",
+              "Computed": true
+            },
+            "tag_key": {
+              "Type": "String",
+              "Computed": true
+            },
+            "values_to_readable_strings": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "parameters": {
+        "Type": "Map",
+        "Computed": true
+      },
+      "sections": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "rows": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "charts": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "base": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "chart_attributes": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "chart_settings": {
+                          "Type": "List",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "auto_column_tags": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "column_tags": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "custom_tags": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "expected_data_spacing": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "fixed_legend_display_stats": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "fixed_legend_enabled": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "fixed_legend_filter_field": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "fixed_legend_filter_limit": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "fixed_legend_filter_sort": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "fixed_legend_hide_label": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "fixed_legend_position": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "fixed_legend_use_raw_stats": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "group_by_source": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "invert_dynamic_legend_hover_control": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "line_type": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "max": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "min": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "num_tags": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "plain_markdown_content": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "show_hosts": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "show_labels": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "show_raw_values": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "sort_values_descending": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "sparkline_decimal_precision": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "sparkline_display_color": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_display_font_size": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_display_horizontal_position": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_display_postfix": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_display_prefix": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_display_value_type": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_display_vertical_position": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_fill_color": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_line_color": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_size": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_value_color_map_apply_to": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "sparkline_value_color_map_colors": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "sparkline_value_color_map_values": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "Int"
+                                }
+                              },
+                              "sparkline_value_color_map_values_v2": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "Float"
+                                }
+                              },
+                              "sparkline_value_text_map_text": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "String"
+                                }
+                              },
+                              "sparkline_value_text_map_thresholds": {
+                                "Type": "List",
+                                "Computed": true,
+                                "ConfigImplicitMode": "Attr",
+                                "Elem": {
+                                  "Type": "SchemaElements",
+                                  "ElementsType": "Float"
+                                }
+                              },
+                              "stack_type": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "tag_mode": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "time_based_coloring": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "type": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "window_size": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "windowing": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "xmax": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "xmin": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "y0_scale_si_by1024": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "y0_unit_autoscaling": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "y1_max": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "y1_min": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "y1_scale_si_by1024": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "y1_unit_autoscaling": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "y1_units": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "ymax": {
+                                "Type": "Float",
+                                "Computed": true
+                              },
+                              "ymin": {
+                                "Type": "Float",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "description": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "include_obsolete_metrics": {
+                          "Type": "Bool",
+                          "Computed": true
+                        },
+                        "interpolate_points_key": {
+                          "Type": "Bool",
+                          "Computed": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "no_default_events": {
+                          "Type": "Bool",
+                          "Computed": true
+                        },
+                        "sources": {
+                          "Type": "List",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "disabled": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "query": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "querybuilder_enabled": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "scatter_plot_source": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "secondary_axis": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "source_color": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "source_description": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "summarization": {
+                          "Type": "String",
+                          "Computed": true
+                        },
+                        "units": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "height_factor": {
+                    "Type": "Int",
+                    "Computed": true
+                  },
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "system_owned": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "updated_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "updater_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "url": {
+        "Type": "String",
+        "Computed": true
+      },
+      "views_last_day": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "views_last_month": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "views_last_week": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "wavefront_dashboards": {
+      "dashboards": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "can_modify": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "can_view": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "chart_title_bg_color": {
+              "Type": "String",
+              "Computed": true
+            },
+            "chart_title_color": {
+              "Type": "String",
+              "Computed": true
+            },
+            "chart_title_scalar": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "created_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "creator_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "customer": {
+              "Type": "String",
+              "Computed": true
+            },
+            "default_end_time": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "default_start_time": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "default_time_window": {
+              "Type": "String",
+              "Computed": true
+            },
+            "deleted": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "display_description": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "display_query_parameters": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "display_section_table_of_contents": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "event_filter_type": {
+              "Type": "String",
+              "Computed": true
+            },
+            "event_query": {
+              "Type": "String",
+              "Computed": true
+            },
+            "favorite": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "hidden": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "num_charts": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "num_favorites": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "parameter_details": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "default_value": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "dynamic_field_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "hide_from_view": {
+                    "Type": "Bool",
+                    "Computed": true
+                  },
+                  "label": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "parameter_type": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "query_value": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "tag_key": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "values_to_readable_strings": {
+                    "Type": "Map",
+                    "Computed": true,
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
+            "parameters": {
+              "Type": "Map",
+              "Computed": true
+            },
+            "sections": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "name": {
+                    "Type": "String",
+                    "Computed": true
+                  },
+                  "rows": {
+                    "Type": "List",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "charts": {
+                          "Type": "List",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "base": {
+                                "Type": "Int",
+                                "Computed": true
+                              },
+                              "chart_attributes": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "chart_settings": {
+                                "Type": "List",
+                                "Computed": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "ComputedBlock",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "auto_column_tags": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "column_tags": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "custom_tags": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "expected_data_spacing": {
+                                      "Type": "Int",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_display_stats": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "fixed_legend_enabled": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_filter_field": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_filter_limit": {
+                                      "Type": "Int",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_filter_sort": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_hide_label": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_position": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "fixed_legend_use_raw_stats": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "group_by_source": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "invert_dynamic_legend_hover_control": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "line_type": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "max": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "min": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "num_tags": {
+                                      "Type": "Int",
+                                      "Computed": true
+                                    },
+                                    "plain_markdown_content": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "show_hosts": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "show_labels": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "show_raw_values": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "sort_values_descending": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "sparkline_decimal_precision": {
+                                      "Type": "Int",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_color": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_font_size": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_horizontal_position": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_postfix": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_prefix": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_value_type": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_display_vertical_position": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_fill_color": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_line_color": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_size": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_value_color_map_apply_to": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "sparkline_value_color_map_colors": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "sparkline_value_color_map_values": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "Int"
+                                      }
+                                    },
+                                    "sparkline_value_color_map_values_v2": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "Float"
+                                      }
+                                    },
+                                    "sparkline_value_text_map_text": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "String"
+                                      }
+                                    },
+                                    "sparkline_value_text_map_thresholds": {
+                                      "Type": "List",
+                                      "Computed": true,
+                                      "ConfigImplicitMode": "Attr",
+                                      "Elem": {
+                                        "Type": "SchemaElements",
+                                        "ElementsType": "Float"
+                                      }
+                                    },
+                                    "stack_type": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "tag_mode": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "time_based_coloring": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "type": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "window_size": {
+                                      "Type": "Int",
+                                      "Computed": true
+                                    },
+                                    "windowing": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "xmax": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "xmin": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "y0_scale_si_by1024": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "y0_unit_autoscaling": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "y1_max": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "y1_min": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "y1_scale_si_by1024": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "y1_unit_autoscaling": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "y1_units": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "ymax": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    },
+                                    "ymin": {
+                                      "Type": "Float",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "description": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "include_obsolete_metrics": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "interpolate_points_key": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "name": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "no_default_events": {
+                                "Type": "Bool",
+                                "Computed": true
+                              },
+                              "sources": {
+                                "Type": "List",
+                                "Computed": true,
+                                "IsBlock": true,
+                                "ConfigImplicitMode": "ComputedBlock",
+                                "Elem": {
+                                  "Type": "SchemaInfo",
+                                  "Info": {
+                                    "disabled": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "name": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "query": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "querybuilder_enabled": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "scatter_plot_source": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "secondary_axis": {
+                                      "Type": "Bool",
+                                      "Computed": true
+                                    },
+                                    "source_color": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    },
+                                    "source_description": {
+                                      "Type": "String",
+                                      "Computed": true
+                                    }
+                                  }
+                                }
+                              },
+                              "summarization": {
+                                "Type": "String",
+                                "Computed": true
+                              },
+                              "units": {
+                                "Type": "String",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
+                        "height_factor": {
+                          "Type": "Int",
+                          "Computed": true
+                        },
+                        "name": {
+                          "Type": "String",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "system_owned": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "updated_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "updater_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "url": {
+              "Type": "String",
+              "Computed": true
+            },
+            "views_last_day": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "views_last_month": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "views_last_week": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      }
+    },
     "wavefront_default_user_group": {
       "group_id": {
         "Type": "String",
         "Computed": true
+      }
+    },
+    "wavefront_derived_metric": {
+      "additional_information": {
+        "Type": "String",
+        "Computed": true
+      },
+      "create_user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "created_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "deleted": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "hosts_used": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "in_trash": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "include_obsolete_metrics": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "last_error_message": {
+        "Type": "String",
+        "Computed": true
+      },
+      "last_failed_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_processed_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "last_query_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "metrics_used": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "points_scanned_at_last_query": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "process_rate_minutes": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "query": {
+        "Type": "String",
+        "Computed": true
+      },
+      "query_failing": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "query_qb_enabled": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "status": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "tags": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "update_user_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      }
+    },
+    "wavefront_derived_metrics": {
+      "derived_metrics": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "additional_information": {
+              "Type": "String",
+              "Computed": true
+            },
+            "create_user_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "created_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "deleted": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "hosts_used": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "in_trash": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "include_obsolete_metrics": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "last_error_message": {
+              "Type": "String",
+              "Computed": true
+            },
+            "last_failed_time": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "last_processed_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "last_query_time": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "metrics_used": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "minutes": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "points_scanned_at_last_query": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "process_rate_minutes": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "query": {
+              "Type": "String",
+              "Computed": true
+            },
+            "query_failing": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "query_qb_enabled": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "status": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "tags": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "update_user_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "updated_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      }
+    },
+    "wavefront_event": {
+      "annotations": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "details": {
+        "Type": "String",
+        "Computed": true
+      },
+      "endtime_key": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "is_ephemeral": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "severity": {
+        "Type": "String",
+        "Computed": true
+      },
+      "start_time": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "tags": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "type": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "wavefront_events": {
+      "earliest_start_time_epoch_millis": {
+        "Type": "Int",
+        "Required": true
+      },
+      "events": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "annotations": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "details": {
+              "Type": "String",
+              "Computed": true
+            },
+            "endtime_key": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "is_ephemeral": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "severity": {
+              "Type": "String",
+              "Computed": true
+            },
+            "start_time": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "tags": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "type": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "latest_start_time_epoch_millis": {
+        "Type": "Int",
+        "Required": true
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      }
+    },
+    "wavefront_external_link": {
+      "created_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "creator_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "is_log_integration": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "metric_filter_regex": {
+        "Type": "String",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "point_tag_filter_regexes": {
+        "Type": "Map",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "source_filter_regex": {
+        "Type": "String",
+        "Computed": true
+      },
+      "template": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "updater_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "wavefront_external_links": {
+      "external_links": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "creator_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "description": {
+              "Type": "String",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "is_log_integration": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "metric_filter_regex": {
+              "Type": "String",
+              "Computed": true
+            },
+            "name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "point_tag_filter_regexes": {
+              "Type": "Map",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "source_filter_regex": {
+              "Type": "String",
+              "Computed": true
+            },
+            "template": {
+              "Type": "String",
+              "Computed": true
+            },
+            "updated_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "updater_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      }
+    },
+    "wavefront_maintenance_window": {
+      "created_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "creator_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "customer_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "end_time_in_seconds": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "event_name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "host_tag_group_host_names_group_anded": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "reason": {
+        "Type": "String",
+        "Computed": true
+      },
+      "relevant_customer_tags": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relevant_host_names": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relevant_host_tags": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "relevant_host_tags_anded": {
+        "Type": "Bool",
+        "Computed": true
+      },
+      "running_state": {
+        "Type": "String",
+        "Computed": true
+      },
+      "sort_attr": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "start_time_in_seconds": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "title": {
+        "Type": "String",
+        "Computed": true
+      },
+      "updated_epoch_millis": {
+        "Type": "Int",
+        "Computed": true
+      },
+      "updater_id": {
+        "Type": "String",
+        "Computed": true
+      }
+    },
+    "wavefront_maintenance_window_all": {
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "maintenance_windows": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "created_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "creator_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "customer_id": {
+              "Type": "String",
+              "Computed": true
+            },
+            "end_time_in_seconds": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "event_name": {
+              "Type": "String",
+              "Computed": true
+            },
+            "host_tag_group_host_names_group_anded": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "id": {
+              "Type": "String",
+              "Required": true
+            },
+            "reason": {
+              "Type": "String",
+              "Computed": true
+            },
+            "relevant_customer_tags": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "relevant_host_names": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "relevant_host_tags": {
+              "Type": "List",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "relevant_host_tags_anded": {
+              "Type": "Bool",
+              "Computed": true
+            },
+            "running_state": {
+              "Type": "String",
+              "Computed": true
+            },
+            "sort_attr": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "start_time_in_seconds": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "title": {
+              "Type": "String",
+              "Computed": true
+            },
+            "updated_epoch_millis": {
+              "Type": "Int",
+              "Computed": true
+            },
+            "updater_id": {
+              "Type": "String",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
       }
     },
     "wavefront_metrics_policy": {
@@ -1823,7 +4169,46 @@
         "Computed": true
       }
     },
+    "wavefront_role": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "permissions": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "wavefront_roles": {
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "roles": {
         "Type": "List",
         "Computed": true,
@@ -1889,7 +4274,55 @@
         }
       }
     },
+    "wavefront_user_group": {
+      "description": {
+        "Type": "String",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Required": true
+      },
+      "name": {
+        "Type": "String",
+        "Computed": true
+      },
+      "roles": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "users": {
+        "Type": "List",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
     "wavefront_user_groups": {
+      "limit": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "100"
+        }
+      },
+      "offset": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "user_groups": {
         "Type": "List",
         "Computed": true,

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "dnsimple",
   "type": "provider",
-  "version": "v0.14.0",
+  "version": "v0.14.1",
   "provider": {
     "account": {
       "Type": "String",

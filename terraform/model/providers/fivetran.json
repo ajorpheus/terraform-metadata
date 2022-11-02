@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "fivetran",
   "type": "provider",
-  "version": "v0.6.3",
+  "version": "v0.6.6",
   "provider": {
     "api_key": {
       "Type": "String",
@@ -1615,6 +1615,15 @@
               "Type": "String",
               "Optional": true
             },
+            "is_private_key_encrypted": {
+              "Type": "String",
+              "Optional": true,
+              "Computed": true
+            },
+            "passphrase": {
+              "Type": "String",
+              "Optional": true
+            },
             "password": {
               "Type": "String",
               "Optional": true
@@ -1638,6 +1647,10 @@
             "public_key": {
               "Type": "String",
               "Computed": true
+            },
+            "role": {
+              "Type": "String",
+              "Optional": true
             },
             "role_arn": {
               "Type": "String",

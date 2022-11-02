@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "aviatrix",
   "type": "provider",
-  "version": "v2.24.0",
+  "version": "v2.24.1",
   "provider": {
     "controller_ip": {
       "Type": "String",
@@ -5050,6 +5050,11 @@
         "Type": "Float",
         "Optional": true,
         "Description": "Longitude of backup remote gateway."
+      },
+      "backup_remote_identifier": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Backup remote identifier. Required for Cert based authentication type with HA enabled."
       },
       "backup_remote_tunnel_ip": {
         "Type": "String",

@@ -3,13 +3,13 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "dme",
   "type": "provider",
-  "version": "v1.0.5",
+  "version": "v1.0.6",
   "provider": {
     "api_key": {
       "Type": "String",
       "Required": true,
       "Description": "API key for HTTP call",
-      "DefaultFunc": "ENV(apikey)"
+      "DefaultFunc": "ENV(DME_API_KEY)"
     },
     "insecure": {
       "Type": "Bool",
@@ -25,7 +25,7 @@
       "Type": "String",
       "Required": true,
       "Description": "Secret Key for HMAC",
-      "DefaultFunc": "ENV(secretkey)"
+      "DefaultFunc": "ENV(DME_SECRET_KEY)"
     }
   },
   "resources": {

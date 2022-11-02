@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "helm",
   "type": "provider",
-  "version": "v2.6.0",
+  "version": "v2.7.1",
   "provider": {
     "debug": {
       "Type": "Bool",
@@ -295,7 +295,7 @@
         "Description": "Location of public keys used for verification. Used only if `verify` is true",
         "Default": {
           "Type": "string",
-          "Value": "/Users/b132ka/.gnupg/pubring.gpg"
+          "Value": "/Users/B441OU/.gnupg/pubring.gpg"
         }
       },
       "lint": {
@@ -703,7 +703,7 @@
         "Description": "Location of public keys used for verification. Used only if `verify` is true",
         "Default": {
           "Type": "string",
-          "Value": "/Users/b132ka/.gnupg/pubring.gpg"
+          "Value": "/Users/B441OU/.gnupg/pubring.gpg"
         }
       },
       "manifest": {

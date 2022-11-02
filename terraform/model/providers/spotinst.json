@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "spotinst",
   "type": "provider",
-  "version": "v1.84.0",
+  "version": "v1.86.0",
   "provider": {
     "account": {
       "Type": "String",
@@ -7762,7 +7762,7 @@
           "Info": {
             "initial_nodes": {
               "Type": "Int",
-              "Required": true
+              "Optional": true
             }
           }
         }
@@ -7776,6 +7776,10 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "delete_nodes": {
+              "Type": "Bool",
+              "Optional": true
+            },
             "force_delete": {
               "Type": "Bool",
               "Required": true
@@ -7878,11 +7882,19 @@
           "Info": {
             "max_instance_count": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             },
             "min_instance_count": {
               "Type": "Int",
-              "Optional": true
+              "Optional": true,
+              "Default": {
+                "Type": "int",
+                "Value": "-1"
+              }
             }
           }
         }

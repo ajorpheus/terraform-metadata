@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "pagerduty",
   "type": "provider",
-  "version": "v2.6.2",
+  "version": "v2.6.3",
   "provider": {
     "api_url_override": {
       "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v1",
   "name": "ucloud",
   "type": "provider",
-  "version": "v1.32.2",
+  "version": "v1.32.4",
   "provider": {
     "base_url": {
       "Type": "String",

@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "avi",
   "type": "provider",
-  "version": "v22.1.1-p1.0",
+  "version": "v22.1.2",
   "provider": {
     "avi_api_timeout": {
       "Type": "Int",
@@ -6621,6 +6621,26 @@
           }
         }
       },
+      "l4_ssl_profile": {
+        "Type": "Set",
+        "Optional": true,
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ssl_stream_idle_timeout": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "3600"
+              }
+            }
+          }
+        }
+      },
       "markers": {
         "Type": "List",
         "Optional": true,
@@ -10952,6 +10972,22 @@
                 }
               }
             },
+            "enable_os_object_caching": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
+            "enable_tagging": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "external_networks": {
               "Type": "String",
               "Optional": true,
@@ -11183,6 +11219,14 @@
             "username": {
               "Type": "String",
               "Required": true
+            },
+            "vip_port_in_admin_tenant": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
             }
           }
         }
@@ -27227,6 +27271,19 @@
         "Optional": true,
         "Computed": true
       },
+      "origin_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "security_only_nsxt": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
       "segment_gw": {
         "Type": "String",
         "Optional": true,
@@ -28269,6 +28326,14 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      },
+      "lb_algo_rr_per_se": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
       },
       "lb_algorithm": {
         "Type": "String",
@@ -33442,10 +33507,7 @@
       "dedicated_dispatcher_core": {
         "Type": "String",
         "Optional": true,
-        "Default": {
-          "Type": "string",
-          "Value": "false"
-        }
+        "Computed": true
       },
       "description": {
         "Type": "String",
@@ -34620,6 +34682,22 @@
         "Default": {
           "Type": "string",
           "Value": "20"
+        }
+      },
+      "ntp_sync_fail_event": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "false"
+        }
+      },
+      "ntp_sync_status_interval": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "0"
         }
       },
       "num_dispatcher_cores": {
@@ -59051,6 +59129,25 @@
           }
         }
       },
+      "l4_ssl_profile": {
+        "Type": "Set",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "ssl_stream_idle_timeout": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "3600"
+              }
+            }
+          }
+        }
+      },
       "markers": {
         "Type": "List",
         "Computed": true,
@@ -63272,6 +63369,22 @@
                 }
               }
             },
+            "enable_os_object_caching": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
+            "enable_tagging": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
+            },
             "external_networks": {
               "Type": "String",
               "Optional": true,
@@ -63503,6 +63616,14 @@
             "username": {
               "Type": "String",
               "Required": true
+            },
+            "vip_port_in_admin_tenant": {
+              "Type": "String",
+              "Optional": true,
+              "Default": {
+                "Type": "string",
+                "Value": "false"
+              }
             }
           }
         }
@@ -78791,6 +78912,14 @@
         "Type": "String",
         "Computed": true
       },
+      "origin_id": {
+        "Type": "String",
+        "Computed": true
+      },
+      "security_only_nsxt": {
+        "Type": "String",
+        "Computed": true
+      },
       "segment_gw": {
         "Type": "String",
         "Computed": true
@@ -79737,6 +79866,10 @@
         "Computed": true
       },
       "ipaddrgroup_ref": {
+        "Type": "String",
+        "Computed": true
+      },
+      "lb_algo_rr_per_se": {
         "Type": "String",
         "Computed": true
       },
@@ -85353,6 +85486,14 @@
         "Computed": true
       },
       "ns_helper_deq_interval_msec": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ntp_sync_fail_event": {
+        "Type": "String",
+        "Computed": true
+      },
+      "ntp_sync_status_interval": {
         "Type": "String",
         "Computed": true
       },

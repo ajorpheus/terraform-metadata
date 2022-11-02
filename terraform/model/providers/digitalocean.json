@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "digitalocean",
   "type": "provider",
-  "version": "v2.22.3",
+  "version": "v2.23.0",
   "provider": {
     "api_endpoint": {
       "Type": "String",
@@ -754,6 +754,24 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "deploy_on_push": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configures automatically deploying images pushed to DOCR.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enabled": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to automatically deploy images pushed to DOCR."
+                              }
+                            }
+                          }
+                        },
                         "registry": {
                           "Type": "String",
                           "Optional": true,
@@ -1217,6 +1235,24 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "deploy_on_push": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configures automatically deploying images pushed to DOCR.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enabled": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to automatically deploy images pushed to DOCR."
+                              }
+                            }
+                          }
+                        },
                         "registry": {
                           "Type": "String",
                           "Optional": true,
@@ -1834,6 +1870,24 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "deploy_on_push": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configures automatically deploying images pushed to DOCR.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enabled": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to automatically deploy images pushed to DOCR."
+                              }
+                            }
+                          }
+                        },
                         "registry": {
                           "Type": "String",
                           "Optional": true,
@@ -2610,7 +2664,8 @@
       },
       "region": {
         "Type": "String",
-        "Required": true
+        "Optional": true,
+        "Computed": true
       },
       "resize_disk": {
         "Type": "Bool",
@@ -5044,6 +5099,24 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "deploy_on_push": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configures automatically deploying images pushed to DOCR.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enabled": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to automatically deploy images pushed to DOCR."
+                              }
+                            }
+                          }
+                        },
                         "registry": {
                           "Type": "String",
                           "Optional": true,
@@ -5507,6 +5580,24 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "deploy_on_push": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configures automatically deploying images pushed to DOCR.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enabled": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to automatically deploy images pushed to DOCR."
+                              }
+                            }
+                          }
+                        },
                         "registry": {
                           "Type": "String",
                           "Optional": true,
@@ -6124,6 +6215,24 @@
                     "Elem": {
                       "Type": "SchemaInfo",
                       "Info": {
+                        "deploy_on_push": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configures automatically deploying images pushed to DOCR.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "Block",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "enabled": {
+                                "Type": "Bool",
+                                "Optional": true,
+                                "Description": "Whether to automatically deploy images pushed to DOCR."
+                              }
+                            }
+                          }
+                        },
                         "registry": {
                           "Type": "String",
                           "Optional": true,

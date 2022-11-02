@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "vmc",
   "type": "provider",
-  "version": "v1.10.1",
+  "version": "v1.11.0",
   "provider": {
     "csp_url": {
       "Type": "String",
@@ -41,19 +41,13 @@
         "Type": "String",
         "Optional": true,
         "Description": "The EDRS policy type. This can either be 'cost', 'performance', 'storage-scaleup' or 'rapid-scaleup'. Default : storage-scaleup. ",
-        "Default": {
-          "Type": "string",
-          "Value": "storage-scaleup"
-        }
+        "Computed": true
       },
       "enable_edrs": {
         "Type": "Bool",
         "Optional": true,
         "Description": "True if EDRS is enabled",
-        "Default": {
-          "Type": "bool",
-          "Value": "true"
-        }
+        "Computed": true
       },
       "host_cpu_cores_count": {
         "Type": "Int",
@@ -69,10 +63,7 @@
         "Type": "Int",
         "Optional": true,
         "Description": "The maximum number of hosts that the cluster can scale out to.",
-        "Default": {
-          "Type": "int",
-          "Value": "16"
-        }
+        "Computed": true
       },
       "microsoft_licensing_config": {
         "Type": "List",
@@ -100,10 +91,7 @@
         "Type": "Int",
         "Optional": true,
         "Description": "The minimum number of hosts that the cluster can scale in to.",
-        "Default": {
-          "Type": "int",
-          "Value": "2"
-        }
+        "Computed": true
       },
       "num_hosts": {
         "Type": "Int",
@@ -316,7 +304,8 @@
       },
       "num_host": {
         "Type": "Int",
-        "Required": true
+        "Required": true,
+        "Description": "The amount of hosts in the primary cluster of the SDDC"
       },
       "org_id": {
         "Type": "String",
@@ -429,6 +418,10 @@
         "create",
         "delete"
       ],
+      "draas_h5_url": {
+        "Type": "String",
+        "Computed": true
+      },
       "sddc_id": {
         "Type": "String",
         "Required": true,

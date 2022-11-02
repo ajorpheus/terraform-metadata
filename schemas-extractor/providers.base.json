@@ -24,6 +24,7 @@
     "skip_generation": true
   },
   "archive": {
+    "skip_generation": false,
     "pkg_name": "internal/provider",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
@@ -38,6 +39,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "external": {
+    "skip_generation": false,
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
@@ -45,6 +47,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "http": {
+    "skip_generation": false,
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
@@ -52,6 +55,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "local": {
+    "skip_generation": false,
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
@@ -59,6 +63,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "null": {
+    "skip_generation": false,
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
@@ -66,6 +71,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "random": {
+    "skip_generation": false,
     "pkg_prefix": "github.com/terraform-providers/terraform-provider-__NAME__",
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
@@ -73,11 +79,11 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "template": {
+    "skip_generation": false,
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "terraform": {
-    "skip_generation": true,
-    "pkg_name": "builtin/providers/__NAME__",
+    "pkg_name": "internal/builtin/providers/__NAME__",
     "repository": "github.com/hashicorp/terraform"
   },
   "time": {
@@ -153,6 +159,7 @@
     "repository": "github.com/AviatrixSystems/terraform-provider-__NAME__"
   },
   "aws": {
+    "skip_generation": false,
     "pkg_name": "internal/provider",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__",
     "provider_constr": "prvdr.New(__PROVIDER_ARGS__)",
@@ -883,5 +890,41 @@
   },
   "hpegl": {
     "repository": "github.com/HPE/terraform-provider-__NAME__"
+  },
+  "ably": {
+    "repository": "github.com/ably/terraform-provider-__NAME__"
+  },
+  "alibabacloudstack": {
+    "repository": "github.com/aliyun/terraform-provider-__NAME__"
+  },
+  "appviewx": {
+    "repository": "github.com/AppViewX/terraform-provider-__NAME__"
+  },
+  "b1ddi": {
+    "repository": "github.com/infobloxopen/terraform-provider-__NAME__"
+  },
+  "cohesivenet": {
+    "repository": "github.com/cohesive/terraform-provider-__NAME__"
+  },
+  "hivelocity": {
+    "repository": "github.com/hivelocity/terraform-provider-__NAME__"
+  },
+  "latitudesh": {
+    "repository": "github.com/latitudesh/terraform-provider-__NAME__"
+  },
+  "lyvecloud": {
+    "repository": "github.com/Seagate/terraform-provider-__NAME__"
+  },
+  "nobl9": {
+    "repository": "github.com/nobl9/terraform-provider-__NAME__"
+  },
+  "scp": {
+    "repository": "github.com/ScpDevTerra/terraform-provider-__NAME__"
+  },
+  "syntropystack": {
+    "repository": "github.com/SyntropyNet/terraform-provider-__NAME__"
+  },
+  "tidbcloud": {
+    "repository": "github.com/tidbcloud/terraform-provider-__NAME__"
   }
 }

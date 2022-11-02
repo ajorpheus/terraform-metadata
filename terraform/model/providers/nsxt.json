@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "nsxt",
   "type": "provider",
-  "version": "v3.2.8",
+  "version": "v3.2.9",
   "provider": {
     "allow_unverified_ssl": {
       "Type": "Bool",
@@ -7138,6 +7138,42 @@
           }
         }
       },
+      "bridge_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Bridge configuration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "profile_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "profile path"
+            },
+            "transport_zone_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "vlan transport zone path"
+            },
+            "uplink_teaming_policy": {
+              "Type": "String",
+              "Optional": true
+            },
+            "vlan_ids": {
+              "Type": "List",
+              "Required": true,
+              "Description": "VLAN specification for bridge endpoint",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "connectivity_path": {
         "Type": "String",
         "Required": true,
@@ -7208,6 +7244,15 @@
         "Description": "Policy path for this resource",
         "Computed": true
       },
+      "replication_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Replication mode - MTEP or SOURCE",
+        "Default": {
+          "Type": "string",
+          "Value": "MTEP"
+        }
+      },
       "revision": {
         "Type": "Int",
         "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
@@ -7224,7 +7269,7 @@
           "Info": {
             "cidr": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Gateway IP address in CIDR format"
             },
             "dhcp_ranges": {
@@ -7748,7 +7793,6 @@
             },
             "nsx_id": {
               "Type": "String",
-              "Optional": true,
               "Description": "NSX ID for this resource",
               "Computed": true
             },
@@ -8637,7 +8681,6 @@
             },
             "nsx_id": {
               "Type": "String",
-              "Optional": true,
               "Description": "NSX ID for this resource",
               "Computed": true
             },
@@ -9242,6 +9285,869 @@
               "Optional": true
             }
           }
+        }
+      }
+    },
+    "nsxt_policy_ipsec_vpn_dpd_profile": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "dpd_probe_interval": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "60"
+        }
+      },
+      "dpd_probe_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "PERIODIC"
+        }
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "retry_count": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "10"
+        }
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "nsxt_policy_ipsec_vpn_ike_profile": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "dh_groups": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "digest_algorithms": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "encryption_algorithms": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "ike_version": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "IKE_V2"
+        }
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "sa_life_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "86400"
+        }
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "nsxt_policy_ipsec_vpn_local_endpoint": {
+      "certificate_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Policy path referencing site certificate"
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "local_address": {
+        "Type": "String",
+        "Required": true
+      },
+      "local_id": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "service_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy path for IPSec VPN service"
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "trust_ca_paths": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "trust_crl_paths": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      }
+    },
+    "nsxt_policy_ipsec_vpn_service": {
+      "bypass_rule": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "For policy-based IPsec VPNs, a security policy specifies as its action the VPN tunnel to be used for transit traffic that meets the policy’s match criteria.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "PROTECT - Protect rules are defined per policy based IPSec VPN session. BYPASS - Bypass rules are defined per IPSec VPN service and affects all policy based IPSec VPN sessions. Bypass rules are prioritized over protect rules.",
+              "Default": {
+                "Type": "string",
+                "Value": "PROTECT"
+              }
+            },
+            "destinations": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of remote subnets used in policy-based L3Vpn.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "nsx_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "NSX ID for this resource",
+              "Computed": true
+            },
+            "sources": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of local subnets. Specifying no value is interpreted as 0.0.0.0/0.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable/Disable IPSec VPN service.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "ha_sync": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable/Disable IPSec VPN service HA state sync.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "ike_log_level": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Log level for internet key exchange (IKE).",
+        "Default": {
+          "Type": "string",
+          "Value": "INFO"
+        }
+      },
+      "locale_service_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Polciy path for the locale service."
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "nsxt_policy_ipsec_vpn_session": {
+      "authentication_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Peer authentication mode. PSK - In this mode a secret key shared between local and peer sites is to be used for authentication. The secret key can be a string with a maximum length of 128 characters. CERTIFICATE - In this mode a certificate defined at the global level is to be used for authentication.",
+        "Default": {
+          "Type": "string",
+          "Value": "PSK"
+        }
+      },
+      "compliance_suite": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Compliance suite.",
+        "Default": {
+          "Type": "string",
+          "Value": "NONE"
+        }
+      },
+      "connection_initiation_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Connection initiation mode used by local endpoint to establish ike connection with peer site. INITIATOR - In this mode local endpoint initiates tunnel setup and will also respond to incoming tunnel setup requests from peer gateway. RESPOND_ONLY - In this mode, local endpoint shall only respond to incoming tunnel setup requests. It shall not initiate the tunnel setup. ON_DEMAND - In this mode local endpoint will initiate tunnel creation once first packet matching the policy rule is received and will also respond to incoming initiation request.",
+        "Default": {
+          "Type": "string",
+          "Value": "INITIATOR"
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "direction": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The traffic direction apply to the MSS clamping"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "dpd_profile_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Policy path referencing dpd profile.",
+        "Computed": true
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable/Disable IPSec VPN session.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "ike_profile_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Policy path referencing Ike profile.",
+        "Computed": true
+      },
+      "ip_addresses": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP Tunnel interface (commonly referred as VTI) ip addresses.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "local_endpoint_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy path referencing Local endpoint."
+      },
+      "max_segment_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum amount of data the host will accept in a Tcp segment."
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "peer_address": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Public IPV4 address of the remote device terminating the VPN connection."
+      },
+      "peer_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Peer ID to uniquely identify the peer site. The peer ID is the public IP address of the remote device terminating the VPN tunnel. When NAT is configured for the peer, enter the private IP address of the peer."
+      },
+      "prefix_length": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Subnet Prefix Length."
+      },
+      "psk": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IPSec Pre-shared key. Maximum length of this field is 128 characters."
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "rule": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "For policy-based IPsec VPNs, a security policy specifies as its action the VPN tunnel to be used for transit traffic that meets the policy’s match criteria.",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "action": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "PROTECT - Protect rules are defined per policy based IPSec VPN session. BYPASS - Bypass rules are defined per IPSec VPN service and affects all policy based IPSec VPN sessions. Bypass rules are prioritized over protect rules.",
+              "Default": {
+                "Type": "string",
+                "Value": "PROTECT"
+              }
+            },
+            "destinations": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of remote subnets used in policy-based L3Vpn.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "nsx_id": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "NSX ID for this resource",
+              "Computed": true
+            },
+            "sources": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "List of local subnets. Specifying no value is interpreted as 0.0.0.0/0.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "service_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy path for IPSec VPN service"
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "tunnel_profile_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy path referencing Tunnel profile to be used."
+      },
+      "vpn_type": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A Policy Based VPN requires to define protect rules that match local and peer subnets. IPSec security associations is negotiated for each pair of local and peer subnet. A Route Based VPN is more flexible, more powerful and recommended over policy based VPN. IP Tunnel port is created and all traffic routed via tunnel port is protected. Routes can be configured statically or can be learned through BGP. A route based VPN is must for establishing redundant VPN session to remote site."
+      }
+    },
+    "nsxt_policy_ipsec_vpn_tunnel_profile": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "df_policy": {
+        "Type": "String",
+        "Optional": true,
+        "Default": {
+          "Type": "string",
+          "Value": "COPY"
+        }
+      },
+      "dh_groups": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "digest_algorithms": {
+        "Type": "Set",
+        "Optional": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "enable_perfect_forward_secrecy": {
+        "Type": "Bool",
+        "Optional": true,
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "encryption_algorithms": {
+        "Type": "Set",
+        "Required": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "sa_life_time": {
+        "Type": "Int",
+        "Optional": true,
+        "Default": {
+          "Type": "int",
+          "Value": "3600"
+        }
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "nsxt_policy_l2_vpn_service": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "enable_hub": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "This property applies only in SERVER mode. If set to true, traffic from any client will be replicated to all other clients. If set to false, traffic received from clients is only replicated to the local VPN endpoint.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "encap_ip_pool": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "IP Pool to allocate local and peer endpoint IPs.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "locale_service_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Polciy path for the locale service."
+      },
+      "mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Specify an L2VPN service mode as SERVER or CLIENT.",
+        "Default": {
+          "Type": "string",
+          "Value": "SERVER"
+        }
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
+    "nsxt_policy_l2_vpn_session": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "direction": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The traffic direction apply to the MSS clamping"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "enabled": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Enable/Disable IPSec VPN session.",
+        "Default": {
+          "Type": "bool",
+          "Value": "true"
+        }
+      },
+      "local_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP Address of the local tunnel port. This property only applies in CLIENT mode"
+      },
+      "max_segment_size": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum amount of data the host will accept in a Tcp segment."
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "peer_address": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "IP Address of the peer tunnel port. This property only applies in CLIENT mode"
+      },
+      "protocol": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Encapsulation protocol used by the tunnel."
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "service_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Policy path for L2 VPN service"
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      },
+      "transport_tunnels": {
+        "Type": "List",
+        "Required": true,
+        "Description": "List of transport tunnels(vpn sessions path) for redundancy",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       }
     },
@@ -12157,7 +13063,6 @@
             },
             "nsx_id": {
               "Type": "String",
-              "Optional": true,
               "Description": "NSX ID for this resource",
               "Computed": true
             },
@@ -12360,6 +13265,42 @@
           }
         }
       },
+      "bridge_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Bridge configuration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "profile_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "profile path"
+            },
+            "transport_zone_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "vlan transport zone path"
+            },
+            "uplink_teaming_policy": {
+              "Type": "String",
+              "Optional": true
+            },
+            "vlan_ids": {
+              "Type": "List",
+              "Required": true,
+              "Description": "VLAN specification for bridge endpoint",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "connectivity_path": {
         "Type": "String",
         "Optional": true,
@@ -12493,6 +13434,15 @@
           }
         }
       },
+      "replication_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Replication mode - MTEP or SOURCE",
+        "Default": {
+          "Type": "string",
+          "Value": "MTEP"
+        }
+      },
       "revision": {
         "Type": "Int",
         "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
@@ -12543,7 +13493,7 @@
           "Info": {
             "cidr": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Gateway IP address in CIDR format"
             },
             "dhcp_ranges": {
@@ -13470,6 +14420,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "display_name": {
+              "Type": "String",
+              "Description": "Display name for this resource",
+              "Computed": true
+            },
             "edge_cluster_path": {
               "Type": "String",
               "Required": true,
@@ -14218,6 +15173,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "display_name": {
+              "Type": "String",
+              "Description": "Display name for this resource",
+              "Computed": true
+            },
             "edge_cluster_path": {
               "Type": "String",
               "Required": true,
@@ -14519,6 +15479,42 @@
           }
         }
       },
+      "bridge_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Bridge configuration",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "profile_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "profile path"
+            },
+            "transport_zone_path": {
+              "Type": "String",
+              "Required": true,
+              "Description": "vlan transport zone path"
+            },
+            "uplink_teaming_policy": {
+              "Type": "String",
+              "Optional": true
+            },
+            "vlan_ids": {
+              "Type": "List",
+              "Required": true,
+              "Description": "VLAN specification for bridge endpoint",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -14641,6 +15637,15 @@
           }
         }
       },
+      "replication_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Replication mode - MTEP or SOURCE",
+        "Default": {
+          "Type": "string",
+          "Value": "MTEP"
+        }
+      },
       "revision": {
         "Type": "Int",
         "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
@@ -14691,7 +15696,7 @@
           "Info": {
             "cidr": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
               "Description": "Gateway IP address in CIDR format"
             },
             "dhcp_ranges": {
@@ -15840,6 +16845,34 @@
         "Computed": true
       }
     },
+    "nsxt_policy_bridge_profile": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display name of this resource",
+        "Computed": true,
+        "ConflictsWith": [
+          "id"
+        ]
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      }
+    },
     "nsxt_policy_certificate": {
       "description": {
         "Type": "String",
@@ -15976,6 +17009,48 @@
         "Type": "Int",
         "Optional": true,
         "Description": "Index of this node within edge cluster"
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      }
+    },
+    "nsxt_policy_gateway_locale_service": {
+      "bgp_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Path for BGP config",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display name of this resource",
+        "Computed": true
+      },
+      "edge_cluster_path": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The path of the edge cluster connected to this Tier0 gateway",
+        "Computed": true
+      },
+      "gateway_path": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Gateway path"
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
       },
       "path": {
         "Type": "String",
@@ -16185,6 +17260,91 @@
         "Computed": true
       }
     },
+    "nsxt_policy_ipsec_vpn_local_endpoint": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource",
+        "Computed": true
+      },
+      "display_name": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Display name of this resource",
+        "Computed": true
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      }
+    },
+    "nsxt_policy_ipsec_vpn_service": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
+      }
+    },
     "nsxt_policy_ipv6_dad_profile": {
       "description": {
         "Type": "String",
@@ -16233,6 +17393,60 @@
         "Type": "String",
         "Description": "Policy path for this resource",
         "Computed": true
+      }
+    },
+    "nsxt_policy_l2_vpn_service": {
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Description for this resource"
+      },
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name for this resource"
+      },
+      "id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Unique ID of this resource",
+        "Computed": true
+      },
+      "nsx_id": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "NSX ID for this resource",
+        "Computed": true
+      },
+      "path": {
+        "Type": "String",
+        "Description": "Policy path for this resource",
+        "Computed": true
+      },
+      "revision": {
+        "Type": "Int",
+        "Description": "The _revision property describes the current revision of the resource. To prevent clients from overwriting each other's changes, PUT operations must include the current _revision of the resource, which clients should obtain by issuing a GET operation. If the _revision provided in a PUT request is missing or stale, the operation will be rejected",
+        "Computed": true
+      },
+      "tag": {
+        "Type": "Set",
+        "Optional": true,
+        "Description": "Set of opaque identifiers meaningful to the user",
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "scope": {
+              "Type": "String",
+              "Optional": true
+            },
+            "tag": {
+              "Type": "String",
+              "Optional": true
+            }
+          }
+        }
       }
     },
     "nsxt_policy_lb_app_profile": {

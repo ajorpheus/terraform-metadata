@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "remote",
   "type": "backend",
-  "version": "v1.3.0-rc1",
+  "version": "v1.3.3",
   "schema": {
     "hostname": {
       "Type": "String",

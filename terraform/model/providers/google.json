@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "google",
   "type": "provider",
-  "version": "v4.37.0",
+  "version": "v4.41.0",
   "provider": {
     "access_approval_custom_endpoint": {
       "Type": "String",
@@ -154,6 +154,11 @@
       "Type": "String",
       "Optional": true,
       "DefaultFunc": "MENV(GOOGLE_CLOUD_IDENTITY_CUSTOM_ENDPOINT)"
+    },
+    "cloud_ids_custom_endpoint": {
+      "Type": "String",
+      "Optional": true,
+      "DefaultFunc": "MENV(GOOGLE_CLOUD_IDS_CUSTOM_ENDPOINT)"
     },
     "cloud_iot_custom_endpoint": {
       "Type": "String",
@@ -5228,6 +5233,12 @@
         "Required": true,
         "Description": "AppEngine service resource"
       },
+      "service_account": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The identity that the deployed version will run as. Admin API will use the App Engine Appspot service account as default if this field is neither provided in app.yaml file nor through CLI flag.",
+        "Computed": true
+      },
       "threadsafe": {
         "Type": "Bool",
         "Optional": true,
@@ -5248,6 +5259,11 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "egress_setting": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The egress setting for the connector, controlling what traffic is diverted through it."
+            },
             "name": {
               "Type": "String",
               "Required": true,
@@ -7147,6 +7163,11 @@
                 "Value": "false"
               }
             },
+            "json_extension": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "If sourceFormat is set to newline-delimited JSON, indicates whether it should be processed as a JSON variant such as GeoJSON.\nFor a sourceFormat other than JSON, omit this field. If the sourceFormat is newline-delimited JSON: - for newline-delimited\nGeoJSON: set to GEOJSON."
+            },
             "max_bad_records": {
               "Type": "Int",
               "Optional": true,
@@ -7577,6 +7598,15 @@
         "update",
         "delete"
       ],
+      "concurrency": {
+        "Type": "Int",
+        "Optional": true,
+        "Description": "Maximum number of queries that are allowed to run concurrently in this reservation. This is a soft limit due to asynchronous nature of the system and various optimizations for small queries. Default value is 0 which means that concurrency will be automatically set based on the reservation size.",
+        "Default": {
+          "Type": "int",
+          "Value": "0"
+        }
+      },
       "ignore_idle_slots": {
         "Type": "Bool",
         "Optional": true,
@@ -7594,6 +7624,11 @@
           "Type": "string",
           "Value": "US"
         }
+      },
+      "multi_region_auxiliary": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Applicable only for reservations located within one of the BigQuery multi-regions (US or EU).\nIf set to true, this reservation is placed in the organization's secondary region which is designated for disaster recovery purposes. If false, this reservation is placed in the organization's default region."
       },
       "name": {
         "Type": "String",
@@ -7851,6 +7886,24 @@
               "Type": "Bool",
               "Required": true,
               "Description": "Let BigQuery try to autodetect the schema and format of the table."
+            },
+            "avro_options": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Additional options if source_format is set to \"AVRO\"",
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "use_avro_logical_types": {
+                    "Type": "Bool",
+                    "Required": true,
+                    "Description": "If sourceFormat is set to \"AVRO\", indicates whether to interpret logical types as the corresponding BigQuery data type (for example, TIMESTAMP), instead of using the raw type (for example, INTEGER)."
+                  }
+                }
+              }
             },
             "compression": {
               "Type": "String",
@@ -9842,13 +9895,25 @@
           "Info": {
             "certificate_pem": {
               "Type": "String",
-              "Required": true,
+              "Optional": true,
+              "Description": "**Deprecated** The certificate chain in PEM-encoded form.\n\nLeaf certificate comes first, followed by intermediate ones if any.",
+              "Deprecated": "Deprecated in favor of `pem_certificate`"
+            },
+            "pem_certificate": {
+              "Type": "String",
+              "Optional": true,
               "Description": "The certificate chain in PEM-encoded form.\n\nLeaf certificate comes first, followed by intermediate ones if any."
+            },
+            "pem_private_key": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "The private key of the leaf certificate in PEM-encoded form."
             },
             "private_key_pem": {
               "Type": "String",
-              "Required": true,
-              "Description": "The private key of the leaf certificate in PEM-encoded form."
+              "Optional": true,
+              "Description": "**Deprecated** The private key of the leaf certificate in PEM-encoded form.",
+              "Deprecated": "Deprecated in favor of `pem_private_key`"
             }
           }
         }
@@ -10585,6 +10650,62 @@
       "update_time": {
         "Type": "String",
         "Description": "The time when the Membership was last updated.",
+        "Computed": true
+      }
+    },
+    "google_cloud_ids_endpoint": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "create_time": {
+        "Type": "String",
+        "Description": "Creation timestamp in RFC 3339 text format.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "An optional description of the endpoint."
+      },
+      "endpoint": {
+        "Type": "String",
+        "Description": "Internal IP address of the endpoint's network entry point.",
+        "Computed": true
+      },
+      "endpoint_forwarding_rule": {
+        "Type": "String",
+        "Description": "URL of the endpoint's network address to which traffic is to be sent by Packet Mirroring.",
+        "Computed": true
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The location for the endpoint."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the endpoint in the format projects/{project_id}/locations/{locationId}/endpoints/{endpointId}."
+      },
+      "network": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Name of the VPC network that is connected to the IDS endpoint. This can either contain the VPC network name itself (like \"src-net\") or the full URL to the network (like \"projects/{project_id}/global/networks/src-net\")."
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "severity": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The minimum alert severity level that is reported by the endpoint. Possible values: [\"INFORMATIONAL\", \"LOW\", \"MEDIUM\", \"HIGH\", \"CRITICAL\"]"
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "Last update timestamp in RFC 3339 text format.",
         "Computed": true
       }
     },
@@ -14104,6 +14225,11 @@
         "Optional": true,
         "Description": " A set of key/value environment variable pairs available during build time."
       },
+      "build_worker_pool": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Name of the Cloud Build Custom Worker Pool that should be used to build the function."
+      },
       "description": {
         "Type": "String",
         "Optional": true,
@@ -16114,6 +16240,11 @@
           }
         }
       },
+      "compression_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Compress text responses using Brotli or gzip compression, based on the client's Accept-Encoding header. Possible values: [\"AUTOMATIC\", \"DISABLED\"]"
+      },
       "creation_timestamp": {
         "Type": "String",
         "Description": "Creation timestamp in RFC3339 text format.",
@@ -16470,6 +16601,11 @@
             }
           }
         }
+      },
+      "compression_mode": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Compress text responses using Brotli or gzip compression, based on the client's Accept-Encoding header. Possible values: [\"AUTOMATIC\", \"DISABLED\"]"
       },
       "connection_draining_timeout_sec": {
         "Type": "Int",
@@ -27960,6 +28096,30 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
+            "json_custom_config": {
+              "Type": "List",
+              "Optional": true,
+              "Description": "Custom configuration to apply the JSON parsing. Only applicable when JSON parsing is set to STANDARD.",
+              "Computed": true,
+              "MaxItems": 1,
+              "IsBlock": true,
+              "ConfigImplicitMode": "Block",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "content_types": {
+                    "Type": "Set",
+                    "Required": true,
+                    "Description": "A list of custom Content-Type header values to apply the JSON parsing.",
+                    "ConfigImplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaElements",
+                      "ElementsType": "String"
+                    }
+                  }
+                }
+              }
+            },
             "json_parsing": {
               "Type": "String",
               "Optional": true,
@@ -34802,6 +34962,28 @@
                     "Optional": true,
                     "Description": "Size of partitions to create on the GPU. Valid values are described in the NVIDIA mig user guide (https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#partitioning)"
                   },
+                  "gpu_sharing_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Configuration for GPU sharing.",
+                    "MaxItems": 1,
+                    "ConfigExplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "gpu_sharing_strategy": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The type of GPU sharing strategy to enable on the GPU node. Possible values are described in the API package (https://pkg.go.dev/google.golang.org/api/container/v1#GPUSharingConfig)"
+                        },
+                        "max_shared_clients_per_gpu": {
+                          "Type": "Int",
+                          "Required": true,
+                          "Description": "The maximum number of containers that can share a GPU."
+                        }
+                      }
+                    }
+                  },
                   "type": {
                     "Type": "String",
                     "Required": true,
@@ -35241,6 +35423,28 @@
                           "Optional": true,
                           "Description": "Size of partitions to create on the GPU. Valid values are described in the NVIDIA mig user guide (https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#partitioning)"
                         },
+                        "gpu_sharing_config": {
+                          "Type": "List",
+                          "Optional": true,
+                          "Description": "Configuration for GPU sharing.",
+                          "MaxItems": 1,
+                          "ConfigExplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "gpu_sharing_strategy": {
+                                "Type": "String",
+                                "Required": true,
+                                "Description": "The type of GPU sharing strategy to enable on the GPU node. Possible values are described in the API package (https://pkg.go.dev/google.golang.org/api/container/v1#GPUSharingConfig)"
+                              },
+                              "max_shared_clients_per_gpu": {
+                                "Type": "Int",
+                                "Required": true,
+                                "Description": "The maximum number of containers that can share a GPU."
+                              }
+                            }
+                          }
+                        },
                         "type": {
                           "Type": "String",
                           "Required": true,
@@ -35558,6 +35762,29 @@
                     "Type": "Bool",
                     "Required": true,
                     "Description": "Whether or not the notification config is enabled"
+                  },
+                  "filter": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Allows filtering to one or more specific event types. If event types are present, those and only those event types will be transmitted to the cluster. Other types will be skipped. If no filter is specified, or no event types are present, all event types will be sent",
+                    "MaxItems": 1,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "Block",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "event_type": {
+                          "Type": "List",
+                          "Required": true,
+                          "Description": "Can be used to filter what notifications are sent. Valid values include include UPGRADE_AVAILABLE_EVENT, UPGRADE_EVENT and SECURITY_BULLETIN_EVENT",
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
                   },
                   "topic": {
                     "Type": "String",
@@ -36013,6 +36240,28 @@
                     "Type": "String",
                     "Optional": true,
                     "Description": "Size of partitions to create on the GPU. Valid values are described in the NVIDIA mig user guide (https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#partitioning)"
+                  },
+                  "gpu_sharing_config": {
+                    "Type": "List",
+                    "Optional": true,
+                    "Description": "Configuration for GPU sharing.",
+                    "MaxItems": 1,
+                    "ConfigExplicitMode": "Attr",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "gpu_sharing_strategy": {
+                          "Type": "String",
+                          "Required": true,
+                          "Description": "The type of GPU sharing strategy to enable on the GPU node. Possible values are described in the API package (https://pkg.go.dev/google.golang.org/api/container/v1#GPUSharingConfig)"
+                        },
+                        "max_shared_clients_per_gpu": {
+                          "Type": "Int",
+                          "Required": true,
+                          "Description": "The maximum number of containers that can share a GPU."
+                        }
+                      }
+                    }
                   },
                   "type": {
                     "Type": "String",
@@ -37040,6 +37289,24 @@
         "Type": "String",
         "Description": "The time the instance was created in RFC3339 UTC \"Zulu\" format, accurate to nanoseconds.",
         "Computed": true
+      },
+      "crypto_key_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The crypto key configuration. This field is used by the Customer-Managed Encryption Keys (CMEK) feature.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "key_reference": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The name of the key which is used to encrypt/decrypt customer data. For key in Cloud KMS, the key should be in the format of projects/*/locations/*/keyRings/*/cryptoKeys/*."
+            }
+          }
+        }
       },
       "dataproc_service_account": {
         "Type": "String",
@@ -44278,6 +44545,17 @@
         "update",
         "delete"
       ],
+      "bigquery_profile": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "BigQuery warehouse profile.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo"
+        }
+      },
       "connection_profile_id": {
         "Type": "String",
         "Required": true,
@@ -44306,7 +44584,10 @@
             "password": {
               "Type": "String",
               "Optional": true,
-              "Description": "SSH password."
+              "Description": "SSH password.",
+              "ConflictsWith": [
+                "forward_ssh_connectivity.0.private_key"
+              ]
             },
             "port": {
               "Type": "Int",
@@ -44320,7 +44601,10 @@
             "private_key": {
               "Type": "String",
               "Optional": true,
-              "Description": "SSH private key."
+              "Description": "SSH private key.",
+              "ConflictsWith": [
+                "forward_ssh_connectivity.0.password"
+              ]
             },
             "username": {
               "Type": "String",
@@ -44551,6 +44835,70 @@
         "Type": "String",
         "Optional": true,
         "Computed": true
+      }
+    },
+    "google_datastream_private_connection": {
+      "__timeouts__": [
+        "create",
+        "delete"
+      ],
+      "display_name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "Display name."
+      },
+      "labels": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Labels.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the location this repository is located in."
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The resource's name.",
+        "Computed": true
+      },
+      "private_connection_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The private connectivity identifier."
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "vpc_peering_config": {
+        "Type": "List",
+        "Required": true,
+        "Description": "The VPC Peering configuration is used to create VPC peering\nbetween Datastream and the consumer's VPC.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "subnet": {
+              "Type": "String",
+              "Required": true,
+              "Description": "A free subnet for peering. (CIDR of /29)"
+            },
+            "vpc": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Fully qualified name of the VPC that Datastream will peer to.\nFormat: projects/{project}/global/{networks}/{name}"
+            }
+          }
+        }
       }
     },
     "google_deployment_manager_deployment": {
@@ -46329,6 +46677,25 @@
         "update",
         "delete"
       ],
+      "cloud_logging_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Cloud logging configuration",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "enable_logging": {
+              "Type": "Bool",
+              "Required": true,
+              "Description": "If set, enable query logging for this ManagedZone. False by default, making logging opt-in."
+            }
+          }
+        }
+      },
       "creation_time": {
         "Type": "String",
         "Description": "The time that this resource was created on the server.\nThis is in RFC3339 text format.",
@@ -50376,7 +50743,7 @@
       },
       "name": {
         "Type": "String",
-        "Description": "Output only. Identifier of the brand, in the format\n'projects/{project_number}/brands/{brand_id}'. NOTE: The brand\nidentification corresponds to the project number as only one\nbrand per project can be created.",
+        "Description": "Output only. Identifier of the brand, in the format 'projects/{project_number}/brands/{brand_id}'\nNOTE: The name can also be expressed as 'projects/{project_id}/brands/{brand_id}', e.g. when importing.\nNOTE: The brand identification corresponds to the project number as only one\nbrand can be created per project.",
         "Computed": true
       },
       "org_internal_only": {
@@ -51101,6 +51468,28 @@
       "policy_data": {
         "Type": "String",
         "Required": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      }
+    },
+    "google_identity_platform_config": {
+      "__timeouts__": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "autodelete_anonymous_users": {
+        "Type": "Bool",
+        "Optional": true,
+        "Description": "Whether anonymous users will be auto-deleted after a period of 30 days"
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The name of the Config resource",
+        "Computed": true
       },
       "project": {
         "Type": "String",
@@ -64692,6 +65081,42 @@
           }
         }
       },
+      "persistence_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Maintenance policy for an instance.",
+        "Computed": true,
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "persistence_mode": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Optional. Controls whether Persistence features are enabled. If not provided, the existing value will be used.\n\n- DISABLED: \tPersistence is disabled for the instance, and any existing snapshots are deleted.\n- RDB: RDB based Persistence is enabled. Possible values: [\"DISABLED\", \"RDB\"]",
+              "Computed": true
+            },
+            "rdb_next_snapshot_time": {
+              "Type": "String",
+              "Description": "Output only. The next time that a snapshot attempt is scheduled to occur.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution and up\nto nine fractional digits.\nExamples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
+              "Computed": true
+            },
+            "rdb_snapshot_period": {
+              "Type": "String",
+              "Required": true,
+              "Description": "Optional. Available snapshot periods for scheduling.\n\n- ONE_HOUR:\tSnapshot every 1 hour.\n- SIX_HOURS:\tSnapshot every 6 hours.\n- TWELVE_HOURS:\tSnapshot every 12 hours.\n- TWENTY_FOUR_HOURS:\tSnapshot every 24 horus. Possible values: [\"ONE_HOUR\", \"SIX_HOURS\", \"TWELVE_HOURS\", \"TWENTY_FOUR_HOURS\"]"
+            },
+            "rdb_snapshot_start_time": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Optional. Date and time that the first snapshot was/will be attempted,\nand to which future snapshots will be aligned. If not provided,\nthe current time will be used.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution\nand up to nine fractional digits.\nExamples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
+              "Computed": true
+            }
+          }
+        }
+      },
       "persistence_iam_identity": {
         "Type": "String",
         "Description": "Output only. Cloud IAM identity used by import / export operations\nto transfer data to/from Cloud Storage. Format is \"serviceAccount:\".\nThe value may change over time for a given instance so should be\nchecked before each import/export operation.",
@@ -64714,13 +65139,13 @@
       },
       "read_endpoint_port": {
         "Type": "Int",
-        "Description": "Output only. The port number of the exposed readonly redis endpoint. Standard tier only. \nWrite requests should target 'port'.",
+        "Description": "Output only. The port number of the exposed readonly redis endpoint. Standard tier only.\nWrite requests should target 'port'.",
         "Computed": true
       },
       "read_replicas_mode": {
         "Type": "String",
         "Optional": true,
-        "Description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the \ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance \ncan scale up and down the number of replicas. Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
+        "Description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the\ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance\ncan scale up and down the number of replicas. Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
         "Computed": true
       },
       "redis_configs": {
@@ -64736,7 +65161,7 @@
       "redis_version": {
         "Type": "String",
         "Optional": true,
-        "Description": "The version of Redis software. If not provided, latest supported\nversion will be used. Please check the API documentation linked \nat the top for the latest valid values.",
+        "Description": "The version of Redis software. If not provided, latest supported\nversion will be used. Please check the API documentation linked\nat the top for the latest valid values.",
         "Computed": true
       },
       "region": {
@@ -64748,7 +65173,7 @@
       "replica_count": {
         "Type": "Int",
         "Optional": true,
-        "Description": "Optional. The number of replica nodes. The valid range for the Standard Tier with \nread replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled\nfor a Standard Tier instance, the only valid value is 1 and the default is 1. \nThe valid value for basic tier is 0 and the default is also 0.",
+        "Description": "Optional. The number of replica nodes. The valid range for the Standard Tier with\nread replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled\nfor a Standard Tier instance, the only valid value is 1 and the default is 1.\nThe valid value for basic tier is 0 and the default is also 0.",
         "Computed": true
       },
       "reserved_ip_range": {
@@ -64760,7 +65185,7 @@
       "secondary_ip_range": {
         "Type": "String",
         "Optional": true,
-        "Description": "Optional. Additional IP range for node placement. Required when enabling read replicas on\nan existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or\n\"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address \nrange associated with the private service access connection, or \"auto\".",
+        "Description": "Optional. Additional IP range for node placement. Required when enabling read replicas on\nan existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or\n\"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address\nrange associated with the private service access connection, or \"auto\".",
         "Computed": true
       },
       "server_ca_certs": {
@@ -65251,6 +65676,11 @@
         "Type": "String",
         "Required": true,
         "Description": "The secret data. Must be no larger than 64KiB."
+      },
+      "version": {
+        "Type": "String",
+        "Description": "The version of the Secret.",
+        "Computed": true
       }
     },
     "google_service_account": {
@@ -66151,6 +66581,16 @@
         "update",
         "delete"
       ],
+      "available_maintenance_versions": {
+        "Type": "List",
+        "Description": "Available Maintenance versions.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "clone": {
         "Type": "List",
         "Optional": true,
@@ -66192,7 +66632,7 @@
       "deletion_protection": {
         "Type": "Bool",
         "Optional": true,
-        "Description": "Used to block Terraform from deleting a SQL Instance.",
+        "Description": "Used to block Terraform from deleting a SQL Instance. Defaults to true.",
         "Default": {
           "Type": "bool",
           "Value": "true"
@@ -66230,6 +66670,12 @@
             }
           }
         }
+      },
+      "maintenance_version": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Maintenance version.",
+        "Computed": true
       },
       "master_instance_name": {
         "Type": "String",
@@ -66294,7 +66740,7 @@
             "connect_retry_interval": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The number of seconds between connect retries."
+              "Description": "The number of seconds between connect retries. MySQL's default is 60 seconds."
             },
             "dump_file_path": {
               "Type": "String",
@@ -66452,7 +66898,7 @@
             "availability_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "The availability type of the Cloud SQL instance, high availability\n(REGIONAL) or single zone (ZONAL). For all instances, ensure that\nsettings.backup_configuration.enabled is set to true.\nFor MySQL instances, ensure that settings.backup_configuration.binary_log_enabled is set to true.\nFor Postgres instances, ensure that settings.backup_configuration.point_in_time_recovery_enabled\nis set to true.",
+              "Description": "The availability type of the Cloud SQL instance, high availability\n(REGIONAL) or single zone (ZONAL). For all instances, ensure that\nsettings.backup_configuration.enabled is set to true.\nFor MySQL instances, ensure that settings.backup_configuration.binary_log_enabled is set to true.\nFor Postgres instances, ensure that settings.backup_configuration.point_in_time_recovery_enabled\nis set to true. Defaults to ZONAL.",
               "Default": {
                 "Type": "string",
                 "Value": "ZONAL"
@@ -66559,7 +67005,7 @@
             "disk_autoresize": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "Enables auto-resizing of the storage size. Defaults to true. Set to false if you want to set disk_size.",
+              "Description": "Enables auto-resizing of the storage size. Defaults to true.",
               "Default": {
                 "Type": "bool",
                 "Value": "true"
@@ -66577,13 +67023,13 @@
             "disk_size": {
               "Type": "Int",
               "Optional": true,
-              "Description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased. If you want to set this field, set disk_autoresize to false.",
+              "Description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased. The minimum value is 10GB.",
               "Computed": true
             },
             "disk_type": {
               "Type": "String",
               "Optional": true,
-              "Description": "The type of data disk: PD_SSD or PD_HDD.",
+              "Description": "The type of data disk: PD_SSD or PD_HDD. Defaults to PD_SSD.",
               "Default": {
                 "Type": "string",
                 "Value": "PD_SSD"
@@ -66974,13 +67420,7 @@
         "Optional": true,
         "Description": "The password for the user. Can be updated. For Postgres instances this is a Required field, unless type is set to\n                either CLOUD_IAM_USER or CLOUD_IAM_SERVICE_ACCOUNT."
       },
-      "project": {
-        "Type": "String",
-        "Optional": true,
-        "Description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
-        "Computed": true
-      },
-      "sql_server_user_details": {
+      "password_policy": {
         "Type": "List",
         "Optional": true,
         "MaxItems": 1,
@@ -66989,19 +67429,73 @@
         "Elem": {
           "Type": "SchemaInfo",
           "Info": {
-            "disabled": {
+            "allowed_failed_attempts": {
+              "Type": "Int",
+              "Optional": true,
+              "Description": "Number of failed attempts allowed before the user get locked."
+            },
+            "enable_failed_attempts_check": {
               "Type": "Bool",
               "Optional": true,
-              "Description": "If the user has been disabled.",
-              "Default": {
-                "Type": "bool",
-                "Value": "false"
+              "Description": "If true, the check that will lock user after too many failed login attempts will be enabled."
+            },
+            "enable_password_verification": {
+              "Type": "Bool",
+              "Optional": true,
+              "Description": "If true, the user must specify the current password before changing the password. This flag is supported only for MySQL."
+            },
+            "password_expiration_duration": {
+              "Type": "String",
+              "Optional": true,
+              "Description": "Password expiration duration with one week grace period."
+            },
+            "status": {
+              "Type": "List",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "locked": {
+                    "Type": "Bool",
+                    "Description": "If true, user does not have login privileges.",
+                    "Computed": true
+                  },
+                  "password_expiration_time": {
+                    "Type": "String",
+                    "Description": "Password expiration duration with one week grace period.",
+                    "Computed": true
+                  }
+                }
               }
+            }
+          }
+        }
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "The ID of the project in which the resource belongs. If it is not provided, the provider project is used.",
+        "Computed": true
+      },
+      "sql_server_user_details": {
+        "Type": "List",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "disabled": {
+              "Type": "Bool",
+              "Description": "If the user has been disabled.",
+              "Computed": true
             },
             "server_roles": {
               "Type": "List",
-              "Optional": true,
               "Description": "The server roles for this user in the database.",
+              "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -67061,6 +67555,31 @@
               "Type": "List",
               "Optional": true,
               "Description": "The list of HTTP headers other than the simple response headers to give permission for the user-agent to share across domains.",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "custom_placement_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "The bucket's custom location configuration, which specifies the individual regions that comprise a dual-region bucket. If the bucket is designated a single or multi-region, the parameters are empty.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "data_locations": {
+              "Type": "Set",
+              "Required": true,
+              "Description": "The list of individual regions that comprise a dual-region bucket. See the docs for a list of acceptable regions. Note: If any of the data_locations changes, it will recreate the bucket.",
+              "MaxItems": 2,
+              "MinItems": 2,
               "ConfigImplicitMode": "Attr",
               "Elem": {
                 "Type": "SchemaElements",
@@ -68002,6 +68521,39 @@
         "Description": "The name of the Transfer Job.",
         "Computed": true
       },
+      "notification_config": {
+        "Type": "List",
+        "Optional": true,
+        "Description": "Notification configuration.",
+        "MaxItems": 1,
+        "IsBlock": true,
+        "ConfigImplicitMode": "Block",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "event_types": {
+              "Type": "Set",
+              "Optional": true,
+              "Description": "Event types for which a notification is desired. If empty, send notifications for all event types. The valid types are \"TRANSFER_OPERATION_SUCCESS\", \"TRANSFER_OPERATION_FAILED\", \"TRANSFER_OPERATION_ABORTED\".",
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "payload_format": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The desired format of the notification message payloads. One of \"NONE\" or \"JSON\"."
+            },
+            "pubsub_topic": {
+              "Type": "String",
+              "Required": true,
+              "Description": "The Topic.name of the Pub/Sub topic to which to publish notifications."
+            }
+          }
+        }
+      },
       "project": {
         "Type": "String",
         "Optional": true,
@@ -68406,6 +68958,11 @@
                     "Type": "Bool",
                     "Optional": true,
                     "Description": "Whether overwriting objects that already exist in the sink is allowed."
+                  },
+                  "overwrite_when": {
+                    "Type": "String",
+                    "Optional": true,
+                    "Description": "When to overwrite objects that already exist in the sink. If not set, overwrite behavior is determined by overwriteObjectsAlreadyExistingInSink."
                   }
                 }
               }
@@ -68465,6 +69022,21 @@
         "Type": "String",
         "Required": true,
         "Description": "Input only. The resource name of the new TagKey's parent. Must be of the form organizations/{org_id}."
+      },
+      "purpose": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Optional. A purpose cannot be changed once set.\n\nA purpose denotes that this Tag is intended for use in policies of a specific policy engine, and will involve that policy engine in management operations involving this Tag. Possible values: [\"GCE_FIREWALL\"]"
+      },
+      "purpose_data": {
+        "Type": "Map",
+        "Optional": true,
+        "Description": "Optional. Purpose data cannot be changed once set.\n\nPurpose data corresponds to the policy system that the tag is intended for. For example, the GCE_FIREWALL purpose expects data in the following format: 'network = \"\u003cproject-name\u003e/\u003cvpc-name\u003e\"'.",
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
       },
       "short_name": {
         "Type": "String",
@@ -69134,6 +69706,84 @@
       },
       "unique_id": {
         "Type": "String",
+        "Computed": true
+      }
+    },
+    "google_artifact_registry_repository": {
+      "create_time": {
+        "Type": "String",
+        "Description": "The time when the repository was created.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "The user-provided description of the repository.",
+        "Computed": true
+      },
+      "format": {
+        "Type": "String",
+        "Description": "The format of packages that are stored in the repository. Supported formats\ncan be found [here](https://cloud.google.com/artifact-registry/docs/supported-formats).\nYou can only create alpha formats if you are a member of the\n[alpha user group](https://cloud.google.com/artifact-registry/docs/supported-formats#alpha-access).",
+        "Computed": true
+      },
+      "kms_key_name": {
+        "Type": "String",
+        "Description": "The Cloud KMS resource name of the customer managed encryption key that’s\nused to encrypt the contents of the Repository. Has the form:\n'projects/my-project/locations/my-region/keyRings/my-kr/cryptoKeys/my-key'.\nThis value may not be changed after the Repository has been created.",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Description": "Labels with user-defined metadata.\nThis field may contain up to 64 entries. Label keys and values may be no\nlonger than 63 characters. Label keys must begin with a lowercase letter\nand may only contain lowercase letters, numeric characters, underscores,\nand dashes.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the location this repository is located in."
+      },
+      "maven_config": {
+        "Type": "List",
+        "Description": "MavenRepositoryConfig is maven related repository details.\nProvides additional configuration details for repositories of the maven\nformat type.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "allow_snapshot_overwrites": {
+              "Type": "Bool",
+              "Description": "The repository with this flag will allow publishing the same\nsnapshot versions.",
+              "Computed": true
+            },
+            "version_policy": {
+              "Type": "String",
+              "Description": "Version policy defines the versions that the registry will accept. Default value: \"VERSION_POLICY_UNSPECIFIED\" Possible values: [\"VERSION_POLICY_UNSPECIFIED\", \"RELEASE\", \"SNAPSHOT\"]",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "name": {
+        "Type": "String",
+        "Description": "The name of the repository, for example:\n\"projects/p1/locations/us-central1/repositories/repo1\"",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true
+      },
+      "repository_id": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The last part of the repository name, for example:\n\"repo1\""
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "The time when the repository was last updated.",
         "Computed": true
       }
     },
@@ -70006,6 +70656,417 @@
         }
       }
     },
+    "google_cloudfunctions2_function": {
+      "build_config": {
+        "Type": "List",
+        "Description": "Describes the Build step of the function that builds a container\nfrom the given source.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "build": {
+              "Type": "String",
+              "Description": "The Cloud Build name of the latest successful\ndeployment of the function.",
+              "Computed": true
+            },
+            "docker_repository": {
+              "Type": "String",
+              "Description": "User managed repository created in Artifact Registry optionally with a customer managed encryption key.",
+              "Computed": true
+            },
+            "entry_point": {
+              "Type": "String",
+              "Description": "The name of the function (as defined in source code) that will be executed.\nDefaults to the resource name suffix, if not specified. For backward\ncompatibility, if function with given name is not found, then the system\nwill try to use function named \"function\". For Node.js this is name of a\nfunction exported by the module specified in source_location.",
+              "Computed": true
+            },
+            "environment_variables": {
+              "Type": "Map",
+              "Description": "User-provided build-time environment variables for the function.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "runtime": {
+              "Type": "String",
+              "Description": "The runtime in which to run the function. Required when deploying a new\nfunction, optional when updating an existing function.",
+              "Computed": true
+            },
+            "source": {
+              "Type": "List",
+              "Description": "The location of the function source code.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "repo_source": {
+                    "Type": "List",
+                    "Description": "If provided, get the source from this location in a Cloud Source Repository.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "branch_name": {
+                          "Type": "String",
+                          "Description": "Regex matching branches to build.",
+                          "Computed": true
+                        },
+                        "commit_sha": {
+                          "Type": "String",
+                          "Description": "Regex matching tags to build.",
+                          "Computed": true
+                        },
+                        "dir": {
+                          "Type": "String",
+                          "Description": "Directory, relative to the source root, in which to run the build.",
+                          "Computed": true
+                        },
+                        "invert_regex": {
+                          "Type": "Bool",
+                          "Description": "Only trigger a build if the revision regex does \nNOT match the revision regex.",
+                          "Computed": true
+                        },
+                        "project_id": {
+                          "Type": "String",
+                          "Description": "ID of the project that owns the Cloud Source Repository. If omitted, the \nproject ID requesting the build is assumed.",
+                          "Computed": true
+                        },
+                        "repo_name": {
+                          "Type": "String",
+                          "Description": "Name of the Cloud Source Repository.",
+                          "Computed": true
+                        },
+                        "tag_name": {
+                          "Type": "String",
+                          "Description": "Regex matching tags to build.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
+                  "storage_source": {
+                    "Type": "List",
+                    "Description": "If provided, get the source from this location in Google Cloud Storage.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "bucket": {
+                          "Type": "String",
+                          "Description": "Google Cloud Storage bucket containing the source",
+                          "Computed": true
+                        },
+                        "generation": {
+                          "Type": "Int",
+                          "Description": "Google Cloud Storage generation for the object. If the generation \nis omitted, the latest generation will be used.",
+                          "Computed": true
+                        },
+                        "object": {
+                          "Type": "String",
+                          "Description": "Google Cloud Storage object containing the source.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "worker_pool": {
+              "Type": "String",
+              "Description": "Name of the Cloud Build Custom Worker Pool that should be used to build the function.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "description": {
+        "Type": "String",
+        "Description": "User-provided description of a function.",
+        "Computed": true
+      },
+      "environment": {
+        "Type": "String",
+        "Description": "The environment the function is hosted on.",
+        "Computed": true
+      },
+      "event_trigger": {
+        "Type": "List",
+        "Description": "An Eventarc trigger managed by Google Cloud Functions that fires events in\nresponse to a condition in another service.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "event_filters": {
+              "Type": "Set",
+              "Description": "Criteria used to filter events.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "attribute": {
+                    "Type": "String",
+                    "Description": "'Required. The name of a CloudEvents attribute.\nCurrently, only a subset of attributes are supported for filtering. Use the 'gcloud eventarc providers describe' command to learn more about events and their attributes.\nDo not filter for the 'type' attribute here, as this is already achieved by the resource's 'event_type' attribute.",
+                    "Computed": true
+                  },
+                  "operator": {
+                    "Type": "String",
+                    "Description": "Optional. The operator used for matching the events with the value of\nthe filter. If not specified, only events that have an exact key-value\npair specified in the filter are matched.\nThe only allowed value is 'match-path-pattern'.\n[See documentation on path patterns here](https://cloud.google.com/eventarc/docs/path-patterns)'",
+                    "Computed": true
+                  },
+                  "value": {
+                    "Type": "String",
+                    "Description": "Required. The value for the attribute.\nIf the operator field is set as 'match-path-pattern', this value can be a path pattern instead of an exact value.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "event_type": {
+              "Type": "String",
+              "Description": "Required. The type of event to observe.",
+              "Computed": true
+            },
+            "pubsub_topic": {
+              "Type": "String",
+              "Description": "The name of a Pub/Sub topic in the same project that will be used\nas the transport topic for the event delivery.",
+              "Computed": true
+            },
+            "retry_policy": {
+              "Type": "String",
+              "Description": "Describes the retry policy in case of function's execution failure.\nRetried execution is charged as any other execution. Possible values: [\"RETRY_POLICY_UNSPECIFIED\", \"RETRY_POLICY_DO_NOT_RETRY\", \"RETRY_POLICY_RETRY\"]",
+              "Computed": true
+            },
+            "service_account_email": {
+              "Type": "String",
+              "Description": "The email of the service account for this function.",
+              "Computed": true
+            },
+            "trigger": {
+              "Type": "String",
+              "Description": "The resource name of the Eventarc trigger.",
+              "Computed": true
+            },
+            "trigger_region": {
+              "Type": "String",
+              "Description": "The region that the trigger will be in. The trigger will only receive\nevents originating in this region. It can be the same\nregion as the function, a different region or multi-region, or the global\nregion. If not provided, defaults to the same region as the function.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "labels": {
+        "Type": "Map",
+        "Description": "A set of key/value label pairs associated with this Cloud Function.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "location": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The location of this cloud function."
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "A user-defined name of the function. Function names must\nbe unique globally and match pattern 'projects/*/locations/*/functions/*'."
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true
+      },
+      "service_config": {
+        "Type": "List",
+        "Description": "Describes the Service being deployed.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "all_traffic_on_latest_revision": {
+              "Type": "Bool",
+              "Description": "Whether 100% of traffic is routed to the latest revision. Defaults to true.",
+              "Computed": true
+            },
+            "available_memory": {
+              "Type": "String",
+              "Description": "The amount of memory available for a function.\nDefaults to 256M. Supported units are k, M, G, Mi, Gi. If no unit is\nsupplied the value is interpreted as bytes.",
+              "Computed": true
+            },
+            "environment_variables": {
+              "Type": "Map",
+              "Description": "Environment variables that shall be available during function execution.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            },
+            "gcf_uri": {
+              "Type": "String",
+              "Description": "URIs of the Service deployed",
+              "Computed": true
+            },
+            "ingress_settings": {
+              "Type": "String",
+              "Description": "Available ingress settings. Defaults to \"ALLOW_ALL\" if unspecified. Default value: \"ALLOW_ALL\" Possible values: [\"ALLOW_ALL\", \"ALLOW_INTERNAL_ONLY\", \"ALLOW_INTERNAL_AND_GCLB\"]",
+              "Computed": true
+            },
+            "max_instance_count": {
+              "Type": "Int",
+              "Description": "The limit on the maximum number of function instances that may coexist at a\ngiven time.",
+              "Computed": true
+            },
+            "min_instance_count": {
+              "Type": "Int",
+              "Description": "The limit on the minimum number of function instances that may coexist at a\ngiven time.",
+              "Computed": true
+            },
+            "secret_environment_variables": {
+              "Type": "List",
+              "Description": "Secret environment variables configuration.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "key": {
+                    "Type": "String",
+                    "Description": "Name of the environment variable.",
+                    "Computed": true
+                  },
+                  "project_id": {
+                    "Type": "String",
+                    "Description": "Project identifier (preferrably project number but can also be the project ID) of the project that contains the secret. If not set, it will be populated with the function's project assuming that the secret exists in the same project as of the function.",
+                    "Computed": true
+                  },
+                  "secret": {
+                    "Type": "String",
+                    "Description": "Name of the secret in secret manager (not the full resource name).",
+                    "Computed": true
+                  },
+                  "version": {
+                    "Type": "String",
+                    "Description": "Version of the secret (version number or the string 'latest'). It is recommended to use a numeric version for secret environment variables as any updates to the secret value is not reflected until new instances start.",
+                    "Computed": true
+                  }
+                }
+              }
+            },
+            "secret_volumes": {
+              "Type": "List",
+              "Description": "Secret volumes configuration.",
+              "Computed": true,
+              "IsBlock": true,
+              "ConfigImplicitMode": "ComputedBlock",
+              "Elem": {
+                "Type": "SchemaInfo",
+                "Info": {
+                  "mount_path": {
+                    "Type": "String",
+                    "Description": "The path within the container to mount the secret volume. For example, setting the mountPath as /etc/secrets would mount the secret value files under the /etc/secrets directory. This directory will also be completely shadowed and unavailable to mount any other secrets. Recommended mount path: /etc/secrets",
+                    "Computed": true
+                  },
+                  "project_id": {
+                    "Type": "String",
+                    "Description": "Project identifier (preferrably project number but can also be the project ID) of the project that contains the secret. If not set, it will be populated with the function's project assuming that the secret exists in the same project as of the function.",
+                    "Computed": true
+                  },
+                  "secret": {
+                    "Type": "String",
+                    "Description": "Name of the secret in secret manager (not the full resource name).",
+                    "Computed": true
+                  },
+                  "versions": {
+                    "Type": "List",
+                    "Description": "List of secret versions to mount for this secret. If empty, the latest version of the secret will be made available in a file named after the secret under the mount point.'",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "path": {
+                          "Type": "String",
+                          "Description": "Relative path of the file under the mount path where the secret value for this version will be fetched and made available. For example, setting the mountPath as '/etc/secrets' and path as secret_foo would mount the secret value file at /etc/secrets/secret_foo.",
+                          "Computed": true
+                        },
+                        "version": {
+                          "Type": "String",
+                          "Description": "Version of the secret (version number or the string 'latest'). It is preferable to use latest version with secret volumes as secret value changes are reflected immediately.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "service": {
+              "Type": "String",
+              "Description": "Name of the service associated with a Function.",
+              "Computed": true
+            },
+            "service_account_email": {
+              "Type": "String",
+              "Description": "The email of the service account for this function.",
+              "Computed": true
+            },
+            "timeout_seconds": {
+              "Type": "Int",
+              "Description": "The function execution timeout. Execution is considered failed and\ncan be terminated if the function is not completed at the end of the\ntimeout period. Defaults to 60 seconds.",
+              "Computed": true
+            },
+            "uri": {
+              "Type": "String",
+              "Description": "URI of the Service deployed.",
+              "Computed": true
+            },
+            "vpc_connector": {
+              "Type": "String",
+              "Description": "The Serverless VPC Access connector that this cloud function can connect to.",
+              "Computed": true
+            },
+            "vpc_connector_egress_settings": {
+              "Type": "String",
+              "Description": "Available egress settings. Possible values: [\"VPC_CONNECTOR_EGRESS_SETTINGS_UNSPECIFIED\", \"PRIVATE_RANGES_ONLY\", \"ALL_TRAFFIC\"]",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "state": {
+        "Type": "String",
+        "Description": "Describes the current state of the function.",
+        "Computed": true
+      },
+      "update_time": {
+        "Type": "String",
+        "Description": "The last update timestamp of a Cloud Function.",
+        "Computed": true
+      }
+    },
     "google_cloudfunctions_function": {
       "available_memory_mb": {
         "Type": "Int",
@@ -70015,6 +71076,11 @@
       "build_environment_variables": {
         "Type": "Map",
         "Description": " A set of key/value environment variable pairs available during build time.",
+        "Computed": true
+      },
+      "build_worker_pool": {
+        "Type": "String",
+        "Description": "Name of the Cloud Build Custom Worker Pool that should be used to build the function.",
         "Computed": true
       },
       "description": {
@@ -71009,6 +72075,11 @@
           }
         }
       },
+      "compression_mode": {
+        "Type": "String",
+        "Description": "Compress text responses using Brotli or gzip compression, based on the client's Accept-Encoding header. Possible values: [\"AUTOMATIC\", \"DISABLED\"]",
+        "Computed": true
+      },
       "creation_timestamp": {
         "Type": "String",
         "Description": "Creation timestamp in RFC3339 text format.",
@@ -71288,6 +72359,11 @@
             }
           }
         }
+      },
+      "compression_mode": {
+        "Type": "String",
+        "Description": "Compress text responses using Brotli or gzip compression, based on the client's Accept-Encoding header. Possible values: [\"AUTOMATIC\", \"DISABLED\"]",
+        "Computed": true
       },
       "connection_draining_timeout_sec": {
         "Type": "Int",
@@ -74805,206 +75881,155 @@
         "Computed": true
       }
     },
-    "google_compute_router_status": {
-      "best_routes": {
-        "Type": "List",
-        "Description": "Best routes for this router's network.",
+    "google_compute_snapshot": {
+      "chain_name": {
+        "Type": "String",
+        "Description": "Creates the new snapshot in the snapshot chain labeled with the \nspecified name. The chain name must be 1-63 characters long and \ncomply with RFC1035. This is an uncommon option only for advanced \nservice owners who needs to create separate snapshot chains, for \nexample, for chargeback tracking.  When you describe your snapshot \nresource, this field is visible only if it has a non-empty value.",
+        "Computed": true
+      },
+      "creation_timestamp": {
+        "Type": "String",
+        "Description": "Creation timestamp in RFC3339 text format.",
+        "Computed": true
+      },
+      "description": {
+        "Type": "String",
+        "Description": "An optional description of this resource.",
+        "Computed": true
+      },
+      "disk_size_gb": {
+        "Type": "Int",
+        "Description": "Size of the snapshot, specified in GB.",
+        "Computed": true
+      },
+      "filter": {
+        "Type": "String",
+        "Optional": true
+      },
+      "label_fingerprint": {
+        "Type": "String",
+        "Description": "The fingerprint used for optimistic locking of this resource. Used\ninternally during updates.",
+        "Computed": true
+      },
+      "labels": {
+        "Type": "Map",
+        "Description": "Labels to apply to this Snapshot.",
         "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
+        "ConfigImplicitMode": "Attr",
         "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "description": {
-              "Type": "String",
-              "Description": "An optional description of this resource. Provide this property\nwhen you create the resource.",
-              "Computed": true
-            },
-            "dest_range": {
-              "Type": "String",
-              "Description": "The destination range of outgoing packets that this route applies to.\nOnly IPv4 is supported.",
-              "Computed": true
-            },
-            "name": {
-              "Type": "String",
-              "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
-              "Computed": true
-            },
-            "network": {
-              "Type": "String",
-              "Description": "The network that this route applies to.",
-              "Computed": true
-            },
-            "next_hop_gateway": {
-              "Type": "String",
-              "Description": "URL to a gateway that should handle matching packets.\nCurrently, you can only specify the internet gateway, using a full or\npartial valid URL:\n* 'https://www.googleapis.com/compute/v1/projects/project/global/gateways/default-internet-gateway'\n* 'projects/project/global/gateways/default-internet-gateway'\n* 'global/gateways/default-internet-gateway'\n* The string 'default-internet-gateway'.",
-              "Computed": true
-            },
-            "next_hop_ilb": {
-              "Type": "String",
-              "Description": "The IP address or URL to a forwarding rule of type\nloadBalancingScheme=INTERNAL that should handle matching\npackets.\n\nWith the GA provider you can only specify the forwarding\nrule as a partial or full URL. For example, the following\nare all valid values:\n* 10.128.0.56\n* https://www.googleapis.com/compute/v1/projects/project/regions/region/forwardingRules/forwardingRule\n* regions/region/forwardingRules/forwardingRule\n\nWhen the beta provider, you can also specify the IP address\nof a forwarding rule from the same VPC or any peered VPC.\n\nNote that this can only be used when the destinationRange is\na public (non-RFC 1918) IP CIDR range.",
-              "Computed": true
-            },
-            "next_hop_instance": {
-              "Type": "String",
-              "Description": "URL to an instance that should handle matching packets.\nYou can specify this as a full or partial URL. For example:\n* 'https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/instance'\n* 'projects/project/zones/zone/instances/instance'\n* 'zones/zone/instances/instance'\n* Just the instance name, with the zone in 'next_hop_instance_zone'.",
-              "Computed": true
-            },
-            "next_hop_instance_zone": {
-              "Type": "String",
-              "Description": "The zone of the instance specified in next_hop_instance. Omit if next_hop_instance is specified as a URL.",
-              "Computed": true
-            },
-            "next_hop_ip": {
-              "Type": "String",
-              "Description": "Network IP address of an instance that should handle matching packets.",
-              "Computed": true
-            },
-            "next_hop_network": {
-              "Type": "String",
-              "Description": "URL to a Network that should handle matching packets.",
-              "Computed": true
-            },
-            "next_hop_vpn_tunnel": {
-              "Type": "String",
-              "Description": "URL to a VpnTunnel that should handle matching packets.",
-              "Computed": true
-            },
-            "priority": {
-              "Type": "Int",
-              "Description": "The priority of this route. Priority is used to break ties in cases\nwhere there is more than one matching route of equal prefix length.\n\nIn the case of two routes with equal prefix length, the one with the\nlowest-numbered priority value wins.\n\nDefault value is 1000. Valid range is 0 through 65535.",
-              "Computed": true
-            },
-            "project": {
-              "Type": "String",
-              "Computed": true
-            },
-            "self_link": {
-              "Type": "String",
-              "Computed": true
-            },
-            "tags": {
-              "Type": "Set",
-              "Description": "A list of instance tags to which this route applies.",
-              "Computed": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            }
-          }
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
       },
-      "best_routes_for_router": {
+      "licenses": {
         "Type": "List",
-        "Description": "Best routes learned by this router.",
+        "Description": "A list of public visible licenses that apply to this snapshot. This\ncan be because the original image had licenses attached (such as a\nWindows image).  snapshotEncryptionKey nested object Encrypts the\nsnapshot using a customer-supplied encryption key.",
         "Computed": true,
-        "IsBlock": true,
-        "ConfigImplicitMode": "ComputedBlock",
+        "ConfigImplicitMode": "Attr",
         "Elem": {
-          "Type": "SchemaInfo",
-          "Info": {
-            "description": {
-              "Type": "String",
-              "Description": "An optional description of this resource. Provide this property\nwhen you create the resource.",
-              "Computed": true
-            },
-            "dest_range": {
-              "Type": "String",
-              "Description": "The destination range of outgoing packets that this route applies to.\nOnly IPv4 is supported.",
-              "Computed": true
-            },
-            "name": {
-              "Type": "String",
-              "Description": "Name of the resource. Provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035.  Specifically, the name must be 1-63 characters long and\nmatch the regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means\nthe first character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the\nlast character, which cannot be a dash.",
-              "Computed": true
-            },
-            "network": {
-              "Type": "String",
-              "Description": "The network that this route applies to.",
-              "Computed": true
-            },
-            "next_hop_gateway": {
-              "Type": "String",
-              "Description": "URL to a gateway that should handle matching packets.\nCurrently, you can only specify the internet gateway, using a full or\npartial valid URL:\n* 'https://www.googleapis.com/compute/v1/projects/project/global/gateways/default-internet-gateway'\n* 'projects/project/global/gateways/default-internet-gateway'\n* 'global/gateways/default-internet-gateway'\n* The string 'default-internet-gateway'.",
-              "Computed": true
-            },
-            "next_hop_ilb": {
-              "Type": "String",
-              "Description": "The IP address or URL to a forwarding rule of type\nloadBalancingScheme=INTERNAL that should handle matching\npackets.\n\nWith the GA provider you can only specify the forwarding\nrule as a partial or full URL. For example, the following\nare all valid values:\n* 10.128.0.56\n* https://www.googleapis.com/compute/v1/projects/project/regions/region/forwardingRules/forwardingRule\n* regions/region/forwardingRules/forwardingRule\n\nWhen the beta provider, you can also specify the IP address\nof a forwarding rule from the same VPC or any peered VPC.\n\nNote that this can only be used when the destinationRange is\na public (non-RFC 1918) IP CIDR range.",
-              "Computed": true
-            },
-            "next_hop_instance": {
-              "Type": "String",
-              "Description": "URL to an instance that should handle matching packets.\nYou can specify this as a full or partial URL. For example:\n* 'https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/instance'\n* 'projects/project/zones/zone/instances/instance'\n* 'zones/zone/instances/instance'\n* Just the instance name, with the zone in 'next_hop_instance_zone'.",
-              "Computed": true
-            },
-            "next_hop_instance_zone": {
-              "Type": "String",
-              "Description": "The zone of the instance specified in next_hop_instance. Omit if next_hop_instance is specified as a URL.",
-              "Computed": true
-            },
-            "next_hop_ip": {
-              "Type": "String",
-              "Description": "Network IP address of an instance that should handle matching packets.",
-              "Computed": true
-            },
-            "next_hop_network": {
-              "Type": "String",
-              "Description": "URL to a Network that should handle matching packets.",
-              "Computed": true
-            },
-            "next_hop_vpn_tunnel": {
-              "Type": "String",
-              "Description": "URL to a VpnTunnel that should handle matching packets.",
-              "Computed": true
-            },
-            "priority": {
-              "Type": "Int",
-              "Description": "The priority of this route. Priority is used to break ties in cases\nwhere there is more than one matching route of equal prefix length.\n\nIn the case of two routes with equal prefix length, the one with the\nlowest-numbered priority value wins.\n\nDefault value is 1000. Valid range is 0 through 65535.",
-              "Computed": true
-            },
-            "project": {
-              "Type": "String",
-              "Computed": true
-            },
-            "self_link": {
-              "Type": "String",
-              "Computed": true
-            },
-            "tags": {
-              "Type": "Set",
-              "Description": "A list of instance tags to which this route applies.",
-              "Computed": true,
-              "ConfigImplicitMode": "Attr",
-              "Elem": {
-                "Type": "SchemaElements",
-                "ElementsType": "String"
-              }
-            }
-          }
+          "Type": "SchemaElements",
+          "ElementsType": "String"
         }
+      },
+      "most_recent": {
+        "Type": "Bool",
+        "Optional": true
       },
       "name": {
         "Type": "String",
-        "Required": true,
-        "Description": "Name of the router to query."
-      },
-      "network": {
-        "Type": "String",
-        "Description": "URI of the network to which this router belongs.",
-        "Computed": true
+        "Optional": true,
+        "Description": "Name of the resource; provided by the client when the resource is\ncreated. The name must be 1-63 characters long, and comply with\nRFC1035. Specifically, the name must be 1-63 characters long and match\nthe regular expression '[a-z]([-a-z0-9]*[a-z0-9])?' which means the\nfirst character must be a lowercase letter, and all following\ncharacters must be a dash, lowercase letter, or digit, except the last\ncharacter, which cannot be a dash."
       },
       "project": {
         "Type": "String",
-        "Optional": true,
-        "Description": "Project ID of the target router."
+        "Optional": true
       },
-      "region": {
+      "self_link": {
         "Type": "String",
-        "Optional": true,
-        "Description": "Region of the target router.",
+        "Computed": true
+      },
+      "snapshot_encryption_key": {
+        "Type": "List",
+        "Description": "The customer-supplied encryption key of the snapshot. Required if the\nsource snapshot is protected by a customer-supplied encryption key.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "kms_key_self_link": {
+              "Type": "String",
+              "Description": "The name of the encryption key that is stored in Google Cloud KMS.",
+              "Computed": true
+            },
+            "kms_key_service_account": {
+              "Type": "String",
+              "Description": "The service account used for the encryption request for the given KMS key.\nIf absent, the Compute Engine Service Agent service account is used.",
+              "Computed": true
+            },
+            "raw_key": {
+              "Type": "String",
+              "Description": "Specifies a 256-bit customer-supplied encryption key, encoded in\nRFC 4648 base64 to either encrypt or decrypt this resource.",
+              "Computed": true
+            },
+            "sha256": {
+              "Type": "String",
+              "Description": "The RFC 4648 base64 encoded SHA-256 hash of the customer-supplied\nencryption key that protects this resource.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "snapshot_id": {
+        "Type": "Int",
+        "Description": "The unique identifier for the resource.",
+        "Computed": true
+      },
+      "source_disk": {
+        "Type": "String",
+        "Description": "A reference to the disk used to create this snapshot.",
+        "Computed": true
+      },
+      "source_disk_encryption_key": {
+        "Type": "List",
+        "Description": "The customer-supplied encryption key of the source snapshot. Required\nif the source snapshot is protected by a customer-supplied encryption\nkey.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "kms_key_service_account": {
+              "Type": "String",
+              "Description": "The service account used for the encryption request for the given KMS key.\nIf absent, the Compute Engine Service Agent service account is used.",
+              "Computed": true
+            },
+            "raw_key": {
+              "Type": "String",
+              "Description": "Specifies a 256-bit customer-supplied encryption key, encoded in\nRFC 4648 base64 to either encrypt or decrypt this resource.",
+              "Computed": true
+            }
+          }
+        }
+      },
+      "storage_bytes": {
+        "Type": "Int",
+        "Description": "A size of the storage used by the snapshot. As snapshots share\nstorage, this number is expected to change with snapshot\ncreation/deletion.",
+        "Computed": true
+      },
+      "storage_locations": {
+        "Type": "List",
+        "Description": "Cloud Storage bucket storage location of the snapshot (regional or multi-regional).",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
+      "zone": {
+        "Type": "String",
+        "Description": "A reference to the zone where the disk is hosted.",
         "Computed": true
       }
     },
@@ -76073,6 +77098,28 @@
                     "Description": "Size of partitions to create on the GPU. Valid values are described in the NVIDIA mig user guide (https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#partitioning)",
                     "Computed": true
                   },
+                  "gpu_sharing_config": {
+                    "Type": "List",
+                    "Description": "Configuration for GPU sharing.",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "gpu_sharing_strategy": {
+                          "Type": "String",
+                          "Description": "The type of GPU sharing strategy to enable on the GPU node. Possible values are described in the API package (https://pkg.go.dev/google.golang.org/api/container/v1#GPUSharingConfig)",
+                          "Computed": true
+                        },
+                        "max_shared_clients_per_gpu": {
+                          "Type": "Int",
+                          "Description": "The maximum number of containers that can share a GPU.",
+                          "Computed": true
+                        }
+                      }
+                    }
+                  },
                   "type": {
                     "Type": "String",
                     "Description": "The accelerator type resource name.",
@@ -76462,6 +77509,28 @@
                           "Description": "Size of partitions to create on the GPU. Valid values are described in the NVIDIA mig user guide (https://docs.nvidia.com/datacenter/tesla/mig-user-guide/#partitioning)",
                           "Computed": true
                         },
+                        "gpu_sharing_config": {
+                          "Type": "List",
+                          "Description": "Configuration for GPU sharing.",
+                          "Computed": true,
+                          "IsBlock": true,
+                          "ConfigImplicitMode": "ComputedBlock",
+                          "Elem": {
+                            "Type": "SchemaInfo",
+                            "Info": {
+                              "gpu_sharing_strategy": {
+                                "Type": "String",
+                                "Description": "The type of GPU sharing strategy to enable on the GPU node. Possible values are described in the API package (https://pkg.go.dev/google.golang.org/api/container/v1#GPUSharingConfig)",
+                                "Computed": true
+                              },
+                              "max_shared_clients_per_gpu": {
+                                "Type": "Int",
+                                "Description": "The maximum number of containers that can share a GPU.",
+                                "Computed": true
+                              }
+                            }
+                          }
+                        },
                         "type": {
                           "Type": "String",
                           "Description": "The accelerator type resource name.",
@@ -76745,6 +77814,28 @@
                     "Type": "Bool",
                     "Description": "Whether or not the notification config is enabled",
                     "Computed": true
+                  },
+                  "filter": {
+                    "Type": "List",
+                    "Description": "Allows filtering to one or more specific event types. If event types are present, those and only those event types will be transmitted to the cluster. Other types will be skipped. If no filter is specified, or no event types are present, all event types will be sent",
+                    "Computed": true,
+                    "IsBlock": true,
+                    "ConfigImplicitMode": "ComputedBlock",
+                    "Elem": {
+                      "Type": "SchemaInfo",
+                      "Info": {
+                        "event_type": {
+                          "Type": "List",
+                          "Description": "Can be used to filter what notifications are sent. Valid values include include UPGRADE_AVAILABLE_EVENT, UPGRADE_EVENT and SECURITY_BULLETIN_EVENT",
+                          "Computed": true,
+                          "ConfigImplicitMode": "Attr",
+                          "Elem": {
+                            "Type": "SchemaElements",
+                            "ElementsType": "String"
+                          }
+                        }
+                      }
+                    }
                   },
                   "topic": {
                     "Type": "String",
@@ -79634,6 +80725,38 @@
           }
         }
       },
+      "persistence_config": {
+        "Type": "List",
+        "Description": "Maintenance policy for an instance.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "persistence_mode": {
+              "Type": "String",
+              "Description": "Optional. Controls whether Persistence features are enabled. If not provided, the existing value will be used.\n\n- DISABLED: \tPersistence is disabled for the instance, and any existing snapshots are deleted.\n- RDB: RDB based Persistence is enabled. Possible values: [\"DISABLED\", \"RDB\"]",
+              "Computed": true
+            },
+            "rdb_next_snapshot_time": {
+              "Type": "String",
+              "Description": "Output only. The next time that a snapshot attempt is scheduled to occur.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution and up\nto nine fractional digits.\nExamples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
+              "Computed": true
+            },
+            "rdb_snapshot_period": {
+              "Type": "String",
+              "Description": "Optional. Available snapshot periods for scheduling.\n\n- ONE_HOUR:\tSnapshot every 1 hour.\n- SIX_HOURS:\tSnapshot every 6 hours.\n- TWELVE_HOURS:\tSnapshot every 12 hours.\n- TWENTY_FOUR_HOURS:\tSnapshot every 24 horus. Possible values: [\"ONE_HOUR\", \"SIX_HOURS\", \"TWELVE_HOURS\", \"TWENTY_FOUR_HOURS\"]",
+              "Computed": true
+            },
+            "rdb_snapshot_start_time": {
+              "Type": "String",
+              "Description": "Optional. Date and time that the first snapshot was/will be attempted,\nand to which future snapshots will be aligned. If not provided,\nthe current time will be used.\nA timestamp in RFC3339 UTC \"Zulu\" format, with nanosecond resolution\nand up to nine fractional digits.\nExamples: \"2014-10-02T15:01:23Z\" and \"2014-10-02T15:01:23.045123456Z\".",
+              "Computed": true
+            }
+          }
+        }
+      },
       "persistence_iam_identity": {
         "Type": "String",
         "Description": "Output only. Cloud IAM identity used by import / export operations\nto transfer data to/from Cloud Storage. Format is \"serviceAccount:\".\nThe value may change over time for a given instance so should be\nchecked before each import/export operation.",
@@ -79655,12 +80778,12 @@
       },
       "read_endpoint_port": {
         "Type": "Int",
-        "Description": "Output only. The port number of the exposed readonly redis endpoint. Standard tier only. \nWrite requests should target 'port'.",
+        "Description": "Output only. The port number of the exposed readonly redis endpoint. Standard tier only.\nWrite requests should target 'port'.",
         "Computed": true
       },
       "read_replicas_mode": {
         "Type": "String",
-        "Description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the \ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance \ncan scale up and down the number of replicas. Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
+        "Description": "Optional. Read replica mode. Can only be specified when trying to create the instance.\nIf not set, Memorystore Redis backend will default to READ_REPLICAS_DISABLED.\n- READ_REPLICAS_DISABLED: If disabled, read endpoint will not be provided and the\ninstance cannot scale up or down the number of replicas.\n- READ_REPLICAS_ENABLED: If enabled, read endpoint will be provided and the instance\ncan scale up and down the number of replicas. Possible values: [\"READ_REPLICAS_DISABLED\", \"READ_REPLICAS_ENABLED\"]",
         "Computed": true
       },
       "redis_configs": {
@@ -79675,7 +80798,7 @@
       },
       "redis_version": {
         "Type": "String",
-        "Description": "The version of Redis software. If not provided, latest supported\nversion will be used. Please check the API documentation linked \nat the top for the latest valid values.",
+        "Description": "The version of Redis software. If not provided, latest supported\nversion will be used. Please check the API documentation linked\nat the top for the latest valid values.",
         "Computed": true
       },
       "region": {
@@ -79685,7 +80808,7 @@
       },
       "replica_count": {
         "Type": "Int",
-        "Description": "Optional. The number of replica nodes. The valid range for the Standard Tier with \nread replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled\nfor a Standard Tier instance, the only valid value is 1 and the default is 1. \nThe valid value for basic tier is 0 and the default is also 0.",
+        "Description": "Optional. The number of replica nodes. The valid range for the Standard Tier with\nread replicas enabled is [1-5] and defaults to 2. If read replicas are not enabled\nfor a Standard Tier instance, the only valid value is 1 and the default is 1.\nThe valid value for basic tier is 0 and the default is also 0.",
         "Computed": true
       },
       "reserved_ip_range": {
@@ -79695,7 +80818,7 @@
       },
       "secondary_ip_range": {
         "Type": "String",
-        "Description": "Optional. Additional IP range for node placement. Required when enabling read replicas on\nan existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or\n\"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address \nrange associated with the private service access connection, or \"auto\".",
+        "Description": "Optional. Additional IP range for node placement. Required when enabling read replicas on\nan existing instance. For DIRECT_PEERING mode value must be a CIDR range of size /28, or\n\"auto\". For PRIVATE_SERVICE_ACCESS mode value must be the name of an allocated address\nrange associated with the private service access connection, or \"auto\".",
         "Computed": true
       },
       "server_ca_certs": {
@@ -80423,6 +81546,16 @@
       }
     },
     "google_sql_database_instance": {
+      "available_maintenance_versions": {
+        "Type": "List",
+        "Description": "Available Maintenance versions.",
+        "Computed": true,
+        "ConfigImplicitMode": "Attr",
+        "Elem": {
+          "Type": "SchemaElements",
+          "ElementsType": "String"
+        }
+      },
       "clone": {
         "Type": "List",
         "Description": "Configuration for creating a new instance as a clone of another instance.",
@@ -80462,7 +81595,7 @@
       },
       "deletion_protection": {
         "Type": "Bool",
-        "Description": "Used to block Terraform from deleting a SQL Instance.",
+        "Description": "Used to block Terraform from deleting a SQL Instance. Defaults to true.",
         "Computed": true
       },
       "encryption_key_name": {
@@ -80496,6 +81629,11 @@
             }
           }
         }
+      },
+      "maintenance_version": {
+        "Type": "String",
+        "Description": "Maintenance version.",
+        "Computed": true
       },
       "master_instance_name": {
         "Type": "String",
@@ -80553,7 +81691,7 @@
             },
             "connect_retry_interval": {
               "Type": "Int",
-              "Description": "The number of seconds between connect retries.",
+              "Description": "The number of seconds between connect retries. MySQL's default is 60 seconds.",
               "Computed": true
             },
             "dump_file_path": {
@@ -80703,7 +81841,7 @@
             },
             "availability_type": {
               "Type": "String",
-              "Description": "The availability type of the Cloud SQL instance, high availability\n(REGIONAL) or single zone (ZONAL). For all instances, ensure that\nsettings.backup_configuration.enabled is set to true.\nFor MySQL instances, ensure that settings.backup_configuration.binary_log_enabled is set to true.\nFor Postgres instances, ensure that settings.backup_configuration.point_in_time_recovery_enabled\nis set to true.",
+              "Description": "The availability type of the Cloud SQL instance, high availability\n(REGIONAL) or single zone (ZONAL). For all instances, ensure that\nsettings.backup_configuration.enabled is set to true.\nFor MySQL instances, ensure that settings.backup_configuration.binary_log_enabled is set to true.\nFor Postgres instances, ensure that settings.backup_configuration.point_in_time_recovery_enabled\nis set to true. Defaults to ZONAL.",
               "Computed": true
             },
             "backup_configuration": {
@@ -80796,7 +81934,7 @@
             },
             "disk_autoresize": {
               "Type": "Bool",
-              "Description": "Enables auto-resizing of the storage size. Defaults to true. Set to false if you want to set disk_size.",
+              "Description": "Enables auto-resizing of the storage size. Defaults to true.",
               "Computed": true
             },
             "disk_autoresize_limit": {
@@ -80806,12 +81944,12 @@
             },
             "disk_size": {
               "Type": "Int",
-              "Description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased. If you want to set this field, set disk_autoresize to false.",
+              "Description": "The size of data disk, in GB. Size of a running instance cannot be reduced but can be increased. The minimum value is 10GB.",
               "Computed": true
             },
             "disk_type": {
               "Type": "String",
-              "Description": "The type of data disk: PD_SSD or PD_HDD.",
+              "Description": "The type of data disk: PD_SSD or PD_HDD. Defaults to PD_SSD.",
               "Computed": true
             },
             "insights_config": {
@@ -81086,6 +82224,28 @@
             "response_header": {
               "Type": "List",
               "Description": "The list of HTTP headers other than the simple response headers to give permission for the user-agent to share across domains.",
+              "Computed": true,
+              "ConfigImplicitMode": "Attr",
+              "Elem": {
+                "Type": "SchemaElements",
+                "ElementsType": "String"
+              }
+            }
+          }
+        }
+      },
+      "custom_placement_config": {
+        "Type": "List",
+        "Description": "The bucket's custom location configuration, which specifies the individual regions that comprise a dual-region bucket. If the bucket is designated a single or multi-region, the parameters are empty.",
+        "Computed": true,
+        "IsBlock": true,
+        "ConfigImplicitMode": "ComputedBlock",
+        "Elem": {
+          "Type": "SchemaInfo",
+          "Info": {
+            "data_locations": {
+              "Type": "Set",
+              "Description": "The list of individual regions that comprise a dual-region bucket. See the docs for a list of acceptable regions. Note: If any of the data_locations changes, it will recreate the bucket.",
               "Computed": true,
               "ConfigImplicitMode": "Attr",
               "Elem": {
@@ -81802,6 +82962,52 @@
       "zone": {
         "Type": "String",
         "Optional": true,
+        "Computed": true
+      }
+    },
+    "google_vpc_access_connector": {
+      "ip_cidr_range": {
+        "Type": "String",
+        "Description": "The range of internal addresses that follows RFC 4632 notation. Example: '10.132.0.0/28'.",
+        "Computed": true
+      },
+      "max_throughput": {
+        "Type": "Int",
+        "Description": "Maximum throughput of the connector in Mbps, must be greater than 'min_throughput'. Default is 300.",
+        "Computed": true
+      },
+      "min_throughput": {
+        "Type": "Int",
+        "Description": "Minimum throughput of the connector in Mbps. Default and min is 200.",
+        "Computed": true
+      },
+      "name": {
+        "Type": "String",
+        "Required": true,
+        "Description": "The name of the resource (Max 25 characters)."
+      },
+      "network": {
+        "Type": "String",
+        "Description": "Name or self_link of the VPC network. Required if 'ip_cidr_range' is set.",
+        "Computed": true
+      },
+      "project": {
+        "Type": "String",
+        "Optional": true
+      },
+      "region": {
+        "Type": "String",
+        "Optional": true,
+        "Description": "Region where the VPC Access connector resides. If it is not provided, the provider region is used."
+      },
+      "self_link": {
+        "Type": "String",
+        "Description": "The fully qualified name of this VPC connector",
+        "Computed": true
+      },
+      "state": {
+        "Type": "String",
+        "Description": "State of the VPC access connector.",
         "Computed": true
       }
     }

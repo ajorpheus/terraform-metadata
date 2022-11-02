@@ -3,7 +3,7 @@
   ".sdk_type": "terraform-plugin-sdk-v2",
   "name": "exoscale",
   "type": "provider",
-  "version": "v0.40.2",
+  "version": "v0.41.0",
   "provider": {
     "compute_endpoint": {
       "Type": "String",
@@ -925,9 +925,19 @@
         "update",
         "delete"
       ],
+      "address_family": {
+        "Type": "String",
+        "Optional": true,
+        "Computed": true
+      },
+      "cidr": {
+        "Type": "String",
+        "Computed": true
+      },
       "description": {
         "Type": "String",
-        "Optional": true
+        "Optional": true,
+        "Computed": true
       },
       "healthcheck": {
         "Type": "List",
@@ -2835,6 +2845,14 @@
       }
     },
     "exoscale_elastic_ip": {
+      "address_family": {
+        "Type": "String",
+        "Computed": true
+      },
+      "cidr": {
+        "Type": "String",
+        "Computed": true
+      },
       "description": {
         "Type": "String",
         "Computed": true

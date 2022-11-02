@@ -17,7 +17,9 @@ fi
 function jq_get() {
   name="$1"
   prop="$2"
-  jq -r ".\"$name\".$prop // .__NAME__.$prop // \"\" " <"$CUR/$config_file" | sed -e "s~__NAME__~$name~g"
+  # Not working when value is false, eg for skip_generation = false
+  #jq -r ".\"$name\".$prop // .__NAME__.$prop // \"\" " <"$CUR/$config_file" | sed -e "s~__NAME__~$name~g"
+  jq -r "if ( .\"$name\" | has(\"$prop\") ) then .\"$name\".$prop elif (.__NAME__ | has(\"$prop\")) then .__NAME__.$prop else \"\" end" <"$CUR/$config_file" | sed -e "s~__NAME__~$name~g"
 }
 
 function trim() {
@@ -56,6 +58,7 @@ function update_all() {
     repositories+=("$repository")
   else
     while IFS= read -r p; do
+      echo "check $p"
       if [[ "$p" == "__NAME__" ]]; then
         continue
       fi
@@ -71,6 +74,7 @@ function update_all() {
       if [[ $skip_generation == "true" ]]; then
         continue
       fi
+      echo "no skip $p"
       repository="$(jq_get "$p" 'repository')"
       repositories+=("$repository")
     done < <(jq -r 'keys[]' <"$CUR/$config_file")
