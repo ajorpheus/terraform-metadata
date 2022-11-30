@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 set -euo pipefail
 IFS=$'\n\t'
 

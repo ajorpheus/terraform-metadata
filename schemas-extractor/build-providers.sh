@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 config_file='providers.json'
 
 . common.sh
