@@ -186,7 +186,7 @@ EOF
     "$CUR/template/$base_file" \
     >generate-schema/generate-schema.go
 
-  echo "Generating schema for $name"
+  echo "Generating schema for $name using $($(pwd)/generate-schema/generate-schema.go)"
   if [[ "${GENERATE_PARALLEL:-}" == "1" ]]; then
     (
       generate_one "$name" "$go_envs" "$go_args"

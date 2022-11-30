@@ -295,8 +295,11 @@ type ResourceProviderSchema struct {
 
 func main() {
 	var provider *schema.Provider
+	ctx := context.Background()
+	if ctx == nil {
+	}
 	//noinspection GoUnresolvedReference
-	provider = prvdr.__PROVIDER_FUNC_NAME__(__PROVIDER_ARGS__)
+	__PROVIDER_VARS__ = __PROVIDER_CONSTR__
 	Generate(provider, "__NAME__", "__OUT__")
 }
 

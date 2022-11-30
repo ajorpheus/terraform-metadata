@@ -200,7 +200,7 @@
   },
   "chef": {},
   "cherryservers": {},
-  "cidr": {},
+  "cidr": {
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/volcano-coffee-company/terraform-provider-__NAME__"
@@ -926,5 +926,29 @@
   },
   "tidbcloud": {
     "repository": "github.com/tidbcloud/terraform-provider-__NAME__"
+  },
+  "atlas": {
+    "repository": "github.com/ariga/terraform-provider-atlas"
+  },
+  "ionoscloud": {
+    "repository": "github.com/ionos-cloud/terraform-provider-ionoscloud"
+  },
+  "netskopebwan": {
+    "repository": "github.com/netskopeoss/terraform-provider-netskopebwan"
+  },
+  "nutanixkps": {
+    "repository": "github.com/nutanix/terraform-provider-nutanixkps"
+  },
+  "polaris": {
+    "repository": "github.com/rubrikinc/terraform-provider-polaris"
+  },
+  "rke": {
+    "repository": "github.com/rancher/terraform-provider-rke"
+  },
+  "samsungcloudplatform": {
+    "repository": "github.com/SamsungSDSCloud/terraform-provider-samsungcloudplatform"
+  },
+  "tfcoremock": {
+    "repository": "github.com/hashicorp/terraform-provider-tfcoremock"
   }
 }
