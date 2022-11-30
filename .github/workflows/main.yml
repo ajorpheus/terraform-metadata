@@ -24,9 +24,12 @@ jobs:
 
       - name: Sync terraform providers
         run: |
+              sudo apt-get update
+              sudo apt-get install -y libxml2-utils jq
               cd schemas-extractor
               export GOPATH=/tmp/
-              make
+              export UPDATE_PARALLEL=1 GENERATE_PARALLEL=1 UPDATE_SKIP="1" CHECK_SKIP="1"
+              make providers ONLY="aws"
               cp -r schemas/* ../terraform/model/
               cp providers.list ../terraform/model
 
