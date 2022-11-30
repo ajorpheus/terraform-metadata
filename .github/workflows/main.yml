@@ -28,8 +28,8 @@ jobs:
               sudo apt-get install -y libxml2-utils jq
               cd schemas-extractor
               export GOPATH=/tmp/
-              export UPDATE_PARALLEL=1 GENERATE_PARALLEL=1
-              make providers ONLY="aws"
+#              export UPDATE_PARALLEL=1 GENERATE_PARALLEL=1
+              make
               cp -r schemas/* ../terraform/model/
               cp providers.list ../terraform/model
 
