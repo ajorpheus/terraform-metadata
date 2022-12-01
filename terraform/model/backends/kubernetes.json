@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "kubernetes",
   "type": "backend",
-  "version": "v1.3.3",
+  "version": "v1.3.6",
   "schema": {
     "client_certificate": {
       "Type": "String",
