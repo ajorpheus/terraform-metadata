@@ -70,8 +70,8 @@ jobs:
         with:
           commit_message: ${{ steps.commit.outputs.desc }}
           branch: sync
-          commit_user_name: Vladimir Samoylov
-          commit_user_email: cageyv.dev@gmail.com
+          commit_user_name: Ash Jindal
+          commit_user_email: ajorpheus@users.noreply.github.com
 
       - name: Merge sync changes to master
         run: |
