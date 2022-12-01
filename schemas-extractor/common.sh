@@ -103,6 +103,8 @@ function generate_one() {
   log_file="$logs/$1.log"
   set +e
   printf "%b" "\n\n******* Command\n cd "$(pwd)"\n${2:-} go run ${3:-} generate-schema/generate-schema.go 2>&1\n"
+  go get -t .
+  go mod tidy
   eval ${2:-} go run ${3:-} generate-schema/generate-schema.go 2>&1 | tee "$log_file"
   ec=$?
   if [[ $ec -eq 0 ]]; then
