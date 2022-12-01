@@ -130,8 +130,8 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "aci": {
-     "skip_generation": true,
-     "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
   },
   "acme": {
     "skip_generation": true,
@@ -153,12 +153,12 @@
   },
   "arukas": {"skip_generation": true},
   "auth0": {
-     "skip_generation": true,
-     "repository": "github.com/alexkappa/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/alexkappa/terraform-provider-__NAME__"
   },
   "avi": {
-     "skip_generation": true,
-     "repository": "github.com/vmware/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "aviatrix": {
     "skip_generation": true,
@@ -182,7 +182,7 @@
   "azuredevops": {
     "skip_generation": true,
     "skip_generation": true,
-     "repository": "github.com/microsoft/terraform-provider-__NAME__"
+    "repository": "github.com/microsoft/terraform-provider-__NAME__"
   },
   "azurerm": {
     "skip_generation": true,
@@ -198,8 +198,8 @@
     "repository": "github.com/baidubce/terraform-provider-__NAME__"
   },
   "bigip": {
-     "skip_generation": true,
-     "repository": "github.com/F5Networks/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/F5Networks/terraform-provider-__NAME__"
   },
   "bitbucket": {
     "TODO": "investigate which repo to use"
@@ -210,8 +210,8 @@
     "repository": "github.com/__NAME__/terraform-provider-__NAME__"
   },
   "checkpoint": {
-     "skip_generation": true,
-     "repository": "github.com/checkpointsw/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/checkpointsw/terraform-provider-__NAME__"
   },
   "chef": {"skip_generation": true},
   "cherryservers": {"skip_generation": true},
@@ -226,8 +226,8 @@
   "clc": {"skip_generation": true},
   "cloudamqp": {"skip_generation": true},
   "cloudflare": {
-     "skip_generation": true,
-     "repository": "github.com/cloudflare/terraform-provider-cloudflare"
+    "skip_generation": true,
+    "repository": "github.com/cloudflare/terraform-provider-cloudflare"
   },
   "cloudinit": {"skip_generation": true},
   "cloudscale": {"skip_generation": true},
@@ -253,14 +253,14 @@
   "fakewebservices": {"skip_generation": true},
   "fastly": {"skip_generation": true},
   "flexibleengine": {
-     "skip_generation": true,
-     "repository": "github.com/FlexibleEngineCloud/terraform-provider-flexibleengine"
+    "skip_generation": true,
+    "repository": "github.com/FlexibleEngineCloud/terraform-provider-flexibleengine"
   },
   "fortios": {"skip_generation": true},
   "genymotion": {"skip_generation": true},
   "github": {
-     "skip_generation": true,
-     "repository": "github.com/integrations/terraform-provider-github"
+    "skip_generation": true,
+    "repository": "github.com/integrations/terraform-provider-github"
   },
   "gitlab": {"skip_generation": true},
   "google": {
@@ -305,13 +305,13 @@
   "incapsula": {"skip_generation": true},
   "influxdb": {"skip_generation": true},
   "infoblox": {
-     "skip_generation": true,
-     "repository": "github.com/infobloxopen/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/infobloxopen/terraform-provider-__NAME__"
   },
   "jdcloud": {"skip_generation": true},
   "ksyun": {
-     "skip_generation": true,
-     "repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"
   },
   "kubernetes": {
     "skip_generation": true,
@@ -340,12 +340,12 @@
     "repository": "github.com/metalsoft-io/terraform-provider-__NAME__"
   },
   "mongodbatlas": {
-     "skip_generation": true,
-     "repository": "github.com/mongodb/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/mongodb/terraform-provider-__NAME__"
   },
   "mso": {
-     "skip_generation": true,
-     "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
   },
   "mysql": {"skip_generation": true},
   "ncloud": {
@@ -363,31 +363,31 @@
     "skip_generation": true
   },
   "nomad": {
-     "skip_generation": true,
-     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "ns1": {"skip_generation": true},
   "nsxt": {"skip_generation": true},
   "null": {"skip_generation": true},
   "nutanix": {"skip_generation": true},
   "oci": {
-     "skip_generation": true,
-     "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
   },
   "okta": {"skip_generation": true},
   "oktaasa": {"skip_generation": true},
   "oneandone": {"skip_generation": true},
   "opc": {
-     "skip_generation": true,
-     "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
   },
   "opennebula": {"skip_generation": true},
   "openstack": {"skip_generation": true},
   "opentelekomcloud": {"skip_generation": true},
   "opsgenie": {"skip_generation": true},
   "oraclepaas": {
-     "skip_generation": true,
-     "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
   },
   "ovh": {"skip_generation": true},
   "packet": {"skip_generation": true},
@@ -427,12 +427,13 @@
     "skip_generation": true
   },
   "test": {
+    "skip_generation": true,
     "pkg_name": "builtin/providers/__NAME__",
     "repository": "github.com/hashicorp/terraform"
   },
   "tfe": {
-     "skip_generation": true,
-     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "tls": {"skip_generation": true},
   "triton": {"skip_generation": true},
@@ -444,8 +445,8 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "vault": {
-     "skip_generation": true,
-     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "vcd": {
     "skip_generation": true,
@@ -453,20 +454,20 @@
     "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "venafi": {
-     "skip_generation": true,
-     "repository": "github.com/__NAME__/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/__NAME__/terraform-provider-__NAME__"
   },
   "vmc": {
-     "skip_generation": true,
-     "repository": "github.com/vmware/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "vra": {
-     "skip_generation": true,
-     "repository": "github.com/vmware/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "vra7": {
-     "skip_generation": true,
-     "repository": "github.com/vmware/terraform-provider-__NAME__"
+    "skip_generation": true,
+    "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "vsphere": {"skip_generation": true},
   "thunder": {"skip_generation": true},
