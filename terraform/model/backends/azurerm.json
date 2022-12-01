@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "azurerm",
   "type": "backend",
-  "version": "v1.3.3",
+  "version": "v1.3.6",
   "schema": {
     "access_key": {
       "Type": "String",
@@ -72,14 +72,26 @@
     "oidc_request_token": {
       "Type": "String",
       "Optional": true,
-      "Description": "The bearer token for the request to the OIDC provider",
+      "Description": "The bearer token to use for the request to the OIDC providers `oidc_request_url` URL to fetch an ID token. Needs to be used in conjunction with `oidc_request_url`. This is meant to be used for Github Actions.",
       "DefaultFunc": "MENV(ARM_OIDC_REQUEST_TOKEN,ACTIONS_ID_TOKEN_REQUEST_TOKEN)"
     },
     "oidc_request_url": {
       "Type": "String",
       "Optional": true,
-      "Description": "The URL for the OIDC provider from which to request an ID token",
+      "Description": "The URL of the OIDC provider from which to request an ID token. Needs to be used in conjunction with `oidc_request_token`. This is meant to be used for Github Actions.",
       "DefaultFunc": "MENV(ARM_OIDC_REQUEST_URL,ACTIONS_ID_TOKEN_REQUEST_URL)"
+    },
+    "oidc_token": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "A generic JWT token that can be used for OIDC authentication. Should not be used in conjunction with `oidc_request_token`.",
+      "DefaultFunc": "ENV(ARM_OIDC_TOKEN)"
+    },
+    "oidc_token_file_path": {
+      "Type": "String",
+      "Optional": true,
+      "Description": "Path to file containing a generic JWT token that can be used for OIDC authentication. Should not be used in conjunction with `oidc_request_token`.",
+      "DefaultFunc": "ENV(ARM_OIDC_TOKEN_FILE_PATH)"
     },
     "resource_group_name": {
       "Type": "String",
