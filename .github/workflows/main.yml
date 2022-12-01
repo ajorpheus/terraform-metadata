@@ -17,12 +17,12 @@ jobs:
     steps:
 
       - name: Set up Go 1.19.1
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v3
         with:
           go-version: 1.19.1
         id: go
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: |
              git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
@@ -37,7 +37,7 @@ jobs:
               cp providers.list ../terraform/model
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: latest-sync
           path: terraform
