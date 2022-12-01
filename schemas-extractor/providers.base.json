@@ -130,7 +130,8 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "aci": {
-    "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
   },
   "acme": {
     "pkg_prefix": "__REPOSITORY__/v2",
@@ -149,10 +150,12 @@
   },
   "arukas": {},
   "auth0": {
-    "repository": "github.com/alexkappa/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/alexkappa/terraform-provider-__NAME__"
   },
   "avi": {
-    "repository": "github.com/vmware/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "aviatrix": {
     "pkg_prefix": "__REPOSITORY__/v2",
@@ -172,7 +175,8 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "azuredevops": {
-    "repository": "github.com/microsoft/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/microsoft/terraform-provider-__NAME__"
   },
   "azurerm": {
     "pkg_name": "internal/provider",
@@ -186,7 +190,8 @@
     "repository": "github.com/baidubce/terraform-provider-__NAME__"
   },
   "bigip": {
-    "repository": "github.com/F5Networks/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/F5Networks/terraform-provider-__NAME__"
   },
   "bitbucket": {
     "TODO": "investigate which repo to use"
@@ -196,7 +201,8 @@
     "repository": "github.com/__NAME__/terraform-provider-__NAME__"
   },
   "checkpoint": {
-    "repository": "github.com/checkpointsw/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/checkpointsw/terraform-provider-__NAME__"
   },
   "chef": {},
   "cherryservers": {},
@@ -210,7 +216,8 @@
   "clc": {},
   "cloudamqp": {},
   "cloudflare": {
-    "repository": "github.com/cloudflare/terraform-provider-cloudflare"
+     "skip_generation": true,
+     "repository": "github.com/cloudflare/terraform-provider-cloudflare"
   },
   "cloudinit": {},
   "cloudscale": {},
@@ -236,12 +243,14 @@
   "fakewebservices": {},
   "fastly": {},
   "flexibleengine": {
-    "repository": "github.com/FlexibleEngineCloud/terraform-provider-flexibleengine"
+     "skip_generation": true,
+     "repository": "github.com/FlexibleEngineCloud/terraform-provider-flexibleengine"
   },
   "fortios": {},
   "genymotion": {},
   "github": {
-    "repository": "github.com/integrations/terraform-provider-github"
+     "skip_generation": true,
+     "repository": "github.com/integrations/terraform-provider-github"
   },
   "gitlab": {},
   "google": {
@@ -281,11 +290,13 @@
   "incapsula": {},
   "influxdb": {},
   "infoblox": {
-    "repository": "github.com/infobloxopen/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/infobloxopen/terraform-provider-__NAME__"
   },
   "jdcloud": {},
   "ksyun": {
-    "repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/kingsoftcloud/terraform-provider-__NAME__"
   },
   "kubernetes": {
     "pkg_prefix": "github.com/hashicorp/terraform-provider-__NAME__",
@@ -311,10 +322,12 @@
     "repository": "github.com/metalsoft-io/terraform-provider-__NAME__"
   },
   "mongodbatlas": {
-    "repository": "github.com/mongodb/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/mongodb/terraform-provider-__NAME__"
   },
   "mso": {
-    "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/ciscodevnet/terraform-provider-__NAME__"
   },
   "mysql": {},
   "ncloud": {
@@ -330,27 +343,31 @@
     "skip_generation": true
   },
   "nomad": {
-    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "ns1": {},
   "nsxt": {},
   "null": {},
   "nutanix": {},
   "oci": {
-    "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
   },
   "okta": {},
   "oktaasa": {},
   "oneandone": {},
   "opc": {
-    "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
   },
   "opennebula": {},
   "openstack": {},
   "opentelekomcloud": {},
   "opsgenie": {},
   "oraclepaas": {
-    "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/terraform-providers/terraform-provider-__NAME__"
   },
   "ovh": {},
   "packet": {},
@@ -394,7 +411,8 @@
     "repository": "github.com/hashicorp/terraform"
   },
   "tfe": {
-    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "tls": {},
   "triton": {},
@@ -405,378 +423,211 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "vault": {
-    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "vcd": {
     "pkg_prefix": "__REPOSITORY__/v3",
     "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "venafi": {
-    "repository": "github.com/__NAME__/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/__NAME__/terraform-provider-__NAME__"
   },
   "vmc": {
-    "repository": "github.com/vmware/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "vra": {
-    "repository": "github.com/vmware/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "vra7": {
-    "repository": "github.com/vmware/terraform-provider-__NAME__"
+     "skip_generation": true,
+     "repository": "github.com/vmware/terraform-provider-__NAME__"
   },
   "vsphere": {
-    "repository": "github.com/hashicorp/terraform-provider-__NAME__"
+    "skip_generation": true
   },
   "thunder": {
-    "repository": "github.com/a10networks/terraform-provider-__NAME__"
+    "skip_generation": true
   },
   "vthunder": {
     "substituted-by": "thunder",
     "skip_generation": true
   },
-  "vultr": {
-  },
-  "wavefront": {
-  },
-  "yandex": {
-  },
-  "ad": {
-  },
-  "ah": {
-  },
-  "aiven": {
-  },
-  "alkira": {
-  },
-  "amixr": {
-  },
-  "anxcloud": {
-  },
-  "aquasec": {
-  },
-  "artifactory": {
-  },
-  "artifacts": {
-  },
-  "astra": {
-  },
+  "vultr":{ "skip_generation": true},
+  "wavefront":{ "skip_generation": true},
+  "yandex":{ "skip_generation": true},
+  "ad":{ "skip_generation": true},
+  "ah":{ "skip_generation": true},
+  "aiven":{ "skip_generation": true},
+  "alkira":{ "skip_generation": true},
+  "amixr":{ "skip_generation": true},
+  "anxcloud":{ "skip_generation": true},
+  "aquasec":{ "skip_generation": true},
+  "artifactory":{ "skip_generation": true},
+  "artifacts":{ "skip_generation": true},
+  "astra":{ "skip_generation": true},
   "awscc": {
     "pkg_name": "internal/provider"
   },
-  "azurecaf": {
-  },
-  "b2": {
-  },
-  "better-uptime": {
-  },
-  "bluecat": {
-  },
-  "bridgecrew": {
-  },
-  "britive": {
-  },
-  "buddy": {
-  },
-  "buildkite": {
-  },
-  "carvel": {
-  },
-  "cbs": {
-  },
-  "checkly": {
-  },
-  "ciphertrust": {
-  },
-  "citrixadc": {
-  },
-  "civo": {
-  },
-  "cloudeos": {
-  },
-  "cloudsigma": {
-  },
-  "cloudsmith": {
-  },
-  "cloudtamerio": {
-  },
-  "codefresh": {
-  },
-  "commvault": {
-  },
-  "configcat": {
-  },
-  "confluentcloud": {
-  },
-  "databricks": {
-  },
-  "dcnm": {
-  },
-  "dynatrace": {
-  },
-  "ec": {
-  },
-  "elasticstack": {
-  },
-  "equinix": {
-  },
-  "fivetran": {
-  },
-  "fmc": {
-  },
-  "fortimanager": {
-  },
-  "gcorelabs": {
-  },
-  "genesyscloud": {
-  },
-  "gocache": {
-  },
-  "harness": {
-  },
-  "honeycombio": {
-  },
-  "ilert": {
-  },
-  "illumio-core": {
-  },
-  "infracost": {
-  },
-  "instaclustr": {
-  },
-  "intersight": {
-    "skip_generation": true
-  },
-  "iterative": {
-  },
-  "kentik-cloudexport": {
-  },
-  "kentik-synthetics": {
-  },
-  "lightstep": {
-  },
-  "limelight": {
-  },
-  "logtail": {
-  },
-  "logzio": {
-  },
-  "metal": {
-  },
-  "netapp-cloudmanager": {
-  },
-  "netapp-elementsw": {
-  },
-  "netapp-gcp": {
-  },
-  "ngrok": {
-  },
-  "nirmata": {
-  },
-  "ns": {
-  },
-  "octopusdeploy": {
-  },
-  "onelogin": {
-  },
-  "onepassword": {
-  },
-  "oneview": {
-  },
-  "outscale": {
-  },
-  "pnap": {
-  },
-  "prismacloudcompute": {
-  },
-  "project": {
-  },
-  "quorum": {
-  },
-  "rafay": {
-  },
-  "rediscloud": {
-  },
-  "rollbar": {
-  },
-  "satori": {
-  },
-  "sdm": {
-  },
-  "sdwan": {
-  },
-  "secretsmanager": {
-  },
-  "sematext": {
-  },
-  "serverspace": {
-  },
-  "shipa": {
-  },
-  "shoreline": {
-  },
-  "sigsci": {
-  },
-  "spectrocloud": {
-  },
-  "splunk": {
-  },
-  "splunkconfig": {
-  },
-  "steampipecloud": {
-  },
-  "synthetics": {
-  },
-  "sysdig": {
-  },
-  "tanzu-mission-control": {
-  },
-  "tetration": {
-  },
-  "transloadit": {
-  },
-  "upcloud": {
-  },
-  "valtix": {
-  },
-  "victorops": {
-  },
-  "volterra": {
-  },
-  "waapm": {
-  },
-  "xray": {
-  },
-  "zedcloud": {
-  },
-  "zerotier": {
-  },
-  "azapi": {
-  },
-  "cloudngfwaws": {
-  },
-  "cloudvision": {
-  },
-  "clumio": {
-  },
-  "cockroach": {
-  },
-  "confluent": {
-  },
-  "coralogix": {
-  },
-  "couchbasecapella": {
-  },
-  "cpln": {
-  },
-  "crunchybridge": {
-  },
-  "delphix": {
-  },
-  "devcycle": {
-  },
-  "dockerless": {
-  },
-  "dsm": {
-  },
-  "fic": {
-  },
-  "firehydrant": {
-  },
-  "flagsmith": {
-  },
-  "fly": {
-  },
-  "fortianalyzer": {
-  },
-  "fusion": {
-  },
-  "infinity-next": {
-  },
-  "ionosdeveloper": {
-  },
-  "iosxe": {
-  },
-  "junos-vsrx": {
-  },
-  "kaleido": {
-  },
-  "kion": {
-  },
-  "lumen": {
-  },
-  "multy": {
-  },
-  "netooze": {
-  },
-  "netris": {
-  },
-  "netskope": {
-  },
-  "packetfabric": {
-  },
-  "pipeline": {
-  },
-  "rockset": {
-  },
-  "salesforce": {
-  },
-  "seeweb": {
-  },
-  "site24x7": {
-  },
-  "snowflake": {
-  },
-  "stackbill": {
-  },
-  "thousandeyes": {
-  },
-  "vercel": {
-  },
-  "zentral": {
-  },
-  "zia": {
-  },
-  "zpa": {
-  },
-  "hpegl": {
-  },
-  "ably": {
-  },
-  "alibabacloudstack": {
-  },
-  "appviewx": {
-  },
-  "b1ddi": {
-  },
-  "cohesivenet": {
-  },
-  "hivelocity": {
-  },
-  "latitudesh": {
-  },
-  "lyvecloud": {
-  },
-  "nobl9": {
-  },
-  "scp": {
-  },
-  "syntropystack": {
-  },
-  "tidbcloud": {
-  },
-  "atlas": {
-  },
-  "ionoscloud": {
-  },
-  "netskopebwan": {
-  },
-  "nutanixkps": {
-  },
-  "polaris": {
-  },
-  "rke": {
-  },
-  "samsungcloudplatform": {
-  },
-  "tfcoremock": {
-  }
+  "azurecaf":{ "skip_generation": true},
+  "b2":{ "skip_generation": true},
+  "better-uptime":{ "skip_generation": true},
+  "bluecat":{ "skip_generation": true},
+  "bridgecrew":{ "skip_generation": true},
+  "britive":{ "skip_generation": true},
+  "buddy":{ "skip_generation": true},
+  "buildkite":{ "skip_generation": true},
+  "carvel":{ "skip_generation": true},
+  "cbs":{ "skip_generation": true},
+  "checkly":{ "skip_generation": true},
+  "ciphertrust":{ "skip_generation": true},
+  "citrixadc":{ "skip_generation": true},
+  "civo":{ "skip_generation": true},
+  "cloudeos":{ "skip_generation": true},
+  "cloudsigma":{ "skip_generation": true},
+  "cloudsmith":{ "skip_generation": true},
+  "cloudtamerio":{ "skip_generation": true},
+  "codefresh":{ "skip_generation": true},
+  "commvault":{ "skip_generation": true},
+  "configcat":{ "skip_generation": true},
+  "confluentcloud":{ "skip_generation": true},
+  "databricks":{ "skip_generation": true},
+  "dcnm":{ "skip_generation": true},
+  "dynatrace":{ "skip_generation": true},
+  "ec":{ "skip_generation": true},
+  "elasticstack":{ "skip_generation": true},
+  "equinix":{ "skip_generation": true},
+  "fivetran":{ "skip_generation": true},
+  "fmc":{ "skip_generation": true},
+  "fortimanager":{ "skip_generation": true},
+  "gcorelabs":{ "skip_generation": true},
+  "genesyscloud":{ "skip_generation": true},
+  "gocache":{ "skip_generation": true},
+  "harness":{ "skip_generation": true},
+  "honeycombio":{ "skip_generation": true},
+  "ilert":{ "skip_generation": true},
+  "illumio-core":{ "skip_generation": true},
+  "infracost":{ "skip_generation": true},
+  "instaclustr":{ "skip_generation": true},
+  "intersight": {"skip_generation": true},
+  "iterative":{ "skip_generation": true},
+  "kentik-cloudexport":{ "skip_generation": true},
+  "kentik-synthetics":{ "skip_generation": true},
+  "lightstep":{ "skip_generation": true},
+  "limelight":{ "skip_generation": true},
+  "logtail":{ "skip_generation": true},
+  "logzio":{ "skip_generation": true},
+  "metal":{ "skip_generation": true},
+  "netapp-cloudmanager":{ "skip_generation": true},
+  "netapp-elementsw":{ "skip_generation": true},
+  "netapp-gcp":{ "skip_generation": true},
+  "ngrok":{ "skip_generation": true},
+  "nirmata":{ "skip_generation": true},
+  "ns":{ "skip_generation": true},
+  "octopusdeploy":{ "skip_generation": true},
+  "onelogin":{ "skip_generation": true},
+  "onepassword":{ "skip_generation": true},
+  "oneview":{ "skip_generation": true},
+  "outscale":{ "skip_generation": true},
+  "pnap":{ "skip_generation": true},
+  "prismacloudcompute":{ "skip_generation": true},
+  "project":{ "skip_generation": true},
+  "quorum":{ "skip_generation": true},
+  "rafay":{ "skip_generation": true},
+  "rediscloud":{ "skip_generation": true},
+  "rollbar":{ "skip_generation": true},
+  "satori":{ "skip_generation": true},
+  "sdm":{ "skip_generation": true},
+  "sdwan":{ "skip_generation": true},
+  "secretsmanager":{ "skip_generation": true},
+  "sematext":{ "skip_generation": true},
+  "serverspace":{ "skip_generation": true},
+  "shipa":{ "skip_generation": true},
+  "shoreline":{ "skip_generation": true},
+  "sigsci":{ "skip_generation": true},
+  "spectrocloud":{ "skip_generation": true},
+  "splunk":{ "skip_generation": true},
+  "splunkconfig":{ "skip_generation": true},
+  "steampipecloud":{ "skip_generation": true},
+  "synthetics":{ "skip_generation": true},
+  "sysdig":{ "skip_generation": true},
+  "tanzu-mission-control":{ "skip_generation": true},
+  "tetration":{ "skip_generation": true},
+  "transloadit":{ "skip_generation": true},
+  "upcloud":{ "skip_generation": true},
+  "valtix":{ "skip_generation": true},
+  "victorops":{ "skip_generation": true},
+  "volterra":{ "skip_generation": true},
+  "waapm":{ "skip_generation": true},
+  "xray":{ "skip_generation": true},
+  "zedcloud":{ "skip_generation": true},
+  "zerotier":{ "skip_generation": true},
+  "azapi":{ "skip_generation": true},
+  "cloudngfwaws":{ "skip_generation": true},
+  "cloudvision":{ "skip_generation": true},
+  "clumio":{ "skip_generation": true},
+  "cockroach":{ "skip_generation": true},
+  "confluent":{ "skip_generation": true},
+  "coralogix":{ "skip_generation": true},
+  "couchbasecapella":{ "skip_generation": true},
+  "cpln":{ "skip_generation": true},
+  "crunchybridge":{ "skip_generation": true},
+  "delphix":{ "skip_generation": true},
+  "devcycle":{ "skip_generation": true},
+  "dockerless":{ "skip_generation": true},
+  "dsm":{ "skip_generation": true},
+  "fic":{ "skip_generation": true},
+  "firehydrant":{ "skip_generation": true},
+  "flagsmith":{ "skip_generation": true},
+  "fly":{ "skip_generation": true},
+  "fortianalyzer":{ "skip_generation": true},
+  "fusion":{ "skip_generation": true},
+  "infinity-next":{ "skip_generation": true},
+  "ionosdeveloper":{ "skip_generation": true},
+  "iosxe":{ "skip_generation": true},
+  "junos-vsrx":{ "skip_generation": true},
+  "kaleido":{ "skip_generation": true},
+  "kion":{ "skip_generation": true},
+  "lumen":{ "skip_generation": true},
+  "multy":{ "skip_generation": true},
+  "netooze":{ "skip_generation": true},
+  "netris":{ "skip_generation": true},
+  "netskope":{ "skip_generation": true},
+  "packetfabric":{ "skip_generation": true},
+  "pipeline":{ "skip_generation": true},
+  "rockset":{ "skip_generation": true},
+  "salesforce":{ "skip_generation": true},
+  "seeweb":{ "skip_generation": true},
+  "site24x7":{ "skip_generation": true},
+  "snowflake":{ "skip_generation": true},
+  "stackbill":{ "skip_generation": true},
+  "thousandeyes":{ "skip_generation": true},
+  "vercel":{ "skip_generation": true},
+  "zentral":{ "skip_generation": true},
+  "zia":{ "skip_generation": true},
+  "zpa":{ "skip_generation": true},
+  "hpegl":{ "skip_generation": true},
+  "ably":{ "skip_generation": true},
+  "alibabacloudstack":{ "skip_generation": true},
+  "appviewx":{ "skip_generation": true},
+  "b1ddi":{ "skip_generation": true},
+  "cohesivenet":{ "skip_generation": true},
+  "hivelocity":{ "skip_generation": true},
+  "latitudesh":{ "skip_generation": true},
+  "lyvecloud":{ "skip_generation": true},
+  "nobl9":{ "skip_generation": true},
+  "scp":{ "skip_generation": true},
+  "syntropystack":{ "skip_generation": true},
+  "tidbcloud":{ "skip_generation": true},
+  "atlas":{ "skip_generation": true},
+  "ionoscloud":{ "skip_generation": true},
+  "netskopebwan":{ "skip_generation": true},
+  "nutanixkps":{ "skip_generation": true},
+  "polaris":{ "skip_generation": true},
+  "rke":{ "skip_generation": true},
+  "samsungcloudplatform":{ "skip_generation": true},
+  "tfcoremock": { "skip_generation": true}
 }
