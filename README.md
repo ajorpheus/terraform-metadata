@@ -22,7 +22,7 @@ Plugin may read it from `$HOME/.terraform.d/metadata-repo` (Linux, macOS) or `%A
 Just clone this repositry there:
 ```bash
 mkdir -p "$HOME/.terraform.d/metadata-repo"
-git clone "https://github.com/cageyv/terraform-metadata" "$HOME/.terraform.d/metadata-repo"
+git clone "https://github.com/ajorpheus/terraform-metadata" "$HOME/.terraform.d/metadata-repo"
 ```
 And then update it regularly using `git pull`
 
