@@ -17,6 +17,7 @@
   },
   "oci": {"skip_generation": true},
   "azure": {
+    "skip_generation": true,
     "repository": "github.com/terraform-providers/terraform-provider-azure-classic",
     "pkg_name": "azure"
   },
@@ -98,6 +99,7 @@
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
   },
   "boundary": {
+    "skip_generation": true,
     "pkg_name": "internal/provider",
     "provider_constr": "prvdr.New()",
     "repository": "github.com/hashicorp/terraform-provider-__NAME__"
@@ -202,6 +204,7 @@
     "repository": "github.com/F5Networks/terraform-provider-__NAME__"
   },
   "bitbucket": {
+    "skip_generation": true,
     "TODO": "investigate which repo to use"
   },
   "brightbox": {

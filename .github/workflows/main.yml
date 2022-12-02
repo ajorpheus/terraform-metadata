@@ -28,12 +28,33 @@ jobs:
       - run: |
              git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libxml2-utils jq
+          version: 1.0
+
+      - uses: actions/cache@v3
+        with:
+          # In order:
+          # * Module download cache
+          # * Build cache (Linux)
+          # * Build cache (Mac)
+          # * Build cache (Windows)
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ matrix.go-version }}-
+
       - name: Sync terraform providers
         run: |
-              sudo apt-get update
-              sudo apt-get install -y libxml2-utils jq
+#              sudo apt-get update
+#              sudo apt-get install -y libxml2-utils jq
+              echo "BEFORE **** $GOPATH"
               cd schemas-extractor
-              export GOPATH=/tmp/
+#              export GOPATH=~/go/
+#              echo "After **** $GOPATH"
               export CHECK_SKIP="1"
               make
               cp -r schemas/* ../terraform/model/
