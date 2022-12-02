@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.19.1
+          check-latest: true
+          cache: true
         id: go
 
       - uses: actions/checkout@v3
@@ -32,6 +34,7 @@ jobs:
               sudo apt-get install -y libxml2-utils jq
               cd schemas-extractor
               export GOPATH=/tmp/
+              export CHECK_SKIP="1"
               make
               cp -r schemas/* ../terraform/model/
               cp providers.list ../terraform/model
