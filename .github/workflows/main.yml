@@ -26,10 +26,10 @@ jobs:
       - run: |
              git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
-      - uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: libxml2-utils jq
-          version: 1.0
+#      - uses: awalsh128/cache-apt-pkgs-action@latest
+#        with:
+#          packages: libxml2-utils jq
+#          version: 1.0
 
       - uses: actions/cache@v3
         with:
@@ -42,8 +42,8 @@ jobs:
 
       - name: Sync terraform providers
         run: |
-              # sudo apt-get update
-              # sudo apt-get install -y libxml2-utils jq
+              sudo apt-get update
+              sudo apt-get install -y libxml2-utils jq
               echo "BEFORE **** $GOPATH"
               cd schemas-extractor
               export GOPATH=~/go/
