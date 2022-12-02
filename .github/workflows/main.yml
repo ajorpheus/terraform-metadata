@@ -85,12 +85,20 @@ jobs:
         id: commit
         run: echo "desc=Update metadata as of  $(date)" >> "$GITHUB_OUTPUT"
 
-      - uses: stefanzweifel/git-auto-commit-action@v4.0.0
+#      - uses: stefanzweifel/git-auto-commit-action@v4.0.0
+#        with:
+#          commit_message: ${{ steps.commit.outputs.desc }}
+#          branch: sync
+#          commit_user_name: Ash Jindal
+#          commit_user_email: ajorpheus@users.noreply.github.com
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v9
         with:
-          commit_message: ${{ steps.commit.outputs.desc }}
-          branch: sync
-          commit_user_name: Ash Jindal
-          commit_user_email: ajorpheus@users.noreply.github.com
+          pull: '--rebase --autostash'
+          author_name: Ash Jindal
+          author_email: ajorpheus@users.noreply.github.com
+          message: ${{ steps.commit.outputs.desc }}
 
       - name: Merge sync changes to master
         run: |
