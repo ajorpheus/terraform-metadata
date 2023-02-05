@@ -13,7 +13,7 @@ jobs:
 
   sync:
     name: Sync repositories
-    runs-on: buildjet-32vcpu-ubuntu-2204
+    runs-on: self-hosted
     steps:
 
       - name: Set up Go 1.19.1
