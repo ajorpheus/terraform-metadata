@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "functions",
   "type": "functions",
-  "version": "v1.4.1",
+  "version": "v1.4.2",
   "schema": {
     "abs": {
       "Parameters": [
@@ -438,8 +438,7 @@
       "VariadicParameter": {
         "Name": "args",
         "Type": "Any",
-        "AllowNull": true,
-        "AllowUnknown": true
+        "AllowNull": true
       }
     },
     "formatdate": {
@@ -524,7 +523,6 @@
           "Name": "val",
           "Type": "Any",
           "AllowNull": true,
-          "AllowUnknown": true,
           "AllowDynamicType": true
         }
       ],
@@ -814,7 +812,6 @@
       "VariadicParameter": {
         "Name": "sets",
         "Type": "Any",
-        "AllowUnknown": true,
         "AllowMarked": true
       }
     },
@@ -906,8 +903,7 @@
       "Parameters": [
         {
           "Name": "list",
-          "Type": "List(String)",
-          "AllowUnknown": true
+          "Type": "List(String)"
         }
       ],
       "ReturnType": "List(String)"
