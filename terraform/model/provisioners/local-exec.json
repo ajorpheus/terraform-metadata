@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "local-exec",
   "type": "provisioner",
-  "version": "v1.4.4",
+  "version": "v1.4.5",
   "schema": {
     "command": {
       "Type": "cty.String",
