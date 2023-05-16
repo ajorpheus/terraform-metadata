@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "functions",
   "type": "functions",
-  "version": "v1.4.6",
+  "version": "v1.5.0-beta1",
   "schema": {
     "abs": {
       "Parameters": [
@@ -693,6 +693,9 @@
       ],
       "ReturnType": "String"
     },
+    "plantimestamp": {
+      "ReturnType": "String"
+    },
     "pow": {
       "Parameters": [
         {
@@ -929,6 +932,19 @@
         },
         {
           "Name": "prefix",
+          "Type": "String"
+        }
+      ],
+      "ReturnType": "Bool"
+    },
+    "strcontains": {
+      "Parameters": [
+        {
+          "Name": "str",
+          "Type": "String"
+        },
+        {
+          "Name": "substr",
           "Type": "String"
         }
       ],
