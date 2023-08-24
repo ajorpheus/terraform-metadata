@@ -3,7 +3,7 @@
   ".sdk_type": "builtin",
   "name": "functions",
   "type": "functions",
-  "version": "v1.5.5",
+  "version": "v1.5.6",
   "schema": {
     "abs": {
       "Parameters": [
